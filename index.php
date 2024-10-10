@@ -333,7 +333,8 @@
 			                        <a href="admin/admin_login.php">Admin Login</a>
                                     <a href="admin/index.php">Organizer Login</a>
                                     <a href="tabulator/index.php">Tabulator Login</a>
-                                    <a href="student/index.php">Student Login</a>
+                                    <a href="admin/welcome.php">Judge Login</a>
+
                                 </div>
                             </li>
                         </ul>
