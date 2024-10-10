@@ -323,7 +323,7 @@
                         <div class="main_list" id="mainListDiv">
                         <ul>
                             <li><a href="index.php">Home</a></li>
-                            <li><a href="ongoing.php">Ongoing</a></li>
+                            <li><a href="ongoing.php">Ongong</a></li>
                             <li><a href="upcoming.php">Upcoming</a></li>
                             <li><a href="about.php">About</a></li>
                             <li><a href="blog.php">Live</a></li>
