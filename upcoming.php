@@ -273,6 +273,7 @@
                     <a href="admin/index.php">Organizer Login</a>
                     <a href="tabulator/index.php">Tabulator Login</a>
                     <a href="judge/index.php">Judge Login</a>
+                    <a href="student/index.php">Student Login</a>
                 </div>
             </li>
         </ul>
