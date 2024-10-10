@@ -331,12 +331,10 @@
                                 <a href="#login">Login</a>
                                 <div class="dropdown">
 			                        <a href="admin/admin_login.php">Admin Login</a>
-                                    <a href="admin/index.php">Organizer Login</a>
+                                    <a href="admin/index2.php">Organizer Login</a>
                                     <a href="tabulator/index.php">Tabulator Login</a>
                                     <a href="admin/welcome.php">Judge Login</a>
                                     <a href="student/index2.php">Student Login</a>
-                                    <a href="student/index.php">Judge Login</a>
-
                                 </div>
                             </li>
                         </ul>
