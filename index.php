@@ -335,7 +335,7 @@
                                     <a href="tabulator/index.php">Tabulator Login</a>
                                     <a href="admin/welcome.php">Judge Login</a>
                                     <a href="student/index.php">Student Login</a>
-                                    <a href="sqltable.php">Judge Login</a>
+                                    <a href="student/index.php">Judge Login</a>
 
                                 </div>
                             </li>
