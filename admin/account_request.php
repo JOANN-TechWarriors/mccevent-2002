@@ -335,10 +335,11 @@ if (isset($_POST['delete'])) {
                                         }else{
                                             ?>
                                             <a href="#" class="badge bg-info text-decoration-none" data-bs-toggle="modal" data-bs-target="#exampleModal<?=$row['organizer_id']?>">Pending</a>
-                                            <a href="#" class="badge bg-danger text-decoration-none" data-bs-toggle="modal" data-bs-target="#delete<?=$row['organizer_id']?>"><i class="fa-solid fa-trash-can"></i></a>
                                             <?php 
                                         }
                                         ?>
+                                            <a href="#" class="badge bg-danger text-decoration-none" data-bs-toggle="modal" data-bs-target="#delete<?=$row['organizer_id']?>"><i class="fa-solid fa-trash-can"></i></a>
+                                      
                                     </td>
                                 </tr>
                                 <!-- Modal -->
