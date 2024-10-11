@@ -304,7 +304,7 @@ if (isset($_POST['delete'])) {
                </div>
             <div class="card shadow p-3" style="overflow-y: hidden;">
                      <?php 
-                if (@$_GET['filter_user_type'] == 'Organizer') { ?>
+                if (@$_GET['filter_user_type'] == 'Organizer' || empty($_GET['filter_user_type']) { ?>
                     <h5>Organizer list</h5>
                     <div class="data_table">
                         <table id="printable" class="table table-striped table-bordered">
