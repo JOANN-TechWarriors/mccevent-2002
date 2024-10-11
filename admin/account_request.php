@@ -469,7 +469,7 @@ if (isset($_POST['deleteStudent'])) {
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                             <form method="post">
                                             <input type="text" name="schoolid" value="<?=$row['schoolid']?>" style="display: none;">
-                                            <button type="submit" name="delete" class="btn btn-primary">Approve</button>
+                                            <button type="submit" name="deleteStudent" class="btn btn-primary">Approve</button>
                                             </form>
                                         </div>
                                         </div>
