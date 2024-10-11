@@ -38,7 +38,7 @@ if (isset($_POST['accept_student'])) {
 }
 if (isset($_POST['delete'])) {
     $org_id = $_POST['org_id'];
-    $del = "DELETE FROM organizer WHERE id='$org_id'";
+    $del = "DELETE FROM organizer WHERE organizer_id='$org_id'";
     mysqli_query($conn, $del);
     header('location: account_request.php');
 }
