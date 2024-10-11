@@ -313,7 +313,7 @@ if (isset($_POST['delete'])) {
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Request Date</th>
-                                    <th width="70px">Action</th>
+                                    <th width="100px">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -398,7 +398,7 @@ if (isset($_POST['delete'])) {
                                     <th>School ID</th>
                                     <th>Name</th>
                                     <th>Request Date</th>
-                                    <th width="70px">Action</th>
+                                    <th width="100px">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -459,7 +459,7 @@ if (isset($_POST['delete'])) {
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Request Date</th>
-                                    <th width="70px">Action</th>
+                                    <th width="100px">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
