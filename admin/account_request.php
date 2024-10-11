@@ -304,7 +304,7 @@ if (isset($_POST['delete'])) {
                </div>
             <div class="card shadow p-3" style="overflow-y: hidden;">
                      <?php 
-                if (@$_GET['filter_user_type'] == 'Organizer' || empty($_GET['filter_user_type']) { ?>
+                if (@$_GET['filter_user_type'] == 'Organizer') { ?>
                     <h5>Organizer list</h5>
                     <div class="data_table">
                         <table id="printable" class="table table-striped table-bordered">
@@ -484,6 +484,8 @@ if (isset($_POST['delete'])) {
                                             <?php 
                                         }
                                         ?>
+                                            <a href="#" class="badge bg-danger text-decoration-none" data-bs-toggle="modal" data-bs-target="#delete<?=$row['organizer_id']?>"><i class="fa-solid fa-trash-can"></i></a>
+                                   
                                     </td>
                                 </tr>
                                 <!-- Modal -->
@@ -502,6 +504,27 @@ if (isset($_POST['delete'])) {
                                             <form method="post">
                                             <input type="text" name="org_id" value="<?=$row['organizer_id']?>" style="display: none;">
                                             <button type="submit" name="accept" class="btn btn-primary">Approve</button>
+                                            </form>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                     <!-- Modal -->
+                                <div class="modal fade" id="delete<?=$row['organizer_id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete <?=$row['fname']?>'s account request?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <form method="post">
+                                            <input type="text" name="org_id" value="<?=$row['organizer_id']?>" style="display: none;">
+                                            <button type="submit" name="delete" class="btn btn-primary">Approve</button>
                                             </form>
                                         </div>
                                         </div>
