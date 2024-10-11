@@ -36,6 +36,12 @@ if (isset($_POST['accept_student'])) {
     mysqli_query($conn, $up);
     header('location: account_request.php?filter_user_type=Student');
 }
+if (isset($_POST['delete'])) {
+    $org_id = $_POST['org_id'];
+    $del = "DELETE FROM organizer WHERE id='$org_id'";
+    mysqli_query($conn, $del);
+    header('location: account_request.php');
+}
   ?>
 <head>
 <meta charset="UTF-8">
@@ -329,6 +335,7 @@ if (isset($_POST['accept_student'])) {
                                         }else{
                                             ?>
                                             <a href="#" class="badge bg-info text-decoration-none" data-bs-toggle="modal" data-bs-target="#exampleModal<?=$row['organizer_id']?>">Pending</a>
+                                            <a href="#" class="badge bg-danger text-decoration-none" data-bs-toggle="modal" data-bs-target="#delete<?=$row['organizer_id']?>"><i class="fa-solid fa-trash-can"></i></a>
                                             <?php 
                                         }
                                         ?>
@@ -350,6 +357,27 @@ if (isset($_POST['accept_student'])) {
                                             <form method="post">
                                             <input type="text" name="org_id" value="<?=$row['organizer_id']?>" style="display: none;">
                                             <button type="submit" name="accept" class="btn btn-primary">Approve</button>
+                                            </form>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <!-- Modal -->
+                                <div class="modal fade" id="delete<?=$row['organizer_id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete <?=$row['fname']?>'s account request?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <form method="post">
+                                            <input type="text" name="org_id" value="<?=$row['organizer_id']?>" style="display: none;">
+                                            <button type="submit" name="delete" class="btn btn-primary">Approve</button>
                                             </form>
                                         </div>
                                         </div>
