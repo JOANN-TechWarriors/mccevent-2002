@@ -1,74 +1,89 @@
+<?php
+session_start();
+// Database connection (replace with your actual database credentials)
+$db = new mysqli('localhost', 'root', '', 'judging');
+if ($db->connect_error) {
+    die("Connection failed: " . $db->connect_error);
+}
+// Get active streams
+$result = $db->query("SELECT * FROM streams WHERE status = 'live'");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Live Broadcast - Viewer</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../images/logo copy.png"/>
+    <title>Live Stream Viewer</title>
+    <style>
+        .stream-container {
+            margin-bottom: 10px;
+        }
+        .stream-video {
+            width: 1330px;
+            height: 580px;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-    <h1><strong><marquee behavior="scroll" direction="right" scrollamount="12">Live NOW!</marquee></strong></h1>
-    <div id="videoContainer">
-        <video id="liveStream" controls autoplay style="width: 100%; max-width: 90%;">
-            Your browser does not support the video tag.
-        </video>
+    <h1>Available Live Streams</h1>
+    <div id="streams-container">
+        <?php
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "<div class='stream-container' id='stream-" . $row['id'] . "'>";
+                // echo "<h2>Stream ID: " . $row['id'] . "</h2>";
+                // echo "<p>Status: " . $row['status'] . "</p>";
+                echo "<div class='stream-video'>";
+                echo "<img id='video-" . $row['id'] . "' src='' alt='Live Stream'>";
+                echo "</div>";
+                echo "</div>";
+            }
+        } else {
+            echo "<p>No active streams at the moment.</p>";
+        }
+        ?>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
-        const videoElement = document.getElementById('liveStream');
-        // const streamUrl = 'http://localhost/mcceventjudging.m3u8'; // Update with your actual HLS stream URL
-        const streamUrl = 'http://localhost/hls/mcceventjudging.m3u8'; // Update with your actual HLS stream URL
-        if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(streamUrl);
-            hls.attachMedia(videoElement);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                videoElement.play();
-            });
-        } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-            videoElement.src = streamUrl;
-            videoElement.addEventListener('loadedmetadata', function() {
-                videoElement.play();
-            });
-        } else {
-            console.error('This browser does not support HLS.');
+        const socket = io('http://localhost:3000');  // Replace with your WebSocket server address
+
+        socket.on('stream', (data) => {
+            const img = document.getElementById(`video-${data.streamId}`);
+            if (img) {
+                img.src = data.imageData;
+            }
+        });
+
+        function updateStreams() {
+            fetch('get_streams.php')
+                .then(response => response.json())
+                .then(streams => {
+                    const container = document.getElementById('streams-container');
+                    container.innerHTML = '';
+                    streams.forEach(stream => {
+                        const streamDiv = document.createElement('div');
+                        streamDiv.className = 'stream-container';
+                        streamDiv.id = `stream-${stream.id}`;
+                        streamDiv.innerHTML = `
+                            <h2>Stream ID: ${stream.id}</h2>
+                            <p>Status: ${stream.status}</p>
+                            <div class='stream-video'>
+                                <img id='video-${stream.id}' src='' alt='Live Stream'>
+                            </div>
+                        `;
+                        container.appendChild(streamDiv);
+                    });
+                });
         }
 
-        videoElement.addEventListener('error', function() {
-            console.error('Error loading the stream. Please check if the broadcast is active.');
-            alert('Error loading the stream. Please check if the broadcast is active.');
-        });
+        setInterval(updateStreams, 30000);  // Update stream list every 30 seconds
     </script>
-    <script>
-// Disable right-click
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
-
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        document.onkeydown = function (e) {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
-                e.preventDefault();
-            }
-        };
-
-        // Disable developer tools
-        function disableDevTools() {
-            if (window.devtools.isOpen) {
-                window.location.href = "about:blank";
-            }
-        }
-
-        // Check for developer tools every 100ms
-        setInterval(disableDevTools, 100);
-
-        // Disable selecting text
-        document.onselectstart = function (e) {
-            e.preventDefault();
-        };
-</script>
 </body>
 </html>
