@@ -67,74 +67,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../images/logo copy.png"/>
-    <title>Live Stream Control Panel</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1, h2 { color: #333; }
-        form { margin-bottom: 20px; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
-        .stream-item { margin-bottom: 10px; }
-        #videoContainer { margin-top: 20px; }
-    </style>
+    <title>Server Admin</title>
 </head>
 <body>
-    <h1>Live Stream Control Panel</h1>
-    <form method="post">
-        <button type="submit" name="action" value="start">Start New Stream</button>
-    </form>
-    <h2>Active Streams</h2>
-    <?php
-    $result = $db->query("SELECT * FROM streams WHERE status = 'live' AND organizer_id = $organizer_id");
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<div class='stream-item'>";
-            // echo "Stream ID: " . $row['id'] . " - Status: " . $row['status'];
-            echo "<form method='post' style='display:inline; margin-left: 10px;'>";
-            echo "<input type='hidden' name='stream_id' value='" . $row['id'] . "'>";
-            echo "<button type='submit' name='action' value='stop'>Stop</button>";
-            echo "</form>";
-            echo "<button onclick='startWebcam(" . $row['id'] . ")'>Start</button>";
-            echo "<button onclick='captureImage(" . $row['id'] . ")'>Capture Image</button>";
-            echo "</div>";
-        }
-    } else {
-        echo "<p>No active streams at the moment.</p>";
-    }
-    ?>
-    <div id="videoContainer">
-        <video id="video" width="1240" height="580" autoplay></video>
-        <canvas id="canvas" width="1340" height="480" style="display:none;"></canvas>
-    </div>
+    <h1>Server Admin</h1>
+    <button id="startBtn">Start Server</button>
+    <button id="stopBtn">Stop Server</button>
+    <p id="status"></p>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
-        let video = document.getElementById('video');
-        let canvas = document.getElementById('canvas');
-        let stream;
-        let socket = io('https://mcceventsjudging.com:3306 ');  // Replace with your WebSocket server address
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const status = document.getElementById('status');
 
-        async function startWebcam(streamId) {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = stream;
-                broadcastStream(streamId);
-            } catch (err) {
-                console.error("Error accessing the webcam", err);
-            }
-        }
+        startBtn.addEventListener('click', async () => {
+            const response = await fetch('/start');
+            const result = await response.text();
+            status.textContent = result;
+        });
 
-        function broadcastStream(streamId) {
-            setInterval(() => {
-                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                let imageData = canvas.toDataURL('image/jpeg', 0.5);
-                socket.emit('stream', { streamId: streamId, imageData: imageData });
-            }, 100);  // Adjust interval as needed
-        }
-
-        function captureImage(streamId) {
-            // ... (previous captureImage function remains the same) ...
-        }
+        stopBtn.addEventListener('click', async () => {
+            const response = await fetch('/stop');
+            const result = await response.text();
+            status.textContent = result;
+        });
     </script>
 </body>
 </html>
