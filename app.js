@@ -21,6 +21,6 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3306 ;
-http.listen(PORT, () => {
+https.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
