@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         let video = document.getElementById('video');
         let canvas = document.getElementById('canvas');
         let stream;
-        let socket = io('https://mcceventsjudging.com:127.0.0.1');  // Replace with your WebSocket server address
+        let socket = io('http://localhost:3000');  // Replace with your WebSocket server address
 
         async function startWebcam(streamId) {
             try {
