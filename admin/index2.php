@@ -93,7 +93,7 @@ thead th {
              <tr style="background-color: #fff;">
              
              <td>
-              <h5><i class="icon-user"></i>  USERNAME:</h5>
+              <h5><i class="icon-user"></i>  SERNAME:</h5>
               <input style="font-size: large; height: 35px !important; text-indent: 7px !important;" class="form-control btn-block" type="email" name="username" placeholder="Username" required="true" autofocus="true" />
              
               <h5><i class="icon-lock"></i>  PASSWORD:</h5>
