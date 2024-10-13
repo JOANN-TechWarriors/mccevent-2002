@@ -1,7 +1,7 @@
 <?php
 session_start();
 // Database connection (replace with your actual database credentials)
-$db = new mysqli('localhost', 'root', '', 'judging');
+$db = new mysqli('127.0.0.1', 'u510162695_judging_root', '1Judging_root', 'u510162695_judging');
 if ($db->connect_error) {
     die("Connection failed: " . $db->connect_error);
 }
