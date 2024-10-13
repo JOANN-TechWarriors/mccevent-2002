@@ -20,7 +20,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
             margin-bottom: 10px;
         }
         .stream-video {
-            width: 1330px;
+            width: 1320px;
             height: 580px;
             background-color: #000;
             color: #fff;
@@ -52,7 +52,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
-        const socket = io('https://mcceventsjudging.com:127.0.0.1');  // Replace with your WebSocket server address
+        const socket = io('http://localhost:3000');  // Replace with your WebSocket server address
 
         socket.on('stream', (data) => {
             const img = document.getElementById(`video-${data.streamId}`);
