@@ -16,7 +16,6 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
     <link rel="shortcut icon" href="../images/logo copy.png"/>
     <title>Live Stream Viewer</title>
     <style>
-        /* ... (keep your existing styles) ... */
         #debug-log {
             background-color: #f8f8f8;
             border: 1px solid #ddd;
@@ -62,65 +61,80 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
             background-color: #f8f8f8;
             border-top: 1px solid #eee;
         }
+        #error-message {
+            background-color: #ffeeee;
+            border: 1px solid #ffcccc;
+            color: #ff0000;
+            padding: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        #loading {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Available Live Streams</h1>
-    <div id="streams-container">
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<div class='stream-container' id='stream-" . $row['id'] . "'>";
-                echo "<div class='stream-video'>";
-                echo "<img id='video-" . $row['id'] . "' src='' alt='Live Stream'>";
-                echo "</div>";
-                echo "<div class='stream-info'>";
-                echo "<h2>Stream ID: " . $row['id'] . "</h2>";
-                echo "<p>Status: " . $row['status'] . "</p>";
-                echo "</div>";
-                echo "</div>";
-            }
-        } else {
-            echo "<p>No active streams at the moment.</p>";
-        }
-        ?>
-    </div>
-    <div id="debug-log"></div>
+    <div id="loading">Loading streams...</div>
+    <div id="error-message" style="display: none;"></div>
+    <div id="streams-container"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
-        const debugLog = document.getElementById('debug-log');
-        function log(message) {
-            console.log(message);
-            debugLog.textContent += message + '\n';
+        const streamsContainer = document.getElementById('streams-container');
+        const errorMessage = document.getElementById('error-message');
+        const loading = document.getElementById('loading');
+        let socket;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 5;
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
         }
 
-        const socket = io('https://mcceventsjudging.com:3306', {
-            transports: ['websocket'],
-            upgrade: false
-        });
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
 
-        socket.on('connect', () => {
-            log('Connected to WebSocket server');
-        });
-
-        socket.on('connect_error', (error) => {
-            log('WebSocket connection error: ' + error);
-        });
-
-        socket.on('stream', (data) => {
-            log('Received stream data for stream ID: ' + data.streamId);
-            const img = document.getElementById(`video-${data.streamId}`);
-            if (img) {
-                img.src = data.imageData;
-                log('Updated image for stream ID: ' + data.streamId);
-            } else {
-                log('Image element not found for stream ID: ' + data.streamId);
+        function connectWebSocket() {
+            if (reconnectAttempts >= maxReconnectAttempts) {
+                showError('Maximum reconnection attempts reached. Please refresh the page.');
+                return;
             }
-        });
+
+            socket = io('https://mcceventsjudging.com:3306', {
+                transports: ['websocket'],
+                upgrade: false,
+                reconnection: false,
+                timeout: 10000
+            });
+
+            socket.on('connect', () => {
+                console.log('Connected to WebSocket server');
+                hideError();
+                reconnectAttempts = 0;
+            });
+
+            socket.on('connect_error', (error) => {
+                console.error('WebSocket connection error:', error);
+                reconnectAttempts++;
+                showError(`WebSocket connection error. Retrying... (${reconnectAttempts}/${maxReconnectAttempts})`);
+                setTimeout(connectWebSocket, 5000);
+            });
+
+            socket.on('stream', (data) => {
+                const img = document.getElementById(`video-${data.streamId}`);
+                if (img) {
+                    img.src = data.imageData;
+                }
+            });
+        }
 
         function updateStreams() {
-            log('Fetching updated stream list...');
+            loading.style.display = 'block';
             fetch('get_streams.php')
                 .then(response => {
                     if (!response.ok) {
@@ -129,13 +143,12 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
                     return response.json();
                 })
                 .then(streams => {
-                    log('Received ' + streams.length + ' streams');
-                    const container = document.getElementById('streams-container');
+                    loading.style.display = 'none';
                     if (streams.length === 0) {
-                        container.innerHTML = '<p>No active streams at the moment.</p>';
+                        streamsContainer.innerHTML = '<p>No active streams at the moment.</p>';
                         return;
                     }
-                    container.innerHTML = '';
+                    streamsContainer.innerHTML = '';
                     streams.forEach(stream => {
                         const streamDiv = document.createElement('div');
                         streamDiv.className = 'stream-container';
@@ -150,18 +163,19 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
                                 <p>Organizer ID: ${stream.organizer_id}</p>
                             </div>
                         `;
-                        container.appendChild(streamDiv);
-                        log('Added stream container for stream ID: ' + stream.id);
+                        streamsContainer.appendChild(streamDiv);
                     });
+                    hideError();
                 })
                 .catch(error => {
-                    log('Error fetching streams: ' + error);
-                    const container = document.getElementById('streams-container');
-                    container.innerHTML = '<p>Error loading streams. Please try again later.</p>';
+                    console.error('Error fetching streams:', error);
+                    loading.style.display = 'none';
+                    showError('Error loading streams. Please try again later.');
                 });
         }
 
-        // Initial update
+        // Initial connection and update
+        connectWebSocket();
         updateStreams();
 
         // Update stream list every 30 seconds
