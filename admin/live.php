@@ -89,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo "<div class='stream-item'>";
-            // echo "Stream ID: " . $row['id'] . " - Status: " . $row['status'];
             echo "<form method='post' style='display:inline; margin-left: 10px;'>";
             echo "<input type='hidden' name='stream_id' value='" . $row['id'] . "'>";
             echo "<button type='submit' name='action' value='stop'>Stop</button>";
@@ -112,7 +111,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         let video = document.getElementById('video');
         let canvas = document.getElementById('canvas');
         let stream;
-        let socket = io('https://mcceventsjudging.com:3306 ');  // Replace with your WebSocket server address
+        let socket = io('https://mcceventsjudging.com:3306');  // Replace with your WebSocket server address
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find all start buttons
+            document.querySelectorAll('button[onclick^="startWebcam"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const streamId = this.getAttribute('onclick').match(/\d+/)[0];
+                    startWebcam(streamId);
+                });
+            });
+
+            // Find all stop buttons
+            document.querySelectorAll('button[name="action"][value="stop"]').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const streamId = this.closest('form').querySelector('input[name="stream_id"]').value;
+                    stopStream(streamId);
+                });
+            });
+        });
 
         async function startWebcam(streamId) {
             try {
@@ -121,6 +139,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 broadcastStream(streamId);
             } catch (err) {
                 console.error("Error accessing the webcam", err);
+            }
+        }
+
+        async function stopStream(streamId) {
+            const formData = new FormData();
+            formData.append('action', 'stop');
+            formData.append('stream_id', streamId);
+
+            try {
+                const response = await fetch(window.location.href, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.text();
+                console.log(result);
+                // Optionally, you can reload the page or update the UI here
+                window.location.reload();
+            } catch (error) {
+                console.error('Error stopping stream:', error);
             }
         }
 
@@ -133,7 +170,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         function captureImage(streamId) {
-            // ... (previous captureImage function remains the same) ...
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            let imageData = canvas.toDataURL('image/png');
+            
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=capture&stream_id=${streamId}&image=${encodeURIComponent(imageData)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
     </script>
 </body>
