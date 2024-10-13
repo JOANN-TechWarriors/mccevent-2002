@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
     });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 127.0.0.1;
 http.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
