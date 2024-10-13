@@ -16,6 +16,15 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
     <link rel="shortcut icon" href="../images/logo copy.png"/>
     <title>Live Stream Viewer</title>
     <style>
+        /* ... (keep your existing styles) ... */
+        #debug-log {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -76,19 +85,42 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
         }
         ?>
     </div>
+    <div id="debug-log"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
-        const socket = io('https://mcceventsjudging.com:3306');  // Replace with your WebSocket server address
+        const debugLog = document.getElementById('debug-log');
+        function log(message) {
+            console.log(message);
+            debugLog.textContent += message + '\n';
+        }
+
+        const socket = io('https://mcceventsjudging.com:3306', {
+            transports: ['websocket'],
+            upgrade: false
+        });
+
+        socket.on('connect', () => {
+            log('Connected to WebSocket server');
+        });
+
+        socket.on('connect_error', (error) => {
+            log('WebSocket connection error: ' + error);
+        });
 
         socket.on('stream', (data) => {
+            log('Received stream data for stream ID: ' + data.streamId);
             const img = document.getElementById(`video-${data.streamId}`);
             if (img) {
                 img.src = data.imageData;
+                log('Updated image for stream ID: ' + data.streamId);
+            } else {
+                log('Image element not found for stream ID: ' + data.streamId);
             }
         });
 
         function updateStreams() {
+            log('Fetching updated stream list...');
             fetch('get_streams.php')
                 .then(response => {
                     if (!response.ok) {
@@ -97,6 +129,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
                     return response.json();
                 })
                 .then(streams => {
+                    log('Received ' + streams.length + ' streams');
                     const container = document.getElementById('streams-container');
                     if (streams.length === 0) {
                         container.innerHTML = '<p>No active streams at the moment.</p>';
@@ -118,10 +151,11 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
                             </div>
                         `;
                         container.appendChild(streamDiv);
+                        log('Added stream container for stream ID: ' + stream.id);
                     });
                 })
                 .catch(error => {
-                    console.error('Error fetching streams:', error);
+                    log('Error fetching streams: ' + error);
                     const container = document.getElementById('streams-container');
                     container.innerHTML = '<p>Error loading streams. Please try again later.</p>';
                 });
