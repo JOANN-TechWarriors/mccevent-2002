@@ -52,7 +52,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
-        const socket = io('https://mcceventsjudging.com:3306 ');  // Replace with your WebSocket server address
+        const socket = io('https://mcceventsjudging.com:3000 ');  // Replace with your WebSocket server address
 
         socket.on('stream', (data) => {
             const img = document.getElementById(`video-${data.streamId}`);
