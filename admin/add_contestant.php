@@ -170,21 +170,21 @@
 
 
 
-                <br />
-                <div class="col-md-10">
-                    <ul class="breadcrumb">
+     <br />
+    <div class="col-md-10">
+        <ul class="breadcrumb">
                     
-                        <li><a href="dashboard.php">Dashboard</a></li>
+        <li><a href="dashboard.php">Dashboard</a></li>
                     
-                        <li><a href="home.php">List of Events</a></li>
+        <li><a href="home.php">List of Events</a></li>
                         
-                        <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
+        <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
                         
-                        <li>Add Contestant</li>
+       <li>Add Contestant</li>
                         
-                    </ul>
-                </div>
-                <br><br><br><br>
+       </ul>
+    </div>
+     <br><br><br><br>
                 
 
    <form method="POST" enctype="multipart/form-data">
