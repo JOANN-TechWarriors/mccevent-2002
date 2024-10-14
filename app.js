@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
 });
 
 // Endpoint to get active streams
-app.get('get_streams.php', (req, res) => {
+app.get('/active-streams', (req, res) => {
     res.json(Array.from(activeStreams));
 });
 
