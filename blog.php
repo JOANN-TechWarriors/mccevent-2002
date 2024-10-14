@@ -105,7 +105,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
             return;
         }
 
-        const serverUrl = 'wss://mcceventsjudging.com:3306'; // Change to correct WebSocket URL
+        const serverUrl = 'https://mcceventsjudging.com:3306'; // Change to correct WebSocket URL
         console.log(`Attempting to connect to WebSocket server: ${serverUrl}`);
 
         socket = io(serverUrl, {
