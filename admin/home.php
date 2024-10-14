@@ -773,16 +773,8 @@ $(document).ready(function() {
     $('#saveChanges').on('click', function() {
     var formData = new FormData($('#editEventForm')[0]);
     
-    // Show "Saving changes" SweetAlert immediately
-    Swal.fire({
-        title: 'Saving changes...',
-        allowOutsideClick: false,
-        timer: 5000,
-        timerProgressBar: true,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
+    // Disable the save button to prevent multiple submissions
+    $('#saveChanges').prop('disabled', true);
 
     $.ajax({
         url: 'update_event.php',
@@ -795,7 +787,7 @@ $(document).ready(function() {
                 response = JSON.parse(response);
             }
             
-            // Wait for the "Saving changes" SweetAlert to finish
+            // Wait for 5 seconds before showing the success/error alert
             setTimeout(() => {
                 if (response.success) {
                     Swal.fire({
@@ -813,16 +805,20 @@ $(document).ready(function() {
                         text: response.message || 'Failed to update event'
                     });
                 }
+                // Re-enable the save button
+                $('#saveChanges').prop('disabled', false);
             }, 5000);
         },
         error: function() {
-            // Wait for the "Saving changes" SweetAlert to finish
+            // Wait for 5 seconds before showing the error alert
             setTimeout(() => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Failed to update event'
                 });
+                // Re-enable the save button
+                $('#saveChanges').prop('disabled', false);
             }, 5000);
         }
     });
