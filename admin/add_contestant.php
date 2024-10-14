@@ -1,9 +1,12 @@
+ 
+
 <!DOCTYPE html>
 <html lang="en">
   
   <?php 
   include('header.php');
-  session_start();    
+    include('session.php');
+    
     
     $sub_event_id=$_GET['sub_event_id'];
     $se_name=$_GET['se_name'];
@@ -11,8 +14,7 @@
      
   ?>
   <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="shortcut icon" href="../images/logo copy.png"/>
+      <link rel="shortcut icon" href="../images/logo copy.png"/>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -137,17 +139,16 @@
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggle-btn">☰</button>
     <div class="sidebar-heading">
-      <img src="../img/logo.png" alt="Logo">
+      <img src="logo.png" alt="Logo">
       <div>Event Judging System</div>
     </div>
     <ul>
-      <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-      <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-      <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-      <li><a href="score_sheets.php"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
-      <li><a href="rev_main_event.php"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
-      <li><a href="live.php"><i class="fas fa-camera"></i> <span>LIVE</span></a></li>
-    </ul>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+            <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+            <li><a href="live.php"><i class="fas fa-camera"></i> <span>LIVE</span></a></li>
+
+        </ul>
   </div>
 
   <div class="main" id="main-content">
@@ -283,40 +284,38 @@
           </div>
           
     </div>      
-    <?php 
-if(isset($_POST['add_contestant'])) {
-    $se_name = $_POST['se_name'];
-    $sub_event_id = $_POST['sub_event_id'];
-    $contestant_ctr = $_POST['contestant_ctr'];
-    $fullname = $_POST['fullname'];
-    $course = $_POST['addon'];
-    $picture = $_FILES['picture']['name'];
-    $target = '../img/' . basename($picture);
-    
-    if (!empty($picture)) {
-        if (move_uploaded_file($_FILES['picture']['tmp_name'], $target)) {
-            $conn->query("INSERT INTO contestants (fullname, subevent_id, contestant_ctr, picture, AddOn) VALUES ('$fullname', '$sub_event_id', '$contestant_ctr', '$picture', '$course')");
-            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@10'></script>";
-            echo "<script>
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Contestant $fullname added successfully!',
-                    icon: 'success'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location = 'sub_event_details_edit.php?sub_event_id=$sub_event_id&se_name=$se_name';
-                    }
-                });
-            </script>";
-        } else {
-            echo "<script>alert('Failed to upload the picture.');</script>";
-        }
-    } else {
-        echo "<script>alert('No picture selected.');</script>";
-    }
-}
-?>
+<?php 
 
+if(isset($_POST['add_contestant']))
+{
+    
+    $se_name=$_POST['se_name'];
+    $sub_event_id=$_POST['sub_event_id'];
+    $contestant_ctr=$_POST['contestant_ctr'];
+    $picture=$_POST['picture'];
+    $fullname=$_POST['fullname'];
+    $course=$_POST['addon'];
+    $picture=$_FILES['picture']['name'];
+    $target = 'img/'.basename($picture);
+    
+  
+   /* contestants */
+   
+    $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr,picture, 
+    AddOn)VALUES('$fullname','$sub_event_id','$contestant_ctr','$picture', '$course' )");
+   move_uploaded_file($_FILES['picture']['tmp_name'],$target);
+  
+ ?>
+<script>
+			                                      
+			      								window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>';
+			      							   	alert('Contestant <?php echo $fullname; ?>  added successfully!');						
+			      								</script>
+<?php  
+ 
+ 
+} ?>
+  <div>
 <?php include('footer.php'); ?>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

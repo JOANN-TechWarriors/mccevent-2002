@@ -30,18 +30,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("i", $organizer_id);
             if ($stmt->execute()) {
                 $stream_id = $db->insert_id;
-                // echo "<p>Stream started with ID: " . $stream_id . "</p>";
+                echo json_encode(['status' => 'success', 'stream_id' => $stream_id]);
             } else {
-                // echo "<p>Error starting stream: " . $stmt->error . "</p>";
+                echo json_encode(['status' => 'error', 'message' => 'Error starting stream: ' . $stmt->error]);
             }
+            exit;
         } elseif ($_POST['action'] === 'stop') {
             $stmt = $db->prepare("UPDATE streams SET status = 'ended' WHERE id = ? AND status = 'live' AND organizer_id = ?");
             $stmt->bind_param("ii", $_POST['stream_id'], $organizer_id);
             if ($stmt->execute()) {
-                // echo "<p>Stream ended</p>";
+                echo json_encode(['status' => 'success', 'message' => 'Stream ended']);
             } else {
-                // echo "<p>Error ending stream: " . $stmt->error . "</p>";
+                echo json_encode(['status' => 'error', 'message' => 'Error ending stream: ' . $stmt->error]);
             }
+            exit;
         } elseif ($_POST['action'] === 'capture') {
             $img = $_POST['image'];
             $img = str_replace('data:image/png;base64,', '', $img);
@@ -80,28 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <h1>Live Stream Control Panel</h1>
-    <form method="post">
-        <button type="submit" name="action" value="start">Start New Stream</button>
-    </form>
+    <button id="startStreamBtn">Start New Stream</button>
     <h2>Active Streams</h2>
-    <?php
-    $result = $db->query("SELECT * FROM streams WHERE status = 'live' AND organizer_id = $organizer_id");
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<div class='stream-item'>";
-            // echo "Stream ID: " . $row['id'] . " - Status: " . $row['status'];
-            echo "<form method='post' style='display:inline; margin-left: 10px;'>";
-            echo "<input type='hidden' name='stream_id' value='" . $row['id'] . "'>";
-            echo "<button type='submit' name='action' value='stop'>Stop</button>";
-            echo "</form>";
-            echo "<button onclick='startWebcam(" . $row['id'] . ")'>Start</button>";
-            echo "<button onclick='captureImage(" . $row['id'] . ")'>Capture Image</button>";
-            echo "</div>";
-        }
-    } else {
-        echo "<p>No active streams at the moment.</p>";
-    }
-    ?>
+    <div id="activeStreams"></div>
     <div id="videoContainer">
         <video id="video" width="1240" height="580" autoplay></video>
         <canvas id="canvas" width="1340" height="480" style="display:none;"></canvas>
@@ -113,6 +96,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         let canvas = document.getElementById('canvas');
         let stream;
         let socket = io('http://localhost:3000');  // Replace with your WebSocket server address
+        let currentStreamId = null;
+
+        document.getElementById('startStreamBtn').addEventListener('click', startNewStream);
+
+        async function startNewStream() {
+            try {
+                const response = await fetch('', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=start'
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    currentStreamId = data.stream_id;
+                    await startWebcam(currentStreamId);
+                    updateActiveStreams();
+                } else {
+                    console.error("Error starting stream:", data.message);
+                }
+            } catch (err) {
+                console.error("Error starting stream:", err);
+            }
+        }
 
         async function startWebcam(streamId) {
             try {
@@ -133,8 +141,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         function captureImage(streamId) {
-            // ... (previous captureImage function remains the same) ...
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            let imageData = canvas.toDataURL('image/png');
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=capture&stream_id=${streamId}&image=${encodeURIComponent(imageData)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log("Image captured successfully");
+                } else {
+                    console.error("Error capturing image:", data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
+
+        function stopStream(streamId) {
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=stop&stream_id=${streamId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log("Stream stopped successfully");
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                    video.srcObject = null;
+                    currentStreamId = null;
+                    updateActiveStreams();
+                } else {
+                    console.error("Error stopping stream:", data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function updateActiveStreams() {
+            fetch(`get_streams.php?organizer_id=${<?php echo $organizer_id; ?>}`)
+            .then(response => response.json())
+            .then(streams => {
+                const activeStreamsDiv = document.getElementById('activeStreams');
+                activeStreamsDiv.innerHTML = '';
+                streams.forEach(stream => {
+                    const streamDiv = document.createElement('div');
+                    streamDiv.className = 'stream-item';
+                    streamDiv.innerHTML = `
+                        Stream ID: ${stream.id} - Status: ${stream.status}
+                        <button onclick="stopStream(${stream.id})">Stop</button>
+                        <button onclick="captureImage(${stream.id})">Capture Image</button>
+                    `;
+                    activeStreamsDiv.appendChild(streamDiv);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Initial update of active streams
+        updateActiveStreams();
     </script>
 </body>
 </html>
