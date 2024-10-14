@@ -206,7 +206,7 @@ $txtsearch = $_POST['txtsearch'];
     </div>
     <div class="container">
       <br />
-      <div class="col-md-12">
+      <div class="col-md-10">
         <ul class="breadcrumb">
           <li><a href="rev_main_event.php">Data Reviews</a> / </li>
           <li>Data Reviews: Search</li>
