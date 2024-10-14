@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h2>Active Streams</h2>
     <div id="activeStreams"></div>
     <div id="videoContainer">
-        <video id="video" width="1240" height="580" autoplay></video>
+        <video id="video" width="1240" height="680" autoplay></video>
         <canvas id="canvas" width="1340" height="480" style="display:none;"></canvas>
     </div>
 
