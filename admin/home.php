@@ -76,6 +76,10 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         background-color: #fff;
         margin: 0;
         padding: 0;
+        height: 100vh; /* Ensures full height */
+        width: 100vw;  /* Ensures full width */
+        position: fixed; /* Fixes the body in place */
+        overflow: hidden; /* Prevents scrolling */
     }
 
     .sidebar {
