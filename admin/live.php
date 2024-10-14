@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div id="activeStreams"></div>
     <div id="videoContainer">
         <video id="video" width="1240" height="680" autoplay></video>
-        <canvas id="canvas" width="1540" height="480" style="display:none;"></canvas>
+        <canvas id="canvas" width="1740" height="480" style="display:none;"></canvas>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
