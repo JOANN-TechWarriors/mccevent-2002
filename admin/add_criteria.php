@@ -31,91 +31,93 @@
     }
 
     .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 250px;
-      background-color: #27293d;
-      color: #fff;
-      padding-top: 20px;
-      transition: all 0.3s;
-      overflow: hidden;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 250px;
+        background-color: #27293d;
+        color: #fff;
+        padding-top: 20px;
+        transition: all 0.3s;
+        overflow: hidden;
     }
 
     .sidebar.collapsed {
-      width: 80px;
+        width: 80px;
     }
 
     .sidebar .toggle-btn {
-      position: absolute;
-      top: 10px;
-      right: -2px;
-      background-color: transparent;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 20px;
+        position: absolute;
+        top: 10px;
+        right: 18px;
+        background-color: transparent;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
     }
 
     .sidebar .toggle-btn i {
-      font-size: 18px;
+        font-size: 20px;
     }
 
     .sidebar-heading {
-      text-align: center;
-      padding: 10px 0;
-      font-size: 18px;
-      margin-bottom: 10px;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 18px;
+        margin-bottom: 10px;
     }
 
     .sidebar-heading img {
-      max-width: 100px;
-      max-height: 100px;
+        max-width: 100px;
+        max-height: 100px;
     }
 
     .sidebar ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        font-size: 14px;
     }
 
     .sidebar ul li {
-      padding: 10px;
-      border-bottom: 1px solid #555;
-      transition: all 0.3s;
+        padding: 15px 20px;
+        transition: all 0.3s;
     }
 
     .sidebar ul li a {
-      color: #fff;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
     }
 
     .sidebar ul li a i {
-      margin-right: 10px;
-      transition: margin 0.3s;
+        margin-right: 10px;
+        transition: margin 0.3s;
+        font-size: 14px;
     }
 
     .sidebar.collapsed ul li a i {
-      margin-right: 0;
+        margin-right: 0;
     }
 
     .sidebar ul li a span {
-      display: inline-block;
-      transition: opacity 0.3s;
+        display: inline-block;
+        transition: opacity 0.3s;
     }
 
     .sidebar.collapsed ul li a span {
-      opacity: 0;
-      width: 0;
-      overflow: hidden;
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
     }
 
     .sidebar ul li a:hover {
-      background-color: #555;
+        background-color: #1a1a2e;
+        
     }
 
     .main {
@@ -219,13 +221,12 @@
       <div>Event Judging System</div>
     </div>
     <ul>
-      <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-      <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-      <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-      <li><a href="score_sheets.php"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
-      <li><a href="rev_main_event.php"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
-      <li><a href="live.php"><i class="fas fa-camera"></i> <span>LIVE</span></a></li>
-    </ul>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+            <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+            <li><a href="live.php"><i class="fas fa-camera"></i> <span>LIVE</span></a></li>
+
+        </ul>
   </div>
 
 <div class="main" id="main-content">
