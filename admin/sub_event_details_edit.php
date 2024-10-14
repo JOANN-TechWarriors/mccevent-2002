@@ -210,7 +210,7 @@ $se_row = $se_query->fetch();
 
   <div class="container">
 
-    <div class="span12">
+    <div class="span15">
 
 
 
@@ -229,7 +229,7 @@ $se_row = $se_query->fetch();
         </ul>
       </div>
 
-
+    </div>
 
 
       <form method="POST">
