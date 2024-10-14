@@ -25,7 +25,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
             border-radius: 5px;
         }
         .stream-video {
-            width: 1395px;
+            width: 1295px;
             height: 580px;
             background-color: #000;
             color: #fff;
