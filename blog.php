@@ -66,17 +66,17 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
     <script>
         const socket = io('https://mcceventsjudging.com:3306');
 
-        socket.on('stream', (data) => {
-            const img = document.getElementById(`video-${data.streamId}`);
-            if (img) {
-                img.src = data.imageData;
-            }
-        });
+        socket.on('streamEnded', (streamId) => {
+    const streamElement = document.getElementById(`stream-${streamId}`);
+    if (streamElement) {
+        streamElement.remove();
+    }
+    });
 
-        function updateStreams() {
-            fetch('get_streams.php')
-                .then(response => response.json())
-                .then(streams => {
+    function updateStreams() {
+        fetch('/active-streams')
+            .then(response => response.json())
+            .then(streamIds => {
                     const container = document.getElementById('streams-container');
                     if (streams.length === 0) {
                         container.innerHTML = '<p id="no-streams">No active streams at the moment.</p>';
@@ -106,13 +106,12 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
                         });
                     }
                 })
-                .catch(error => {
-                    console.error('Error fetching streams:', error);
-                    const container = document.getElementById('streams-container');
-                    container.innerHTML = '<p>Error loading streams. Please try again later.</p>';
-                });
-        }
-
+                    .catch(error => {
+                        console.error('Error fetching streams:', error);
+                        const container = document.getElementById('streams-container');
+                        container.innerHTML = '<p>Error loading streams. Please try again later.</p>';
+                    });
+            }
         // Initial load of streams
         updateStreams();
 
