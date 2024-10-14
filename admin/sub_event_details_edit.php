@@ -229,7 +229,7 @@ $se_row = $se_query->fetch();
         </ul>
       </div>
 
-    </div>
+  
 
 
       <form method="POST">
