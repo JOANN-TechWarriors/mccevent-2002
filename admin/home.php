@@ -771,46 +771,56 @@ $(document).ready(function() {
     
     // Handle save changes button click
     $('#saveChanges').on('click', function() {
-        var formData = new FormData($('#editEventForm')[0]);
-        
-        $.ajax({
-            url: 'update_event.php',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                // Parse the response if it's a string
-                if (typeof response === 'string') {
-                    response = JSON.parse(response);
-                }
-                
-                if (response.success) {
+    var formData = new FormData($('#editEventForm')[0]);
+    
+    // Show loading indicator immediately
+    Swal.fire({
+        title: 'Saving changes...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    $.ajax({
+        url: 'update_event.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (typeof response === 'string') {
+                response = JSON.parse(response);
+            }
+            
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: response.message
+                }).then(function() {
                     $('#editEventModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(function() {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message || 'Failed to update event'
-                    });
-                }
-            },
-            error: function() {
+                    // Consider updating page content dynamically here
+                    // instead of reloading the entire page
+                    location.reload();
+                });
+            } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Failed to update event'
+                    text: response.message || 'Failed to update event'
                 });
             }
-        });
+        },
+        error: function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to update event'
+            });
+        }
     });
+});
 });
 </script>
 <script>
