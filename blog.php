@@ -100,30 +100,33 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
         }
 
         function connectWebSocket() {
-            if (reconnectAttempts >= maxReconnectAttempts) {
-                showError('Maximum reconnection attempts reached. Please refresh the page.');
-                return;
-            }
+        if (reconnectAttempts >= maxReconnectAttempts) {
+            showError('Maximum reconnection attempts reached. Please refresh the page.');
+            return;
+        }
 
-            socket = io('https://mcceventsjudging.com:3306', {
-                transports: ['websocket'],
-                upgrade: false,
-                reconnection: false,
-                timeout: 10000
-            });
+        const serverUrl = 'wss://mcceventsjudging.com:3306'; // Change to correct WebSocket URL
+        console.log(`Attempting to connect to WebSocket server: ${serverUrl}`);
 
-            socket.on('connect', () => {
-                console.log('Connected to WebSocket server');
-                hideError();
-                reconnectAttempts = 0;
-            });
+        socket = io(serverUrl, {
+            transports: ['websocket'],
+            upgrade: false,
+            reconnection: false,
+            timeout: 10000
+        });
 
-            socket.on('connect_error', (error) => {
-                console.error('WebSocket connection error:', error);
-                reconnectAttempts++;
-                showError(`WebSocket connection error. Retrying... (${reconnectAttempts}/${maxReconnectAttempts})`);
-                setTimeout(connectWebSocket, 5000);
-            });
+        socket.on('connect', () => {
+            console.log('Connected to WebSocket server');
+            hideError();
+            reconnectAttempts = 0;
+        });
+
+        socket.on('connect_error', (error) => {
+            console.error('WebSocket connection error:', error);
+            reconnectAttempts++;
+            showError(`WebSocket connection error: ${error.message}. Retrying... (${reconnectAttempts}/${maxReconnectAttempts})`);
+            setTimeout(connectWebSocket, 5000);
+        });
 
             socket.on('stream', (data) => {
                 const img = document.getElementById(`video-${data.streamId}`);
@@ -174,7 +177,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
                 });
         }
 
-        // Initial connection and update
+        // Call this function to initiate the WebSocket connection
         connectWebSocket();
         updateStreams();
 
