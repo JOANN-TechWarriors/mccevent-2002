@@ -435,7 +435,7 @@ if (isset($_POST['edit_se'])) {
     </div>
     <div class="main" id="main-content">
         <div class="container">
-            <h1>Ongoing Events</h1>
+            <h1  style="font-size: 35px;">Ongoing Events</h1>
         </div>
         <section id="download-bootstrap">
             <a data-toggle="modal" class="btn btn-info pull-right" href="#addMEcollapse"
