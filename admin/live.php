@@ -190,7 +190,7 @@ function stopStream(streamId) {
 }
 
 function updateActiveStreams() {
-    fetch(`get_streams.php?organizer_id=${<?php echo $organizer_id; ?>}`)
+    fetch(`/active-streams?organizer_id=${<?php echo $organizer_id; ?>}`)
     .then(response => response.json())
     .then(streams => {
         const activeStreamsDiv = document.getElementById('activeStreams');
