@@ -215,7 +215,7 @@ $se_row = $se_query->fetch();
 
 
       <br />
-      <div class="col-md-12">
+      <div class="col-md-10">
         <ul class="breadcrumb">
 
           <li><a href="dashboard.php">Dashboard</a> / </li>
