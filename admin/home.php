@@ -807,7 +807,7 @@ $(document).ready(function() {
                 }
                 // Re-enable the save button
                 $('#saveChanges').prop('disabled', false);
-            }, 2000);
+            }, 1000);
         },
         error: function() {
             // Wait for 2 seconds before showing the error SweetAlert
@@ -819,7 +819,7 @@ $(document).ready(function() {
                 });
                 // Re-enable the save button
                 $('#saveChanges').prop('disabled', false);
-            }, 2000);
+            }, 1000);
         }
     });
 });
