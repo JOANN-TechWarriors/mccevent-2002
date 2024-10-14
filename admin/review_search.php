@@ -205,6 +205,8 @@ $txtsearch = $_POST['txtsearch'];
       <h1 style="font-size: 35px;">Data Reviews</h1>
     </div>
     <div class="container">
+    <div class="span15">
+
       <br />
       <div class="col-md-10">
         <ul class="breadcrumb">
@@ -213,6 +215,7 @@ $txtsearch = $_POST['txtsearch'];
         </ul>
       </div>
       <br />
+  </div>
     </div>
     <div class="col-lg-10">
       <form method="POST" target="_self" action="review_search.php">
