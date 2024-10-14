@@ -1,17 +1,17 @@
 <?php
-// Database connection (replace with your actual database credentials)
+// Database connection (use the same credentials as in the main file)
 $db = new mysqli('127.0.0.1', 'u510162695_judging_root', '1Judging_root', 'u510162695_judging');
 if ($db->connect_error) {
-    die("Connection failed: " . $db->connect_error);
+    die(json_encode(['error' => "Connection failed: " . $db->connect_error]));
 }
 
-$result = $db->query("SELECT * FROM streams WHERE status = 'live'");
-$streams = [];
+$stmt = $db->prepare("SELECT id, status FROM streams WHERE status = 'live'");
+$stmt->execute();
+$result = $stmt->get_result();
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $streams[] = $row;
-    }
+$streams = [];
+while ($row = $result->fetch_assoc()) {
+    $streams[] = $row;
 }
 
 header('Content-Type: application/json');

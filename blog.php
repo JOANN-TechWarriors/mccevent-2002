@@ -16,8 +16,13 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
     <link rel="shortcut icon" href="../images/logo copy.png"/>
     <title>Live Stream Viewer</title>
     <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
         .stream-container {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
         }
         .stream-video {
             width: 1320px;
@@ -28,12 +33,20 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
             justify-content: center;
             align-items: center;
         }
+        .stream-video img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        #no-streams {
+            font-style: italic;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <h1>Available Live Streams</h1>
     <div id="streams-container">
-        <?php
+    <?php
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<div class='stream-container' id='stream-" . $row['id'] . "'>";
@@ -62,28 +75,41 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
         });
 
         function updateStreams() {
-            fetch('get_streams.php')
+            fetch('get_active_streams.php')
                 .then(response => response.json())
                 .then(streams => {
                     const container = document.getElementById('streams-container');
                     container.innerHTML = '';
-                    streams.forEach(stream => {
-                        const streamDiv = document.createElement('div');
-                        streamDiv.className = 'stream-container';
-                        streamDiv.id = `stream-${stream.id}`;
-                        streamDiv.innerHTML = `
-                            <h2>Stream ID: ${stream.id}</h2>
-                            <p>Status: ${stream.status}</p>
-                            <div class='stream-video'>
-                                <img id='video-${stream.id}' src='' alt='Live Stream'>
-                            </div>
-                        `;
-                        container.appendChild(streamDiv);
-                    });
+                    if (streams.length === 0) {
+                        container.innerHTML = '<p id="no-streams">No active streams at the moment.</p>';
+                    } else {
+                        streams.forEach(stream => {
+                            const streamDiv = document.createElement('div');
+                            streamDiv.className = 'stream-container';
+                            streamDiv.id = `stream-${stream.id}`;
+                            streamDiv.innerHTML = `
+                                <h2>Stream ID: ${stream.id}</h2>
+                                <p>Status: ${stream.status}</p>
+                                <div class='stream-video'>
+                                    <img id='video-${stream.id}' src='' alt='Live Stream'>
+                                </div>
+                            `;
+                            container.appendChild(streamDiv);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching streams:', error);
+                    const container = document.getElementById('streams-container');
+                    container.innerHTML = '<p>Error loading streams. Please try again later.</p>';
                 });
         }
 
-        setInterval(updateStreams, 30000);  // Update stream list every 30 seconds
+        // Initial load of streams
+        updateStreams();
+
+        // Update stream list every 30 seconds
+        setInterval(updateStreams, 30000);
     </script>
 </body>
 </html>
