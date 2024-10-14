@@ -773,61 +773,58 @@ $(document).ready(function() {
     $('#saveChanges').on('click', function() {
     var formData = new FormData($('#editEventForm')[0]);
     
-    // Show loading indicator immediately
+    // Show "Saving changes" SweetAlert immediately
     Swal.fire({
         title: 'Saving changes...',
         allowOutsideClick: false,
-        timer: 5000,  // Set timer for 5 seconds
-        timerProgressBar: true,  // Show a progress bar
+        timer: 5000,
+        timerProgressBar: true,
         didOpen: () => {
             Swal.showLoading();
         }
     });
 
-    // Create a promise that resolves after 5 seconds
-    const timerPromise = new Promise((resolve) => {
-        setTimeout(resolve, 5000);
-    });
-
-    // Run the AJAX request and the timer concurrently
-    Promise.all([
-        $.ajax({
-            url: 'update_event.php',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false
-        }),
-        timerPromise
-    ]).then(([response]) => {
-        if (typeof response === 'string') {
-            response = JSON.parse(response);
+    $.ajax({
+        url: 'update_event.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (typeof response === 'string') {
+                response = JSON.parse(response);
+            }
+            
+            // Wait for the "Saving changes" SweetAlert to finish
+            setTimeout(() => {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.message
+                    }).then(function() {
+                        $('#editEventModal').modal('hide');
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'Failed to update event'
+                    });
+                }
+            }, 5000);
+        },
+        error: function() {
+            // Wait for the "Saving changes" SweetAlert to finish
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to update event'
+                });
+            }, 5000);
         }
-        
-        if (response.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: response.message
-            }).then(function() {
-                $('#editEventModal').modal('hide');
-                // Consider updating page content dynamically here
-                // instead of reloading the entire page
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: response.message || 'Failed to update event'
-            });
-        }
-    }).catch(() => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to update event'
-        });
     });
 });
 });
