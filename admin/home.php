@@ -773,7 +773,7 @@ $(document).ready(function() {
     $('#saveChanges').on('click', function() {
     var formData = new FormData($('#editEventForm')[0]);
     
-    // Disable the save button to prevent multiple submissions
+    // Disable the save button to prevent multiple clicks
     $('#saveChanges').prop('disabled', true);
 
     $.ajax({
@@ -787,7 +787,7 @@ $(document).ready(function() {
                 response = JSON.parse(response);
             }
             
-            // Wait for 5 seconds before showing the success/error alert
+            // Wait for 2 seconds before showing the SweetAlert
             setTimeout(() => {
                 if (response.success) {
                     Swal.fire({
@@ -807,10 +807,10 @@ $(document).ready(function() {
                 }
                 // Re-enable the save button
                 $('#saveChanges').prop('disabled', false);
-            }, 5000);
+            }, 2000);
         },
         error: function() {
-            // Wait for 5 seconds before showing the error alert
+            // Wait for 2 seconds before showing the error SweetAlert
             setTimeout(() => {
                 Swal.fire({
                     icon: 'error',
@@ -819,7 +819,7 @@ $(document).ready(function() {
                 });
                 // Re-enable the save button
                 $('#saveChanges').prop('disabled', false);
-            }, 5000);
+            }, 2000);
         }
     });
 });
