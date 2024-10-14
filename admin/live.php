@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         let video = document.getElementById('video');
         let canvas = document.getElementById('canvas');
         let stream;
-        let socket = io('http://localhost:3000');  // Replace with your WebSocket server address
+        let socket = io('https://mcceventsjudging.com:3306');  // Replace with your WebSocket server address
         let currentStreamId = null;
 
         document.getElementById('startStreamBtn').addEventListener('click', startNewStream);
