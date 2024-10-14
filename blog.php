@@ -74,44 +74,58 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
     });
 
     function updateStreams() {
-        fetch('/active-streams')
-            .then(response => response.json())
-            .then(streamIds => {
-                    const container = document.getElementById('streams-container');
-                    if (streams.length === 0) {
-                        container.innerHTML = '<p id="no-streams">No active streams at the moment.</p>';
-                    } else {
-                        streams.forEach(stream => {
-                            let streamDiv = document.getElementById(`stream-${stream.id}`);
-                            if (!streamDiv) {
-                                streamDiv = document.createElement('div');
-                                streamDiv.className = 'stream-container';
-                                streamDiv.id = `stream-${stream.id}`;
-                                streamDiv.innerHTML = `
-                                    <div class='stream-video'>
-                                        <img id='video-${stream.id}' src='' alt='Live Stream'>
-                                    </div>
-                                `;
-                                container.appendChild(streamDiv);
-                            }
-                        });
-                        // Remove streams that are no longer active
-                        Array.from(container.children).forEach(child => {
-                            if (child.id && child.id.startsWith('stream-')) {
-                                const streamId = child.id.split('-')[1];
-                                if (!streams.some(s => s.id == streamId)) {
-                                    container.removeChild(child);
-                                }
-                            }
-                        });
-                    }
-                })
-                    .catch(error => {
-                        console.error('Error fetching streams:', error);
-                        const container = document.getElementById('streams-container');
-                        container.innerHTML = '<p>Error loading streams. Please try again later.</p>';
-                    });
+    fetch('get_streams.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
             }
+            const streams = data.streams || [];
+            const container = document.getElementById('streams-container');
+            if (streams.length === 0) {
+                container.innerHTML = '<p id="no-streams">No active streams at the moment.</p>';
+            } else {
+                streams.forEach(stream => {
+                    let streamDiv = document.getElementById(`stream-${stream.id}`);
+                    if (!streamDiv) {
+                        streamDiv = document.createElement('div');
+                        streamDiv.className = 'stream-container';
+                        streamDiv.id = `stream-${stream.id}`;
+                        streamDiv.innerHTML = `
+                            <div class='stream-video'>
+                                <img id='video-${stream.id}' src='' alt='Live Stream'>
+                            </div>
+                        `;
+                        container.appendChild(streamDiv);
+                    }
+                });
+                // Remove streams that are no longer active
+                Array.from(container.children).forEach(child => {
+                    if (child.id && child.id.startsWith('stream-')) {
+                        const streamId = child.id.split('-')[1];
+                        if (!streams.some(s => s.id == streamId)) {
+                            container.removeChild(child);
+                        }
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching streams:', error);
+            const container = document.getElementById('streams-container');
+            container.innerHTML = `<p>Error loading streams: ${error.message}. Please try again later.</p>`;
+        });
+        }
+
+        // Log WebSocket connection status
+        const socket = io('https://mcceventsjudging.com:3306');
+        socket.on('connect', () => {
+            console.log('WebSocket connected');
+        });
+        socket.on('connect_error', (error) => {
+            console.error('WebSocket connection error:', error);
+        });
+
         // Initial load of streams
         updateStreams();
 
