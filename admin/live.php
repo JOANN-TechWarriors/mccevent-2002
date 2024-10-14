@@ -196,7 +196,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     const streamDiv = document.createElement('div');
                     streamDiv.className = 'stream-item';
                     streamDiv.innerHTML = `
-                    
                         <button onclick="stopStream(${stream.id})">Stop</button>
                         <button onclick="captureImage(${stream.id})">Capture Image</button>
                     `;

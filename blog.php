@@ -75,7 +75,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
         });
 
         function updateStreams() {
-            fetch('get_active_streams.php')
+            fetch('get_streams.php')
                 .then(response => response.json())
                 .then(streams => {
                     const container = document.getElementById('streams-container');
@@ -88,8 +88,6 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
                             streamDiv.className = 'stream-container';
                             streamDiv.id = `stream-${stream.id}`;
                             streamDiv.innerHTML = `
-                                <h2>Stream ID: ${stream.id}</h2>
-                                <p>Status: ${stream.status}</p>
                                 <div class='stream-video'>
                                     <img id='video-${stream.id}' src='' alt='Live Stream'>
                                 </div>
