@@ -22,17 +22,33 @@ if ($organizer_id === null) {
     die("No valid organizer found in the database.");
 }
 
+// Function to stop all active streams for the organizer
+function stopAllActiveStreams($db, $organizer_id) {
+    $stmt = $db->prepare("UPDATE streams SET status = 'ended' WHERE status = 'live' AND organizer_id = ?");
+    $stmt->bind_param("i", $organizer_id);
+    if ($stmt->execute()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Handle stream start/stop and image capture
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         if ($_POST['action'] === 'start') {
-            $stmt = $db->prepare("INSERT INTO streams (organizer_id, status) VALUES (?, 'live')");
-            $stmt->bind_param("i", $organizer_id);
-            if ($stmt->execute()) {
-                $stream_id = $db->insert_id;
-                echo json_encode(['status' => 'success', 'stream_id' => $stream_id]);
+            // Stop all active streams before starting a new one
+            if (stopAllActiveStreams($db, $organizer_id)) {
+                $stmt = $db->prepare("INSERT INTO streams (organizer_id, status) VALUES (?, 'live')");
+                $stmt->bind_param("i", $organizer_id);
+                if ($stmt->execute()) {
+                    $stream_id = $db->insert_id;
+                    echo json_encode(['status' => 'success', 'stream_id' => $stream_id]);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Error starting stream: ' . $stmt->error]);
+                }
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error starting stream: ' . $stmt->error]);
+                echo json_encode(['status' => 'error', 'message' => 'Error stopping previous streams']);
             }
             exit;
         } elseif ($_POST['action'] === 'stop') {
@@ -70,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../images/logo copy.png"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <title>Live Stream Control Panel</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
