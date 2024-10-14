@@ -116,7 +116,6 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
             container.innerHTML = `<p>Error loading streams: ${error.message}. Please try again later.</p>`;
         });
         }
-
         // Log WebSocket connection status
         const socket = io('https://mcceventsjudging.com:3306');
         socket.on('connect', () => {
