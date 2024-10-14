@@ -36,6 +36,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
         .stream-video img {
             max-width: 100%;
             max-height: 100%;
+            object-fit: contain;
         }
         #no-streams {
             font-style: italic;
@@ -47,25 +48,23 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
     <h1>Available Live Streams</h1>
     <div id="streams-container">
     <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<div class='stream-container' id='stream-" . $row['id'] . "'>";
-                // echo "<h2>Stream ID: " . $row['id'] . "</h2>";
-                // echo "<p>Status: " . $row['status'] . "</p>";
-                echo "<div class='stream-video'>";
-                echo "<img id='video-" . $row['id'] . "' src='' alt='Live Stream'>";
-                echo "</div>";
-                echo "</div>";
-            }
-        } else {
-            echo "<p>No active streams at the moment.</p>";
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<div class='stream-container' id='stream-" . $row['id'] . "'>";
+            echo "<div class='stream-video'>";
+            echo "<img id='video-" . $row['id'] . "' src='' alt='Live Stream'>";
+            echo "</div>";
+            echo "</div>";
         }
-        ?>
+    } else {
+        echo "<p id='no-streams'>No active streams at the moment.</p>";
+    }
+    ?>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
-        const socket = io('https://mcceventsjudging.com:3306');  // Replace with your WebSocket server address
+        const socket = io('https://mcceventsjudging.com:3306');
 
         socket.on('stream', (data) => {
             const img = document.getElementById(`video-${data.streamId}`);
@@ -79,20 +78,31 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
                 .then(response => response.json())
                 .then(streams => {
                     const container = document.getElementById('streams-container');
-                    container.innerHTML = '';
                     if (streams.length === 0) {
                         container.innerHTML = '<p id="no-streams">No active streams at the moment.</p>';
                     } else {
                         streams.forEach(stream => {
-                            const streamDiv = document.createElement('div');
-                            streamDiv.className = 'stream-container';
-                            streamDiv.id = `stream-${stream.id}`;
-                            streamDiv.innerHTML = `
-                                <div class='stream-video'>
-                                    <img id='video-${stream.id}' src='' alt='Live Stream'>
-                                </div>
-                            `;
-                            container.appendChild(streamDiv);
+                            let streamDiv = document.getElementById(`stream-${stream.id}`);
+                            if (!streamDiv) {
+                                streamDiv = document.createElement('div');
+                                streamDiv.className = 'stream-container';
+                                streamDiv.id = `stream-${stream.id}`;
+                                streamDiv.innerHTML = `
+                                    <div class='stream-video'>
+                                        <img id='video-${stream.id}' src='' alt='Live Stream'>
+                                    </div>
+                                `;
+                                container.appendChild(streamDiv);
+                            }
+                        });
+                        // Remove streams that are no longer active
+                        Array.from(container.children).forEach(child => {
+                            if (child.id && child.id.startsWith('stream-')) {
+                                const streamId = child.id.split('-')[1];
+                                if (!streams.some(s => s.id == streamId)) {
+                                    container.removeChild(child);
+                                }
+                            }
                         });
                     }
                 })

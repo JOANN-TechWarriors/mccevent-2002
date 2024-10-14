@@ -1,18 +1,40 @@
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const app = express();
-const https = require('https').createServer(app);
-const io = require('socket.io')(https, {
+
+// HTTPS options - make sure to replace with your actual certificate paths
+const options = {
+  key: fs.readFileSync('/path/to/your/private.key'),
+  cert: fs.readFileSync('/path/to/your/certificate.crt')
+};
+
+const server = https.createServer(options, app);
+const io = require('socket.io')(server, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
     }
 });
 
+// Keep track of active streams
+const activeStreams = new Set();
+
 io.on('connection', (socket) => {
     console.log('A user connected');
 
     socket.on('stream', (data) => {
+        // Add stream ID to active streams if it's not already there
+        activeStreams.add(data.streamId);
+        // Broadcast the stream data to all other connected clients
         socket.broadcast.emit('stream', data);
+    });
+
+    socket.on('stopStream', (streamId) => {
+        // Remove stream from active streams when it's stopped
+        activeStreams.delete(streamId);
+        // Notify all clients that the stream has ended
+        io.emit('streamEnded', streamId);
     });
 
     socket.on('disconnect', () => {
@@ -20,7 +42,12 @@ io.on('connection', (socket) => {
     });
 });
 
+// Endpoint to get active streams
+app.get('/active-streams', (req, res) => {
+    res.json(Array.from(activeStreams));
+});
+
 const PORT = process.env.PORT || 3306;
-https.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

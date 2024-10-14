@@ -93,120 +93,123 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
         let video = document.getElementById('video');
-        let canvas = document.getElementById('canvas');
-        let stream;
-        let socket = io('https://mcceventsjudging.com:3306');  // Replace with your WebSocket server address
-        let currentStreamId = null;
+let canvas = document.getElementById('canvas');
+let stream;
+let socket = io('https://mcceventsjudging.com:3306');
+let currentStreamId = null;
 
-        document.getElementById('startStreamBtn').addEventListener('click', startNewStream);
+document.getElementById('startStreamBtn').addEventListener('click', startNewStream);
 
-        async function startNewStream() {
-            try {
-                const response = await fetch('', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'action=start'
-                });
-                const data = await response.json();
-                if (data.status === 'success') {
-                    currentStreamId = data.stream_id;
-                    await startWebcam(currentStreamId);
-                    updateActiveStreams();
-                } else {
-                    console.error("Error starting stream:", data.message);
-                }
-            } catch (err) {
-                console.error("Error starting stream:", err);
+async function startNewStream() {
+    try {
+        const response = await fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'action=start'
+        });
+        const data = await response.json();
+        if (data.status === 'success') {
+            currentStreamId = data.stream_id;
+            await startWebcam(currentStreamId);
+            updateActiveStreams();
+        } else {
+            console.error("Error starting stream:", data.message);
+        }
+    } catch (err) {
+        console.error("Error starting stream:", err);
+    }
+}
+
+async function startWebcam(streamId) {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+            video.play();
+            broadcastStream(streamId);
+        };
+    } catch (err) {
+        console.error("Error accessing the webcam", err);
+    }
+}
+
+function broadcastStream(streamId) {
+    setInterval(() => {
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        let imageData = canvas.toDataURL('image/jpeg', 0.5);
+        socket.emit('stream', { streamId: streamId, imageData: imageData });
+    }, 100);  // Adjust interval as needed
+}
+
+function captureImage(streamId) {
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    let imageData = canvas.toDataURL('image/png');
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=capture&stream_id=${streamId}&image=${encodeURIComponent(imageData)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log("Image captured successfully");
+        } else {
+            console.error("Error capturing image:", data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function stopStream(streamId) {
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=stop&stream_id=${streamId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log("Stream stopped successfully");
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
             }
+            video.srcObject = null;
+            currentStreamId = null;
+            updateActiveStreams();
+        } else {
+            console.error("Error stopping stream:", data.message);
         }
+    })
+    .catch(error => console.error('Error:', error));
+}
 
-        async function startWebcam(streamId) {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = stream;
-                broadcastStream(streamId);
-            } catch (err) {
-                console.error("Error accessing the webcam", err);
-            }
-        }
+function updateActiveStreams() {
+    fetch(`get_streams.php?organizer_id=${<?php echo $organizer_id; ?>}`)
+    .then(response => response.json())
+    .then(streams => {
+        const activeStreamsDiv = document.getElementById('activeStreams');
+        activeStreamsDiv.innerHTML = '';
+        streams.forEach(stream => {
+            const streamDiv = document.createElement('div');
+            streamDiv.className = 'stream-item';
+            streamDiv.innerHTML = `
+                <button onclick="stopStream(${stream.id})">Stop</button>
+                <button onclick="captureImage(${stream.id})">Capture Image</button>
+            `;
+            activeStreamsDiv.appendChild(streamDiv);
+        });
+    })
+    .catch(error => console.error('Error:', error));
+}
 
-        function broadcastStream(streamId) {
-            setInterval(() => {
-                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                let imageData = canvas.toDataURL('image/jpeg', 0.5);
-                socket.emit('stream', { streamId: streamId, imageData: imageData });
-            }, 100);  // Adjust interval as needed
-        }
-
-        function captureImage(streamId) {
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-            let imageData = canvas.toDataURL('image/png');
-            fetch('', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `action=capture&stream_id=${streamId}&image=${encodeURIComponent(imageData)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    console.log("Image captured successfully");
-                } else {
-                    console.error("Error capturing image:", data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-        function stopStream(streamId) {
-            fetch('', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `action=stop&stream_id=${streamId}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    console.log("Stream stopped successfully");
-                    if (stream) {
-                        stream.getTracks().forEach(track => track.stop());
-                    }
-                    video.srcObject = null;
-                    currentStreamId = null;
-                    updateActiveStreams();
-                } else {
-                    console.error("Error stopping stream:", data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-        function updateActiveStreams() {
-            fetch(`get_streams.php?organizer_id=${<?php echo $organizer_id; ?>}`)
-            .then(response => response.json())
-            .then(streams => {
-                const activeStreamsDiv = document.getElementById('activeStreams');
-                activeStreamsDiv.innerHTML = '';
-                streams.forEach(stream => {
-                    const streamDiv = document.createElement('div');
-                    streamDiv.className = 'stream-item';
-                    streamDiv.innerHTML = `
-                        <button onclick="stopStream(${stream.id})">Stop</button>
-                        <button onclick="captureImage(${stream.id})">Capture Image</button>
-                    `;
-                    activeStreamsDiv.appendChild(streamDiv);
-                });
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-        // Initial update of active streams
-        updateActiveStreams();
+// Initial update of active streams
+updateActiveStreams();
     </script>
 </body>
 </html>
