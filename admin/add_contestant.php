@@ -17,11 +17,15 @@
       <link rel="shortcut icon" href="../images/logo copy.png"/>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fff;
-      margin: 0;
-      padding: 0;
+   body {
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        height: 100vh; /* Ensures full height */
+        width: 100vw;  /* Ensures full width */
+        position: fixed; /* Fixes the body in place */
+        overflow: hidden; /* Prevents scrolling */
     }
 
     .sidebar {
