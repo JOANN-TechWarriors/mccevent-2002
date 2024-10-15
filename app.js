@@ -43,11 +43,11 @@ io.on('connection', (socket) => {
 });
 
 // Endpoint to get active streams
-app.get('get_streams.php', (req, res) => {
+app.get('/active-streams', (req, res) => {
     res.json(Array.from(activeStreams));
 });
 
-const PORT = process.env.PORT || ;
+const PORT = process.env.PORT || 3306;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
