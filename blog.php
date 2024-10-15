@@ -64,7 +64,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
-        const socket = io('https://mcceventsjudging.com:3306');
+        const socket = io('https://mcceventsjudging.com');
 
         socket.on('streamEnded', (streamId) => {
     const streamElement = document.getElementById(`stream-${streamId}`);
@@ -117,7 +117,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
         });
         }
         // Log WebSocket connection status
-        const socket = io('https://mcceventsjudging.com:3306');
+        const socket = io('https://mcceventsjudging.com');
         socket.on('connect', () => {
             console.log('WebSocket connected');
         });

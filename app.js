@@ -47,7 +47,7 @@ app.get('/active-streams', (req, res) => {
     res.json(Array.from(activeStreams));
 });
 
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || ;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

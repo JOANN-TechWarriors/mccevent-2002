@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         let video = document.getElementById('video');
         let canvas = document.getElementById('canvas');
         let stream;
-        let socket = io('https://mcceventsjudging.com:3306');
+        let socket = io('https://mcceventsjudging.com');
         let currentStreamId = null;
 
         document.getElementById('startStreamBtn').addEventListener('click', startNewStream);
