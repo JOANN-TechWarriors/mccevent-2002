@@ -6,7 +6,7 @@ include('../admin/dbcon.php');
 if (!isset($_SESSION['student_id'])) {
     // Redirect to login page if not logged in
     $_SESSION['redirect_after_login'] = 'poll/index.php?event=' . $_GET['event'];
-    header("Location: ../student/index.php");
+    header("Location: ../student/index2.php");
     exit();
 }
 
