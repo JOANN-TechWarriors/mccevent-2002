@@ -117,7 +117,7 @@ $result = $db->query("SELECT * FROM streams WHERE status = 'live'");
         });
         }
         // Log WebSocket connection status
-        const socket = io('https://mcceventsjudging.com:3306');
+        const socket = io('https://mcceventsjudging.com');
         socket.on('connect', () => {
             console.log('WebSocket connected');
         });
