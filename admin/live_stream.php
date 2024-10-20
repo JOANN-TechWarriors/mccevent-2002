@@ -747,7 +747,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $(document).ready(function() {
         $('.delete-stream').on('click', function() {
             var streamId = $(this).data('id');
-            var $row = $(this).closest('tr');
             
             Swal.fire({
                 title: 'Are you sure?',
@@ -766,14 +765,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         dataType: 'json',
                         success: function(response) {
                             if (response.success) {
-                                Swal.fire(
-                                    'Deleted!',
-                                    response.message,
-                                    'success'
-                                ).then(() => {
-                                    $row.remove();
-                                    if ($('#streams-table tbody tr').length === 0) {
-                                        $('#streams-table tbody').append('<tr><td colspan="6" class="text-center">No streams available</td></tr>');
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Reload the page
+                                        window.location.reload();
                                     }
                                 });
                             } else {
