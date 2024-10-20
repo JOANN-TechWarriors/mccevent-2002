@@ -19,6 +19,34 @@ $stmt = $conn->prepare($query);
 $stmt->bindParam(':organizer_id', $session_id);
 $stmt->execute();
 $streams = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+// Add this near the top of your live_stream.php file
+if(isset($_GET['error'])) {
+    $error_message = '';
+    switch($_GET['error']) {
+        case 'missing_parameters':
+            $error_message = 'Missing required parameters to access the stream.';
+            break;
+        case 'invalid_token':
+            $error_message = 'Invalid access token provided.';
+            break;
+        case 'stream_not_found':
+            $error_message = 'The requested stream could not be found.';
+            break;
+    }
+    if($error_message) {
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Access Denied',
+                text: '$error_message'
+            });
+        </script>";
+    }
+}
+
 ?>
 
 

@@ -1,30 +1,49 @@
 <?php
+// File: host.php
+
 // Database connection details
 include('../session.php');
 include "db.php";
 
-// Check if stream_id is provided in the URL
-if(isset($_GET['id'])) {
-    $stream_id = $_GET['id'];
-} else {
-    die("Error: No stream ID provided");
+// Initialize error message
+$error_message = "";
+
+// Check if both stream_id and token are provided in the URL
+if(!isset($_GET['id']) || !isset($_GET['token'])) {
+    header("Location: ../live_stream.php");
+    exit();
 }
 
-// Prepare the SQL statement
-$stmt = $conn->prepare("SELECT channel_name FROM live_streams WHERE stream_id = ?");
+$stream_id = $_GET['id'];
+$provided_token = $_GET['token'];
+
+// Prepare the SQL statement to check both stream_id and token
+$stmt = $conn->prepare("SELECT channel_name, token FROM live_streams WHERE stream_id = ?");
 $stmt->bind_param("i", $stream_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if($result->num_rows > 0) {
-    $channelName = $result->fetch_assoc()['channel_name'];
+    $row = $result->fetch_assoc();
+    $channelName = $row['channel_name'];
+    $stored_token = $row['token'];
+
+    // Verify that the provided token matches the stored token
+    if($provided_token !== $stored_token) {
+        // Invalid token, redirect to live_stream.php
+        header("Location: ../live_stream.php");
+        exit();
+    }
 } else {
-    die("Error: Stream not found");
+    // Stream not found, redirect to live_stream.php
+    header("Location: ../live_stream.php");
+    exit();
 }
 
-// Close the statement and connection
+// Close the statement
 $stmt->close();
-$conn->close();
+
+// Here's the rest of your host.php code
 ?>
 
 <!DOCTYPE html>
