@@ -2,27 +2,11 @@
 // Database connection details
 include "db.php";
 
-// Check if stream_id is provided in the URL
-if(isset($_GET['id'])) {
-    $stream_id = $_GET['id'];
-} else {
-    die("Error: No stream ID provided");
-}
+// Fetch the channel name for stream_id = 11
+$result = $conn->query("SELECT channel_name FROM live_streams WHERE stream_id = 1");
+$channelName = $result->fetch_assoc()['channel_name'];
 
-// Prepare the SQL statement
-$stmt = $conn->prepare("SELECT channel_name FROM live_streams WHERE stream_id = ?");
-$stmt->bind_param("i", $stream_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if($result->num_rows > 0) {
-    $channelName = $result->fetch_assoc()['channel_name'];
-} else {
-    die("Error: Stream not found");
-}
-
-// Close the statement and connection
-$stmt->close();
+// Close the connection
 $conn->close();
 ?>
 
@@ -114,7 +98,7 @@ $conn->close();
 
         // Agora client options
         var options = {
-            appid: "", // Replace with your Agora App ID
+            appid: "639e26f0457a4e85b9e24844db6078cd", // Replace with your Agora App ID
             channel: null,
             uid: null,
             token: null, // Provide token if required
