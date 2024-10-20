@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 
 <head>
-    <link rel="shortcut icon" href="../img/logo.png"/>
+    <link rel="shortcut icon" href="../img/logo.png" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="shortcut icon" href="../images/logo copy.png" />
@@ -468,40 +468,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         class="close" data-dismiss="modal">&times;</button></h4>
                             </div>
                             <div class="modal-body">
-                                <form id="addStreamForm" method="POST" action="add_stream.php">
+                                <form id="addStreamForm" method="POST" action="add_stream.php"
+                                    enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <input type="hidden" name="organizer_id" value="<?php echo $session_id; ?>">
 
                                         <div class="form-group">
                                             <label>Stream Title</label>
-                                            <input type="text" class="form-control btn-block" style="height: 30px !important;" name="stream_title" required>
+                                            <input type="text" class="form-control btn-block"
+                                                style="height: 30px !important;" name="stream_title" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Channel Name</label>
-                                            <input type="text" class="form-control btn-block" style="height: 30px !important;" name="channel_name" required>
+                                            <input type="text" class="form-control btn-block"
+                                                style="height: 30px !important;" name="channel_name" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Start Time</label>
-                                            <input type="datetime-local" class="form-control btn-block" style="height: 30px !important;" name="start_time"
-                                                required>
+                                            <input type="datetime-local" class="form-control btn-block"
+                                                style="height: 30px !important;" name="start_time" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>End Time</label>
-                                            <input type="datetime-local" class="form-control btn-block" style="height: 30px !important;" name="end_time" required>
+                                            <input type="datetime-local" class="form-control btn-block"
+                                                style="height: 30px !important;" name="end_time" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Banner Image</label>
-                                            <input type="file" class="form-control btn-block" name="stream_banner" accept="image/*" required>
-                                            <small class="text-muted">Recommended size: 1280x720px. Max size: 2MB</small>
+                                            <input type="file" class="form-control btn-block" name="stream_banner"
+                                                accept="image/*" required>
+                                            <small class="text-muted">Recommended size: 1280x720px. Max size:
+                                                2MB</small>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Save Stream</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                             </div>
@@ -514,195 +521,202 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Stream Title</th>
-            <th>Channel Name</th>
-            <th>Stream Status</th>
-            <th>Start Time</th>
-            <th>Banner</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($streams as $stream): ?>
-            <tr>
-                <td><?php echo htmlspecialchars($stream['stream_title']); ?></td>
-                <td><?php echo htmlspecialchars($stream['channel_name']); ?></td>
-                <td><?php echo ucfirst($stream['stream_status']); ?></td>
-                <td><?php echo date('Y-m-d H:i:s', strtotime($stream['start_time'])); ?></td>
-                <td>
-                    <?php if (!empty($stream['image_url'])): ?>
-                        <img src="<?php echo htmlspecialchars($stream['image_url']); ?>" 
-                             alt="Stream Banner" 
-                             style="max-width: 100px; height: auto;">
-                    <?php else: ?>
-                        <span class="text-muted">No banner</span>
-                    <?php endif; ?>
-                </td>
-                <td>
-                    <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>" class="btn btn-primary btn-sm">View</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+                <thead>
+                    <tr>
+                        <th>Stream Title</th>
+                        <th>Channel Name</th>
+                        <th>Stream Status</th>
+                        <th>Start Time</th>
+                        <th>Banner</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($streams as $stream): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($stream['stream_title']); ?></td>
+                        <td><?php echo htmlspecialchars($stream['channel_name']); ?></td>
+                        <td><?php echo ucfirst($stream['stream_status']); ?></td>
+                        <td><?php echo date('Y-m-d H:i:s', strtotime($stream['start_time'])); ?></td>
+                        <td>
+                            <?php if (!empty($stream['image_url'])): ?>
+                            <?php
+                    // Ensure the image URL is relative to the web root
+                    $image_url = str_replace('../', '', $stream['image_url']);
+                    $image_url = '/uploads/' . basename($image_url);
+                ?>
+                            <img src="<?php echo htmlspecialchars($image_url); ?>" alt="Stream Banner"
+                                style="max-width: 100px; max-height: 60px; object-fit: cover;">
+                            <?php else: ?>
+                            <span class="text-muted">No banner</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>"
+                                class="btn btn-primary btn-sm">View</a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
 
-    </section>
+        </section>
 
-    <script src="..//assets/js/jquery.js"></script>
-    <script src="..//assets/js/bootstrap-transition.js"></script>
-    <script src="..//assets/js/bootstrap-alert.js"></script>
-    <script src="..//assets/js/bootstrap-modal.js"></script>
-    <script src="..//assets/js/bootstrap-dropdown.js"></script>
-    <script src="..//assets/js/bootstrap-scrollspy.js"></script>
-    <script src="..//assets/js/bootstrap-tab.js"></script>
-    <script src="..//assets/js/bootstrap-tooltip.js"></script>
-    <script src="..//assets/js/bootstrap-popover.js"></script>
-    <script src="..//assets/js/bootstrap-button.js"></script>
-    <script src="..//assets/js/bootstrap-collapse.js"></script>
-    <script src="..//assets/js/bootstrap-carousel.js"></script>
-    <script src="..//assets/js/bootstrap-typeahead.js"></script>
-    <script src="..//assets/js/bootstrap-affix.js"></script>
-    <script src="..//assets/js/holder/holder.js"></script>
-    <script src="..//assets/js/google-code-prettify/prettify.js"></script>
-    <script src="..//assets/js/application.js"></script>
-    <!-- SweetAlert JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="..//assets/js/jquery.js"></script>
+        <script src="..//assets/js/bootstrap-transition.js"></script>
+        <script src="..//assets/js/bootstrap-alert.js"></script>
+        <script src="..//assets/js/bootstrap-modal.js"></script>
+        <script src="..//assets/js/bootstrap-dropdown.js"></script>
+        <script src="..//assets/js/bootstrap-scrollspy.js"></script>
+        <script src="..//assets/js/bootstrap-tab.js"></script>
+        <script src="..//assets/js/bootstrap-tooltip.js"></script>
+        <script src="..//assets/js/bootstrap-popover.js"></script>
+        <script src="..//assets/js/bootstrap-button.js"></script>
+        <script src="..//assets/js/bootstrap-collapse.js"></script>
+        <script src="..//assets/js/bootstrap-carousel.js"></script>
+        <script src="..//assets/js/bootstrap-typeahead.js"></script>
+        <script src="..//assets/js/bootstrap-affix.js"></script>
+        <script src="..//assets/js/holder/holder.js"></script>
+        <script src="..//assets/js/google-code-prettify/prettify.js"></script>
+        <script src="..//assets/js/application.js"></script>
+        <!-- SweetAlert JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        <?php if (isset($_SESSION['message'])): ?>
-        Swal.fire({
-            title: '<?php echo htmlspecialchars($_SESSION['message']); ?>',
-            icon: '<?php echo $_SESSION['message_type'] === 'success' ? 'success' : 'error'; ?>',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            <?php unset($_SESSION['message']); unset($_SESSION['message_type']); ?>
-        });
-        <?php endif; ?>
-
-        document.getElementById('logout').addEventListener('click', function(event) {
-            event.preventDefault();
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            <?php if (isset($_SESSION['message'])): ?>
             Swal.fire({
-                title: 'Are you sure you want to log out?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to logout.php
-                    window.location.href = '..//index.php';
-                }
+                title: '<?php echo htmlspecialchars($_SESSION['message']); ?>',
+                icon: '<?php echo $_SESSION['message_type'] === 'success' ? 'success' : 'error'; ?>',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                <?php unset($_SESSION['message']); unset($_SESSION['message_type']); ?>
+            });
+            <?php endif; ?>
+
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Are you sure you want to log out?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to logout.php
+                        window.location.href = '..//index.php';
+                    }
+                });
+            });
+
+            $('#toggle-btn').on('click', function() {
+                $('#sidebar').toggleClass('collapsed');
+                $('#main-content').toggleClass('collapsed');
+                $(this).toggleClass('collapsed');
             });
         });
-
-        $('#toggle-btn').on('click', function() {
-            $('#sidebar').toggleClass('collapsed');
-            $('#main-content').toggleClass('collapsed');
-            $(this).toggleClass('collapsed');
-        });
-    });
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.tile').forEach(function(tile) {
-            tile.addEventListener('click', function() {
-                var eventId = this.getAttribute('data-id');
-                window.location.href = 'sub_event.php?id=' + eventId;
+        </script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.tile').forEach(function(tile) {
+                tile.addEventListener('click', function() {
+                    var eventId = this.getAttribute('data-id');
+                    window.location.href = 'sub_event.php?id=' + eventId;
+                });
             });
         });
-    });
-    </script>
-    <script>
-    // Function to get today's date in YYYY-MM-DD format
-    function getTodayDate() {
-        return new Date().toISOString().split('T')[0];
-    }
-
-    // Set min attribute for both date inputs
-    document.getElementById('date_start').min = getTodayDate();
-    document.getElementById('date_end').min = getTodayDate();
-
-    // Ensure end date is not before start date
-    document.getElementById('date_start').addEventListener('change', function() {
-        document.getElementById('date_end').min = this.value;
-    });
-    document.getElementById('event_time').addEventListener('change', function() {
-        var time = this.value;
-        var [hours, minutes] = time.split(':');
-
-        // Round minutes to nearest 30
-        minutes = (Math.round(minutes / 30) * 30) % 60;
-
-        // Adjust hours if minutes rounded up to 60
-        if (minutes === 0 && parseInt(this.value.split(':')[1]) > 30) {
-            hours = (parseInt(hours) + 1) % 24;
+        </script>
+        <script>
+        // Function to get today's date in YYYY-MM-DD format
+        function getTodayDate() {
+            return new Date().toISOString().split('T')[0];
         }
 
-        // Format hours and minutes to ensure two digits
-        hours = hours.toString().padStart(2, '0');
-        minutes = minutes.toString().padStart(2, '0');
+        // Set min attribute for both date inputs
+        document.getElementById('date_start').min = getTodayDate();
+        document.getElementById('date_end').min = getTodayDate();
 
-        this.value = `${hours}:${minutes}`;
-    });
-    </script>
-    
+        // Ensure end date is not before start date
+        document.getElementById('date_start').addEventListener('change', function() {
+            document.getElementById('date_end').min = this.value;
+        });
+        document.getElementById('event_time').addEventListener('change', function() {
+            var time = this.value;
+            var [hours, minutes] = time.split(':');
 
-    <!-- Add this to your existing JavaScript section -->
-    <script>
-    $(document).ready(function() {
-        // Handle form submission
-        $('#addStreamForm').on('submit', function(e) {
-            e.preventDefault();
+            // Round minutes to nearest 30
+            minutes = (Math.round(minutes / 30) * 30) % 60;
 
-            // Show loading state
-            Swal.fire({
-                title: 'Adding stream...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+            // Adjust hours if minutes rounded up to 60
+            if (minutes === 0 && parseInt(this.value.split(':')[1]) > 30) {
+                hours = (parseInt(hours) + 1) % 24;
+            }
 
-            $.ajax({
-                type: 'POST',
-                url: 'add_stream.php',
-                data: $(this).serialize(),
-                dataType: 'json',
-                success: function(response) {
-                    Swal.close();
+            // Format hours and minutes to ensure two digits
+            hours = hours.toString().padStart(2, '0');
+            minutes = minutes.toString().padStart(2, '0');
 
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: response.message || 'Stream added successfully',
-                        }).then(() => {
-                            $('#addMEcollapse').modal('hide');
-                            location.reload();
-                        });
-                    } else {
+            this.value = `${hours}:${minutes}`;
+        });
+        </script>
+
+
+        <!-- Add this to your existing JavaScript section -->
+        <script>
+        $(document).ready(function() {
+            // Handle form submission
+            $('#addStreamForm').on('submit', function(e) {
+                e.preventDefault();
+
+                // Show loading state
+                Swal.fire({
+                    title: 'Adding stream...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'add_stream.php',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        Swal.close();
+
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: response.message ||
+                                    'Stream added successfully',
+                            }).then(() => {
+                                $('#addMEcollapse').modal('hide');
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message || 'Failed to add stream'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.close();
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: response.message || 'Failed to add stream'
+                            text: 'Server error: ' + (error ||
+                                'Unknown error occurred')
                         });
                     }
-                },
-                error: function(xhr, status, error) {
-                    Swal.close();
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Server error: ' + (error || 'Unknown error occurred')
-                    });
-                }
+                });
             });
         });
-    });
-    </script>
+        </script>
 </body>
 
 </html>

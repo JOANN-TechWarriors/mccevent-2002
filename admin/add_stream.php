@@ -14,42 +14,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Handle file upload
-        $imageUrl = null;
-        if (isset($_FILES['stream_banner']) && $_FILES['stream_banner']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'uploads/';
+        $upload_dir = '../uploads/';
+        $image_url = '';
+        
+        if (isset($_FILES['stream_banner']) && $_FILES['stream_banner']['error'] == 0) {
+            $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+            $max_size = 2 * 1024 * 1024; // 2MB
             
-            // Create directory if it doesn't exist
-            if (!file_exists($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
+            if (!in_array($_FILES['stream_banner']['type'], $allowed_types)) {
+                throw new Exception('Invalid file type. Only JPG, PNG, and GIF are allowed.');
             }
             
-            // Get file information
-            $fileName = $_FILES['stream_banner']['name'];
-            $fileType = $_FILES['stream_banner']['type'];
-            $fileTmpName = $_FILES['stream_banner']['tmp_name'];
-            $fileSize = $_FILES['stream_banner']['size'];
-            
-            // Validate file type
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!in_array($fileType, $allowedTypes)) {
-                throw new Exception('Invalid file type. Only JPG, PNG and GIF files are allowed.');
+            if ($_FILES['stream_banner']['size'] > $max_size) {
+                throw new Exception('File size exceeds the maximum limit of 2MB.');
             }
             
-            // Validate file size (2MB max)
-            if ($fileSize > 2 * 1024 * 1024) {
-                throw new Exception('File size is too large. Maximum size is 2MB.');
+            $file_name = uniqid() . '_' . $_FILES['stream_banner']['name'];
+            $upload_path = $upload_dir . $file_name;
+            
+            if (move_uploaded_file($_FILES['stream_banner']['tmp_name'], $upload_path)) {
+                $image_url = $upload_path;
+            } else {
+                throw new Exception('Failed to upload the banner image.');
             }
-            
-            // Generate unique filename
-            $newFileName = uniqid() . '_' . $fileName;
-            $uploadPath = $uploadDir . $newFileName;
-            
-            // Move uploaded file
-            if (!move_uploaded_file($fileTmpName, $uploadPath)) {
-                throw new Exception('Failed to upload file.');
-            }
-            
-            $imageUrl = $uploadPath;
         }
 
         $query = "INSERT INTO live_streams (
@@ -60,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             end_time, 
             stream_status,
             app_id,
-            image_url,
-            token
+            token,
+            image_url
         ) VALUES (
             :organizer_id,
             :stream_title,
@@ -70,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             :end_time,
             'scheduled',
             :app_id,
-            :image_url,
-            :token
+            :token,
+            :image_url
         )";
 
         $token = bin2hex(random_bytes(16));
@@ -83,8 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':start_time', $_POST['start_time']);
         $stmt->bindParam(':end_time', $_POST['end_time']);
         $stmt->bindParam(':app_id', $_POST['app_id']);
-        $stmt->bindParam(':image_url', $imageUrl);
         $stmt->bindParam(':token', $token);
+        $stmt->bindParam(':image_url', $image_url);
         
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Stream added successfully']);
@@ -100,4 +87,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     exit;
 }
-?>
