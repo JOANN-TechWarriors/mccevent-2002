@@ -1,5 +1,6 @@
 <?php
 // Database connection details
+include('../session.php');
 include "db.php";
 
 // Check if stream_id is provided in the URL
