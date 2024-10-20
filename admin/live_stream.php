@@ -789,14 +789,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 );
                             }
                         },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.error('AJAX Error:', textStatus, errorThrown);
-                            Swal.fire(
-                                'Error!',
-                                'An error occurred while deleting the stream.',
-                                'error'
-                            );
-                        }
+                
                     });
                 }
             });
