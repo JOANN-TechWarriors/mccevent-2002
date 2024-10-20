@@ -1,6 +1,6 @@
 <?php
-
 include "db.php";
+
 // Fetch live streams
 $sql = "SELECT stream_id, stream_title, stream_status, start_time, image_url FROM live_streams ORDER BY start_time DESC LIMIT 5";
 $result = $conn->query($sql);
@@ -8,6 +8,10 @@ $result = $conn->query($sql);
 // Prepare streams data for JavaScript
 $streams = array();
 while ($row = $result->fetch_assoc()) {
+    // Ensure image_url is a web-accessible path
+    if (!empty($row['image_url'])) {
+        $row['image_url'] = '../' . ltrim(str_replace('../', '', $row['image_url']), '/');
+    }
     $streams[] = $row;
 }
 $streamsJson = json_encode($streams);
@@ -43,6 +47,16 @@ $conn->close();
                 return () => clearInterval(interval);
             }, [streams.length]);
 
+            const getImageUrl = (imageUrl) => {
+                if (!imageUrl) {
+                    return `/api/placeholder/1920/1080?text=No Image`;
+                }
+                // Remove '../' from the beginning of the path if it exists
+                const cleanPath = imageUrl.replace(/^\.\.\//, '');
+                // Construct the correct URL
+                return `/${cleanPath}`;
+            };
+
             return (
                 <div className="relative w-full h-screen overflow-hidden">
                     {streams.map((stream, index) => (
@@ -52,7 +66,11 @@ $conn->close();
                                 index === currentIndex ? 'opacity-100' : 'opacity-0'
                             }`}
                         >
-                            <img src={stream.image_url || `/api/placeholder/1920/1080?text=${stream.stream_title}`} alt={stream.stream_title} className="w-full h-full object-cover" />
+                            <img 
+                                src={getImageUrl(stream.image_url)} 
+                                alt={stream.stream_title} 
+                                className="w-full h-full object-cover" 
+                            />
                         </div>
                     ))}
                 </div>
