@@ -6,6 +6,25 @@ include('dbcon.php'); // Include your PDO database connection file
 
 
 
+// Function to delete a stream
+function deleteStream($streamId, $organizerId, $conn) {
+    $query = "DELETE FROM live_streams WHERE stream_id = :stream_id AND organizer_id = :organizer_id";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':stream_id', $streamId);
+    $stmt->bindParam(':organizer_id', $organizerId);
+    return $stmt->execute();
+}
+
+// Handle delete request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_stream'])) {
+    $streamId = $_POST['delete_stream'];
+    if (deleteStream($streamId, $session_id, $conn)) {
+        echo json_encode(['success' => true, 'message' => 'Stream deleted successfully.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Failed to delete stream.']);
+    }
+    exit;
+}
 
 // Fetch events from the database using PDO
 $query = "SELECT * FROM main_event WHERE organizer_id = :organizer_id";
@@ -19,29 +38,6 @@ $stmt = $conn->prepare($query);
 $stmt->bindParam(':organizer_id', $session_id);
 $stmt->execute();
 $streams = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Add this function to handle stream deletion
-function deleteStream($streamId, $conn) {
-    $query = "DELETE FROM live_streams WHERE stream_id = :stream_id AND organizer_id = :organizer_id";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':stream_id', $streamId);
-    $stmt->bindParam(':organizer_id', $session_id);
-    return $stmt->execute();
-}
-
-// Handle delete request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_stream'])) {
-    $streamId = $_POST['delete_stream'];
-    if (deleteStream($streamId, $conn)) {
-        $_SESSION['message'] = "Stream deleted successfully.";
-        $_SESSION['message_type'] = "success";
-    } else {
-        $_SESSION['message'] = "Failed to delete stream.";
-        $_SESSION['message_type'] = "error";
-    }
-    header("Location: live_stream.php");
-    exit();
-}
 
 
 // Add this near the top of your live_stream.php file
@@ -149,6 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <link rel="shortcut icon" href="../img/logo.png" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="shortcut icon" href="../images/logo copy.png" />
@@ -576,8 +573,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </td>
                         <td>
                             <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>"class="btn btn-primary btn-sm">View</a>
-                            <button class="btn btn-danger btn-sm delete-stream" data-id="<?php echo $stream['stream_id']; ?>">Delete</button>
-                        
+                            <button class="btn btn-danger btn-sm delete-stream" data-id="<?php echo $stream['stream_id']; ?>">Delete</button>                        
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -746,36 +742,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
 
-        // Add event listeners for delete buttons
-        document.querySelectorAll('.delete-stream').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var streamId = this.getAttribute('data-id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Send delete request
-                        var form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = 'live_stream.php';
-                        var input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = 'delete_stream';
-                        input.value = streamId;
-                        form.appendChild(input);
-                        document.body.appendChild(form);
-                        form.submit();
-                    }
-                });
+        </script>
+        <script>
+    $(document).ready(function() {
+        $('.delete-stream').on('click', function() {
+            var streamId = $(this).data('id');
+            var $row = $(this).closest('tr');
+            
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'live_stream.php',
+                        type: 'POST',
+                        data: {delete_stream: streamId},
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    response.message,
+                                    'success'
+                                ).then(() => {
+                                    $row.remove();
+                                    if ($('#streams-table tbody tr').length === 0) {
+                                        $('#streams-table tbody').append('<tr><td colspan="6" class="text-center">No streams available</td></tr>');
+                                    }
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    response.message,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function() {
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred while deleting the stream.',
+                                'error'
+                            );
+                        }
+                    });
+                }
             });
         });
-        </script>
+    });
+    </script>
 </body>
 
 </html>
