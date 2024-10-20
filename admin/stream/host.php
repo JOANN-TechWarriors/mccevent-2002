@@ -25,6 +25,7 @@ if($result->num_rows > 0) {
 $stmt->close();
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -141,30 +142,77 @@ $conn->close();
             leave();
         });
 
+        // New function to toggle microphone
+        $("#mic-btn").click(async function() {
+            if (localTrackState.audioTrackEnabled) {
+                await muteAudio();
+            } else {
+                await unmuteAudio();
+            }
+        });
+
+        // New function to toggle video
+        $("#video-btn").click(async function() {
+            if (localTrackState.videoTrackEnabled) {
+                await muteVideo();
+            } else {
+                await unmuteVideo();
+            }
+        });
+
         async function join() {
-            // Create Agora client
-            client.setClientRole(options.role);
-            $('#mic-btn').prop('disabled', false);
-            $('#video-btn').prop('disabled', false);
-            client.on("user-published", handleUserPublished);
-            client.on("user-joined", handleUserJoined);
-            client.on("user-left", handleUserLeft);
+            try {
+                console.log("Joining channel:", options.channel);
+                
+                // Set client role
+                client.setClientRole(options.role);
+                console.log("Client role set to:", options.role);
+                
+                // Enable UI controls
+                $('#mic-btn').prop('disabled', false);
+                $('#video-btn').prop('disabled', false);
+                
+                // Set up event listeners
+                client.on("user-published", handleUserPublished);
+                client.on("user-joined", handleUserJoined);
+                client.on("user-left", handleUserLeft);
+                console.log("Event listeners set up");
 
-            // Join the channel
-            options.uid = await client.join(options.appid, options.channel, options.token || null);
+                // Join the channel
+                options.uid = await client.join(options.appid, options.channel, options.token || null);
+                console.log("Successfully joined channel. UID:", options.uid);
 
-            // Create local audio and video tracks
-            localTracks.audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-            localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack();
-            showMuteButton();
+                // Get the list of video devices
+                const devices = await AgoraRTC.getDevices();
+                const videoDevices = devices.filter(device => device.kind === "videoinput");
+                console.log("Available video devices:", videoDevices);
 
-            // Play local video track
-            localTracks.videoTrack.play("local-player");
-            $("#local-player-name").text(`localTrack(${options.uid})`);
+                // Create local audio track
+                console.log("Creating microphone audio track...");
+                localTracks.audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+                console.log("Audio track created successfully");
 
-            // Publish local tracks to channel
-            await client.publish(Object.values(localTracks));
-            console.log("Successfully published.");
+                // Create local video track with the detected camera
+                console.log("Creating camera video track...");
+                localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack({
+                    deviceId: videoDevices[0].deviceId  // Use the first available camera
+                });
+                console.log("Video track created successfully");
+
+                showMuteButton();
+
+                // Play local video track
+                localTracks.videoTrack.play("local-player");
+                $("#local-player-name").text(`localTrack(${options.uid})`);
+                console.log("Local video playing");
+
+                // Publish local tracks to channel
+                await client.publish(Object.values(localTracks));
+                console.log("Local tracks published successfully");
+            } catch (error) {
+                console.error("Error in join function:", error);
+                alert(`Failed to join: ${error.message}`);
+            }
         }
 
         async function leave() {
@@ -236,7 +284,7 @@ $conn->close();
             if (!localTracks.audioTrack) return;
             await localTracks.audioTrack.setEnabled(false);
             localTrackState.audioTrackEnabled = false;
-            $("#mic-btn").text("Unmute Audio");
+            $("#mic-icon").removeClass("fa-microphone").addClass("fa-microphone-slash");
         }
 
         // Mute video function
@@ -244,7 +292,7 @@ $conn->close();
             if (!localTracks.videoTrack) return;
             await localTracks.videoTrack.setEnabled(false);
             localTrackState.videoTrackEnabled = false;
-            $("#video-btn").text("Unmute Video");
+            $("#video-icon").removeClass("fa-video").addClass("fa-video-slash");
         }
 
         // Unmute audio function
@@ -252,7 +300,7 @@ $conn->close();
             if (!localTracks.audioTrack) return;
             await localTracks.audioTrack.setEnabled(true);
             localTrackState.audioTrackEnabled = true;
-            $("#mic-btn").text("Mute Audio");
+            $("#mic-icon").removeClass("fa-microphone-slash").addClass("fa-microphone");
         }
 
         // Unmute video function
@@ -260,7 +308,7 @@ $conn->close();
             if (!localTracks.videoTrack) return;
             await localTracks.videoTrack.setEnabled(true);
             localTrackState.videoTrackEnabled = true;
-            $("#video-btn").text("Mute Video");
+            $("#video-icon").removeClass("fa-video-slash").addClass("fa-video");
         }
 
         // Hide mute buttons
