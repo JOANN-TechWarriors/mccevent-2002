@@ -523,7 +523,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <th>Channel Name</th>
             <th>Stream Status</th>
             <th>Start Time</th>
-            <th>App ID</th>
             <th>Banner</th>
             <th>Actions</th>
         </tr>
@@ -535,7 +534,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <td><?php echo htmlspecialchars($stream['channel_name']); ?></td>
                 <td><?php echo ucfirst($stream['stream_status']); ?></td>
                 <td><?php echo date('Y-m-d H:i:s', strtotime($stream['start_time'])); ?></td>
-                <td><?php echo htmlspecialchars($stream['app_id']); ?></td>
                 <td>
                     <?php if (!empty($stream['image_url'])): ?>
                         <img src="<?php echo htmlspecialchars($stream['image_url']); ?>" 
