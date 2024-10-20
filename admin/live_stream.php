@@ -20,6 +20,28 @@ $stmt->bindParam(':organizer_id', $session_id);
 $stmt->execute();
 $streams = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Add this function to handle stream deletion
+function deleteStream($streamId, $conn) {
+    $query = "DELETE FROM live_streams WHERE stream_id = :stream_id AND organizer_id = :organizer_id";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':stream_id', $streamId);
+    $stmt->bindParam(':organizer_id', $session_id);
+    return $stmt->execute();
+}
+
+// Handle delete request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_stream'])) {
+    $streamId = $_POST['delete_stream'];
+    if (deleteStream($streamId, $conn)) {
+        $_SESSION['message'] = "Stream deleted successfully.";
+        $_SESSION['message_type'] = "success";
+    } else {
+        $_SESSION['message'] = "Failed to delete stream.";
+        $_SESSION['message_type'] = "error";
+    }
+    header("Location: live_stream.php");
+    exit();
+}
 
 
 // Add this near the top of your live_stream.php file
@@ -119,6 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -552,8 +575,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endif; ?>
                         </td>
                         <td>
-                            <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>"
-                                class="btn btn-primary btn-sm">View</a>
+                            <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>"class="btn btn-primary btn-sm">View</a>
+                            <button class="btn btn-danger btn-sm delete-stream" data-id="<?php echo $stream['stream_id']; ?>">Delete</button>
+                        
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -717,6 +741,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             text: 'Server error: ' + (xhr.responseText || error ||
                                 'Unknown error occurred')
                         });
+                    }
+                });
+            });
+        });
+
+        // Add event listeners for delete buttons
+        document.querySelectorAll('.delete-stream').forEach(function(button) {
+            button.addEventListener('click', function() {
+                var streamId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Send delete request
+                        var form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = 'live_stream.php';
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'delete_stream';
+                        input.value = streamId;
+                        form.appendChild(input);
+                        document.body.appendChild(form);
+                        form.submit();
                     }
                 });
             });
