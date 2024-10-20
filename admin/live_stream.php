@@ -49,6 +49,76 @@ if(isset($_GET['error'])) {
 
 ?>
 
+<?php
+// add_stream.php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validate and process the uploaded image
+    if (isset($_FILES['stream_banner']) && $_FILES['stream_banner']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'uploads/stream_banners/'; // Create this directory and ensure it's writable
+        
+        // Create directory if it doesn't exist
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
+        // Get file information
+        $fileName = $_FILES['stream_banner']['name'];
+        $fileType = $_FILES['stream_banner']['type'];
+        $fileTmpName = $_FILES['stream_banner']['tmp_name'];
+        $fileError = $_FILES['stream_banner']['error'];
+        $fileSize = $_FILES['stream_banner']['size'];
+        
+        // Validate file type
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!in_array($fileType, $allowedTypes)) {
+            die('Error: Invalid file type. Only JPG, PNG and GIF files are allowed.');
+        }
+        
+        // Validate file size (2MB max)
+        if ($fileSize > 2 * 1024 * 1024) {
+            die('Error: File size is too large. Maximum size is 2MB.');
+        }
+        
+        // Generate unique filename
+        $newFileName = uniqid() . '_' . $fileName;
+        $uploadPath = $uploadDir . $newFileName;
+        
+        // Move uploaded file
+        if (move_uploaded_file($fileTmpName, $uploadPath)) {
+            // File was uploaded successfully
+            $imageUrl = $uploadPath;
+            
+            // Prepare the SQL statement
+            $stmt = $pdo->prepare("INSERT INTO live_streams (
+                organizer_id, channel_name, stream_title, start_time, end_time, 
+                app_id, image_url, stream_status
+            ) VALUES (
+                :organizer_id, :channel_name, :stream_title, :start_time, :end_time,
+                :app_id, :image_url, 'scheduled'
+            )");
+            
+            // Execute the statement with all the form data
+            $stmt->execute([
+                'organizer_id' => $_POST['organizer_id'],
+                'channel_name' => $_POST['channel_name'],
+                'stream_title' => $_POST['stream_title'],
+                'start_time' => $_POST['start_time'],
+                'end_time' => $_POST['end_time'],
+                'app_id' => $_POST['app_id'],
+                'image_url' => $imageUrl
+            ]);
+            
+            // Redirect or show success message
+            header('Location: streams.php?success=1');
+            exit;
+        } else {
+            die('Error: Failed to upload file.');
+        }
+    } else {
+        die('Error: No file uploaded or upload error occurred.');
+    }
+}
+?>
 
 
 <!DOCTYPE html>
@@ -426,6 +496,11 @@ if(isset($_GET['error'])) {
                                             <label>App ID</label>
                                             <input type="text" class="form-control btn-block" style="height: 30px !important;" name="app_id" required>
                                         </div>
+                                        <div class="form-group">
+                                            <label>Banner Image</label>
+                                            <input type="file" class="form-control btn-block" name="stream_banner" accept="image/*" required>
+                                            <small class="text-muted">Recommended size: 1280x720px. Max size: 2MB</small>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Save Stream</button>
@@ -449,6 +524,7 @@ if(isset($_GET['error'])) {
             <th>Stream Status</th>
             <th>Start Time</th>
             <th>App ID</th>
+            <th>Banner</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -460,6 +536,15 @@ if(isset($_GET['error'])) {
                 <td><?php echo ucfirst($stream['stream_status']); ?></td>
                 <td><?php echo date('Y-m-d H:i:s', strtotime($stream['start_time'])); ?></td>
                 <td><?php echo htmlspecialchars($stream['app_id']); ?></td>
+                <td>
+                    <?php if (!empty($stream['image_url'])): ?>
+                        <img src="<?php echo htmlspecialchars($stream['image_url']); ?>" 
+                             alt="Stream Banner" 
+                             style="max-width: 100px; height: auto;">
+                    <?php else: ?>
+                        <span class="text-muted">No banner</span>
+                    <?php endif; ?>
+                </td>
                 <td>
                     <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>" class="btn btn-primary btn-sm">View</a>
                 </td>
