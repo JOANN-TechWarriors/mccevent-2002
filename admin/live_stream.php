@@ -7,6 +7,7 @@ include('dbcon.php'); // Include your PDO database connection file
 
 
 // Function to delete a stream
+// Function to delete a stream
 function deleteStream($streamId, $organizerId, $conn) {
     $query = "DELETE FROM live_streams WHERE stream_id = :stream_id AND organizer_id = :organizer_id";
     $stmt = $conn->prepare($query);
@@ -18,10 +19,14 @@ function deleteStream($streamId, $organizerId, $conn) {
 // Handle delete request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_stream'])) {
     $streamId = $_POST['delete_stream'];
-    if (deleteStream($streamId, $session_id, $conn)) {
-        echo json_encode(['success' => true, 'message' => 'Stream deleted successfully.']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to delete stream.']);
+    try {
+        if (deleteStream($streamId, $session_id, $conn)) {
+            echo json_encode(['success' => true, 'message' => 'Stream deleted successfully.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to delete stream.']);
+        }
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
     exit;
 }
@@ -743,10 +748,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
 
         </script>
-        <script>
+       <script>
     $(document).ready(function() {
         $('.delete-stream').on('click', function() {
             var streamId = $(this).data('id');
+            var $row = $(this).closest('tr');
             
             Swal.fire({
                 title: 'Are you sure?',
@@ -772,7 +778,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     confirmButtonText: 'OK'
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        // Reload the page
                                         window.location.reload();
                                     }
                                 });
@@ -784,7 +789,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 );
                             }
                         },
-                        error: function() {
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error('AJAX Error:', textStatus, errorThrown);
                             Swal.fire(
                                 'Error!',
                                 'An error occurred while deleting the stream.',
