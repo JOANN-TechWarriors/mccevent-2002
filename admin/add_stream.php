@@ -13,6 +13,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception('All fields are required');
         }
 
+        // Handle file upload
+        $imageUrl = null;
+        if (isset($_FILES['stream_banner']) && $_FILES['stream_banner']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'uploads/';
+            
+            // Create directory if it doesn't exist
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            
+            // Get file information
+            $fileName = $_FILES['stream_banner']['name'];
+            $fileType = $_FILES['stream_banner']['type'];
+            $fileTmpName = $_FILES['stream_banner']['tmp_name'];
+            $fileSize = $_FILES['stream_banner']['size'];
+            
+            // Validate file type
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!in_array($fileType, $allowedTypes)) {
+                throw new Exception('Invalid file type. Only JPG, PNG and GIF files are allowed.');
+            }
+            
+            // Validate file size (2MB max)
+            if ($fileSize > 2 * 1024 * 1024) {
+                throw new Exception('File size is too large. Maximum size is 2MB.');
+            }
+            
+            // Generate unique filename
+            $newFileName = uniqid() . '_' . $fileName;
+            $uploadPath = $uploadDir . $newFileName;
+            
+            // Move uploaded file
+            if (!move_uploaded_file($fileTmpName, $uploadPath)) {
+                throw new Exception('Failed to upload file.');
+            }
+            
+            $imageUrl = $uploadPath;
+        }
+
         $query = "INSERT INTO live_streams (
             organizer_id, 
             stream_title, 
@@ -21,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             end_time, 
             stream_status,
             app_id,
+            image_url,
             token
         ) VALUES (
             :organizer_id,
@@ -30,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             :end_time,
             'scheduled',
             :app_id,
+            :image_url,
             :token
         )";
 
@@ -42,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':start_time', $_POST['start_time']);
         $stmt->bindParam(':end_time', $_POST['end_time']);
         $stmt->bindParam(':app_id', $_POST['app_id']);
+        $stmt->bindParam(':image_url', $imageUrl);
         $stmt->bindParam(':token', $token);
         
         if ($stmt->execute()) {
@@ -58,3 +100,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     exit;
 }
+?>
