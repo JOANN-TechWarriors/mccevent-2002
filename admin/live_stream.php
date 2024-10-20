@@ -456,6 +456,11 @@ if(isset($_GET['error'])) {
     <tbody>
     <?php foreach ($streams as $stream): ?>
             <tr>
+                
+                <td><?php echo htmlspecialchars($stream['stream_title']); ?></td>
+                <td><?php echo htmlspecialchars($stream['channel_name']); ?></td>
+                <td><?php echo ucfirst($stream['stream_status']); ?></td>
+                <td><?php echo date('Y-m-d H:i:s', strtotime($stream['start_time'])); ?></td>
                 <td>
                     <?php if (!empty($stream['image_url'])): ?>
                         <img src="<?php echo htmlspecialchars($stream['image_url']); ?>" alt="Stream Banner" style="max-width: 100px; height: auto;">
@@ -463,10 +468,6 @@ if(isset($_GET['error'])) {
                         <img src="assets/images/default-stream-banner.jpg" alt="Default Banner" style="max-width: 100px; height: auto;">
                     <?php endif; ?>
                 </td>
-                <td><?php echo htmlspecialchars($stream['stream_title']); ?></td>
-                <td><?php echo htmlspecialchars($stream['channel_name']); ?></td>
-                <td><?php echo ucfirst($stream['stream_status']); ?></td>
-                <td><?php echo date('Y-m-d H:i:s', strtotime($stream['start_time'])); ?></td>
                 <td>
                     <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>" class="btn btn-primary btn-sm">View</a>
                 </td>
