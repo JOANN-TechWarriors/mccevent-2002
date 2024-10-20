@@ -423,8 +423,9 @@ if(isset($_GET['error'])) {
                                         </div>
 
                                         <div class="form-group">
-                                            <label>App ID</label>
-                                            <input type="text" class="form-control btn-block" style="height: 30px !important;" name="app_id" required>
+                                            <label>Stream Banner</label>
+                                            <input type="file" class="form-control btn-block" style="height: auto !important;" name="stream_image" accept="image/*">
+                                            <small class="text-muted">Recommended size: 1280x720px. Max file size: 2MB</small>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -448,13 +449,20 @@ if(isset($_GET['error'])) {
             <th>Channel Name</th>
             <th>Stream Status</th>
             <th>Start Time</th>
-            <th>App ID</th>
+            <th>Banner</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     <?php foreach ($streams as $stream): ?>
             <tr>
+                <td>
+                    <?php if (!empty($stream['image_url'])): ?>
+                        <img src="<?php echo htmlspecialchars($stream['image_url']); ?>" alt="Stream Banner" style="max-width: 100px; height: auto;">
+                    <?php else: ?>
+                        <img src="assets/images/default-stream-banner.jpg" alt="Default Banner" style="max-width: 100px; height: auto;">
+                    <?php endif; ?>
+                </td>
                 <td><?php echo htmlspecialchars($stream['stream_title']); ?></td>
                 <td><?php echo htmlspecialchars($stream['channel_name']); ?></td>
                 <td><?php echo ucfirst($stream['stream_status']); ?></td>
