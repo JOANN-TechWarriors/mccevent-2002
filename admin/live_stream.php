@@ -435,7 +435,7 @@ $streams = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo date('Y-m-d H:i:s', strtotime($stream['start_time'])); ?></td>
                 <td><?php echo htmlspecialchars($stream['app_id']); ?></td>
                 <td>
-                    <a href="stream/host.php.php?id=<?php echo $stream['stream_id']; ?>" class="btn btn-primary btn-sm">View</a>
+                    <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>" class="btn btn-primary btn-sm">View</a>
                 </td>
             </tr>
         <?php endforeach; ?>
