@@ -664,62 +664,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Add this to your existing JavaScript section -->
         <script>
-$(document).ready(function() {
-    // Handle form submission
-    $('#addStreamForm').on('submit', function(e) {
-        e.preventDefault();
+        $(document).ready(function() {
+            // Handle form submission
+            $('#addStreamForm').on('submit', function(e) {
+                e.preventDefault();
 
-        // Create FormData object to handle file uploads
-        var formData = new FormData(this);
+                // Create FormData object to handle file uploads
+                var formData = new FormData(this);
 
-        // Show loading state
-        Swal.fire({
-            title: 'Adding stream...',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
-        $.ajax({
-            type: 'POST',
-            url: 'add_stream.php',
-            data: formData,
-            dataType: 'json',
-            contentType: false, // Important for file uploads
-            processData: false, // Important for file uploads
-            success: function(response) {
-                Swal.close();
-
-                if (response.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: response.message || 'Stream added successfully',
-                    }).then(() => {
-                        $('#addMEcollapse').modal('hide');
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message || 'Failed to add stream'
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                Swal.close();
+                // Show loading state
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Server error: ' + (xhr.responseText || error || 'Unknown error occurred')
+                    title: 'Adding stream...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
                 });
-            }
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'add_stream.php',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false, // Important for file uploads
+                    processData: false, // Important for file uploads
+                    success: function(response) {
+                        Swal.close();
+
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: response.message ||
+                                    'Stream added successfully',
+                            }).then(() => {
+                                $('#addMEcollapse').modal('hide');
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message || 'Failed to add stream'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Server error: ' + (xhr.responseText || error ||
+                                'Unknown error occurred')
+                        });
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+        </script>
 </body>
 
 </html>

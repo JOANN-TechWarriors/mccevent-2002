@@ -15,7 +15,7 @@ function sendResponse($success, $message) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         // Validate required fields
-        $required_fields = ['organizer_id', 'stream_title', 'channel_name', 'start_time', 'end_time', 'app_id'];
+        $required_fields = ['organizer_id', 'stream_title', 'channel_name', 'start_time', 'end_time'];
         foreach ($required_fields as $field) {
             if (empty($_POST[$field])) {
                 sendResponse(false, "Missing required field: $field");
@@ -50,10 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $query = "INSERT INTO live_streams (
             organizer_id, stream_title, channel_name, start_time, end_time, 
-            stream_status, app_id, token, image_url
+            stream_status, token, image_url
         ) VALUES (
             :organizer_id, :stream_title, :channel_name, :start_time, :end_time,
-            'scheduled', :app_id, :token, :image_url
+            'scheduled', :token, :image_url
         )";
 
         $token = bin2hex(random_bytes(16));
@@ -64,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':channel_name', $_POST['channel_name']);
         $stmt->bindParam(':start_time', $_POST['start_time']);
         $stmt->bindParam(':end_time', $_POST['end_time']);
-        $stmt->bindParam(':app_id', $_POST['app_id']);
         $stmt->bindParam(':token', $token);
         $stmt->bindParam(':image_url', $image_url);
         
