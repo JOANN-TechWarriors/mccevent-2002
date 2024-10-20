@@ -2,14 +2,29 @@
 // Database connection details
 include "db.php";
 
-// Fetch the channel name for stream_id = 11
-$result = $conn->query("SELECT channel_name FROM live_streams WHERE stream_id = 1");
-$channelName = $result->fetch_assoc()['channel_name'];
+// Check if stream_id is provided in the URL
+if(isset($_GET['id'])) {
+    $stream_id = $_GET['id'];
+} else {
+    die("Error: No stream ID provided");
+}
 
-// Close the connection
+// Prepare the SQL statement
+$stmt = $conn->prepare("SELECT channel_name FROM live_streams WHERE stream_id = ?");
+$stmt->bind_param("i", $stream_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if($result->num_rows > 0) {
+    $channelName = $result->fetch_assoc()['channel_name'];
+} else {
+    die("Error: Stream not found");
+}
+
+// Close the statement and connection
+$stmt->close();
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
