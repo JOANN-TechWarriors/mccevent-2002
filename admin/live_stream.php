@@ -460,7 +460,6 @@ if(isset($_GET['error'])) {
                 <td><?php echo ucfirst($stream['stream_status']); ?></td>
                 <td><?php echo date('Y-m-d H:i:s', strtotime($stream['start_time'])); ?></td>
                 <td><?php echo htmlspecialchars($stream['app_id']); ?></td>
-                <td><?php echo htmlspecialchars($stream['token']); ?></td>
                 <td>
                     <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>" class="btn btn-primary btn-sm">View</a>
                 </td>
