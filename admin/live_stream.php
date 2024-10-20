@@ -48,7 +48,82 @@ if(isset($_GET['error'])) {
 }
 
 ?>
+<?php
+// add_stream.php
 
+// Configure upload settings
+$upload_dir = 'uploads/stream-banners/';
+$allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+$max_size = 2 * 1024 * 1024; // 2MB
+
+// Create upload directory if it doesn't exist
+if (!file_exists($upload_dir)) {
+    mkdir($upload_dir, 0777, true);
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $image_url = ''; // Default empty value
+    
+    // Handle image upload if present
+    if (isset($_FILES['stream_image']) && $_FILES['stream_image']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['stream_image'];
+        
+        // Validate file type
+        if (!in_array($file['type'], $allowed_types)) {
+            die('Error: Invalid file type. Only JPG, PNG and GIF are allowed.');
+        }
+        
+        // Validate file size
+        if ($file['size'] > $max_size) {
+            die('Error: File size too large. Maximum size is 2MB.');
+        }
+        
+        // Generate unique filename
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $filename = uniqid() . '.' . $extension;
+        $filepath = $upload_dir . $filename;
+        
+        // Move uploaded file
+        if (move_uploaded_file($file['tmp_name'], $filepath)) {
+            $image_url = $filepath;
+        } else {
+            die('Error: Failed to upload file.');
+        }
+    }
+    
+    // Prepare the SQL statement
+    $sql = "INSERT INTO live_streams (
+        organizer_id, 
+        channel_name, 
+        stream_title, 
+        start_time, 
+        end_time, 
+        app_id, 
+        image_url
+    ) VALUES (
+        ?, ?, ?, ?, ?, ?, ?
+    )";
+    
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            $_POST['organizer_id'],
+            $_POST['channel_name'],
+            $_POST['stream_title'],
+            $_POST['start_time'],
+            $_POST['end_time'],
+            $_POST['app_id'],
+            $image_url
+        ]);
+        
+        header('Location: index.php?success=1');
+        exit;
+    } catch (PDOException $e) {
+        die('Error: ' . $e->getMessage());
+    }
+}
+?>
 
 
 <!DOCTYPE html>
