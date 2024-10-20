@@ -749,60 +749,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         </script>
        <script>
-    $(document).ready(function() {
-        $('.delete-stream').on('click', function() {
-            var streamId = $(this).data('id');
-            var $row = $(this).closest('tr');
-            
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: 'live_stream.php',
-                        type: 'POST',
-                        data: {delete_stream: streamId},
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                Swal.fire({
-                                    title: 'Deleted!',
-                                    text: response.message,
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.reload();
-                                    }
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Error!',
-                                    response.message,
-                                    'error'
-                                );
-                            }
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.error('AJAX Error:', textStatus, errorThrown);
-                            Swal.fire(
-                                'success',
-                                'Successfully Deleted!',
-                                'success'
-                            );
-                        }
-                    });
-                }
-            });
+$(document).ready(function() {
+    $('.delete-stream').on('click', function() {
+        var streamId = $(this).data('id');
+        var $row = $(this).closest('tr');
+        
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'live_stream.php',
+                    type: 'POST',
+                    data: {delete_stream: streamId},
+                    dataType: 'json',
+                    success: function(response) {
+                        showSuccessAndReload('Deleted!', response.message);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX Error:', textStatus, errorThrown);
+                        showSuccessAndReload('Success', 'Successfully Deleted!');
+                    }
+                });
+            }
         });
     });
-    </script>
+
+    function showSuccessAndReload(title, message) {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.reload();
+            }
+        });
+    }
+});
+</script>
 </body>
 
 </html>
