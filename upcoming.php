@@ -265,7 +265,7 @@
             <li><a href="ongoing.php">Ongoing</a></li>
             <li><a href="upcoming.php">Upcoming</a></li>
             <li><a href="about.php">About</a></li>
-            <li><a href="blog.php">Live</a></li>
+            <li><a href="admin/stream/audience.php">Live</a></li>
             <li>
                 <a href="#login">Login</a>
                 <div class="dropdown">
