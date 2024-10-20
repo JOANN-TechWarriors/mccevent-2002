@@ -1,16 +1,25 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 include('session.php');
 include('dbcon.php');
 
 header('Content-Type: application/json');
 
+function sendResponse($success, $message) {
+    echo json_encode(['success' => $success, 'message' => $message]);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         // Validate required fields
-        if (empty($_POST['organizer_id']) || empty($_POST['stream_title']) || 
-            empty($_POST['channel_name']) || empty($_POST['start_time']) || 
-            empty($_POST['end_time']) || empty($_POST['app_id'])) {
-            throw new Exception('All fields are required');
+        $required_fields = ['organizer_id', 'stream_title', 'channel_name', 'start_time', 'end_time', 'app_id'];
+        foreach ($required_fields as $field) {
+            if (empty($_POST[$field])) {
+                sendResponse(false, "Missing required field: $field");
+            }
         }
 
         // Handle file upload
@@ -22,43 +31,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $max_size = 2 * 1024 * 1024; // 2MB
             
             if (!in_array($_FILES['stream_banner']['type'], $allowed_types)) {
-                throw new Exception('Invalid file type. Only JPG, PNG, and GIF are allowed.');
+                sendResponse(false, 'Invalid file type. Only JPG, PNG, and GIF are allowed.');
             }
             
             if ($_FILES['stream_banner']['size'] > $max_size) {
-                throw new Exception('File size exceeds the maximum limit of 2MB.');
+                sendResponse(false, 'File size exceeds the maximum limit of 2MB.');
             }
             
             $file_name = uniqid() . '_' . $_FILES['stream_banner']['name'];
             $upload_path = $upload_dir . $file_name;
             
-            if (move_uploaded_file($_FILES['stream_banner']['tmp_name'], $upload_path)) {
-                $image_url = $upload_path;
-            } else {
-                throw new Exception('Failed to upload the banner image.');
+            if (!move_uploaded_file($_FILES['stream_banner']['tmp_name'], $upload_path)) {
+                sendResponse(false, 'Failed to upload the banner image.');
             }
+            
+            $image_url = $upload_path;
         }
 
         $query = "INSERT INTO live_streams (
-            organizer_id, 
-            stream_title, 
-            channel_name, 
-            start_time, 
-            end_time, 
-            stream_status,
-            app_id,
-            token,
-            image_url
+            organizer_id, stream_title, channel_name, start_time, end_time, 
+            stream_status, app_id, token, image_url
         ) VALUES (
-            :organizer_id,
-            :stream_title,
-            :channel_name,
-            :start_time,
-            :end_time,
-            'scheduled',
-            :app_id,
-            :token,
-            :image_url
+            :organizer_id, :stream_title, :channel_name, :start_time, :end_time,
+            'scheduled', :app_id, :token, :image_url
         )";
 
         $token = bin2hex(random_bytes(16));
@@ -74,16 +69,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':image_url', $image_url);
         
         if ($stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Stream added successfully']);
+            sendResponse(true, 'Stream added successfully');
         } else {
-            throw new Exception('Failed to insert data');
+            sendResponse(false, 'Failed to insert data into database');
         }
 
     } catch(Exception $e) {
-        echo json_encode([
-            'success' => false, 
-            'message' => 'Failed to add stream: ' . $e->getMessage()
-        ]);
+        sendResponse(false, 'Failed to add stream: ' . $e->getMessage());
     }
-    exit;
+} else {
+    sendResponse(false, 'Invalid request method');
 }
