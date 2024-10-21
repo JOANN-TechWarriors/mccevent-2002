@@ -37,14 +37,14 @@
         padding-top: 20px;
         transition: all 0.3s;
         overflow: hidden;
+        z-index: 1000; /* Ensure the sidebar is above the main content */
     }
 
     .sidebar.collapsed {
-        width: 80px;
+        transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
     }
 
     .sidebar .toggle-btn {
-        position: absolute;
         top: 10px;
         right: 18px;
         background-color: transparent;
@@ -90,22 +90,6 @@
 
     .sidebar ul li a i {
         margin-right: 10px;
-        transition: margin 0.3s;
-    }
-
-    .sidebar.collapsed ul li a i {
-        margin-right: 0;
-    }
-
-    .sidebar ul li a span {
-        display: inline-block;
-        transition: opacity 0.3s;
-    }
-
-    .sidebar.collapsed ul li a span {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
     }
 
     .sidebar ul li a:hover {
@@ -171,22 +155,24 @@
 
     @media (max-width: 768px) {
         .sidebar {
-            width: 100%;
-            height: auto;
-            position: relative;
-            overflow: visible;
-        }
-
-        .sidebar.collapsed {
-            width: 100%;
+            position: absolute;
+            width: 250px;
+           
+            transform: translateX(-100%); /* Hide sidebar off-screen */
+            display: block; /* Show sidebar when collapsed */
         }
 
         .main {
-            margin-left: 0;
+            margin-left: 0; /* No space for sidebar on mobile */
+            transition: margin-left 0.3s ease; /* Smooth transition for main content */
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(0); /* Show sidebar when expanded */
         }
 
         .sidebar .toggle-btn {
-            display: block;
+            display: block; /* Show toggle button on mobile */
         }
     }
 
@@ -221,24 +207,25 @@
 </style>
 </head>
 <body>
-<div class="sidebar" id="sidebar">
-  <button class="toggle-btn" id="toggle-btn">☰</button>
-    <div class="sidebar-heading">
-      <img src="../img/logo.png" alt="Logo">
-      <div>Event Judging System</div>
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
+        <div class="sidebar-heading">
+            <img src="../img/logo.png" alt="Logo">
+            <div>Event Judging System</div>
+        </div>
+        <ul>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+            <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+            <li><a href="live.php"><i class="fas fa-camera"></i> <span>LIVE</span></a></li>
+        </ul>
     </div>
-    <ul>
-        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-        <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-        <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-        <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
-    </ul>
   </div>
 
     <!-- Header -->
     <div class="header">
         <div>
-            <!-- Add any left-aligned content here if needed -->
+            <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
         </div>
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $name; ?></div>
@@ -421,6 +408,23 @@
             maintainAspectRatio: false
         }
     });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleButtons = document.querySelectorAll(".toggle-btn");
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.querySelector(".main");
+
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Toggle the collapsed class on sidebar
+            sidebar.classList.toggle("collapsed");
+            // Toggle the collapsed class on main content
+            mainContent.classList.toggle("collapsed");
+        });
+    });
+});
+
 </script>
 <!-- Optional JavaScript -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
