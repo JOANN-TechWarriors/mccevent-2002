@@ -326,17 +326,21 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        <?php if (isset($_SESSION['message'])): ?>
-        Swal.fire({
-            title: '<?php echo htmlspecialchars($_SESSION['message']); ?>',
-            icon: '<?php echo $_SESSION['message_type'] === 'success' ? 'success' : 'error'; ?>',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            <?php unset($_SESSION['message']); unset($_SESSION['message_type']); ?>
-        });
-        <?php endif; ?>
+    // Existing SweetAlert for session message (if needed)
+    <?php if (isset($_SESSION['message'])): ?>
+    Swal.fire({
+        title: '<?php echo htmlspecialchars($_SESSION['message']); ?>',
+        icon: '<?php echo $_SESSION['message_type'] === 'success' ? 'success' : 'error'; ?>',
+        confirmButtonText: 'OK'
+    }).then(() => {
+        <?php unset($_SESSION['message']); unset($_SESSION['message_type']); ?>
+    });
+    <?php endif; ?>
 
-        document.getElementById('logout').addEventListener('click', function(event) {
+    // Updated logout confirmation
+    const logoutLink = document.querySelector('a[href="logout.php"]');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function(event) {
             event.preventDefault();
             Swal.fire({
                 title: 'Are you sure you want to log out?',
@@ -346,12 +350,12 @@
                 cancelButtonText: 'No'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Redirect to logout.php
-                    window.location.href = '..//index.php';
+                    window.location.href = 'logout.php';
                 }
             });
         });
-    });
+    }
+});
         </script>
 <script>
   
