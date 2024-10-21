@@ -323,6 +323,36 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Chart.js JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if (isset($_SESSION['message'])): ?>
+        Swal.fire({
+            title: '<?php echo htmlspecialchars($_SESSION['message']); ?>',
+            icon: '<?php echo $_SESSION['message_type'] === 'success' ? 'success' : 'error'; ?>',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            <?php unset($_SESSION['message']); unset($_SESSION['message_type']); ?>
+        });
+        <?php endif; ?>
+
+        document.getElementById('logout').addEventListener('click', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Are you sure you want to log out?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to logout.php
+                    window.location.href = '..//index.php';
+                }
+            });
+        });
+    });
+        </script>
 <script>
   
     // Pie Chart
@@ -425,48 +455,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-        <?php if (isset($_SESSION['message'])): ?>
-        Swal.fire({
-            title: '<?php echo htmlspecialchars($_SESSION['message']); ?>',
-            icon: '<?php echo $_SESSION['message_type'] === 'success' ? 'success' : 'error'; ?>',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            <?php unset($_SESSION['message']); unset($_SESSION['message_type']); ?>
-        });
-        <?php endif; ?>
-
-        document.getElementById('logout').addEventListener('click', function(event) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Are you sure you want to log out?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to logout.php
-                    window.location.href = '..//index.php';
-                }
-            });
-        });
-
-document.getElementById('logout').addEventListener('click', function(event) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Are you sure you want to log out?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to logout.php
-                    window.location.href = '..//index.php';
-                }
-            });
-        });
 </script>
 <!-- Optional JavaScript -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
