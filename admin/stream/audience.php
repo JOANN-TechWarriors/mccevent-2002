@@ -1,14 +1,13 @@
 <?php
- 
     include "db.php";
     // Connect to the database
     
-    
-    // Get stream_id from URL parameter
+    // Get stream_id and token from URL parameters
     $stream_id = isset($_GET['stream_id']) ? intval($_GET['stream_id']) : 0;
+    $token = isset($_GET['token']) ? $_GET['token'] : '';
     
-    // Fetch the channel name and stream title for the given stream_id
-    $stmt = $conn->prepare("SELECT channel_name, stream_title FROM live_streams WHERE stream_id = ?");
+    // Fetch the channel name, stream title and token for the given stream_id
+    $stmt = $conn->prepare("SELECT channel_name, stream_title, token FROM live_streams WHERE stream_id = ?");
     $stmt->bind_param("i", $stream_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -17,11 +16,12 @@
     // Close the connection
     $conn->close();
 
-    // If stream not found, set default values
-    if (!$stream) {
+    // If stream not found or token doesn't match, set default values
+    if (!$stream || $stream['token'] !== $token) {
         $stream = [
             'channel_name' => 'Unknown Channel',
-            'stream_title' => 'Stream Not Found'
+            'stream_title' => 'Stream Not Found or Invalid Token',
+            'token' => ''
         ];
     }
 ?>
@@ -69,7 +69,7 @@
             flex: 1;
             position: relative;
             width: 100%;
-            height: calc(100% - 50px); /* Adjust based on your controls height */
+            height: calc(100% - 50px);
         }
         .player { 
             position: absolute;
@@ -99,6 +99,15 @@
             color: #2F3FB0; 
             background-color: white; 
         }
+        .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -108,6 +117,9 @@
         </div>
         <div class="player-wrapper">
             <div id="remote-playerlist" class="player"></div>
+            <div id="error-message" class="error-message">
+                Invalid stream or token. Please check your access link.
+            </div>
         </div>
         <div class="controls">
             <button id="leave" type="button" class="btn btn-live btn-sm" disabled>Leave Stream</button>
@@ -119,25 +131,32 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
     <script>
-             // Create Agora client
-             var client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
+        var client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
         var remoteUsers = {};
 
-        // Agora client options
         var options = {
             appid: "639e26f0457a4e85b9e24844db6078cd",
             channel: "<?php echo $stream['channel_name']; ?>",
             uid: null,
-            token: null,
+            token: "<?php echo $stream['token']; ?>", // Use the token from database
             role: "audience"
         };
 
+        // Show error message if token is invalid
+        if (!options.token) {
+            $("#error-message").show();
+            $("#leave").hide();
+        }
+
         document.addEventListener("DOMContentLoaded", async function() {
-            try {
-                await join();
-                $("#leave").attr("disabled", false);
-            } catch (error) {
-                console.error(error);
+            if (options.token) {
+                try {
+                    await join();
+                    $("#leave").attr("disabled", false);
+                } catch (error) {
+                    console.error(error);
+                    $("#error-message").show();
+                }
             }
         });
 
