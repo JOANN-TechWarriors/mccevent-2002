@@ -172,7 +172,7 @@
             <script>
               Swal.fire({
                 title: 'Success!',
-                text: 'Organizer <?php echo $fname . " " . $mname . " " . $lname; ?> registered successfully!',
+                text: 'Organizer <?php echo $fname . " " . $mname . " " . $lname; ?> Registered Successfully!',
                 icon: 'success',
                 confirmButtonText: 'OK'
               }).then((result) => {
