@@ -87,7 +87,7 @@ thead th {
              <br/> 
              <table cellpadding="50" cellspacing="40"  align="center">
              <thead>
-             <th align="left" style="background-color: aquamarine; text-indent: 10px; color: black; "><h4>ORGANIZER  </h4></th>
+             <th align="left" style="background-color: aquamarine; text-indent: 10px; color: black; "><h4>ORGANIZER LOGIN </h4></th>
              </thead>
              
              <tr style="background-color: #fff;">
