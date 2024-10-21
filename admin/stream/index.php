@@ -2,7 +2,7 @@
 include "db.php";
 
 // Fetch live streams
-$sql = "SELECT stream_id, stream_title, stream_status, start_time, image_url, token FROM live_streams ORDER BY start_time DESC LIMIT 5";
+$sql = "SELECT stream_id, stream_title, stream_status, start_time, image_url FROM live_streams ORDER BY start_time DESC LIMIT 5";
 $result = $conn->query($sql);
 
 // Prepare streams data for JavaScript
@@ -51,7 +51,9 @@ $conn->close();
                 if (!imageUrl) {
                     return `/api/placeholder/1920/1080?text=No Image`;
                 }
+                // Remove '../' from the beginning of the path if it exists
                 const cleanPath = imageUrl.replace(/^\.\.\//, '');
+                // Construct the correct URL
                 return `/${cleanPath}`;
             };
 
@@ -85,7 +87,6 @@ $conn->close();
 
         const App = () => {
             const [currentIndex, setCurrentIndex] = useState(0);
-            const [error, setError] = useState('');
             const streams = JSON.parse('<?php echo addslashes($streamsJson); ?>');
 
             useEffect(() => {
@@ -95,48 +96,15 @@ $conn->close();
                 return () => clearInterval(interval);
             }, [streams.length]);
 
-            const handleWatchLive = async () => {
+            const handleWatchLive = () => {
                 const currentStream = streams[currentIndex];
-                
-                if (!currentStream.token) {
-                    setError('This stream is not available.');
-                    return;
-                }
-
-                // Validate token before redirecting
-                try {
-                    const response = await fetch('validate_token.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            stream_id: currentStream.stream_id,
-                            token: currentStream.token
-                        })
-                    });
-
-                    const data = await response.json();
-                    
-                    if (data.valid) {
-                        window.location.href = `audience.php?stream_id=${currentStream.stream_id}&token=${currentStream.token}`;
-                    } else {
-                        setError('Invalid or expired stream token.');
-                    }
-                } catch (err) {
-                    setError('Error validating stream access.');
-                }
+                window.location.href = `audience.php?stream_id=${currentStream.stream_id}`;
             };
 
             return (
                 <div className="relative">
                     <Carousel streams={streams} />
                     <StreamInfo stream={streams[currentIndex]} />
-                    {error && (
-                        <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-md">
-                            {error}
-                        </div>
-                    )}
                     <button 
                         onClick={handleWatchLive}
                         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-red-600 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-red-700 transition-colors duration-300"
