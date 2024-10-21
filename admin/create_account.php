@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <?php 
     include('header.php');
-    include('dbcon.php');
+    // Include your database connection
+    include('dbcon.php'); // Make sure this file contains the $conn variable and the connection logic.
     ?>
     <head>    
       <link rel="shortcut icon" href="../images/logo copy.png"/>
-      <!-- Add SweetAlert2 CSS -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.32/sweetalert2.min.css">
-      <style>
+    </head>
+  <body>
+  <style>
         body { font-family: Arial, sans-serif; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
         .modal-content { background: white; margin: 5% auto; padding: 20px; width: 50%; }
         .close { cursor: pointer; float: right; }
-      </style>
-    </head>
-    <body>
+    </style>
     <div class="container">
       <div class="col-lg-3"></div>
       <div class="col-lg-6">
@@ -24,7 +24,7 @@
             <h3 class="panel-title">Event Organizer Registration Form</h3>
           </div>
           <div class="panel-body">
-            <form method="POST" id="registrationForm">
+            <form method="POST">
               <table align="center">
                 <tr><td colspan="5"><strong>Basic Information</strong><hr /></td></tr>
                 <tr>
@@ -43,6 +43,15 @@
                     <input type="text" name="lname" class="form-control" placeholder="Lastname" aria-describedby="basic-addon1" required>
                   </td>
                 </tr>
+                
+                <!-- <tr><td colspan="5">&nbsp;</td></tr>
+                <tr><td colspan="5"><strong>Notification Information</strong><hr /></td></tr>
+                <tr>
+                  <td>
+                    Email:
+                    <input type="email" name="email" class="form-control" placeholder="Email" aria-describedby="basic-addon1" required>
+                  </td>
+                </tr> -->
                 
                 <tr><td colspan="5">&nbsp;</td></tr>
                 <tr><td colspan="5"><strong>Account Security</strong><hr /></td></tr>
@@ -125,15 +134,7 @@
         <font size="2" class="pull-left"><strong>Event Judging System &middot; 2023 &COPY;</strong></font>
       </div>
     </footer>      
-
-    <!-- Scripts -->
-    <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
-    <script src="javascript/jquery1102.min.js"></script>
-    <!-- Add SweetAlert2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.32/sweetalert2.all.min.js"></script>
-    
     <script>
-    // Modal functionality
     const modal = document.getElementById("myModal");
     const btn = document.getElementById("openModal");
     const span = document.getElementsByClassName("close")[0];
@@ -141,86 +142,54 @@
     btn.onclick = () => modal.style.display = "block";
     span.onclick = () => modal.style.display = "none";
     window.onclick = (event) => { if (event.target === modal) modal.style.display = "none"; };
-
-    // Password matching check
-    $('#password, #confirm_password').on('keyup', function () {
-      if ($('#password').val() == $('#confirm_password').val()) {
-        $('#message').html('Matching').css('color', 'green');
-      } else {
-        $('#message').html('Not Matching').css('color', 'red');
-      }
-    });
+</script>
+    <!-- Scripts -->
+    <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="javascript/jquery1102.min.js"></script>
+    
+    <script>
+      $('#password, #confirm_password').on('keyup', function () {
+        if ($('#password').val() == $('#confirm_password').val()) {
+          $('#message').html('Matching').css('color', 'green');
+        } else {
+          $('#message').html('Not Matching').css('color', 'red');
+        }
+      });
     </script>
 
-    <?php 
-    if (isset($_POST['register'])) {
-       $fname = htmlspecialchars($_POST['fname']);
-       $mname = htmlspecialchars($_POST['mname']);  
-       $lname = htmlspecialchars($_POST['lname']);  
-       $username = htmlspecialchars($_POST['username']);  
-       $password = htmlspecialchars($_POST['password']);  
-       $password2 = htmlspecialchars($_POST['password2']);  
-      
-      if ($password == $password2) {
-        try {
-          $stmt = $conn->prepare("INSERT INTO organizer (fname, mname, lname, username, password, access, status) VALUES (?, ?, ?, ?, ?, 'Organizer', 'offline')");
-          $stmt->bind_param("sssss", $fname, $mname, $lname, $username, $password);
-          $result = $stmt->execute();
-          
-          if ($result) {
-            ?>
-            <script>
-              Swal.fire({
-                title: 'Success!',
-                text: 'Organizer <?php echo $fname . " " . $mname . " " . $lname; ?> Registered Successfully!',
-                icon: 'success',
-                confirmButtonText: 'OK'
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  window.location = 'index.php';
-                }
-              });
-            </script>
-            <?php
-          } else {
-            ?>
-            <script>
-              Swal.fire({
-                title: 'Error!',
-                text: 'Database error occurred. Please try again.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-              });
-            </script>
-            <?php
-          }
-          $stmt->close();
-        } catch (Exception $e) {
-          ?>
-          <script>
-            Swal.fire({
-              title: 'Error!',
-              text: 'An error occurred while processing your request.',
-              icon: 'error',
-              confirmButtonText: 'OK'
-            });
-          </script>
-          <?php
-        }
-      } else {
-        ?>
-        <script>
-          Swal.fire({
-            title: 'Error!',
-            text: 'Password and Re-typed password did not match.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-          });
-        </script>
-        <?php
-      }
-    }
-    ?>
 
-    </body>
+
+<?php 
+if (isset($_POST['register'])) {
+   $fname = htmlspecialchars($_POST['fname']);
+   $mname = htmlspecialchars($_POST['mname']);  
+   $lname = htmlspecialchars($_POST['lname']);  
+   //  $email = $_POST['email']; 
+   $username = htmlspecialchars($_POST['username']);  
+   $password = htmlspecialchars($_POST['password']);  
+   $password2 = htmlspecialchars($_POST['password2']);  
+  
+  
+   if ($password == $password2) {
+     $stmt =  $conn->query("insert into organizer(fname,mname,lname,username,password,access,status)values('$fname','$mname','$lname','$username','$password','Organizer','offline')");
+     $stmt->bind_param("ssssss", $fname, $mname, $lname, $username, $password, $email);
+     $stmt->execute();
+     $stmt->close();
+     ?>
+     <script>
+       window.location = 'index.php';
+       alert('Organizer <?php echo $fname . " " . $mname . " " . $lname; ?> registered successfully!');
+     </script>
+     <?php
+   } else {
+     ?>
+     <script>
+       alert('Organizer <?php echo $fname . " " . $mname . " " . $lname; ?> registration cannot be done. Password and Re-typed password did not match.');
+     </script>
+     <?php
+   }
+}
+?>
+
+</body>
 </html>
