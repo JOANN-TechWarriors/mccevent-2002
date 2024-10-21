@@ -32,7 +32,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Live video streaming for <?php echo htmlspecialchars($stream['stream_title']); ?>">
-    <link rel="shortcut icon" href="../images/logo copy.png" />
+    <link rel="shortcut icon" href="../../images/logo copy.png" />
     <title><?php echo htmlspecialchars($stream['stream_title']); ?> - Live Stream</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
