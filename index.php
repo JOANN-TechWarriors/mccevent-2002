@@ -316,7 +316,7 @@
                     <div class="container">
                         <div class="logo">
                             <a href="#" style="font-family: impact; color: #1153D0;">
-                                <img src="img/logo.png" style="height: 600px;  vertical-align: middle;"> MCC Event
+                                <img src="img/logo.png" style="height: 40px;  vertical-align: middle;"> MCC Event
                             </a>
                             <span class="text-light"MCC>
                         </div>
