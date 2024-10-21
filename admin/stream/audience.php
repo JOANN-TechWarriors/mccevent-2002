@@ -1,29 +1,26 @@
 <?php
- 
-    include "db.php";
-    // Connect to the database
-    
-    
-    // Get stream_id from URL parameter
-    $stream_id = isset($_GET['stream_id']) ? intval($_GET['stream_id']) : 0;
-    
-    // Fetch the channel name and stream title for the given stream_id
-    $stmt = $conn->prepare("SELECT channel_name, stream_title FROM live_streams WHERE stream_id = ?");
-    $stmt->bind_param("i", $stream_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $stream = $result->fetch_assoc();
-    
-    // Close the connection
-    $conn->close();
+include "db.php";
 
-    // If stream not found, set default values
-    if (!$stream) {
-        $stream = [
-            'channel_name' => 'Unknown Channel',
-            'stream_title' => 'Stream Not Found'
-        ];
-    }
+// Get stream_id and token from URL parameters
+$stream_id = isset($_GET['stream_id']) ? intval($_GET['stream_id']) : 0;
+$token = isset($_GET['token']) ? $_GET['token'] : '';
+
+// Validate the stream and token
+$stmt = $conn->prepare("SELECT channel_name, stream_title, stream_status FROM live_streams WHERE stream_id = ? AND token = ? AND stream_status = 'active'");
+$stmt->bind_param("is", $stream_id, $token);
+$stmt->execute();
+$result = $stmt->get_result();
+$stream = $result->fetch_assoc();
+
+// If stream not found or token invalid, redirect to error page
+if (!$stream) {
+    $conn->close();
+    header("Location: error.php?message=" . urlencode("Invalid stream or access token"));
+    exit;
+}
+
+// Close the connection
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +66,7 @@
             flex: 1;
             position: relative;
             width: 100%;
-            height: calc(100% - 50px); /* Adjust based on your controls height */
+            height: calc(100% - 50px);
         }
         .player { 
             position: absolute;
@@ -119,14 +116,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
     <script>
-             // Create Agora client
-             var client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
+        // Create Agora client
+        var client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
         var remoteUsers = {};
 
         // Agora client options
         var options = {
             appid: "639e26f0457a4e85b9e24844db6078cd",
-            channel: "<?php echo $stream['channel_name']; ?>",
+            channel: "<?php echo htmlspecialchars($stream['channel_name']); ?>",
             uid: null,
             token: null,
             role: "audience"
@@ -162,6 +159,7 @@
             await client.leave();
             $("#leave").attr("disabled", true);
             console.log("Client left channel");
+            window.location.href = 'index.php'; // Redirect to index page after leaving
         }
 
         async function subscribe(user, mediaType) {
@@ -206,6 +204,30 @@
             const count = Object.keys(remoteUsers).length;
             $("#viewer-count").text(count);
         }
+
+        // Add periodic token validation
+        setInterval(async function() {
+            try {
+                const response = await fetch('validate_token.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        stream_id: <?php echo $stream_id; ?>,
+                        token: '<?php echo htmlspecialchars($token); ?>'
+                    })
+                });
+                
+                const data = await response.json();
+                if (!data.valid) {
+                    console.log("Token expired or invalid");
+                    leave();
+                }
+            } catch (error) {
+                console.error("Error validating token:", error);
+            }
+        }, 30000); // Check every 30 seconds
     </script>
 </body>
 </html>
