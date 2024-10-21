@@ -2,7 +2,7 @@
 include "db.php";
 
 // Fetch live streams
-$sql = "SELECT stream_id, stream_title, stream_status, start_time, image_url FROM live_streams ORDER BY start_time DESC LIMIT 5";
+$sql = "SELECT stream_id, stream_title, stream_status, start_time, end_time, image_url FROM live_streams ORDER BY start_time DESC LIMIT 5";
 $result = $conn->query($sql);
 
 // Prepare streams data for JavaScript
@@ -37,6 +37,13 @@ $conn->close();
     <script type="text/babel">
         const { useState, useEffect } = React;
 
+        const isStreamActive = (startTime, endTime) => {
+            const now = new Date();
+            const streamStart = new Date(startTime);
+            const streamEnd = endTime ? new Date(endTime) : new Date(streamStart.getTime() + (2 * 60 * 60 * 1000)); // Default 2 hours duration
+            return now >= streamStart && now <= streamEnd;
+        };
+
         const Carousel = ({ streams }) => {
             const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -51,9 +58,7 @@ $conn->close();
                 if (!imageUrl) {
                     return `/api/placeholder/1920/1080?text=No Image`;
                 }
-                // Remove '../' from the beginning of the path if it exists
                 const cleanPath = imageUrl.replace(/^\.\.\//, '');
-                // Construct the correct URL
                 return `/${cleanPath}`;
             };
 
@@ -77,13 +82,25 @@ $conn->close();
             );
         };
 
-        const StreamInfo = ({ stream }) => (
-            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-                <h2 className="text-2xl font-bold">{stream.stream_title}</h2>
-                <p>Status: {stream.stream_status}</p>
-                <p>Start Time: {stream.start_time}</p>
-            </div>
-        );
+        const StreamInfo = ({ stream }) => {
+            const active = isStreamActive(stream.start_time, stream.end_time);
+            const startTime = new Date(stream.start_time);
+            
+            return (
+                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                    <h2 className="text-2xl font-bold">{stream.stream_title}</h2>
+                    <p>Status: {active ? "Live Now" : "Scheduled"}</p>
+                    <p>Start Time: {startTime.toLocaleString()}</p>
+                    {!active && (
+                        <p className="text-yellow-400">
+                            {startTime > new Date() ? 
+                                `Stream starts in ${Math.ceil((startTime - new Date()) / (1000 * 60))} minutes` :
+                                "Stream has ended"}
+                        </p>
+                    )}
+                </div>
+            );
+        };
 
         const App = () => {
             const [currentIndex, setCurrentIndex] = useState(0);
@@ -101,15 +118,22 @@ $conn->close();
                 window.location.href = `audience.php?stream_id=${currentStream.stream_id}`;
             };
 
+            const currentStream = streams[currentIndex];
+            const isActive = isStreamActive(currentStream.start_time, currentStream.end_time);
+
             return (
                 <div className="relative">
                     <Carousel streams={streams} />
-                    <StreamInfo stream={streams[currentIndex]} />
+                    <StreamInfo stream={currentStream} />
                     <button 
                         onClick={handleWatchLive}
-                        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-red-600 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-red-700 transition-colors duration-300"
+                        disabled={!isActive}
+                        className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 py-2 px-6 rounded-full text-lg font-bold shadow-lg transition-colors duration-300 
+                            ${isActive ? 
+                                'bg-red-600 text-white hover:bg-red-700 cursor-pointer' : 
+                                'bg-gray-400 text-gray-200 cursor-not-allowed'}`}
                     >
-                        Watch Live
+                        {isActive ? "Watch Live" : "Stream Not Available"}
                     </button>
                 </div>
             );
