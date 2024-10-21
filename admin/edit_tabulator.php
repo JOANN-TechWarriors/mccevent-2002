@@ -202,7 +202,7 @@ if(isset($_POST['add_tabulator'])) {
                 echo "<script>
                 swal({
                     title: 'Success!',
-                    text: '$fname $mname $lname successfully added.',
+                    text: '$fname $mname $lname Successfully Added.',
                     type: 'success',
                     confirmButtonText: 'OK'
                 }, function() {
@@ -238,7 +238,7 @@ if(isset($_POST['update'])) {
     echo "<script>
     swal({
         title: 'Success!',
-        text: '$fname $mname $lname updated successfully.',
+        text: '$fname $mname $lname Updated Successfully.',
         type: 'success',
         confirmButtonText: 'OK'
     }, function() {
