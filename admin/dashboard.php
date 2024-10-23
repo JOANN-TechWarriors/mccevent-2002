@@ -51,6 +51,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-i
     }
 
     .sidebar .toggle-btn {
+        position:absolute;
         top: 10px;
         right: 18px;
         background-color: transparent;
