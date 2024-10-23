@@ -83,80 +83,78 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 250px;
-        background-color: #27293d;
-        color: #fff;
-        padding-top: 20px;
-        transition: all 0.3s;
-        overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #27293d;
+    color: #fff;
+    padding-top: 20px;
+    transition: all 0.3s;
+    overflow: hidden;
+    z-index: 1000; /* Ensure the sidebar is above the main content */
     }
 
     .sidebar.collapsed {
-        width: 80px;
+    transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
     }
+
 
     .sidebar .toggle-btn {
-        position: absolute;
-        top: 10px;
-        right: 18px;
-        background-color: transparent;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
+    position:absolute;
+    top: 10px;
+    right: 18px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
 
-    .sidebar .toggle-btn i {
-        font-size: 20px;
-    }
+.sidebar .toggle-btn i {
+    font-size: 20px;
+}
 
-    .sidebar-heading {
-        text-align: center;
-        padding: 10px 0;
-        font-size: 18px;
-        margin-bottom: 10px;
-    }
+.sidebar-heading {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
 
-    .sidebar-heading img {
-        max-width: 100px;
-        max-height: 100px;
-    }
+.sidebar-heading img {
+    max-width: 100px;
+    max-height: 100px;
+}
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 
-    .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        font-size: 14px;
-    }
+.sidebar ul li {
+    padding: 15px 20px;
+    transition: all 0.3s;
+}
 
-    .sidebar ul li {
-        padding: 15px 20px;
-        transition: all 0.3s;
-    }
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
 
-    .sidebar ul li a {
-        color: #fff;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-    }
 
-    .sidebar ul li a i {
-        margin-right: 10px;
-        transition: margin 0.3s;
-        font-size: 14px;
-    }
+.sidebar ul li a i {
+    margin-right: 10px;
+}
 
     .sidebar.collapsed ul li a i {
         margin-right: 0;
     }
 
-    .sidebar ul li a span {
+/*     .sidebar ul li a span {
         display: inline-block;
         transition: opacity 0.3s;
     }
@@ -165,22 +163,21 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         opacity: 0;
         width: 0;
         overflow: hidden;
-    }
+    } */
 
     .sidebar ul li a:hover {
-        background-color: #1a1a2e;
-        
-    }
+    background-color: #1a1a2e;
+}
 
     .main {
-        margin-left: 250px;
-        padding: 20px;
-        transition: all 0.3s;
-    }
+    margin-left: 250px; /* Space for the sidebar */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Smooth transition for main content */
+}
 
-    .main.collapsed {
-        margin-left: 80px;
-    }
+.main.collapsed {
+    margin-left: 0; /* No space for sidebar when collapsed */
+}
 
     .header {
         background-color: #f8f9fa;
@@ -270,38 +267,46 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     @media (max-width: 768px) {
-        .sidebar {
-            width: 100%;
-            height: auto;
-            position: relative;
-        }
-
-        .sidebar.collapsed {
-            width: 100%;
-        }
-
-        .main {
-            margin-left: 0;
-        }
+    .sidebar {
+        position: absolute;
+        width: 250px;
+       
+        transform: translateX(-100%); /* Hide sidebar off-screen */
+        display: block; /* Show sidebar when collapsed */
     }
+
+    .main {
+        margin-left: 0; /* No space for sidebar on mobile */
+        transition: margin-left 0.3s ease; /* Smooth transition for main content */
+    }
+
+    .sidebar.collapsed {
+        transform: translateX(0); /* Show sidebar when expanded */
+    }
+
+    .sidebar .toggle-btn {
+        display: block; /* Show toggle button on mobile */
+    }
+}
     @media (max-width: 576px) {
-        .sidebar-heading {
-            font-size: 18px;
-        }
-
-        .sidebar ul li a {
-            font-size: 14px;
-        }
-
-        .header {
-            padding: 5px 10px;
-        }
-
-        .header .profile-dropdown img {
-            width: 30px;
-            height: 30px;
-        }
+    .sidebar-heading {
+        font-size: 14px;
     }
+
+    .sidebar ul li a {
+        font-size: 14px;
+    }
+
+    .header {
+        padding: 5px 10px;
+    }
+
+    .header .profile-dropdown img {
+        width: 30px;
+        height: 30px;
+    }
+    }
+
 
 
     .tile {
@@ -354,7 +359,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
     <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggle-btn">☰</button>
+        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
         <div class="sidebar-heading">
             <img src="../img/logo.png" alt="Logo">
             <div>Event Judging System</div>
@@ -370,7 +375,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Header -->
     <div class="header">
         <div>
-            <!-- Add any left-aligned content here if needed -->
+        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
         </div>
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $name; ?></div>
@@ -895,6 +900,23 @@ $(document).ready(function() {
         });
     });
     </script>
+        <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleButtons = document.querySelectorAll(".toggle-btn");
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.querySelector(".main");
+
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Toggle the collapsed class on sidebar
+            sidebar.classList.toggle("collapsed");
+            // Toggle the collapsed class on main content
+            mainContent.classList.toggle("collapsed");
+        });
+    });
+});
+
+</script>
 </body>
 
 </html>
