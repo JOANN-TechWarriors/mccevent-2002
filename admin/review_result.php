@@ -2,8 +2,7 @@
    
 <!DOCTYPE html>
 <html lang="en">
-<head>
-      
+   
    <?php
    include('header2.php');
     include('session.php');
@@ -12,41 +11,8 @@
    $subevent_id=$_GET['sub_event_id'];
     ?>
 
-    <style>
-        body {
-            background-color: #f3f4f6;
-            padding: 2rem 1rem;
-            margin: 0;
-        }
-        .paper-container {
-            max-width: 8.5in;
-            min-height: 11in;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            position: relative;
-        }
-        .paper-border {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 1px solid #e5e7eb;
-            pointer-events: none;
-        }
-        .content {
-            position: relative;
-            z-index: 1;
-        }
-    </style>
-</head>
- 
   <body data-spy="scroll" data-target=".bs-docs-sidebar">
-  <div class="paper-container">
-        <div class="paper-border"></div>
-        <div class="content">
+ 
  
 
 
@@ -369,9 +335,6 @@ $jname_row = $jname_query->fetch();
 
   </div>
  
- </div>
-
- </div>
  </div>
  
  <?php include('footer.php'); ?>
