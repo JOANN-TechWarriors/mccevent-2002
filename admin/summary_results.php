@@ -9,18 +9,54 @@ $active_main_event=$_GET['main_event_id'];
  
 <head>
     <style>
-        @page {
-            size: 8.5in 13in;
-            margin: 1cm;
+        /* Bond paper simulation */
+        html {
+            background: #gray;
+            min-height: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
         }
         
         body {
-            background-color: white;
+            background: white;
             width: 8.5in;
-            min-height: 13in;
+            min-height: 13in; /* Long bond paper size */
             margin: 0 auto;
             padding: 0.5in;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Paper edges effect */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
+        }
+
+        /* Print settings */
+        @page {
+            size: 8.5in 13in;
+            margin: 0;
+        }
+        
+        @media print {
+            html {
+                background: none;
+                padding: 0;
+            }
+            
+            body {
+                box-shadow: none;
+                margin: 0;
+                padding: 0.5in;
+            }
         }
         
         .container {
@@ -35,10 +71,23 @@ $active_main_event=$_GET['main_event_id'];
             margin: 0;
         }
         
+        /* Table styles */
+        .table-responsive {
+            overflow-x: auto;
+            margin-bottom: 1rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        
         table {
             width: 100% !important;
             margin-bottom: 1rem;
             border-collapse: collapse;
+            page-break-inside: auto;
+        }
+        
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
         }
         
         table.table-bordered {
@@ -50,63 +99,54 @@ $active_main_event=$_GET['main_event_id'];
             border: 1px solid #dee2e6;
             padding: 0.5rem;
             vertical-align: middle;
+            text-align: center;
         }
-        
-        .page-header {
-            margin: 20px 0;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        @media print {
-            body {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0.5in;
-                background-color: white;
-            }
-            
-            .container {
-                width: 100% !important;
-                padding: 0;
-                margin: 0;
-            }
-        }
-        
-        /* Responsive table styles */
-        .table-responsive {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin-bottom: 1rem;
-        }
-        
+
         /* Header styles */
         .header-title {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 1in;
+            padding-top: 0.5in;
         }
         
-        .header-title h3 {
-            margin: 5px 0;
-        }
-        
-        /* Event name styles */
-        .event-name {
-            font-size: 20.5px;
+        .event-title {
+            font-size: 24px;
             font-weight: bold;
-            text-align: center;
-            margin: 15px 0;
+            margin-bottom: 10px;
+        }
+        
+        .tally-sheet-title {
+            font-size: 20.5px;
+            margin-top: 10px;
         }
         
         /* Sub-event styles */
         .sub-event {
-            margin: 20px 0;
+            margin: 30px 0;
+            page-break-inside: avoid;
         }
         
         .sub-event h4 {
             font-size: 15.5px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Center alignment helper */
+        .center-align {
+            text-align: center;
+        }
+        
+        /* Paper content area */
+        .paper-content {
+            max-width: 7.5in;
+            margin: 0 auto;
+        }
+        
+        /* Additional margin controls */
+        .content-wrapper {
+            margin: 0.5in;
         }
     </style>
 </head>
@@ -114,83 +154,78 @@ $active_main_event=$_GET['main_event_id'];
 <body>
     <div class="container">
         <div class="span12">
-            <?php   
-            $event_query = $conn->query("select * from main_event where mainevent_id='$active_main_event'") or die(mysql_error());
-            while ($event_row = $event_query->fetch()) { 
-            ?>
-            <center>
-                <?php include('doc_header.php'); ?>
-                <table>
-                    <tr>
-                        <td align="center">
-                            <h3><strong><?php echo $event_row['event_name']; ?></strong></h3> 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center">
-                            <h3 style="font-size:20.5px;">Tally Sheet</h3>
-                        </td>
-                    </tr>
-                </table>
-            </center>
-            <?php }  ?>
-            
-            <section id="download-bootstrap">
-                <div class="page-header">
-                    <div class="table-responsive">
-                        <table align="center">
-                            <?php   
-                            $sy_query = $conn->query("select DISTINCT sy FROM main_event where organizer_id='$session_id' AND mainevent_id='$active_main_event='") or die(mysql_error());
-                            while ($sy_row = $sy_query->fetch()) {
-                                $sy=$sy_row['sy'];
-                                $MEctrQuery = $conn->query("select * FROM main_event where sy='$sy'") or die(mysql_error());
-                                $MECtr = $MEctrQuery->rowCount();
-                            ?>
-                            <tr>
-                                <td>   
-                                    <?php   
-                                    $event_query = $conn->query("select * from main_event where organizer_id='$session_id' AND sy='$sy'") or die(mysql_error());
-                                    while ($event_row = $event_query->fetch()) {
-                                        $main_event_id=$event_row['mainevent_id'];
-                                        $SEctrQuery = $conn->query("select * FROM sub_event where mainevent_id='$main_event_id'") or die(mysql_error());
-                                        while($SECtr = $SEctrQuery->fetch()) {
-                                            $rs_subevent_id=$SECtr['subevent_id'];
-                                    ?>
-                                    <div class="sub-event">
-                                        <h4>EVENT: <strong><?php echo $SECtr['event_name']; ?></strong></h4>
-                                        <hr />
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <tr>
-                                                <?php   
-                                                $contxx_query = $conn->query("select DISTINCT fullname from contestants where subevent_id='$rs_subevent_id'") or die(mysql_error());
-                                                while ($contxx_row = $contxx_query->fetch()) { 
-                                                ?>
-                                                    <th><center><?php echo $contxx_row['fullname']; ?></center></th>
-                                                <?php } ?>
-                                                </tr>
-                                                <tr>
-                                                <?php  
-                                                $contxxz_query = $conn->query("select contestant_id from contestants where subevent_id='$rs_subevent_id'") or die(mysql_error());
-                                                while ($contxxz_row = $contxxz_query->fetch()) {  
-                                                    $contxzID=$contxxz_row['contestant_id'];
-                                                    $place_query = $conn->query("select DISTINCT place_title from sub_results where contestant_id='$contxzID' AND subevent_id='$rs_subevent_id'") or die(mysql_error());
-                                                    while ($place_row = $place_query->fetch()) { 
-                                                ?>
-                                                    <td><center><?php echo $place_row['place_title']; ?></center></td>
-                                                <?php } } ?>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <?php } } ?>
-                                </td>
-                            </tr>
-                            <?php } ?>
-                        </table>
+            <div class="paper-content">
+                <?php   
+                $event_query = $conn->query("select * from main_event where mainevent_id='$active_main_event'") or die(mysql_error());
+                while ($event_row = $event_query->fetch()) { 
+                ?>
+                <div class="header-title">
+                    <?php include('doc_header.php'); ?>
+                    <div class="event-title">
+                        <strong><?php echo $event_row['event_name']; ?></strong>
+                    </div>
+                    <div class="tally-sheet-title">
+                        Tally Sheet
                     </div>
                 </div>
-            </section>
+                <?php }  ?>
+                
+                <section id="download-bootstrap">
+                    <div class="content-wrapper">
+                        <div class="table-responsive">
+                            <table align="center">
+                                <?php   
+                                $sy_query = $conn->query("select DISTINCT sy FROM main_event where organizer_id='$session_id' AND mainevent_id='$active_main_event='") or die(mysql_error());
+                                while ($sy_row = $sy_query->fetch()) {
+                                    $sy=$sy_row['sy'];
+                                    $MEctrQuery = $conn->query("select * FROM main_event where sy='$sy'") or die(mysql_error());
+                                    $MECtr = $MEctrQuery->rowCount();
+                                ?>
+                                <tr>
+                                    <td>   
+                                        <?php   
+                                        $event_query = $conn->query("select * from main_event where organizer_id='$session_id' AND sy='$sy'") or die(mysql_error());
+                                        while ($event_row = $event_query->fetch()) {
+                                            $main_event_id=$event_row['mainevent_id'];
+                                            $SEctrQuery = $conn->query("select * FROM sub_event where mainevent_id='$main_event_id'") or die(mysql_error());
+                                            while($SECtr = $SEctrQuery->fetch()) {
+                                                $rs_subevent_id=$SECtr['subevent_id'];
+                                        ?>
+                                        <div class="sub-event">
+                                            <h4>EVENT: <strong><?php echo $SECtr['event_name']; ?></strong></h4>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <tr>
+                                                    <?php   
+                                                    $contxx_query = $conn->query("select DISTINCT fullname from contestants where subevent_id='$rs_subevent_id'") or die(mysql_error());
+                                                    while ($contxx_row = $contxx_query->fetch()) { 
+                                                    ?>
+                                                        <th><center><?php echo $contxx_row['fullname']; ?></center></th>
+                                                    <?php } ?>
+                                                    </tr>
+                                                    <tr>
+                                                    <?php  
+                                                    $contxxz_query = $conn->query("select contestant_id from contestants where subevent_id='$rs_subevent_id'") or die(mysql_error());
+                                                    while ($contxxz_row = $contxxz_query->fetch()) {  
+                                                        $contxzID=$contxxz_row['contestant_id'];
+                                                        $place_query = $conn->query("select DISTINCT place_title from sub_results where contestant_id='$contxzID' AND subevent_id='$rs_subevent_id'") or die(mysql_error());
+                                                        while ($place_row = $place_query->fetch()) { 
+                                                    ?>
+                                                        <td><center><?php echo $place_row['place_title']; ?></center></td>
+                                                    <?php } } ?>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <?php } } ?>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
 
