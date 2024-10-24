@@ -116,7 +116,7 @@
         ?>
         
         <div class="header-content">
-            <center style="font-size: 20px;"><?php include('doc_header.php'); ?></center> <br> <br>
+            <center style="font-size: 50px;"><?php include('doc_header.php'); ?></center> <br> <br>
             
             <h2 style="font-size: 20px;"><?php echo $event_row['event_name']; ?></h2>
             <h3 style="font-size: 20px;">Over All Result - <?php echo $s_event_row['event_name']; ?></h3>
@@ -226,7 +226,7 @@
         </div>
         
         <button type="submit" onclick="window.print()" class="btn btn-default pull-right no-print">
-            <i class="icon-print"></i> Print
+            <i class="icon-print"></i>
         </button>
         
         <?php } } ?>
@@ -253,10 +253,8 @@
     <script src="..//assets/js/bootstrap-carousel.js"></script>
     <script src="..//assets/js/bootstrap-typeahead.js"></script>
     <script src="..//assets/js/bootstrap-affix.js"></script>
-
     <script src="..//assets/js/holder/holder.js"></script>
     <script src="..//assets/js/google-code-prettify/prettify.js"></script>
-
     <script src="..//assets/js/application.js"></script>
 
 
