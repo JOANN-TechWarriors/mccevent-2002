@@ -23,16 +23,23 @@ $active_main_event = $_GET['main_event_id'];
             background-color: white;
             width: 8.5in;
             min-height: 11in;
-            margin: 0 auto;
+            margin: 0 auto 2rem auto; /* Added bottom margin for spacing between pages */
             padding: 1in;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             position: relative;
+            page-break-after: always; /* Forces a page break after each container */
+        }
+
+        /* Hide the last page break */
+        .page-container:last-child {
+            page-break-after: auto;
         }
 
         @media screen and (max-width: 8.5in) {
             .page-container {
                 width: 100%;
                 padding: 20px;
+                margin-bottom: 30px; /* Increased spacing between pages on mobile */
             }
         }
 
@@ -107,6 +114,15 @@ $active_main_event = $_GET['main_event_id'];
             padding-top: 0.5rem;
         }
 
+        /* Page number styling */
+        .page-number {
+            position: absolute;
+            bottom: 0.5in;
+            right: 0.5in;
+            font-size: 12px;
+            color: #666;
+        }
+
         /* Print styles */
         @media print {
             body {
@@ -118,14 +134,12 @@ $active_main_event = $_GET['main_event_id'];
                 width: 100%;
                 box-shadow: none;
                 padding: 0.5in;
+                margin: 0;
+                page-break-after: always;
             }
 
             .print-button {
                 display: none;
-            }
-
-            footer {
-                page-break-after: always;
             }
         }
 
@@ -149,21 +163,23 @@ $active_main_event = $_GET['main_event_id'];
     </style>
 </head>
 <body>
+    <?php   
+    $event_query = $conn->query("select * from main_event where mainevent_id='$active_main_event'") or die(mysql_error());
+    while ($event_row = $event_query->fetch()) {
+        $s_event_query = $conn->query("select * from sub_event where mainevent_id='$active_main_event'") or die(mysql_error());
+        $page_count = 0;
+        while ($s_event_row = $s_event_query->fetch()) {
+            $active_sub_event = $s_event_row['subevent_id'];
+            $page_count++;
+    ?>
+    <br><br>
     <div class="page-container">
-        <?php   
-        $event_query = $conn->query("select * from main_event where mainevent_id='$active_main_event'") or die(mysql_error());
-        while ($event_row = $event_query->fetch()) {
-            $s_event_query = $conn->query("select * from sub_event where mainevent_id='$active_main_event'") or die(mysql_error());
-            while ($s_event_row = $s_event_query->fetch()) {
-                $active_sub_event = $s_event_row['subevent_id'];
-        ?>
-
         <div class="event-header">
            <center> <?php include('doc_header.php'); ?></center>
             <h2><?php echo $event_row['event_name']; ?> - Over All Result</h2>
             <h3><?php echo $s_event_row['event_name']; ?></h3>
         </div>
-      <br><br>
+
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -271,11 +287,13 @@ $active_main_event = $_GET['main_event_id'];
             <?php } ?>
         </div>
 
-        <?php
-            }
-        }
-        ?>
+        <div class="page-number">Page <?php echo $page_count; ?></div>
     </div>
+
+    <?php
+        }
+    }
+    ?>
 
     <button onclick="window.print()" class="print-button">
         <i class="icon-print"></i> Print
