@@ -225,9 +225,9 @@
             <?php } ?>
         </div>
         
-        <button type="submit" onclick="window.print()" class="btn btn-default pull-right no-print">
+        <!-- <button type="submit" onclick="window.print()" class="btn btn-default pull-right no-print">
             <i class="icon-print"></i>
-        </button>
+        </button> -->
         
         <?php } } ?>
     </div>
