@@ -561,7 +561,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <td><?php echo htmlspecialchars($stream['stream_title']); ?></td>
                         <td><?php echo htmlspecialchars($stream['channel_name']); ?></td>
                         <td><?php echo ucfirst($stream['stream_status']); ?></td>
-                        <td><?php echo date('d-m-Y H:i:s', strtotime($stream['start_time'])); ?></td>
+                        <td><?php echo date('m-d-Y H:i:s', strtotime($stream['start_time'])); ?></td>
                         <td>
                             <?php if (!empty($stream['image_url'])): ?>
                             <?php
