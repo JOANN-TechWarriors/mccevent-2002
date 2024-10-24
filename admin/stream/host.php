@@ -77,21 +77,18 @@ $stmt->close();
             margin: 0; 
         }
         #join-form { 
-            margin-top: 60px; /* Adjusted to account for fixed banner */
+            margin-top: 60px;
         }
         .tips { 
             font-size: 12px; 
             margin-bottom: 2px; 
             color: gray; 
         }
-        .join-info-text { 
-            margin-bottom: 2px; 
-        }
         input { 
             width: 100%; 
             margin-bottom: 2px; 
         }
-        /* Video container styles */
+        /* Full landscape video container */
         .video-container {
             position: fixed;
             top: 60px; /* Below banner */
@@ -100,23 +97,13 @@ $stmt->close();
             bottom: 0;
             background: #000;
         }
-        .video-group {
-            width: 100%;
-            height: 100%;
-            display: flex;
-        }
-        .col {
-            flex: 1;
-            position: relative;
-        }
-        #local-player,
-        #remote-playerlist {
+        #local-player {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Changed to contain to prevent zooming */
+            object-fit: contain; /* Maintains aspect ratio */
             background: #000;
         }
         .player-name { 
@@ -157,7 +144,23 @@ $stmt->close();
         #channel { 
             display: none; 
         }
-        /* Ensure full screen works across browsers */
+        /* Ensure landscape orientation */
+        @media screen and (orientation: portrait) {
+            .video-container {
+                transform: rotate(90deg);
+                transform-origin: left top;
+                width: 100vh;
+                height: 100vw;
+                position: absolute;
+                top: 0;
+                left: 100%;
+            }
+            #local-player {
+                width: 100vh;
+                height: 100vw;
+            }
+        }
+        /* Full screen support */
         :-webkit-full-screen {
             width: 100%;
             height: 100%;
@@ -195,15 +198,8 @@ $stmt->close();
             </div>
         </form>
         <div class="video-container">
-            <div class="video-group">
-                <div class="col">
-                    <p id="local-player-name" class="player-name"></p>
-                    <div id="local-player"></div>
-                </div>
-                <div class="col">
-                    <div id="remote-playerlist"></div>
-                </div>
-            </div>
+            <p id="local-player-name" class="player-name"></p>
+            <div id="local-player"></div>
         </div>
     </div>
     <!-- Scripts -->
