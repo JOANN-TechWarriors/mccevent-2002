@@ -29,21 +29,24 @@
     }
 
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 250px;
-        background-color: #27293d;
-        color: #fff;
-        padding-top: 20px;
-        transition: all 0.3s;
-        overflow: hidden;
-    }
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #27293d;
+    color: #fff;
+    padding-top: 20px;
+    transition: all 0.3s;
+    overflow: hidden;
+    z-index: 1000; /* Ensure the sidebar is above the main content */
+}
 
-    .sidebar.collapsed {
-        width: 80px;
-    }
+
+.sidebar.collapsed {
+    transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
+}
+
 
     .sidebar .toggle-btn {
         position: absolute;
@@ -73,32 +76,28 @@
     }
 
     .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        font-size: 14px;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
     }
 
     .sidebar ul li {
-        padding: 15px 20px;
-        transition: all 0.3s;
-    }
+    padding: 15px 20px;
+    transition: all 0.3s;
+}
 
-    .sidebar ul li a {
-        color: #fff;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-    }
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
 
-    .sidebar ul li a i {
-        margin-right: 10px;
-        transition: margin 0.3s;
-        font-size: 14px;
-    }
+.sidebar ul li a i {
+    margin-right: 10px;
+}
 
-    .sidebar.collapsed ul li a i {
+/*     .sidebar.collapsed ul li a i {
         margin-right: 0;
     }
 
@@ -111,7 +110,7 @@
         opacity: 0;
         width: 0;
         overflow: hidden;
-    }
+    } */
 
     .sidebar ul li a:hover {
         background-color: #1a1a2e;
@@ -119,36 +118,113 @@
     }
 
     .main {
-      margin-left: 250px;
-      padding: 20px;
-      transition: all 0.3s;
+    margin-left: 250px; /* Space for the sidebar */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Smooth transition for main content */
+}
+
+.main.collapsed {
+    margin-left: 0; /* No space for sidebar when collapsed */
+}
+      
+    .header {
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.header .profile-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.header .profile-dropdown img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.header .profile-dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.header .profile-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.header .profile-dropdown .dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+}
+
+.header .profile-dropdown .dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        width: 250px;
+       
+        transform: translateX(-100%); /* Hide sidebar off-screen */
+        display: block; /* Show sidebar when collapsed */
     }
 
-    .main.collapsed {
-      margin-left: 80px;
+    .main {
+        margin-left: 0; /* No space for sidebar on mobile */
+        transition: margin-left 0.3s ease; /* Smooth transition for main content */
     }
 
-    @media (max-width: 768px) {
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-      }
-
-      .main {
-        margin-left: 0;
-      }
+    .sidebar.collapsed {
+        transform: translateX(0); /* Show sidebar when expanded */
     }
+
+    .sidebar .toggle-btn {
+        display: block; /* Show toggle button on mobile */
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar-heading {
+        font-size: 14px;
+    }
+
+    .sidebar ul li a {
+        font-size: 14px;
+    }
+
+    .header {
+        padding: 5px 10px;
+    }
+
+    .header .profile-dropdown img {
+        width: 30px;
+        height: 30px;
+    }
+  }
   </style>
 </head>
 
 <body>
-  <div class="sidebar" id="sidebar">
-    <button class="toggle-btn" id="toggle-btn">☰</button>
+<div class="sidebar" id="sidebar">
+    <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
     <div class="sidebar-heading">
-            <img src="../img/logo.png" alt="Logo">
-            <div>Event Judging System</div>
-        </div>
+        <img src="../img/logo.png" alt="Logo">
+        <div>Event Judging System</div>
+    </div>
         <ul>
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
             <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
@@ -157,6 +233,12 @@
 
         </ul>
   </div>
+  <!-- Header -->
+<div class="header">
+    <div>
+        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+    </div>
+    </div>
 
   <div class="main" id="main-content">
   <div class="container">
@@ -326,7 +408,7 @@ if(isset($_POST['add_contestant']))
 <?php include('footer.php'); ?>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
+<!--     <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
     <script>
     document.getElementById("toggle-btn").addEventListener("click", function () {
       var sidebar = document.getElementById("sidebar");
@@ -335,6 +417,23 @@ if(isset($_POST['add_contestant']))
       sidebar.classList.toggle("collapsed");
       mainContent.classList.toggle("collapsed");
     });
-  </script>
+  </script> -->
+	<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleButtons = document.querySelectorAll(".toggle-btn");
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.querySelector(".main");
+
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Toggle the collapsed class on sidebar
+            sidebar.classList.toggle("collapsed");
+            // Toggle the collapsed class on main content
+            mainContent.classList.toggle("collapsed");
+        });
+    });
+});
+
+</script>  
   </body>
 </html>
