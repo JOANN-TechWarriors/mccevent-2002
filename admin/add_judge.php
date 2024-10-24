@@ -211,7 +211,7 @@
   }
   </style>
 </head>
-
+< body>
  <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
     <div class="sidebar-heading">
