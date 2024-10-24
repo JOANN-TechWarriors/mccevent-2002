@@ -359,11 +359,11 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
     <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
-        <div class="sidebar-heading">
-            <img src="../img/logo.png" alt="Logo">
-            <div>Event Judging System</div>
-        </div>
+    <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
+    <div class="sidebar-heading">
+        <img src="../img/logo.png" alt="Logo">
+        <div>Event Judging System</div>
+    </div>
         <ul>
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
             <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
@@ -374,17 +374,18 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
     <!-- Header -->
     <div class="header">
-        <div>
+    <div>
         <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
-        </div>
-        <div class="profile-dropdown">
-           <div style="font-size:small;"> <?php echo $name; ?></div>
-            <div class="dropdown-menu">
-                <a href="edit_organizer.php"> Account Settings</a>
-                <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>LOGOUT</span></a>
-            </div>
+    </div>
+    <div class="profile-dropdown">
+        <div style="font-size:small;"> <?php echo $name; ?></div>
+        <div class="dropdown-menu">
+            <a href="edit_organizer.php"> Account Settings</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
         </div>
     </div>
+</div> 
+    
     
     <!-- Main content -->
     <div class="main" id="main-content">
