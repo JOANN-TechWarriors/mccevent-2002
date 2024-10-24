@@ -152,9 +152,6 @@ $active_main_event=$_GET['main_event_id'];
 </head>
  
 <body>
-                  
-<section id="download-bootstrap">
-   <div class="content-wrapper">
     <div class="container">
         <div class="span12">
             <div class="paper-content">
