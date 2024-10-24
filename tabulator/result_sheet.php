@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+   
+<?php
+   include('header2.php');
+   include('..//admin/session.php');
+   $active_sub_event=$_GET['event_id'];
+?>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Paper-like background and page setup */
         body {
             background: #f0f0f0;
             margin: 0;
             padding: 20px;
-            font-family: Arial, sans-serif;
         }
 
-        .paper-container {
+        .container {
             background: #ffffff;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             padding: 40px;
@@ -22,63 +24,36 @@
             box-sizing: border-box;
         }
 
-        /* Responsive table styles */
-        .table-responsive {
-            overflow-x: auto;
-            margin-bottom: 1rem;
-        }
-
         .table {
             width: 100%;
-            border-collapse: collapse;
             margin-bottom: 1rem;
             background-color: transparent;
+            border-collapse: collapse;
         }
 
         .table th,
         .table td {
-            padding: 0.75rem;
+            padding: 8px;
             border: 1px solid #dee2e6;
         }
 
-        .table thead th {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
+        .table-bordered {
+            border: 1px solid #dee2e6;
         }
 
-        /* Center alignment for specific elements */
+        /* Center alignment */
         .text-center {
             text-align: center;
         }
 
-        /* Header styling */
-        .event-header {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .event-header h2 {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Signature section */
-        .signature-section {
-            margin-top: 3rem;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-
-        .signature-block {
-            text-align: center;
-            min-width: 200px;
-        }
-
-        .signature-line {
-            border-top: 1px solid #000;
-            margin-top: 2rem;
-            padding-top: 0.5rem;
+        /* Make tables responsive */
+        @media screen and (max-width: 768px) {
+            .table-responsive {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
         }
 
         /* Print styles */
@@ -87,169 +62,223 @@
                 background: none;
                 padding: 0;
             }
-
-            .paper-container {
+            
+            .container {
                 box-shadow: none;
                 padding: 0.5in;
             }
 
-            .no-print {
-                display: none;
+            footer {
+                page-break-after: always;
             }
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .paper-container {
-                padding: 20px;
-            }
+        /* Signature styles */
+        .signature-table {
+            width: 100%;
+            margin-top: 30px;
+        }
 
-            .signature-section {
-                flex-direction: column;
-                align-items: center;
-            }
+        .signature-table td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .signature-line {
+            border-top: 1px solid black;
+            margin-top: 50px;
+            display: inline-block;
+            min-width: 200px;
         }
     </style>
 </head>
-<body>
-    <div class="paper-container">
-        <?php include('..//admin/doc_header.php'); ?>
-        
-        <div class="event-header">
-            <h2><?php echo $event_row['event_name']; ?></h2>
-            <h3><?php echo $s_event_row['event_name']; ?></h3>
-            <h3>Overall Results</h3>
-        </div>
 
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Participants</th>
-                        <th>Placing</th>
-                        <th>Result Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $o_result_query = $conn->query("select distinct contestant_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by place_title ASC") or die(mysql_error());
-                    while ($o_result_row = $o_result_query->fetch()) {
-                        $contestant_id = $o_result_row['contestant_id'];
-                    ?>
-                    <tr>
-                        <td>
-                            <h3>
-                                <?php
-                                $cname_query = $conn->query("select * from contestants where contestant_id='$contestant_id'") or die(mysql_error());
-                                while ($cname_row = $cname_query->fetch()) {
-                                    echo $cname_row['contestant_ctr'].".".$cname_row['fullname'];
-                                }
-                                ?>
-                            </h3>
-                        </td>
-                        <td class="text-center">
-                            <h3>
-                                <?php 
-                                $placingzz_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
-                                while ($placingzz_row = $placingzz_query->fetch()) {
-                                    $place_title = $placingzz_row['place_title'];
-                                }
-                                echo $place_title; 
-                                ?>
-                            </h3>
-                        </td>
-                        <td>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <tr>
-                                        <th>Average Score in all judges</th>
-                                        <th>Sum of Rank in all judges</th>
-                                    </tr>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <?php   
+                $s_event_query = $conn->query("select * from sub_event where subevent_id='$active_sub_event'") or die(mysql_error());
+                while ($s_event_row = $s_event_query->fetch()) {
+                    $MEidxx=$s_event_row['mainevent_id'];
+                    $event_query = $conn->query("select * from main_event where mainevent_id='$MEidxx'") or die(mysql_error());
+                    while ($event_row = $event_query->fetch()) {
+                ?>
+                
+                <center>
+                    <?php include('..//admin/doc_header.php'); ?>
+                    
+                    <table>
+                        <tr>
+                            <td align="center">
+                                <font size="4"><?php echo $event_row['event_name']; ?></font>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center">
+                                <font size="3"><?php echo $s_event_row['event_name']; ?></font>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center">
+                                <font size="4">Over All Result</font>
+                            </td>
+                        </tr>
+                    </table>
+                </center>
+                
+                <br />
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <th>Participants</th>
+                            <th>Placing</th>
+                            <th>Result Summary</th>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $o_result_query = $conn->query("select distinct contestant_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by place_title ASC") or die(mysql_error());
+                            while ($o_result_row = $o_result_query->fetch()) {
+                                $contestant_id=$o_result_row['contestant_id'];
+                            ?>
+                            <tr>
+                                <td>
+                                    <h3>
                                     <?php
-                                    $divz = 0;
-                                    $c_ctr = 0;
-                                    $totx_score = 0;
-                                    $rank_score = 0;
-                                    $tot_score_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
-                                    while ($tot_score_row = $tot_score_query->fetch()) {
-                                        $divz++;
-                                        $c_ctr++;
-                                        $place_title = $tot_score_row['place_title'];
-                                    }
-
-                                    $tot_score_query = $conn->query("select judge_id,total_score, deduction, rank from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
-                                    while ($tot_score_row = $tot_score_query->fetch()) {
-                                        $totx_score += $tot_score_row['total_score'];
-                                        $rank_score += $tot_score_row['rank'];
-                                        $totx_deduct = $tot_score_row['deduction'];
+                                    $cname_query = $conn->query("select * from contestants where contestant_id='$contestant_id'") or die(mysql_error());
+                                    while ($cname_row = $cname_query->fetch()) {
+                                        echo $cname_row['contestant_ctr'].".".$cname_row['fullname']; 
                                     }
                                     ?>
-                                    <tr>
-                                        <td class="text-center" style="background-color: #C5EAF9">
-                                            <b>Ave: <?php echo round(($totx_score-$totx_deduct)/$divz,1) ?></b>
-                                        </td>
-                                        <td class="text-center" style="background-color: #DFF2FA">
-                                            <b>Sum: <?php echo $rank_score; ?></b>
-                                        </td>
-                                    </tr>
-                                </table>
+                                    </h3>
+                                </td>
+                                <td class="text-center">
+                                    <h3>
+                                    <?php 
+                                    $placingzz_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
+                                    while ($placingzz_row = $placingzz_query->fetch()) {
+                                        $place_title=$placingzz_row['place_title'];
+                                    }
+                                    echo $place_title; 
+                                    ?>
+                                    </h3>
+                                </td>
+                                <td>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Average Score in all judges</th>
+                                            <th>Sum of Rank in all judges</th>
+                                        </tr>
+                                        <?php
+                                        $divz=0;
+                                        $c_ctr=0;
+                                        $totx_score=0;
+                                        $rank_score=0;
+                                        $tot_score_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
+                                        while ($tot_score_row = $tot_score_query->fetch()) {
+                                            $divz=$divz+1;  
+                                            $c_ctr=$c_ctr+1;
+                                            $place_title=$tot_score_row['place_title'];
+                                        }
+
+                                        $tot_score_query = $conn->query("select judge_id,total_score, deduction, rank from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
+                                        while ($tot_score_row = $tot_score_query->fetch()) {
+                                            $totx_score=$totx_score+$tot_score_row['total_score'];
+                                            $rank_score=$rank_score+$tot_score_row['rank'];
+                                            $totx_deduct=$tot_score_row['deduction'];
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td bgcolor="#C5EAF9">
+                                                <b>Ave: <?php echo round(($totx_score-$totx_deduct)/$divz,1) ?></b>
+                                            </td>
+                                            <td bgcolor="#DFF2FA">
+                                                <b>Sum: <?php echo $rank_score; ?></b>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr />
+                <br />
+                
+                <!-- Judges Signatures -->
+                <table class="signature-table">
+                    <tr>
+                        <?php
+                        $jjn_result_query = $conn->query("select distinct judge_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by judge_id ASC") or die(mysql_error());
+                        while ($jjn_result_row = $jjn_result_query->fetch()) {
+                            $jx_id=$jjn_result_row['judge_id'];
+                            $jname_query = $conn->query("select * from judges where judge_id='$jx_id'") or die(mysql_error());
+                            $jname_row = $jname_query->fetch();
+                        ?>
+                        <td>
+                            <div class="signature-line">
+                                <strong><?php echo $jname_row['fullname'];?></strong>
+                            </div>
+                            <div>
+                                <?php echo ($jname_row['jtype']=="Chairman") ? "Chairman Judge" : "Judge"; ?>
                             </div>
                         </td>
+                        <?php } ?>
                     </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
+                </table>
+
+                <hr />
+                
+                <!-- Tabulator Signature -->
+                <table class="signature-table">
+                    <tr>
+                        <?php
+                        $jjn_result_query = $conn->query("select * from organizer where org_id='$session_id'") or die(mysql_error());
+                        while ($jjn_result_row = $jjn_result_query->fetch()) {
+                        ?>
+                        <td>
+                            <div class="signature-line">
+                                <strong><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></strong>
+                            </div>
+                            <div>Tabulator</div>
+                        </td>
+                        <?php } ?>
+                    </tr>
+                </table>
+
+                <hr />
+                
+                <!-- Organizer Signature -->
+                <table class="signature-table">
+                    <tr>
+                        <?php
+                        $jjn_result_query = $conn->query("select * from organizer where organizer_id='$session_id'") or die(mysql_error());
+                        while ($jjn_result_row = $jjn_result_query->fetch()) {
+                        ?>
+                        <td>
+                            <div class="signature-line">
+                                <strong><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></strong>
+                            </div>
+                            <div>Organizer</div>
+                        </td>
+                        <?php } ?>
+                    </tr>
+                </table>
+
+                <button type="submit" onclick="window.print()" class="btn btn-default pull-right">
+                    <i class="icon-print"></i>
+                </button>
+                
+                <?php } } ?>
+            </div>
         </div>
-
-        <div class="signature-section">
-            <?php
-            $jjn_result_query = $conn->query("select distinct judge_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by judge_id ASC") or die(mysql_error());
-            while ($jjn_result_row = $jjn_result_query->fetch()) {
-                $jx_id = $jjn_result_row['judge_id'];
-                $jname_query = $conn->query("select * from judges where judge_id='$jx_id'") or die(mysql_error());
-                $jname_row = $jname_query->fetch();
-            ?>
-            <div class="signature-block">
-                <div class="signature-line">
-                    <strong><?php echo $jname_row['fullname']; ?></strong>
-                </div>
-                <div>
-                    <?php echo ($jname_row['jtype']=="Chairman") ? "Chairman Judge" : "Judge"; ?>
-                </div>
-            </div>
-            <?php } ?>
-
-            <?php
-            $org_query = $conn->query("select * from organizer where org_id='$session_id'") or die(mysql_error());
-            while ($org_row = $org_query->fetch()) {
-            ?>
-            <div class="signature-block">
-                <div class="signature-line">
-                    <strong><?php echo $org_row['fname']." ".$org_row['mname']." ".$org_row['lname']; ?></strong>
-                </div>
-                <div>Tabulator</div>
-            </div>
-            <?php } ?>
-
-            <?php
-            $organizer_query = $conn->query("select * from organizer where organizer_id='$session_id'") or die(mysql_error());
-            while ($organizer_row = $organizer_query->fetch()) {
-            ?>
-            <div class="signature-block">
-                <div class="signature-line">
-                    <strong><?php echo $organizer_row['fname']." ".$organizer_row['mname']." ".$organizer_row['lname']; ?></strong>
-                </div>
-                <div>Organizer</div>
-            </div>
-            <?php } ?>
-        </div>
-
-        <button type="submit" onclick="window.print()" class="btn btn-default pull-right no-print">
-            <i class="icon-print"></i> Print
-        </button>
     </div>
 
-    <!-- JavaScript includes -->
+    <!-- JavaScript -->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     <script src="..//assets/js/jquery.js"></script>
     <script src="..//assets/js/bootstrap-transition.js"></script>
     <script src="..//assets/js/bootstrap-alert.js"></script>
@@ -264,5 +293,8 @@
     <script src="..//assets/js/bootstrap-carousel.js"></script>
     <script src="..//assets/js/bootstrap-typeahead.js"></script>
     <script src="..//assets/js/bootstrap-affix.js"></script>
+    <script src="..//assets/js/holder/holder.js"></script>
+    <script src="..//assets/js/google-code-prettify/prettify.js"></script>
+    <script src="..//assets/js/application.js"></script>
 </body>
 </html>
