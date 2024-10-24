@@ -96,12 +96,12 @@ $active_main_event=$_GET['main_event_id'];
         }
         
         table.table-bordered {
-            border: 1px solid #dee2e6;
+            border: 1px solid #000;
         }
         
         table.table-bordered th,
         table.table-bordered td {
-            border: 1px solid #dee2e6;
+            border: 1px solid #000;
             padding: 0.5rem;
             vertical-align: middle;
             text-align: center;
