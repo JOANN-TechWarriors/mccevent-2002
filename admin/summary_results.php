@@ -152,6 +152,9 @@ $active_main_event=$_GET['main_event_id'];
 </head>
  
 <body>
+                  
+<section id="download-bootstrap">
+   <div class="content-wrapper">
     <div class="container">
         <div class="span12">
             <div class="paper-content">
@@ -170,9 +173,7 @@ $active_main_event=$_GET['main_event_id'];
                     </div>
                 </div>
                 <?php }  ?>
-                
-                <section id="download-bootstrap">
-                    <div class="content-wrapper">
+
                         <div class="table-responsive">
                             <table align="center">
                                 <?php   
