@@ -68,13 +68,16 @@ $stmt->close();
             background-color: #2F3FB0; 
             color: white; 
             width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
         }
         .banner-text { 
             padding: 8px 20px; 
             margin: 0; 
         }
         #join-form { 
-            margin-top: 10px; 
+            margin-top: 60px; /* Adjusted to account for fixed banner */
         }
         .tips { 
             font-size: 12px; 
@@ -88,48 +91,44 @@ $stmt->close();
             width: 100%; 
             margin-bottom: 2px; 
         }
-        .player { 
-            width: 100%; /* Changed from fixed width */
-            height: 100vh; /* Changed to full viewport height */
-            object-fit: cover; /* Ensures video fills container */
+        /* Video container styles */
+        .video-container {
+            position: fixed;
+            top: 60px; /* Below banner */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000;
         }
-        .player-name { 
-            margin: 8px 0; 
-        }
-        .btn-live { 
-            background-color: #2F3FB0; 
-            color: white; 
-            border: 1px solid #2F3FB0; 
-            margin: 5px;
-            padding: 8px 16px;
-        }
-        .btn-live:hover { 
-            color: #2F3FB0; 
-            background-color: white; 
-            border: 1px solid #2F3FB0; 
-        }
-        #channel { 
-            display: none; 
-        }
-        /* Make video container responsive */
         .video-group {
-            position: relative;
             width: 100%;
-            height: 100vh;
+            height: 100%;
+            display: flex;
         }
         .col {
-            height: 100%;
-        }
-        #local-player {
+            flex: 1;
             position: relative;
-            width: 100%;
-            height: 100%;
         }
+        #local-player,
         #remote-playerlist {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            object-fit: contain; /* Changed to contain to prevent zooming */
+            background: #000;
         }
-        /* Control buttons overlay */
+        .player-name { 
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            z-index: 100;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        /* Control buttons */
         .button-group {
             position: fixed;
             bottom: 20px;
@@ -139,6 +138,41 @@ $stmt->close();
             background: rgba(0, 0, 0, 0.5);
             padding: 10px;
             border-radius: 8px;
+            display: flex;
+            gap: 10px;
+        }
+        .btn-live { 
+            background-color: #2F3FB0; 
+            color: white; 
+            border: 1px solid #2F3FB0; 
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-live:hover { 
+            color: #2F3FB0; 
+            background-color: white; 
+        }
+        #channel { 
+            display: none; 
+        }
+        /* Ensure full screen works across browsers */
+        :-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+        :-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+        :-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+        :fullscreen {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -146,31 +180,29 @@ $stmt->close();
     <div class="banner">
         <p class="banner-text">Live Broadcast - Host</p>
     </div>
-    <div class="container-fluid p-0">
+    <div class="container-fluid">
         <form id="join-form" name="join-form">
-            <div class="row join-info-group">
-                <div class="col-sm">
-                    <input id="channel" type="text" placeholder="Enter Channel Name" required class="form-control">
-                </div>
-            </div>
+            <input id="channel" type="text" placeholder="Enter Channel Name" required>
             <div class="button-group">
-                <button id="host-join" type="submit" class="btn btn-live btn-sm">Start Live</button>
-                <button id="mic-btn" type="button" class="btn btn-live btn-sm">
+                <button id="host-join" type="submit" class="btn-live">Start Live</button>
+                <button id="mic-btn" type="button" class="btn-live">
                     <i id="mic-icon" class="fas fa-microphone"></i>
                 </button>
-                <button id="video-btn" type="button" class="btn btn-live btn-sm">
+                <button id="video-btn" type="button" class="btn-live">
                     <i id="video-icon" class="fas fa-video"></i>
                 </button>
-                <button id="leave" type="button" class="btn btn-live btn-sm" disabled>Stop Live</button>
+                <button id="leave" type="button" class="btn-live" disabled>Stop Live</button>
             </div>
         </form>
-        <div class="row video-group">
-            <div class="col">
-                <p id="local-player-name" class="player-name"></p>
-                <div id="local-player" class="player"></div>
-            </div>
-            <div class="col">
-                <div id="remote-playerlist"></div>
+        <div class="video-container">
+            <div class="video-group">
+                <div class="col">
+                    <p id="local-player-name" class="player-name"></p>
+                    <div id="local-player"></div>
+                </div>
+                <div class="col">
+                    <div id="remote-playerlist"></div>
+                </div>
             </div>
         </div>
     </div>
