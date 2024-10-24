@@ -138,7 +138,7 @@ $active_main_event=$_GET['main_event_id'];
             font-size: 15.5px;
             margin-bottom: 15px;
             padding-bottom: 5px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #000;
         }
         
         /* Center alignment helper */
