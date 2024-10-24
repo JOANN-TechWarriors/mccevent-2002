@@ -296,10 +296,6 @@ $active_main_event = $_GET['main_event_id'];
     }
     ?>
 
-    <button onclick="window.print()" class="print-button">
-        <i class="icon-print"></i> Print
-    </button>
-
     <!-- JavaScript files -->
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap-transition.js"></script>
