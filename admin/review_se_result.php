@@ -270,7 +270,7 @@
         <?php } } ?>
     </div>
 
-    <?php include('footer.php'); ?>
+    <center><?php include('footer.php'); ?></center>
 
     <!-- JavaScript Libraries -->
     <script src="..//assets/js/jquery.js"></script>
