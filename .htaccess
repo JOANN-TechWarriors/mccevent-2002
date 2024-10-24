@@ -17,6 +17,8 @@ Options -Indexes
     Require all denied
 </Files>
 
+Content-Security-Policy: default-src 'self'; script-src 'self' https://trusted-cdn.com; object-src 'none'; base-uri 'self';
+
 # Security headers
 <IfModule mod_headers.c>
     # Prevent MIME type sniffing
