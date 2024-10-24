@@ -19,7 +19,7 @@ $active_main_event=$_GET['main_event_id'];
         }
         
         body {
-            background: white;
+            background: #f5f5f5;
             width: 8.5in;
             min-height: 13in; /* Long bond paper size */
             margin: 0 auto;
