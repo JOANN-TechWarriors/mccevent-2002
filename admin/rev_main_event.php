@@ -8,15 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
-    width: 100vw;      /* Ensures full width */
-    overflow-y: auto;  /* Enables vertical scrolling */
-    overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
-}
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
 
     .sidebar {
         position: fixed;
@@ -210,6 +210,14 @@
         height: 400px;
         width: 100%;
     }
+    
+    .print-btn {
+        cursor: pointer;
+    }
+    
+    .print-btn:hover {
+        opacity: 0.8;
+    }
 </style>
 </head>
 <body>
@@ -222,14 +230,11 @@
     <ul>
         <li><a href="../tabulator/score_sheets.php"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
         <li><a href="../tabulator/rev_main_event.php"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
-
     </ul>
   </div>
     
-  <!-- Header -->
   <div class="header">
         <div>
-            <!-- Add any left-aligned content here if needed -->
         </div>
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $tabname ;?></div>
@@ -285,10 +290,10 @@
                   <td width="10" align="center"><input type="radio" name="main_event_id" value="<?php echo $mainevent_row['mainevent_id']; ?>" required="true" /></td>
                   <td> <?php echo $mainevent_row['event_name']; ?></td>
                   <td width="10">
-                    <a target="_blank" title="click to print summary result" href="summary_results.php?main_event_id=<?php echo $mainevent_row['mainevent_id']; ?>" class="btn btn-warning"><i class="icon-list"></i></a>
+                  <a target="_blank" title="click to print summary result" href="summary_results.php?main_event_id=<?php echo $mainevent_row['mainevent_id']; ?>" class="btn btn-warning"><i class="icon-list"></i></a>
                   </td>
                   <td width="10"> 
-                    <a target="_blank" title="click to print event result" href="print_all_results.php?main_event_id=<?php echo $mainevent_row['mainevent_id']; ?>" class="btn btn-info"><i class="icon-print"></i></a>
+                    <a title="click to print event result" class="btn btn-info print-result" data-event-id="<?php echo $mainevent_row['mainevent_id']; ?>"><i class="icon-print"></i></a>
                   </td>
                 </tr>
                 <?php } ?>
@@ -333,23 +338,23 @@
   <script src="..//assets/js/application.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    
+    // Logout confirmation
     document.getElementById('logout').addEventListener('click', function(event) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Are you sure you want to log out?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to logout.php
-                    window.location.href = '..//index.php';
-                }
-            });
+        event.preventDefault();
+        Swal.fire({
+            title: 'Are you sure you want to log out?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '..//index.php';
+            }
         });
+    });
       
+    // Sidebar toggle
     document.getElementById("toggle-btn").addEventListener("click", function () {
       var sidebar = document.getElementById("sidebar");
       var mainContent = document.getElementById("main-content");
@@ -359,6 +364,19 @@
 
       var isCollapsed = sidebar.classList.contains("collapsed");
       this.innerHTML = isCollapsed ? "<i class='fas fa-bars'></i>" : "<i class='fas fa-bars'></i>";
+    });
+
+
+    // Print result button handler with direct print
+    document.querySelectorAll('.print-result').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const eventId = this.getAttribute('data-event-id');
+            const printWindow = window.open(`print_all_results.php?main_event_id=${eventId}`, '_blank');
+            printWindow.onload = function() {
+                printWindow.print();
+            };
+        });
     });
   </script>
 </body>
