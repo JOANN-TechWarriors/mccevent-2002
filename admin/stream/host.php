@@ -63,84 +63,73 @@ $stmt->close();
     <link rel="icon" href="assets/img/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" type="image/png">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            overflow: hidden;
-        }
-
-        .banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 10px;
-            background-color: #2F3FB0;
-            color: white;
-            z-index: 1000;
-        }
-
-        .banner-text {
-            padding: 8px 20px;
-            margin: 0;
-        }
-
-        #join-form {
-            position: fixed;
-            top: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        .tips {
-            font-size: 12px;
-            color: gray;
-        }
-
-        input {
+        .banner { 
+            padding: 10px; 
+            background-color: #2F3FB0; 
+            color: white; 
             width: 100%;
-            margin-bottom: 2px;
-            padding: 8px;
         }
-
-        .video-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #000;
+        .banner-text { 
+            padding: 8px 20px; 
+            margin: 0; 
         }
-
-        .player {
+        #join-form { 
+            margin-top: 10px; 
+        }
+        .tips { 
+            font-size: 12px; 
+            margin-bottom: 2px; 
+            color: gray; 
+        }
+        .join-info-text { 
+            margin-bottom: 2px; 
+        }
+        input { 
+            width: 100%; 
+            margin-bottom: 2px; 
+        }
+        .player { 
+            width: 100%; /* Changed from fixed width */
+            height: 100vh; /* Changed to full viewport height */
+            object-fit: cover; /* Ensures video fills container */
+        }
+        .player-name { 
+            margin: 8px 0; 
+        }
+        .btn-live { 
+            background-color: #2F3FB0; 
+            color: white; 
+            border: 1px solid #2F3FB0; 
+            margin: 5px;
+            padding: 8px 16px;
+        }
+        .btn-live:hover { 
+            color: #2F3FB0; 
+            background-color: white; 
+            border: 1px solid #2F3FB0; 
+        }
+        #channel { 
+            display: none; 
+        }
+        /* Make video container responsive */
+        .video-group {
+            position: relative;
             width: 100%;
             height: 100vh;
-            object-fit: cover;
         }
-
+        .col {
+            height: 100%;
+        }
         #local-player {
-            position: absolute;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
             height: 100%;
         }
-
         #remote-playerlist {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
         }
-
+        /* Control buttons overlay */
         .button-group {
             position: fixed;
             bottom: 20px;
@@ -150,43 +139,6 @@ $stmt->close();
             background: rgba(0, 0, 0, 0.5);
             padding: 10px;
             border-radius: 8px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-live {
-            background-color: #2F3FB0;
-            color: white;
-            border: 1px solid #2F3FB0;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-live:hover {
-            color: #2F3FB0;
-            background-color: white;
-        }
-
-        .btn-live:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        #channel {
-            display: none;
-        }
-
-        /* Fullscreen styles */
-        .fullscreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 2000;
-            background: #000;
         }
     </style>
 </head>
@@ -194,26 +146,23 @@ $stmt->close();
     <div class="banner">
         <p class="banner-text">Live Broadcast - Host</p>
     </div>
-
-    <div class="video-container">
-        <form id="join-form">
-            <input id="channel" type="text" placeholder="Enter Channel Name" required>
-        </form>
-        
-        <div id="local-player" class="player"></div>
-        <div id="remote-playerlist"></div>
-
-        <div class="button-group">
-            <button id="host-join" type="submit" class="btn-live">Start Live</button>
-            <button id="mic-btn" type="button" class="btn-live">
-                <i id="mic-icon" class="fas fa-microphone"></i>
-            </button>
-            <button id="video-btn" type="button" class="btn-live">
-                <i id="video-icon" class="fas fa-video"></i>
-            </button>
-            <button id="leave" type="button" class="btn-live" disabled>Stop Live</button>
-        </div>
-    </div>
+    <div class="container-fluid p-0">
+        <form id="join-form" name="join-form">
+            <div class="row join-info-group">
+                <div class="col-sm">
+                    <input id="channel" type="text" placeholder="Enter Channel Name" required class="form-control">
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="host-join" type="submit" class="btn btn-live btn-sm">Start Live</button>
+                <button id="mic-btn" type="button" class="btn btn-live btn-sm">
+                    <i id="mic-icon" class="fas fa-microphone"></i>
+                </button>
+                <button id="video-btn" type="button" class="btn btn-live btn-sm">
+                    <i id="video-icon" class="fas fa-video"></i>
+                </button>
+                <button id="leave" type="button" class="btn btn-live btn-sm" disabled>Stop Live</button>
+            </div>
         </form>
         <div class="row video-group">
             <div class="col">
@@ -453,41 +402,6 @@ $stmt->close();
             $("#video-btn").css("display", "inline-block");
             $("#mic-btn").css("display", "inline-block");
         }
-    </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Request fullscreen when starting the live stream
-        document.getElementById('host-join').addEventListener('click', function(e) {
-            e.preventDefault();
-            const videoContainer = document.querySelector('.video-container');
-            
-            if (videoContainer.requestFullscreen) {
-                videoContainer.requestFullscreen();
-            } else if (videoContainer.webkitRequestFullscreen) {
-                videoContainer.webkitRequestFullscreen();
-            } else if (videoContainer.msRequestFullscreen) {
-                videoContainer.msRequestFullscreen();
-            }
-            
-            // Add your existing join logic here
-        });
-
-        // Handle fullscreen change
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-
-        function handleFullscreenChange() {
-            const videoContainer = document.querySelector('.video-container');
-            if (document.fullscreenElement) {
-                videoContainer.classList.add('fullscreen');
-            } else {
-                videoContainer.classList.remove('fullscreen');
-            }
-        }
-    });
     </script>
 </body>
 </html>
