@@ -111,7 +111,6 @@
         </div>
         <div class="controls">
             <button id="leave" type="button" class="btn btn-live btn-sm" disabled>Leave Stream</button>
-            <span>Viewers: <span id="viewer-count">0</span></span>
         </div>
     </div>
 
