@@ -204,7 +204,7 @@ $stmt->close();
 </head>
 <body>
     <div class="banner">
-        <p class="banner-text">Live Broadcast - Host</p>
+        <p class="banner-text">Live Streaming</p>
     </div>
     <div class="container-fluid">
         <form id="join-form" name="join-form">
