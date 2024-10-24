@@ -29,7 +29,7 @@
             }
         }
         
-        /* Responsive table styles */
+        /* Enhanced table styles with bold text */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -41,12 +41,34 @@
             max-width: 100%;
             margin-bottom: 1rem;
             border-collapse: collapse;
+            font-weight: bold;
         }
         
-        .table th,
+        .table th {
+            padding: 0.75rem;
+            border: 2px solid #000;
+            background-color: #f8f9fa;
+            font-weight: 900;
+            font-size: 16px;
+            text-align: center;
+        }
+        
         .table td {
             padding: 0.75rem;
-            border: 1px solid #dee2e6;
+            border: 2px solid #000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        /* Nested table styles */
+        .table .table {
+            margin: 0;
+            background-color: transparent;
+        }
+        
+        .table .table th,
+        .table .table td {
+            border: 1px solid #000;
         }
         
         /* Center alignment for headers */
@@ -58,6 +80,15 @@
         .header-content h2,
         .header-content h3 {
             margin: 0.5rem 0;
+            font-weight: bold;
+        }
+        
+        /* Place title styling */
+        .text-center h3 {
+            font-weight: 900;
+            color: #000;
+            margin: 0;
+            font-size: 18px;
         }
         
         /* Signature section styling */
@@ -75,9 +106,13 @@
         }
         
         .signature-line {
-            border-top: 1px solid black;
+            border-top: 2px solid black;
             margin: 0.5rem auto;
             width: 80%;
+        }
+        
+        .signature-block strong {
+            font-weight: 900;
         }
         
         /* Print specific styles */
@@ -94,6 +129,12 @@
             
             .no-print {
                 display: none;
+            }
+            
+            .table th,
+            .table td {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             
             footer {
@@ -171,8 +212,8 @@
                                     }
                                     ?>
                                     <tr>
-                                        <td><b>Ave: <?php echo round($totx_score/$divz,2) ?></b></td>
-                                        <td><b>Sum: <?php echo $rank_score; ?></b></td>
+                                        <td>Ave: <?php echo round($totx_score/$divz,2) ?></td>
+                                        <td>Sum: <?php echo $rank_score; ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -225,20 +266,12 @@
             <?php } ?>
         </div>
         
-        <!-- <button type="submit" onclick="window.print()" class="btn btn-default pull-right no-print">
-            <i class="icon-print"></i>
-        </button> -->
-        
         <?php } } ?>
     </div>
 
     <?php include('footer.php'); ?>
 
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <!-- JavaScript Libraries -->
     <script src="..//assets/js/jquery.js"></script>
     <script src="..//assets/js/bootstrap-transition.js"></script>
     <script src="..//assets/js/bootstrap-alert.js"></script>
@@ -258,8 +291,7 @@
     <script src="..//assets/js/application.js"></script>
 
 
-    <!-- Analytics
-    ================================================== -->
+    <!-- Analytics ================================================== -->
     <script>
       var _gauges = _gauges || [];
       (function() {
