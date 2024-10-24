@@ -62,7 +62,6 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="shortcut icon" href="../images/logo copy.png"/>
 
     <style>
@@ -359,11 +358,11 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
     <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
-        <div class="sidebar-heading">
-            <img src="../img/logo.png" alt="Logo">
-            <div>Event Judging System</div>
-        </div>
+    <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
+    <div class="sidebar-heading">
+        <img src="../img/logo.png" alt="Logo">
+        <div>Event Judging System</div>
+    </div>
         <ul>
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
             <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
@@ -374,17 +373,18 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
     <!-- Header -->
     <div class="header">
-        <div>
+    <div>
         <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
-        </div>
-        <div class="profile-dropdown">
-           <div style="font-size:small;"> <?php echo $name; ?></div>
-            <div class="dropdown-menu">
-                <a href="edit_organizer.php"> Account Settings</a>
-                <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>LOGOUT</span></a>
-            </div>
+    </div>
+    <div class="profile-dropdown">
+        <div style="font-size:small;"> <?php echo $name; ?></div>
+        <div class="dropdown-menu">
+            <a href="edit_organizer.php"> Account Settings</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
         </div>
     </div>
+</div> 
+    
     
     <!-- Main content -->
     <div class="main" id="main-content">
