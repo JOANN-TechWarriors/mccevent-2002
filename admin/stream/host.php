@@ -67,7 +67,6 @@ $stmt->close();
             padding: 10px; 
             background-color: #2F3FB0; 
             color: white; 
-            width: 100%;
         }
         .banner-text { 
             padding: 8px 20px; 
@@ -89,19 +88,32 @@ $stmt->close();
             margin-bottom: 2px; 
         }
         .player { 
-            width: 100%; /* Changed from fixed width */
-            height: 100vh; /* Changed to full viewport height */
-            object-fit: cover; /* Ensures video fills container */
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
-        .player-name { 
-            margin: 8px 0; 
+        .controls-overlay {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            gap: 10px;
         }
         .btn-live { 
             background-color: #2F3FB0; 
             color: white; 
-            border: 1px solid #2F3FB0; 
-            margin: 5px;
+            border: 1px solid #2F3FB0;
             padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
         }
         .btn-live:hover { 
             color: #2F3FB0; 
@@ -111,34 +123,12 @@ $stmt->close();
         #channel { 
             display: none; 
         }
-        /* Make video container responsive */
-        .video-group {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-        }
-        .col {
-            height: 100%;
-        }
-        #local-player {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        #remote-playerlist {
-            width: 100%;
-            height: 100%;
-        }
-        /* Control buttons overlay */
-        .button-group {
+        .banner {
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 8px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2;
         }
     </style>
 </head>
@@ -146,23 +136,24 @@ $stmt->close();
     <div class="banner">
         <p class="banner-text">Live Broadcast - Host</p>
     </div>
-    <div class="container-fluid p-0">
-        <form id="join-form" name="join-form">
-            <div class="row join-info-group">
-                <div class="col-sm">
-                    <input id="channel" type="text" placeholder="Enter Channel Name" required class="form-control">
-                </div>
-            </div>
-            <div class="button-group">
-                <button id="host-join" type="submit" class="btn btn-live btn-sm">Start Live</button>
-                <button id="mic-btn" type="button" class="btn btn-live btn-sm">
-                    <i id="mic-icon" class="fas fa-microphone"></i>
-                </button>
-                <button id="video-btn" type="button" class="btn btn-live btn-sm">
-                    <i id="video-icon" class="fas fa-video"></i>
-                </button>
-                <button id="leave" type="button" class="btn btn-live btn-sm" disabled>Stop Live</button>
-            </div>
+
+    <form id="join-form" name="join-form">
+        <input id="channel" type="text" placeholder="Enter Channel Name" required>
+    </form>
+
+    <div id="local-player" class="player"></div>
+    <div id="remote-playerlist"></div>
+
+    <div class="controls-overlay">
+        <button id="host-join" type="button" class="btn btn-live">Start Live</button>
+        <button id="mic-btn" type="button" class="btn btn-live">
+            <i id="mic-icon" class="fas fa-microphone"></i>
+        </button>
+        <button id="video-btn" type="button" class="btn btn-live">
+            <i id="video-icon" class="fas fa-video"></i>
+        </button>
+        <button id="leave" type="button" class="btn btn-live" disabled>Stop Live</button>
+    </div>
         </form>
         <div class="row video-group">
             <div class="col">
