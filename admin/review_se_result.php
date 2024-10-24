@@ -7,7 +7,7 @@
     <style>
         /* Bond paper styling */
         body {
-            background-color: #f0f0f0;
+            background-color: #f5f5f5;
             margin: 0;
             padding: 20px;
         }

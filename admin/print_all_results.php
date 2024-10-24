@@ -59,7 +59,7 @@ $active_main_event = $_GET['main_event_id'];
         .table th,
         .table td {
             padding: 0.75rem;
-            border: 1px solid #dee2e6;
+            border: 1px solid #000;
         }
 
         .table thead th {
