@@ -96,12 +96,12 @@ $active_main_event=$_GET['main_event_id'];
         }
         
         table.table-bordered {
-            border: 1px solid #000;
+            border: 1px solid #dee2e6;
         }
         
         table.table-bordered th,
         table.table-bordered td {
-            border: 1px solid #000;
+            border: 1px solid #dee2e6;
             padding: 0.5rem;
             vertical-align: middle;
             text-align: center;
@@ -138,7 +138,7 @@ $active_main_event=$_GET['main_event_id'];
             font-size: 15.5px;
             margin-bottom: 15px;
             padding-bottom: 5px;
-            border-bottom: 1px solid #000;
+            border-bottom: 1px solid #eee;
         }
         
         /* Center alignment helper */
