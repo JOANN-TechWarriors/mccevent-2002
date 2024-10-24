@@ -242,7 +242,7 @@ include('session.php');
            <div style="font-size:small;"> <?php echo $name; ?></div>
             <div class="dropdown-menu">
                 <a href="edit_organizer.php"> Account Settings</a>
-                <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>LOGOUT</span></a>
+                <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
         </div>
     </div>
