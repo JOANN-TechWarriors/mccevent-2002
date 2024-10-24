@@ -10,10 +10,16 @@ $active_main_event=$_GET['main_event_id'];
 <head>
     <style>
         /* Bond paper simulation */
-        
+        html {
+            background: #f5f5f5; /* Light gray background for the outer area */
+            min-height: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
         
         body {
-            background: #f5f5f5;
+            background: white; /* Pure white for the bond paper */
             width: 8.5in;
             min-height: 13in; /* Long bond paper size */
             margin: 0 auto;
@@ -50,6 +56,7 @@ $active_main_event=$_GET['main_event_id'];
                 box-shadow: none;
                 margin: 0;
                 padding: 0.5in;
+                background: white;
             }
         }
         
@@ -58,11 +65,13 @@ $active_main_event=$_GET['main_event_id'];
             max-width: none;
             margin: 0;
             padding: 0;
+            background: white; /* Ensure container is also white */
         }
         
         .span12 {
             width: 100%;
             margin: 0;
+            background: white; /* Ensure span12 is white */
         }
         
         /* Table styles */
@@ -70,6 +79,7 @@ $active_main_event=$_GET['main_event_id'];
             overflow-x: auto;
             margin-bottom: 1rem;
             -webkit-overflow-scrolling: touch;
+            background: white; /* Ensure tables have white background */
         }
         
         table {
@@ -77,6 +87,7 @@ $active_main_event=$_GET['main_event_id'];
             margin-bottom: 1rem;
             border-collapse: collapse;
             page-break-inside: auto;
+            background: white; /* White background for tables */
         }
         
         tr {
@@ -94,6 +105,7 @@ $active_main_event=$_GET['main_event_id'];
             padding: 0.5rem;
             vertical-align: middle;
             text-align: center;
+            background: white; /* White background for cells */
         }
 
         /* Header styles */
@@ -101,6 +113,7 @@ $active_main_event=$_GET['main_event_id'];
             text-align: center;
             margin-bottom: 1in;
             padding-top: 0.5in;
+            background: white; /* White background for header */
         }
         
         .event-title {
@@ -118,6 +131,7 @@ $active_main_event=$_GET['main_event_id'];
         .sub-event {
             margin: 30px 0;
             page-break-inside: avoid;
+            background: white; /* White background for sub-events */
         }
         
         .sub-event h4 {
@@ -136,11 +150,13 @@ $active_main_event=$_GET['main_event_id'];
         .paper-content {
             max-width: 7.5in;
             margin: 0 auto;
+            background: white; /* White background for paper content */
         }
         
         /* Additional margin controls */
         .content-wrapper {
             margin: 0.5in;
+            background: white; /* White background for content wrapper */
         }
     </style>
 </head>
