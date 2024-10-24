@@ -122,7 +122,7 @@ $stmt->close();
         }
         #local-player {
             position: relative;
-            width: 100%;
+            width: 400%;
             height: 100%;
         }
         #remote-playerlist {
