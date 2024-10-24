@@ -63,6 +63,11 @@ $stmt->close();
     <link rel="icon" href="assets/img/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" type="image/png">
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
         .banner { 
             padding: 10px; 
             background-color: #2F3FB0; 
@@ -71,39 +76,39 @@ $stmt->close();
             position: fixed;
             top: 0;
             z-index: 1000;
+            height: 50px;
+            box-sizing: border-box;
         }
         .banner-text { 
             padding: 8px 20px; 
             margin: 0; 
         }
         #join-form { 
-            margin-top: 60px;
-        }
-        .tips { 
-            font-size: 12px; 
-            margin-bottom: 2px; 
-            color: gray; 
+            margin-top: 50px;
         }
         input { 
             width: 100%; 
             margin-bottom: 2px; 
         }
-        /* Full landscape video container */
+        /* Adjusted video container with zoom controls */
         .video-container {
             position: fixed;
-            top: 60px; /* Below banner */
+            top: 50px; /* Aligned with banner height */
             left: 0;
             right: 0;
             bottom: 0;
             background: #000;
+            overflow: hidden; /* Prevents scrolling */
         }
         #local-player {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            object-fit: contain; /* Maintains aspect ratio */
+            height: calc(100vh - 50px); /* Subtract banner height */
+            object-fit: cover; /* Changed to cover for better filling */
+            transform-origin: center;
+            transform: scale(1); /* Initial scale - no zoom */
             background: #000;
         }
         .player-name { 
@@ -136,6 +141,7 @@ $stmt->close();
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 14px;
         }
         .btn-live:hover { 
             color: #2F3FB0; 
@@ -144,38 +150,55 @@ $stmt->close();
         #channel { 
             display: none; 
         }
-        /* Ensure landscape orientation */
-        @media screen and (orientation: portrait) {
+        /* Landscape mode optimization */
+        @media screen and (orientation: landscape) {
             .video-container {
-                transform: rotate(90deg);
-                transform-origin: left top;
-                width: 100vh;
-                height: 100vw;
-                position: absolute;
-                top: 0;
-                left: 100%;
+                height: calc(100vh - 50px);
             }
             #local-player {
-                width: 100vh;
-                height: 100vw;
+                width: 100vw;
+                height: 100%;
+                object-position: center;
             }
         }
-        /* Full screen support */
-        :-webkit-full-screen {
-            width: 100%;
-            height: 100%;
+        /* Portrait mode handling */
+        @media screen and (orientation: portrait) {
+            .video-container {
+                height: calc(100vw - 50px);
+            }
+            #local-player {
+                width: 100%;
+                height: 100vw;
+                object-position: center;
+            }
         }
-        :-moz-full-screen {
-            width: 100%;
-            height: 100%;
+        /* Zoom controls */
+        .zoom-controls {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
         }
-        :-ms-fullscreen {
-            width: 100%;
-            height: 100%;
-        }
-        :fullscreen {
-            width: 100%;
-            height: 100%;
+        .zoom-btn {
+            background-color: #2F3FB0;
+            color: white;
+            border: 1px solid #2F3FB0;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -200,6 +223,11 @@ $stmt->close();
         <div class="video-container">
             <p id="local-player-name" class="player-name"></p>
             <div id="local-player"></div>
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="zoomIn()">+</button>
+                <button class="zoom-btn" onclick="zoomOut()">-</button>
+                <button class="zoom-btn" onclick="resetZoom()">⟲</button>
+            </div>
         </div>
     </div>
     <!-- Scripts -->
@@ -207,6 +235,38 @@ $stmt->close();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
     <script src="assets/js/o2o-voice.js"></script>
+
+    <script>
+        let currentZoom = 1;
+        const zoomStep = 0.1;
+        const maxZoom = 2;
+        const minZoom = 1;
+        
+        function zoomIn() {
+            if (currentZoom < maxZoom) {
+                currentZoom += zoomStep;
+                updateZoom();
+            }
+        }
+        
+        function zoomOut() {
+            if (currentZoom > minZoom) {
+                currentZoom -= zoomStep;
+                updateZoom();
+            }
+        }
+        
+        function resetZoom() {
+            currentZoom = 1;
+            updateZoom();
+        }
+        
+        function updateZoom() {
+            const player = document.getElementById('local-player');
+            player.style.transform = `scale(${currentZoom})`;
+        }
+    </script>
+    
     <script>
         // Set the default channel name
         document.addEventListener("DOMContentLoaded", function() {
