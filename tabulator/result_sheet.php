@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../images/logo copy.png"/>
     <style>
-        /* Paper-like styling */
+        /* Paper-like background and page setup */
         body {
             background: #f0f0f0;
             margin: 0;
@@ -14,35 +13,16 @@
         }
 
         .paper-container {
-            background: white;
-            width: 21cm; /* A4 width */
-            min-height: 29.7cm; /* A4 height */
-            margin: 0 auto;
-            padding: 2cm;
+            background: #ffffff;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            position: relative;
+            padding: 40px;
+            margin: 0 auto;
+            max-width: 8.5in;
+            min-height: 11in;
+            box-sizing: border-box;
         }
 
-        @media print {
-            body {
-                background: none;
-                padding: 0;
-            }
-            .paper-container {
-                box-shadow: none;
-                width: 100%;
-                min-height: auto;
-                padding: 1cm;
-            }
-            footer {
-                page-break-after: always;
-            }
-            .no-print {
-                display: none;
-            }
-        }
-
-        /* Responsive table styling */
+        /* Responsive table styles */
         .table-responsive {
             overflow-x: auto;
             margin-bottom: 1rem;
@@ -52,6 +32,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 1rem;
+            background-color: transparent;
         }
 
         .table th,
@@ -60,9 +41,9 @@
             border: 1px solid #dee2e6;
         }
 
-        .table th {
+        .table thead th {
             background-color: #f8f9fa;
-            font-weight: bold;
+            border-bottom: 2px solid #dee2e6;
         }
 
         /* Center alignment for specific elements */
@@ -73,26 +54,11 @@
         /* Header styling */
         .event-header {
             margin-bottom: 2rem;
+            text-align: center;
         }
 
-        .event-title {
-            font-size: 1.5rem;
+        .event-header h2 {
             margin-bottom: 0.5rem;
-        }
-
-        .sub-event-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Result summary table */
-        .result-summary {
-            background-color: #fff;
-            margin-bottom: 1rem;
-        }
-
-        .result-summary th {
-            background-color: #C5EAF9;
         }
 
         /* Signature section */
@@ -101,47 +67,43 @@
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
+            gap: 2rem;
         }
 
         .signature-block {
-            margin: 1rem;
             text-align: center;
+            min-width: 200px;
         }
 
         .signature-line {
             border-top: 1px solid #000;
             margin-top: 2rem;
             padding-top: 0.5rem;
-            min-width: 200px;
         }
 
-        /* Print button */
-        .print-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        /* Print styles */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
 
-        .print-btn:hover {
-            background-color: #0056b3;
-        }
-
-        @media screen and (max-width: 768px) {
             .paper-container {
-                width: 100%;
-                padding: 1cm;
+                box-shadow: none;
+                padding: 0.5in;
             }
 
-            .table-responsive {
-                font-size: 0.9rem;
+            .no-print {
+                display: none;
             }
-            
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .paper-container {
+                padding: 20px;
+            }
+
             .signature-section {
                 flex-direction: column;
                 align-items: center;
@@ -150,31 +112,13 @@
     </style>
 </head>
 <body>
-    <?php
-    include('header2.php');
-    include('session.php');
-    $active_sub_event = $_GET['event_id'];
-    ?>
-
     <div class="paper-container">
-        <?php   
-        $s_event_query = $conn->query("select * from sub_event where subevent_id='$active_sub_event'") or die(mysql_error());
-        while ($s_event_row = $s_event_query->fetch()) {
-            $MEidxx = $s_event_row['mainevent_id'];
-            $event_query = $conn->query("select * from main_event where mainevent_id='$MEidxx'") or die(mysql_error());
-            while ($event_row = $event_query->fetch()) {
-        ?>
-
-        <div class="event-header text-center">
-            <?php include('doc_header.php'); ?>
-            
-            <div class="event-title">
-                <?php echo $event_row['event_name']; ?>
-            </div>
-            <div class="sub-event-title">
-                <?php echo $s_event_row['event_name']; ?>
-            </div>
-            <div class="event-title">Overall Result</div>
+        <?php include('..//admin/doc_header.php'); ?>
+        
+        <div class="event-header">
+            <h2><?php echo $event_row['event_name']; ?></h2>
+            <h3><?php echo $s_event_row['event_name']; ?></h3>
+            <h3>Overall Results</h3>
         </div>
 
         <div class="table-responsive">
@@ -194,24 +138,29 @@
                     ?>
                     <tr>
                         <td>
-                            <?php
-                            $cname_query = $conn->query("select * from contestants where contestant_id='$contestant_id'") or die(mysql_error());
-                            while ($cname_row = $cname_query->fetch()) {
-                                echo $cname_row['contestant_ctr'].".".$cname_row['fullname']; 
-                            }
-                            ?>
+                            <h3>
+                                <?php
+                                $cname_query = $conn->query("select * from contestants where contestant_id='$contestant_id'") or die(mysql_error());
+                                while ($cname_row = $cname_query->fetch()) {
+                                    echo $cname_row['contestant_ctr'].".".$cname_row['fullname'];
+                                }
+                                ?>
+                            </h3>
                         </td>
                         <td class="text-center">
-                            <?php 
-                            $placingzz_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
-                            while ($placingzz_row = $placingzz_query->fetch()) {
-                                echo $placingzz_row['place_title'];
-                            }
-                            ?>
+                            <h3>
+                                <?php 
+                                $placingzz_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
+                                while ($placingzz_row = $placingzz_query->fetch()) {
+                                    $place_title = $placingzz_row['place_title'];
+                                }
+                                echo $place_title; 
+                                ?>
+                            </h3>
                         </td>
                         <td>
                             <div class="table-responsive">
-                                <table class="table result-summary">
+                                <table class="table">
                                     <tr>
                                         <th>Average Score in all judges</th>
                                         <th>Sum of Rank in all judges</th>
@@ -223,8 +172,9 @@
                                     $rank_score = 0;
                                     $tot_score_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
                                     while ($tot_score_row = $tot_score_query->fetch()) {
-                                        $divz++;  
+                                        $divz++;
                                         $c_ctr++;
+                                        $place_title = $tot_score_row['place_title'];
                                     }
 
                                     $tot_score_query = $conn->query("select judge_id,total_score, deduction, rank from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
@@ -235,8 +185,12 @@
                                     }
                                     ?>
                                     <tr>
-                                        <td><b>Ave: <?php echo round(($totx_score-$totx_deduct)/$divz,1) ?></b></td>
-                                        <td><b>Sum: <?php echo $rank_score; ?></b></td>
+                                        <td class="text-center" style="background-color: #C5EAF9">
+                                            <b>Ave: <?php echo round(($totx_score-$totx_deduct)/$divz,1) ?></b>
+                                        </td>
+                                        <td class="text-center" style="background-color: #DFF2FA">
+                                            <b>Sum: <?php echo $rank_score; ?></b>
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -257,62 +211,58 @@
             ?>
             <div class="signature-block">
                 <div class="signature-line">
-                    <?php echo $jname_row['fullname']; ?>
+                    <strong><?php echo $jname_row['fullname']; ?></strong>
                 </div>
                 <div>
-                    <?php echo ($jname_row['jtype'] == "Chairman") ? "Chairman Judge" : "Judge"; ?>
+                    <?php echo ($jname_row['jtype']=="Chairman") ? "Chairman Judge" : "Judge"; ?>
                 </div>
             </div>
             <?php } ?>
 
             <?php
-            $jjn_result_query = $conn->query("select * from organizer where org_id='$session_id'") or die(mysql_error());
-            while ($jjn_result_row = $jjn_result_query->fetch()) {
+            $org_query = $conn->query("select * from organizer where org_id='$session_id'") or die(mysql_error());
+            while ($org_row = $org_query->fetch()) {
             ?>
             <div class="signature-block">
                 <div class="signature-line">
-                    <?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname']; ?>
+                    <strong><?php echo $org_row['fname']." ".$org_row['mname']." ".$org_row['lname']; ?></strong>
                 </div>
                 <div>Tabulator</div>
             </div>
             <?php } ?>
 
             <?php
-            $jjn_result_query = $conn->query("select * from organizer where organizer_id='$session_id'") or die(mysql_error());
-            while ($jjn_result_row = $jjn_result_query->fetch()) {
+            $organizer_query = $conn->query("select * from organizer where organizer_id='$session_id'") or die(mysql_error());
+            while ($organizer_row = $organizer_query->fetch()) {
             ?>
             <div class="signature-block">
                 <div class="signature-line">
-                    <?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname']; ?>
+                    <strong><?php echo $organizer_row['fname']." ".$organizer_row['mname']." ".$organizer_row['lname']; ?></strong>
                 </div>
                 <div>Organizer</div>
             </div>
             <?php } ?>
         </div>
 
-        <?php } } ?>
+        <button type="submit" onclick="window.print()" class="btn btn-default pull-right no-print">
+            <i class="icon-print"></i> Print
+        </button>
     </div>
 
-    <button onclick="window.print()" class="print-btn no-print">
-        <i class="icon-print"></i> Print
-    </button>
-
-    <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap-transition.js"></script>
-    <script src="../assets/js/bootstrap-alert.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
-    <script src="../assets/js/bootstrap-scrollspy.js"></script>
-    <script src="../assets/js/bootstrap-tab.js"></script>
-    <script src="../assets/js/bootstrap-tooltip.js"></script>
-    <script src="../assets/js/bootstrap-popover.js"></script>
-    <script src="../assets/js/bootstrap-button.js"></script>
-    <script src="../assets/js/bootstrap-collapse.js"></script>
-    <script src="../assets/js/bootstrap-carousel.js"></script>
-    <script src="../assets/js/bootstrap-typeahead.js"></script>
-    <script src="../assets/js/bootstrap-affix.js"></script>
-    <script src="../assets/js/holder/holder.js"></script>
-    <script src="../assets/js/google-code-prettify/prettify.js"></script>
-    <script src="../assets/js/application.js"></script>
+    <!-- JavaScript includes -->
+    <script src="..//assets/js/jquery.js"></script>
+    <script src="..//assets/js/bootstrap-transition.js"></script>
+    <script src="..//assets/js/bootstrap-alert.js"></script>
+    <script src="..//assets/js/bootstrap-modal.js"></script>
+    <script src="..//assets/js/bootstrap-dropdown.js"></script>
+    <script src="..//assets/js/bootstrap-scrollspy.js"></script>
+    <script src="..//assets/js/bootstrap-tab.js"></script>
+    <script src="..//assets/js/bootstrap-tooltip.js"></script>
+    <script src="..//assets/js/bootstrap-popover.js"></script>
+    <script src="..//assets/js/bootstrap-button.js"></script>
+    <script src="..//assets/js/bootstrap-collapse.js"></script>
+    <script src="..//assets/js/bootstrap-carousel.js"></script>
+    <script src="..//assets/js/bootstrap-typeahead.js"></script>
+    <script src="..//assets/js/bootstrap-affix.js"></script>
 </body>
 </html>
