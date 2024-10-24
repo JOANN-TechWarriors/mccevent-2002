@@ -116,7 +116,7 @@
         ?>
         
         <div class="header-content">
-            <center style="font-size: 50px;"><?php include('doc_header.php'); ?></center> <br> <br>
+            <center style="font-size: 100px;"><?php include('doc_header.php'); ?></center> <br> <br>
             
             <h2 style="font-size: 20px;"><?php echo $event_row['event_name']; ?></h2>
             <h3 style="font-size: 20px;">Over All Result - <?php echo $s_event_row['event_name']; ?></h3>
