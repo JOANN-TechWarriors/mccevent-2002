@@ -159,11 +159,11 @@ $active_main_event = $_GET['main_event_id'];
         ?>
 
         <div class="event-header">
-            <?php include('doc_header.php'); ?>
+           <center> <?php include('doc_header.php'); ?></center>
             <h2><?php echo $event_row['event_name']; ?> - Over All Result</h2>
             <h3><?php echo $s_event_row['event_name']; ?></h3>
         </div>
-
+      <br><br>
         <div class="table-responsive">
             <table class="table">
                 <thead>
