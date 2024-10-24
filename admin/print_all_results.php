@@ -172,10 +172,11 @@ $active_main_event = $_GET['main_event_id'];
             $active_sub_event = $s_event_row['subevent_id'];
             $page_count++;
     ?>
-    <br><br>
+
     <div class="page-container">
         <div class="event-header">
            <center> <?php include('doc_header.php'); ?></center>
+           <br><br>
             <h2><?php echo $event_row['event_name']; ?> - Over All Result</h2>
             <h3><?php echo $s_event_row['event_name']; ?></h3>
         </div>
