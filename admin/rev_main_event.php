@@ -366,17 +366,6 @@
       this.innerHTML = isCollapsed ? "<i class='fas fa-bars'></i>" : "<i class='fas fa-bars'></i>";
     });
 
-    // Print summary button handler with direct print
-    document.querySelectorAll('.print-summary').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const eventId = this.getAttribute('data-event-id');
-            const printWindow = window.open(`summary_results.php?main_event_id=${eventId}`, '_blank');
-            printWindow.onload = function() {
-                printWindow.print();
-            };
-        });
-    });
 
     // Print result button handler with direct print
     document.querySelectorAll('.print-result').forEach(button => {
