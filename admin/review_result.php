@@ -365,7 +365,6 @@ $subevent_id=$_GET['sub_event_id'];
   
   
   
-           <?php }  } ?>
        
  
     </div>
