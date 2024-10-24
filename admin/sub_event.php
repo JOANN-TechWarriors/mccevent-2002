@@ -444,7 +444,7 @@ body {
 
     <div class="header">
     <div>
-        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
+        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
     </div>
     </div>
     <div class="main" id="main-content">
