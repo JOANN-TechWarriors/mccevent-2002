@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   
-  <?php 
-    include('header2.php');
-    include('session.php');
+<?php 
+  include('header2.php');
+  include('session.php');
 
-    $mainevent_id=$_POST['main_event_id'];
+  $mainevent_id=$_POST['main_event_id'];
 
-    $mainevent_query = $conn->query("SELECT * FROM main_event where mainevent_id='$mainevent_id'") or die(mysql_error());
-    while ($mainevent_row = $mainevent_query->fetch()) {
-        $m_event_name=$mainevent_row['event_name'];
-    } 
-  ?>
+  $mainevent_query = $conn->query("SELECT * FROM main_event where mainevent_id='$mainevent_id'") or die(mysql_error());
+  while ($mainevent_row = $mainevent_query->fetch()) {
+      $m_event_name=$mainevent_row['event_name'];
+  } 
+?>
+
 <head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -23,89 +24,89 @@
     }
 
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 250px;
-        background-color: #27293d;
-        color: #fff;
-        padding-top: 20px;
-        transition: all 0.3s;
-        overflow: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      background-color: #27293d;
+      color: #fff;
+      padding-top: 20px;
+      transition: all 0.3s;
+      overflow: hidden;
     }
 
     .sidebar.collapsed {
-        width: 80px;
+      width: 80px;
     }
 
     .sidebar .toggle-btn {
-        position: absolute;
-        top: 10px;
-        right: 18px;
-        background-color: transparent;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s;
+      position: absolute;
+      top: 10px;
+      right: 18px;
+      background-color: transparent;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
     }
 
     .sidebar .toggle-btn i {
-        font-size: 20px;
+      font-size: 20px;
     }
 
     .sidebar-heading {
-        text-align: center;
-        padding: 10px 0;
-        font-size: 18px;
-        margin-bottom: 10px;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 18px;
+      margin-bottom: 10px;
     }
 
     .sidebar-heading img {
-        max-width: 100px;
-        max-height: 100px;
+      max-width: 100px;
+      max-height: 100px;
     }
 
     .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
     }
 
     .sidebar ul li {
-        padding: 15px 20px;
-        transition: all 0.3s;
+      padding: 15px 20px;
+      transition: all 0.3s;
     }
 
     .sidebar ul li a {
-        color: #fff;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
     }
 
     .sidebar ul li a i {
-        margin-right: 10px;
-        transition: margin 0.3s;
+      margin-right: 10px;
+      transition: margin 0.3s;
     }
 
     .sidebar.collapsed ul li a i {
-        margin-right: 0;
+      margin-right: 0;
     }
 
     .sidebar ul li a span {
-        display: inline-block;
-        transition: opacity 0.3s;
+      display: inline-block;
+      transition: opacity 0.3s;
     }
 
     .sidebar.collapsed ul li a span {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
     }
 
     .sidebar ul li a:hover {
-        background-color: #1a1a2e;
+      background-color: #1a1a2e;
     }
 
     .main {
@@ -117,51 +118,63 @@
     .main.collapsed {
       margin-left: 80px;
     }
+
     .header {
-        background-color: #f8f9fa;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #ddd;
+      background-color: #f8f9fa;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
     }
 
     .header .profile-dropdown {
-        position: relative;
-        display: inline-block;
+      position: relative;
+      display: inline-block;
     }
 
     .header .profile-dropdown img {
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
     }
 
     .header .profile-dropdown .dropdown-menu {
-        display: none;
-        position: absolute;
-        right: 0;
-        background-color: #fff;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        overflow: hidden;
-        z-index: 1000;
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+      z-index: 1000;
     }
 
     .header .profile-dropdown:hover .dropdown-menu {
-        display: block;
+      display: block;
     }
 
     .header .profile-dropdown .dropdown-menu a {
-        display: block;
-        padding: 10px;
-        color: #333;
-        text-decoration: none;
+      display: block;
+      padding: 10px;
+      color: #333;
+      text-decoration: none;
     }
 
     .header .profile-dropdown .dropdown-menu a:hover {
-        background-color: #f1f1f1;
+      background-color: #f1f1f1;
+    }
+
+    /* Print styles */
+    @media print {
+      .sidebar, .header, .no-print {
+        display: none !important;
+      }
+      .main {
+        margin-left: 0 !important;
+        padding: 0 !important;
+      }
     }
 
     @media (max-width: 768px) {
@@ -177,6 +190,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
@@ -190,20 +204,20 @@
     </ul>
   </div>
 
-        <!-- Header -->
-        <div class="header">
-        <div>
-            <!-- Add any left-aligned content here if needed -->
-        </div>
-        <div class="profile-dropdown">
-           <div style="font-size:small;"> <?php echo $tabname ;?></div>
-            <div class="dropdown-menu">
-                <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
-            </div>
-        </div>
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <!-- Add any left-aligned content here if needed -->
     </div>
+    <div class="profile-dropdown">
+      <div style="font-size:small;"><?php echo $tabname; ?></div>
+      <div class="dropdown-menu">
+        <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+      </div>
+    </div>
+  </div>
 
-  <!-- Subhead -->
+  <!-- Main Content -->
   <div class="main" id="main-content"> 
     <div class="container">
       <h1 style="font-size:35px;">Data Reviews</h1>
@@ -212,7 +226,7 @@
     <br />
     <div class="col-md-12">
       <ul class="breadcrumb">
-        <li><a href="rev_main_event.php">DR: Main Event List</strong></i></a> / </li>
+        <li><a href="rev_main_event.php">DR: Main Event List</a> / </li>
         <li>DR: Main Event <i><strong><?php echo $m_event_name; ?></strong></i> - Event List</li>
       </ul>
     </div>
@@ -248,7 +262,7 @@
                   <td><?php echo $subevent_row['event_name']; ?></td>
                   <td width="90">
                     <a title="click to view event details" target="_blank" href="review_result.php?mainevent_id=<?php echo $mainevent_id; ?>&sub_event_id=<?php echo $subevent_row['subevent_id']; ?>" class="btn btn-primary"><i class="icon-folder-open"></i></a>
-                    <a target="_blank" title="click to print event result" href="review_se_result.php?mainevent_id=<?php echo $mainevent_id; ?>&sub_event_id=<?php echo $subevent_row['subevent_id']; ?>" class="btn btn-info"><i class="icon-print"></i></a> 
+                    <button type="button" onclick="handlePrint(<?php echo $mainevent_id; ?>, <?php echo $subevent_row['subevent_id']; ?>)" title="click to print event result" class="btn btn-info"><i class="icon-print"></i></button>
                   </td>
                 </tr>
               <?php } ?>
@@ -262,27 +276,50 @@
 
   <?php include("footer.php") ?>
     
-  <!-- Le javascript -->
-  <script src="..//assets/js/jquery.js"></script>
-  <script src="..//assets/js/bootstrap-transition.js"></script>
-  <script src="..//assets/js/bootstrap-alert.js"></script>
-  <script src="..//assets/js/bootstrap-modal.js"></script>
-  <script src="..//assets/js/bootstrap-dropdown.js"></script>
-  <script src="..//assets/js/bootstrap-scrollspy.js"></script>
-  <script src="..//assets/js/bootstrap-tab.js"></script>
-  <script src="..//assets/js/bootstrap-tooltip.js"></script>
-  <script src="..//assets/js/bootstrap-popover.js"></script>
-  <script src="..//assets/js/bootstrap-button.js"></script>
-  <script src="..//assets/js/bootstrap-collapse.js"></script>
-  <script src="..//assets/js/bootstrap-carousel.js"></script>
-  <script src="..//assets/js/bootstrap-typeahead.js"></script>
-  <script src="..//assets/js/bootstrap-affix.js"></script>
-  <script src="..//assets/js/holder/holder.js"></script>
-  <script src="..//assets/js/google-code-prettify/prettify.js"></script>
-  <script src="..//assets/js/application.js"></script>
-  <!-- SweetAlert JavaScript -->
+  <!-- JavaScript Libraries -->
+  <script src="../assets/js/jquery.js"></script>
+  <script src="../assets/js/bootstrap-transition.js"></script>
+  <script src="../assets/js/bootstrap-alert.js"></script>
+  <script src="../assets/js/bootstrap-modal.js"></script>
+  <script src="../assets/js/bootstrap-dropdown.js"></script>
+  <script src="../assets/js/bootstrap-scrollspy.js"></script>
+  <script src="../assets/js/bootstrap-tab.js"></script>
+  <script src="../assets/js/bootstrap-tooltip.js"></script>
+  <script src="../assets/js/bootstrap-popover.js"></script>
+  <script src="../assets/js/bootstrap-button.js"></script>
+  <script src="../assets/js/bootstrap-collapse.js"></script>
+  <script src="../assets/js/bootstrap-carousel.js"></script>
+  <script src="../assets/js/bootstrap-typeahead.js"></script>
+  <script src="../assets/js/bootstrap-affix.js"></script>
+  <script src="../assets/js/holder/holder.js"></script>
+  <script src="../assets/js/google-code-prettify/prettify.js"></script>
+  <script src="../assets/js/application.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Custom Scripts -->
   <script>
+    // Print handling function
+    function handlePrint(mainEventId, subEventId) {
+      // Create a new window for the print content
+      const printWindow = window.open(
+        `review_se_result.php?mainevent_id=${mainEventId}&sub_event_id=${subEventId}`,
+        'PrintWindow',
+        'width=1000,height=800'
+      );
+
+      // Wait for the content to load, then print
+      printWindow.onload = function() {
+        setTimeout(() => {
+          printWindow.print();
+          // Close the window after printing
+          printWindow.addEventListener('afterprint', function() {
+            printWindow.close();
+          });
+        }, 500);
+      };
+    }
+
+    // Logout confirmation
     document.getElementById('logout').addEventListener('click', function(event) {
       event.preventDefault();
       Swal.fire({
@@ -293,16 +330,15 @@
         cancelButtonText: 'No'
       }).then((result) => {
         if (result.isConfirmed) {
-          // Redirect to logout.php
-          window.location.href = '..//index.php';
+          window.location.href = '../index.php';
         }
       });
     });
 
-    document.getElementById("toggle-btn").addEventListener("click", function () {
+    // Sidebar toggle
+    document.getElementById("toggle-btn").addEventListener("click", function() {
       var sidebar = document.getElementById("sidebar");
       var mainContent = document.getElementById("main-content");
-
       sidebar.classList.toggle("collapsed");
       mainContent.classList.toggle("collapsed");
     });
