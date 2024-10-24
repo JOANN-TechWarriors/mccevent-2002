@@ -15,21 +15,17 @@
   ?>
   
 <head>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
  <link rel="shortcut icon" href="../images/logo copy.png"/>
  <style>
-    body {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
-    width: 100vw;      /* Ensures full width */
-    overflow-y: auto;  /* Enables vertical scrolling */
-    overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
-}
+   body {
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
 
     .sidebar {
     position: fixed;
@@ -63,27 +59,25 @@
 .sidebar .toggle-btn i {
     font-size: 20px;
 }
+    .sidebar-heading {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
 
-.sidebar-heading {
-    text-align: center;
-    padding: 10px 0;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
+    .sidebar-heading img {
+      max-width: 100px;
+      max-height: 100px;
+    }
 
-.sidebar-heading img {
-    max-width: 100px;
-    max-height: 100px;
-}
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
 
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
+    .sidebar ul li {
     padding: 15px 20px;
     transition: all 0.3s;
 }
@@ -114,11 +108,10 @@
     } */
 
     .sidebar ul li a:hover {
-        background-color: #1a1a2e;
-        
-    }
+    background-color: #1a1a2e;
+}
 
-    .main {
+.main {
     margin-left: 250px; /* Space for the sidebar */
     padding: 20px;
     transition: margin-left 0.3s ease; /* Smooth transition for main content */
@@ -127,8 +120,8 @@
 .main.collapsed {
     margin-left: 0; /* No space for sidebar when collapsed */
 }
-
-.header {
+      
+    .header {
     background-color: #f8f9fa;
     padding: 10px 20px;
     display: flex;
@@ -149,7 +142,6 @@
     cursor: pointer;
 }
 
-
 .header .profile-dropdown .dropdown-menu {
     display: none;
     position: absolute;
@@ -161,10 +153,9 @@
     z-index: 1000;
 }
 
-.header .profile-dropdown .dropdown-menu a:hover {
-    background-color: #f1f1f1;
+.header .profile-dropdown:hover .dropdown-menu {
+    display: block;
 }
-
 
 .header .profile-dropdown .dropdown-menu a {
     display: block;
@@ -200,7 +191,6 @@
         display: block; /* Show toggle button on mobile */
     }
 }
-
 @media (max-width: 576px) {
     .sidebar-heading {
         font-size: 14px;
@@ -218,13 +208,10 @@
         width: 30px;
         height: 30px;
     }
-
-    }
+  }
   </style>
 </head>
 
-<body>
-    
  <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
     <div class="sidebar-heading">
