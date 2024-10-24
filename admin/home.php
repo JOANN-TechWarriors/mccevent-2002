@@ -151,10 +151,10 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     margin-right: 10px;
 }
 
-    .sidebar.collapsed ul li a i {
+/*     .sidebar.collapsed ul li a i {
         margin-right: 0;
     }
-
+ */
 /*     .sidebar ul li a span {
         display: inline-block;
         transition: opacity 0.3s;
