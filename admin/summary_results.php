@@ -25,7 +25,6 @@
             min-height: 13in;
             margin: 0 auto;
             padding: 1in;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             position: relative;
         }
 
@@ -68,7 +67,6 @@
             }
             
             .container {
-                box-shadow: none;
                 padding: 0.5in;
                 width: 100%;
             }
