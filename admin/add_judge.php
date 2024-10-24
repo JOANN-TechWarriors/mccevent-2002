@@ -19,12 +19,12 @@
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
  <link rel="shortcut icon" href="../images/logo copy.png"/>
  <style>
-   body {
-      font-family: Arial, sans-serif;
-      background-color: #fff;
-      margin: 0;
-      padding: 0;
-    }
+ body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+}
 
 
     .sidebar {
@@ -45,7 +45,7 @@
     transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
 }
 
-    .sidebar .toggle-btn {
+.sidebar .toggle-btn {
     position: absolute;
     top: 10px;
     right: 18px;
@@ -59,25 +59,26 @@
 .sidebar .toggle-btn i {
     font-size: 20px;
 }
-    .sidebar-heading {
-      text-align: center;
-      padding: 10px 0;
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
 
-    .sidebar-heading img {
-      max-width: 100px;
-      max-height: 100px;
-    }
+.sidebar-heading {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
 
-    .sidebar ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
+.sidebar-heading img {
+    max-width: 100px;
+    max-height: 100px;
+}
 
-    .sidebar ul li {
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
     padding: 15px 20px;
     transition: all 0.3s;
 }
@@ -91,6 +92,7 @@
 
 .sidebar ul li a i {
     margin-right: 10px;
+}
 /*  
     .sidebar.collapsed ul li a i {
         margin-right: 0;
@@ -107,7 +109,7 @@
         overflow: hidden;
     } */
 
-    .sidebar ul li a:hover {
+   .sidebar ul li a:hover {
     background-color: #1a1a2e;
 }
 
@@ -120,8 +122,8 @@
 .main.collapsed {
     margin-left: 0; /* No space for sidebar when collapsed */
 }
-      
-    .header {
+
+.header {
     background-color: #f8f9fa;
     padding: 10px 20px;
     display: flex;
@@ -168,7 +170,6 @@
     background-color: #f1f1f1;
 }
 
-
 @media (max-width: 768px) {
     .sidebar {
         position: absolute;
@@ -191,6 +192,7 @@
         display: block; /* Show toggle button on mobile */
     }
 }
+
 @media (max-width: 576px) {
     .sidebar-heading {
         font-size: 14px;
@@ -211,7 +213,7 @@
   }
   </style>
 </head>
-
+<body>
  <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
     <div class="sidebar-heading">
@@ -227,12 +229,11 @@
         </ul>
   </div>
 <!-- Header -->
-  <div class="header">    
+<div class="header">
     <div>
         <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
     </div>
   </div>
-
 <div class="main" id="main-content">
   <div class="container">
     <h1><?php echo $se_name; ?> Settings</h1>
