@@ -116,7 +116,7 @@
         ?>
         
         <div class="header-content">
-            <?php include('doc_header.php'); ?>
+            <center><?php include('doc_header.php'); ?></center>
             
             <h2><?php echo $event_row['event_name']; ?></h2>
             <h3>Over All Result - <?php echo $s_event_row['event_name']; ?></h3>
