@@ -21,12 +21,12 @@ include('..//admin/session.php');
     overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
 }
 
-        .sidebar-heading {
+/*         .sidebar-heading {
             text-align: center;
             padding: 10px 0;
             font-size: 18px;
             margin-bottom: 10px;
-        }
+        } */
 
         .sidebar {
     position: fixed;
@@ -277,8 +277,8 @@ include('..//admin/session.php');
         </ul>
     </div>
 
-    <!-- Header -->
-    <div class="header">
+   <!-- Header -->
+<div class="header">
     <div>
         <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
     </div>
@@ -456,16 +456,16 @@ include('..//admin/session.php');
             });
         });
 
-        document.getElementById("toggle-btn").addEventListener("click", function () {
-            var sidebar = document.getElementById("sidebar");
-            var mainContent = document.getElementById("main-content");
+        // document.getElementById("toggle-btn").addEventListener("click", function () {
+        //     var sidebar = document.getElementById("sidebar");
+        //     var mainContent = document.getElementById("main-content");
 
-            sidebar.classList.toggle("collapsed");
-            mainContent.classList.toggle("collapsed");
+        //     sidebar.classList.toggle("collapsed");
+        //     mainContent.classList.toggle("collapsed");
 
-            var isCollapsed = sidebar.classList.contains("collapsed");
-            this.innerHTML = isCollapsed ? "☰" : "☰";
-        });
+        //     var isCollapsed = sidebar.classList.contains("collapsed");
+        //     this.innerHTML = isCollapsed ? "☰" : "☰";
+        // });
 
         var acc = document.getElementsByClassName("accordion");
         for (var i = 0; i < acc.length; i++) {
