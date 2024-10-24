@@ -114,7 +114,7 @@ $stmt->close();
         /* Make video container responsive */
         .video-group {
             position: relative;
-            width: 300%;
+            width: 100%;
             height: 100vh;
         }
         .col {
