@@ -161,6 +161,7 @@ $active_main_event=$_GET['main_event_id'];
                 ?>
                 <div class="header-title">
                     <?php include('doc_header.php'); ?>
+                    <br><br>
                     <div class="event-title">
                         <strong><?php echo $event_row['event_name']; ?></strong>
                     </div>
