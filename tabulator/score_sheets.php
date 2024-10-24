@@ -21,40 +21,42 @@ include('..//admin/session.php');
     overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
 }
 
-        .sidebar-heading {
+/*         .sidebar-heading {
             text-align: center;
             padding: 10px 0;
             font-size: 18px;
             margin-bottom: 10px;
-        }
+        } */
 
         .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 250px;
-        background-color: #27293d;
-        color: #fff;
-        padding-top: 20px;
-        transition: all 0.3s;
-        overflow: hidden;
-        }
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #27293d;
+    color: #fff;
+    padding-top: 20px;
+    transition: all 0.3s;
+    overflow: hidden;
+    z-index: 1000; /* Ensure the sidebar is above the main content */
+}
 
-        .sidebar.collapsed {
-            width: 80px;
-        }
+.sidebar.collapsed {
+    transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
+}
 
-        .sidebar .toggle-btn {
-            position: absolute;
-            top: 10px;
-            right: 18px;
-            background-color: transparent;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+.sidebar .toggle-btn {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
 
         .sidebar .toggle-btn i {
             font-size: 20px;
@@ -90,12 +92,11 @@ include('..//admin/session.php');
             align-items: center;
         }
 
-        .sidebar ul li a i {
-            margin-right: 10px;
-            transition: margin 0.3s;
-        }
+       .sidebar ul li a i {
+    margin-right: 10px;
 
-        .sidebar.collapsed ul li a i {
+}
+/*         .sidebar.collapsed ul li a i {
             margin-right: 0;
         }
 
@@ -108,21 +109,22 @@ include('..//admin/session.php');
             opacity: 0;
             width: 0;
             overflow: hidden;
-        }
+        } */
 
         .sidebar ul li a:hover {
-            background-color: #1a1a2e;
-        }
+    background-color: #1a1a2e;
+}
 
-        .main {
-            margin-left: 250px;
-            padding: 20px;
-            transition: all 0.3s;
-        }
+.main {
+    margin-left: 250px; /* Space for the sidebar */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Smooth transition for main content */
+}
 
-        .main.collapsed {
-            margin-left: 80px;
-        }
+.main.collapsed {
+    margin-left: 0; /* No space for sidebar when collapsed */
+}
+
 
         .content {
             margin-left: 260px;
@@ -215,27 +217,46 @@ include('..//admin/session.php');
 
 
         /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
+       @media (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        width: 250px;
+       
+        transform: translateX(-100%); /* Hide sidebar off-screen */
+        display: block; /* Show sidebar when collapsed */
+    }
 
-            .main {
-                margin-left: 0;
-            }
-        }
-        @media (max-width: 576px) {
-        
-        .header {
-            padding: 5px 10px;
-        }
+    .main {
+        margin-left: 0; /* No space for sidebar on mobile */
+        transition: margin-left 0.3s ease; /* Smooth transition for main content */
+    }
 
-        .header .profile-dropdown img {
-            width: 30px;
-            height: 30px;
-        }
+    .sidebar.collapsed {
+        transform: translateX(0); /* Show sidebar when expanded */
+    }
+
+    .sidebar .toggle-btn {
+        display: block; /* Show toggle button on mobile */
+    }
+}
+
+       @media (max-width: 576px) {
+    .sidebar-heading {
+        font-size: 14px;
+    }
+
+    .sidebar ul li a {
+        font-size: 14px;
+    }
+
+    .header {
+        padding: 5px 10px;
+    }
+
+    .header .profile-dropdown img {
+        width: 30px;
+        height: 30px;
+    }
 
     }
     </style>
@@ -244,11 +265,11 @@ include('..//admin/session.php');
 <body>
 
 <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggle-btn">☰</button>
-        <div class="sidebar-heading">
-            <img src="../img/logo.png" alt="Logo">
-            <div>Event Judging System</div>
-        </div>
+    <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
+    <div class="sidebar-heading">
+        <img src="../img/logo.png" alt="Logo">
+        <div>Event Judging System</div>
+    </div>
         <ul>
             <li><a href="score_sheets.php"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
             <li><a href="../admin/rev_main_event.php"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
@@ -257,9 +278,9 @@ include('..//admin/session.php');
 
     <!-- Header -->
     <div class="header">
-        <div>
-            <!-- Add any left-aligned content here if needed -->
-        </div>
+    <div>
+        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+    </div>
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $tabname ;?></div>
             <div class="dropdown-menu">
@@ -458,5 +479,22 @@ include('..//admin/session.php');
             });
         }
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleButtons = document.querySelectorAll(".toggle-btn");
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.querySelector(".main");
+
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Toggle the collapsed class on sidebar
+            sidebar.classList.toggle("collapsed");
+            // Toggle the collapsed class on main content
+            mainContent.classList.toggle("collapsed");
+        });
+    });
+});
+
+</script>
 </body>
 </html>
