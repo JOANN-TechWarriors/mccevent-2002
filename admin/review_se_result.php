@@ -46,7 +46,7 @@
         
         .table th {
             padding: 0.75rem;
-            border: 2px solid #000;
+            border: 1px solid #000;
             background-color: #f8f9fa;
             font-weight: 900;
             font-size: 16px;
@@ -55,7 +55,7 @@
         
         .table td {
             padding: 0.75rem;
-            border: 2px solid #000;
+            border: 1px solid #000;
             font-weight: bold;
             font-size: 14px;
         }
@@ -164,6 +164,7 @@
         </div>
         <br> <br>
         <div class="table-responsive">
+
             <table class="table">
                 <thead>
                     <tr>
