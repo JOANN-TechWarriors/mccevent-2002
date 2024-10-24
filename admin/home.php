@@ -467,10 +467,10 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </div>
                 </div>
-                <h3 style="color:black; font-size: medium;"><?php echo htmlspecialchars($event['event_name']); ?></h3>
-                <p style="color:black;"><?php echo date('m-d-Y', strtotime($event['date_start'])); ?> to
+                <h3 style="color:black; font-size: large;"><b><?php echo htmlspecialchars($event['event_name']); ?></b></h3>
+                <p style="color:black; font-size: small;"><?php echo date('m-d-Y', strtotime($event['date_start'])); ?> to
                 <?php echo date('m-d-Y', strtotime($event['date_end'])); ?></p>
-                <p style="color:black;"><?php echo htmlspecialchars($event['place']); ?></p>
+                <p style="color:black; font-size: small;"><?php echo htmlspecialchars($event['place']); ?></p>
             </div>
             <?php } ?>
         </div>
