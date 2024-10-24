@@ -22,11 +22,6 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Security-Policy" 
-      content="default-src 'self'; 
-               script-src 'self' https://mcceventsjudging.com; 
-               object-src 'none'; 
-               base-uri 'self';">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Live Stream</title>
