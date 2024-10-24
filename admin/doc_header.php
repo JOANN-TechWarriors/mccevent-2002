@@ -1,7 +1,7 @@
 <table>
       
       <tr>
-      <td><center><img src="../uploads/<?php echo $company_logo; ?>" width="100" height="100" /> </center></td>
+      <td><center><img src="../uploads/<?php echo $company_logo; ?>" width="200" height="200" /> </center></td>
      </tr>
      
      <tr>
