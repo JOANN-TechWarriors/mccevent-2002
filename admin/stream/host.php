@@ -222,7 +222,7 @@ $stmt->close();
         </form>
         <div class="video-container">
             <p id="local-player-name" class="player-name"></p>
-            <div id="local-player"></div>
+            <!-- <div id="local-player"></div> -->
             <div class="zoom-controls">
                 <button class="zoom-btn" onclick="zoomIn()">+</button>
                 <button class="zoom-btn" onclick="zoomOut()">-</button>
@@ -266,7 +266,7 @@ $stmt->close();
             player.style.transform = `scale(${currentZoom})`;
         }
     </script>
-    
+
     <script>
         // Set the default channel name
         document.addEventListener("DOMContentLoaded", function() {
