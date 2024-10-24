@@ -11,7 +11,7 @@ $active_main_event=$_GET['main_event_id'];
     <style>
         /* Bond paper simulation */
         html {
-            background: #gray;
+            background: #white;
             min-height: 100%;
             display: flex;
             justify-content: center;
