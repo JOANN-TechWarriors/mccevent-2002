@@ -116,10 +116,10 @@
         ?>
         
         <div class="header-content">
-            <center><?php include('doc_header.php'); ?></center> <br> <br>
+            <center style="size: 20px;"><?php include('doc_header.php'); ?></center> <br> <br>
             
-            <h2 ><?php echo $event_row['event_name']; ?></h2>
-            <h3>Over All Result - <?php echo $s_event_row['event_name']; ?></h3>
+            <h2 style="size: 20px;"><?php echo $event_row['event_name']; ?></h2>
+            <h3 style="size: 20px;">Over All Result - <?php echo $s_event_row['event_name']; ?></h3>
         </div>
         <br> <br>
         <div class="table-responsive">
