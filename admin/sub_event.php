@@ -787,7 +787,7 @@ function showActivationModal(subEventId, subEventName, status) {
         this.value = `${hours}:${minutes}`;
     });
 </script>
-script>
+<script>
 document.addEventListener("DOMContentLoaded", function() {
     const toggleButtons = document.querySelectorAll(".toggle-btn");
     const sidebar = document.getElementById("sidebar");
