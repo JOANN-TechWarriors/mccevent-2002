@@ -6,7 +6,7 @@
      
      <tr>
       <td>
-      <center>
+      <center  style="font-size: 20px !important;">
       <font size="3"><strong><?php echo $company_name; ?></strong></font><br />
         <font size="2"><?php echo $company_address; ?></font> <br />
         <font size="2"><?php echo $company_telephone; ?> &middot;
