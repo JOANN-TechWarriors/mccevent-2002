@@ -391,29 +391,7 @@
         });
     });
 
-    // Print result button handler
-    document.querySelectorAll('.print-result').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const eventId = this.getAttribute('data-event-id');
-            
-            Swal.fire({
-                title: 'Print Results',
-                text: 'Do you want to print the event results?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const printWindow = window.open(`print_all_results.php?main_event_id=${eventId}`, '_blank');
-                    printWindow.onload = function() {
-                        printWindow.print();
-                    };
-                }
-            });
-        });
-    });
+  
   </script>
 </body>
 </html>
