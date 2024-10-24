@@ -256,9 +256,9 @@ body {
     }
 
     .sidebar ul li a i {
-        margin-right: 10px;
-        transition: margin 0.3s;
-    }
+    margin-right: 10px;
+}
+   
 
 /*     .sidebar.collapsed ul li a i {
         margin-right: 0;
@@ -309,10 +309,10 @@ body {
         height: 40px;
         cursor: pointer;
     }
-    .button {
+/*     .button {
   width: 100px; /* Set appropriate width */
   height: 40px; /* Set appropriate height */
-}
+} */
 
     .header .profile-dropdown .dropdown-menu {
         display: none;
@@ -427,26 +427,25 @@ body {
 
 <body>
     <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
-        <div class="sidebar-heading">
-            <img src="../img/logo.png" alt="Logo">
-            <div>Event Judging System</div>
-        </div>
-        <ul>
+    <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
+    <div class="sidebar-heading">
+        <img src="../img/logo.png" alt="Logo">
+        <div>Event Judging System</div>
+    </div>
+    <ul>
         <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
         <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
         <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-        <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
+        <li><a href="live.php"><i class="fas fa-camera"></i> <span>LIVE</span></a></li>
+    </ul>
+</div>
 
-
-        </ul>
-    </div>
-
-    <div class="header">
+    <!-- Header -->
+<div class="header">
     <div>
         <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
     </div>
-    </div>
+</div>
     <div class="main" id="main-content">
         <div class="container">
             <h1  style="font-size: 35px;">Ongoing Events</h1>
