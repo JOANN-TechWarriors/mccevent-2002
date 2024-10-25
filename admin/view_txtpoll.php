@@ -24,6 +24,7 @@ $('#load_tweets3').load('ref_view_txtpoll.php');
     <link rel="stylesheet" href="..//css/custom.min.css"/>
     <link rel="stylesheet" href="..//css/font-awesome.css" media="screen"/>
     <link rel="stylesheet" href="..//css/font-awesome.min.css"/>
+    <link rel="shortcut icon" href="../images/logo copy.png"/>
 </head>
    
    <?php

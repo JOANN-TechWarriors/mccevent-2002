@@ -1,4 +1,5 @@
-   
+<link rel="shortcut icon" href="../images/logo copy.png"/>
+
      <script type="text/javascript">
 var auto_refresh = setInterval(
 function ()
