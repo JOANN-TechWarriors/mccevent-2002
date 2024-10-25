@@ -108,14 +108,15 @@
                 while ($event_row = $event_query->fetch()) {
             ?>
                 
-            <?php include('doc_header.php'); ?>
-
+           <center> <?php include('doc_header.php'); ?></center>
+              <br><br>
             <div class="event-header">
                 <h2><?php echo $event_row['event_name']; ?></h2>
                 <h3>Judge Code for <?php echo $se_name; ?></h3>
             </div>
 
             <div class="table-responsive">
+            <center>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -137,10 +138,7 @@
                         <?php } ?>
                     </tbody>
                 </table>
-            </div>
-
-            <div class="text-end no-print">
-                <strong>Press Ctrl+P to Print</strong>
+                        </center>
             </div>
 
             <?php 
