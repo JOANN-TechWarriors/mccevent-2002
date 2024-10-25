@@ -425,7 +425,7 @@ body {
     /* Table Container */
 .table-responsive-container {
     width: 100%;
-    max-width: 1100px;
+    max-width: 100px;
     margin: 20px 0;
     background: #fff;
     padding: 20px;
