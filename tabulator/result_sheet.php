@@ -106,86 +106,56 @@
             font-weight: bold;
         }
 
-        /* Signature section styles */
+        /* Improved signature section styles */
         .signature-section {
-            margin-top: 30px;
+            margin-top: 40px;
             page-break-inside: avoid;
+            padding: 0 20px;
         }
 
-        .signature-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .signatures-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-around;
+            margin-bottom: 30px;
         }
 
-        .signature-table td {
+        .signature-group {
+            flex: 1;
+            min-width: 250px;
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .signature-group h4 {
             text-align: center;
-            padding: 10px;
-            width: 33.33%;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 16px;
         }
 
-        .signature-line {
-            border-top: 1px solid black;
-            margin-top: 50px;
-            display: inline-block;
-            min-width: 200px;
-            margin-bottom: 5px;
+        .signature-box {
+            border-bottom: 1px solid #000;
+            min-height: 60px;
+            margin: 10px auto;
+            width: 100%;
+            max-width: 300px;
+            position: relative;
         }
 
-        /* Print styles */
-        @media print {
-            body {
-                background: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            .container {
-                box-shadow: none;
-                padding: 0.5in;
-                width: 8.5in;
-                height: 11in;
-            }
-
-            .table {
-                page-break-inside: avoid;
-            }
-
-            .signature-section {
-                page-break-inside: avoid;
-            }
-
-            .btn-print {
-                display: none;
-            }
+        .signature-name {
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+            font-size: 14px;
         }
 
-        /* Responsive styles */
-        @media screen and (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .table {
-                font-size: 12px;
-            }
-
-            .table th,
-            .table td {
-                padding: 6px 4px;
-            }
-
-            .participant-name {
-                font-size: 14px;
-            }
-
-            .signature-table td {
-                padding: 5px;
-            }
-
-            .signature-line {
-                min-width: 150px;
-            }
+        .signature-title {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
         }
 
         /* Print button styles */
@@ -202,6 +172,80 @@
 
         .btn-print:hover {
             background-color: #0056b3;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 0.5in;
+                width: 8.5in;
+                height: 11in;
+                overflow: hidden;
+            }
+
+            .signature-section {
+                margin-top: 20px;
+                padding: 0;
+            }
+
+            .signatures-container {
+                gap: 10px;
+            }
+
+            .signature-group {
+                min-width: 200px;
+            }
+
+            .signature-box {
+                min-height: 40px;
+            }
+
+            .btn-print {
+                display: none;
+            }
+
+            /* Ensure content fits on one page */
+            .table {
+                font-size: 12px;
+            }
+
+            .participant-name {
+                font-size: 13px;
+            }
+
+            .signature-name {
+                font-size: 12px;
+            }
+
+            .signature-title {
+                font-size: 11px;
+            }
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .signature-section {
+                padding: 0 10px;
+            }
+
+            .signature-group {
+                min-width: 200px;
+            }
+
+            .signature-box {
+                min-height: 50px;
+            }
         }
     </style>
 </head>
@@ -316,10 +360,12 @@
             </table>
         </div>
 
+        <!-- Improved signature section -->
         <div class="signature-section">
-            <!-- Judges Signatures -->
-            <table class="signature-table">
-                <tr>
+            <div class="signatures-container">
+                <!-- Judges signatures -->
+                <div class="signature-group">
+                    <h4>Panel of Judges</h4>
                     <?php
                     $jjn_result_query = $conn->query("select distinct judge_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by judge_id ASC") or die(mysql_error());
                     while ($jjn_result_row = $jjn_result_query->fetch()) {
@@ -327,51 +373,38 @@
                         $jname_query = $conn->query("select * from judges where judge_id='$jx_id'") or die(mysql_error());
                         $jname_row = $jname_query->fetch();
                     ?>
-                    <td>
-                        <div class="signature-line">
-                            <strong><?php echo $jname_row['fullname'];?></strong>
-                        </div>
-                        <div>
-                            <?php echo ($jname_row['jtype']=="Chairman") ? "Chairman Judge" : "Judge"; ?>
-                        </div>
-                    </td>
+                    <div class="signature-box"></div>
+                    <div class="signature-name"><?php echo $jname_row['fullname'];?></div>
+                    <div class="signature-title"><?php echo ($jname_row['jtype']=="Chairman") ? "Chairman Judge" : "Judge"; ?></div>
                     <?php } ?>
-                </tr>
-            </table>
+                </div>
 
-            <!-- Tabulator Signature -->
-            <table class="signature-table">
-                <tr>
+                <!-- Tabulator signature -->
+                <div class="signature-group">
+                    <h4>Tabulation Committee</h4>
                     <?php
                     $jjn_result_query = $conn->query("select * from organizer where org_id='$session_id'") or die(mysql_error());
                     while ($jjn_result_row = $jjn_result_query->fetch()) {
                     ?>
-                    <td>
-                        <div class="signature-line">
-                            <strong><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></strong>
-                        </div>
-                        <div>Tabulator</div>
-                    </td>
+                    <div class="signature-box"></div>
+                    <div class="signature-name"><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></div>
+                    <div class="signature-title">Tabulator</div>
                     <?php } ?>
-                </tr>
-            </table>
+                </div>
 
-            <!-- Organizer Signature -->
-            <table class="signature-table">
-                <tr>
+                <!-- Organizer signature -->
+                <div class="signature-group">
+                    <h4>Event Organizer</h4>
                     <?php
                     $jjn_result_query = $conn->query("select * from organizer where organizer_id='$session_id'") or die(mysql_error());
                     while ($jjn_result_row = $jjn_result_query->fetch()) {
                     ?>
-                    <td>
-                        <div class="signature-line">
-                            <strong><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></strong>
-                        </div>
-                        <div>Organizer</div>
-                    </td>
+                    <div class="signature-box"></div>
+                    <div class="signature-name"><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></div>
+                    <div class="signature-title">Organizer</div>
                     <?php } ?>
-                </tr>
-            </table>
+                </div>
+            </div>
         </div>
 
         <button type="button" onclick="window.print()" class="btn-print">
