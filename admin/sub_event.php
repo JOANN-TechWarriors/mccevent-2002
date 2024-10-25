@@ -600,7 +600,7 @@ body {
 
 <div class="header">
         <div>
-            <!-- Add any left-aligned content here if needed -->
+        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
         </div>
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $name; ?></div>
