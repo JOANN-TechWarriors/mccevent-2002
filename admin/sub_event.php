@@ -911,12 +911,6 @@ function showActivationModal(subEventId, subEventName, status) {
                 }
             });
         });
-
-        $('#toggle-btn').on('click', function() {
-            $('#sidebar').toggleClass('collapsed');
-            $('#main-content').toggleClass('collapsed');
-            $(this).toggleClass('collapsed');
-        });
     });
     </script>
 <!-- SweetAlert for Success/Error Messages -->
