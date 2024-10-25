@@ -745,6 +745,8 @@ body {
                 </div>
             </div>
             <br> <br><br>
+            
+            <div class="table-responsive-container">
             <div class="table-controls">
             <div class="show-entries">
                 <span>Show</span>
@@ -762,7 +764,6 @@ body {
                        onkeyup="searchTable(this.value)">
             </div>
         </div>
-            <div class="table-responsive-container">
     <table class="table-custom">
         <thead>
             <tr>
@@ -817,6 +818,27 @@ body {
             <?php endforeach; ?>
         </tbody>
     </table>
+    </div>
+    <div class="pagination-container">
+            <div>
+                Showing <?php echo ($offset + 1); ?> to <?php echo min($offset + $records_per_page, $total_records); ?> of <?php echo $total_records; ?> entries
+            </div>
+            <ul class="pagination">
+                <?php if ($page > 1): ?>
+                    <li><a href="?page=<?php echo ($page - 1); ?>&show=<?php echo $records_per_page; ?>&search=<?php echo urlencode($search); ?>">Previous</a></li>
+                <?php endif; ?>
+                
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <li class="<?php echo $page == $i ? 'active' : ''; ?>">
+                        <a href="?page=<?php echo $i; ?>&show=<?php echo $records_per_page; ?>&search=<?php echo urlencode($search); ?>"><?php echo $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+                
+                <?php if ($page < $total_pages): ?>
+                    <li><a href="?page=<?php echo ($page + 1); ?>&show=<?php echo $records_per_page; ?>&search=<?php echo urlencode($search); ?>">Next</a></li>
+                <?php endif; ?>
+            </ul>
+        </div>
     </div>
     <!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -908,6 +930,19 @@ body {
     </div>
 </div>
 
+<script>
+    function changeEntriesPerPage(value) {
+        window.location.href = '?show=' + value + '&search=<?php echo urlencode($search); ?>';
+    }
+
+    function searchTable(value) {
+        // Add a small delay to prevent too many requests while typing
+        clearTimeout(window.searchTimeout);
+        window.searchTimeout = setTimeout(() => {
+            window.location.href = '?search=' + encodeURIComponent(value) + '&show=<?php echo $records_per_page; ?>';
+        }, 500);
+    }
+    </script>
 <script>
 function showEditModal(subEventId, subEventName) {
     document.getElementById('edit_sub_event_id').value = subEventId;
