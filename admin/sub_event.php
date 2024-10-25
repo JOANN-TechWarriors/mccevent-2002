@@ -421,6 +421,162 @@ body {
         height: 30px;
     }
     }
+
+    /* Table Container */
+.table-responsive-container {
+    width: 100%;
+    margin: 20px 0;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+/* Table Styles */
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+    background: #fff;
+}
+
+.table-custom thead th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+}
+
+.table-custom tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+/* Column Widths */
+.table-custom th:nth-child(1),
+.table-custom td:nth-child(1) {
+    width: 25%;
+}
+
+.table-custom th:nth-child(2),
+.table-custom td:nth-child(2),
+.table-custom th:nth-child(3),
+.table-custom td:nth-child(3) {
+    width: 15%;
+}
+
+.table-custom th:nth-child(4),
+.table-custom td:nth-child(4) {
+    width: 20%;
+}
+
+.table-custom th:nth-child(5),
+.table-custom td:nth-child(5) {
+    width: 10%;
+}
+
+.table-custom th:nth-child(6),
+.table-custom td:nth-child(6) {
+    width: 15%;
+    text-align: center;
+}
+
+/* Button Group */
+.btn-group-custom {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-group-custom .btn {
+    padding: 6px 12px;
+    margin: 2px;
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status-badge.active {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-badge.inactive {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 992px) {
+    .table-custom {
+        display: block;
+    }
+    
+    .btn-group-custom {
+        flex-direction: row;
+    }
+    
+    .btn-group-custom .btn {
+        padding: 4px 8px;
+        font-size: 0.875rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .table-responsive-container {
+        padding: 10px;
+    }
+
+    .table-custom thead {
+        display: none;
+    }
+    
+    .table-custom tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+    
+    .table-custom tbody td {
+        display: block;
+        text-align: right;
+        padding: 10px;
+        position: relative;
+        padding-left: 50%;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .table-custom tbody td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 15px;
+        font-weight: 600;
+        text-align: left;
+    }
+    
+    .table-custom tbody td:last-child {
+        border-bottom: none;
+    }
+    
+    .btn-group-custom {
+        justify-content: flex-end;
+    }
+}
     </style>
 
 </head>
@@ -529,8 +685,8 @@ body {
                 </div>
             </div>
             <br> <br><br>
-            <div class="container">
-    <table class="table table-bordered">
+            <div class="table-responsive-container">
+    <table class="table-custom">
         <thead>
             <tr>
                 <th>Sub-event Title</th>
@@ -544,34 +700,46 @@ body {
         <tbody>
             <?php foreach ($subEvents as $subEvent): ?>
             <tr>
-                <td><?php echo htmlspecialchars($subEvent['event_name']); ?></td>
-                <td><?php echo date('m-d-Y', strtotime($subEvent['eventdate'])); ?></td>
-                <td><?php echo date('g:i', strtotime($subEvent['eventtime'])); ?></td>
-                <td><?php echo htmlspecialchars($subEvent['place']); ?></td>
-                <td><?php echo htmlspecialchars($subEvent['status']); ?></td>
-                <td>
-                    <!-- Disable Edit and Delete buttons if status is 'deactivated' -->
-                    <button class="btn btn-success" onclick="showEditModal(<?php echo htmlspecialchars($subEvent['subevent_id']); ?>, '<?php echo htmlspecialchars($subEvent['event_name']); ?>')" <?php echo $subEvent['status'] == 'deactivated' ? 'disabled' : ''; ?>><i class="icon-pencil"></i></button>
-                    
-                    <button class="btn btn-danger" onclick="showDeleteModal(<?php echo htmlspecialchars($subEvent['subevent_id']); ?>, '<?php echo htmlspecialchars($subEvent['event_name']); ?>')" <?php echo $subEvent['status'] == 'deactivated' ? 'disabled' : ''; ?>><i class="icon-trash"></i></button>
-                    
-                    <!-- Conditionally Render Settings Button -->
-                    <?php if ($subEvent['status'] != 'deactivated'): ?>
-                    <a href="sub_event_details.php?sub_event_id=<?php echo htmlspecialchars($subEvent['subevent_id']); ?>&se_name=<?php echo urlencode($subEvent['event_name']); ?>" 
-                       class="btn btn-primary"><i class="icon icon-cog"></i></a>
-                    <?php endif; ?>
-                    
-                    <!-- Always enable Activate/Deactivate button -->
-                    <button class="btn <?php echo $subEvent['status'] == 'activated' ? 'btn-warning' : 'btn-danger'; ?>" onclick="showActivationModal(<?php echo htmlspecialchars($subEvent['subevent_id']); ?>, '<?php echo htmlspecialchars($subEvent['event_name']); ?>', '<?php echo htmlspecialchars($subEvent['status']); ?>')">
-                        <i class="fa-solid <?php echo $subEvent['status'] == 'activated' ? 'fa-eye' : 'fa-eye-slash'; ?>"></i>
-                        <span class="sr-only"><?php echo $subEvent['status'] == 'activated' ? 'Deactivate' : 'Activate'; ?></span>
-                    </button>
+                <td data-label="Sub-event Title"><?php echo htmlspecialchars($subEvent['event_name']); ?></td>
+                <td data-label="Date"><?php echo date('m-d-Y', strtotime($subEvent['eventdate'])); ?></td>
+                <td data-label="Time"><?php echo date('g:i A', strtotime($subEvent['eventtime'])); ?></td>
+                <td data-label="Venue"><?php echo htmlspecialchars($subEvent['place']); ?></td>
+                <td data-label="Status">
+                    <span class="status-badge <?php echo $subEvent['status'] == 'activated' ? 'active' : 'inactive'; ?>">
+                        <?php echo htmlspecialchars($subEvent['status']); ?>
+                    </span>
+                </td>
+                <td data-label="Actions">
+                    <div class="btn-group-custom">
+                        <button class="btn btn-success" 
+                                onclick="showEditModal(<?php echo htmlspecialchars($subEvent['subevent_id']); ?>, '<?php echo htmlspecialchars($subEvent['event_name']); ?>')" 
+                                <?php echo $subEvent['status'] == 'deactivated' ? 'disabled' : ''; ?>>
+                            <i class="icon-pencil"></i>
+                        </button>
+                        
+                        <button class="btn btn-danger" 
+                                onclick="showDeleteModal(<?php echo htmlspecialchars($subEvent['subevent_id']); ?>, '<?php echo htmlspecialchars($subEvent['event_name']); ?>')" 
+                                <?php echo $subEvent['status'] == 'deactivated' ? 'disabled' : ''; ?>>
+                            <i class="icon-trash"></i>
+                        </button>
+                        
+                        <?php if ($subEvent['status'] != 'deactivated'): ?>
+                        <a href="sub_event_details.php?sub_event_id=<?php echo htmlspecialchars($subEvent['subevent_id']); ?>&se_name=<?php echo urlencode($subEvent['event_name']); ?>" 
+                           class="btn btn-primary">
+                            <i class="icon icon-cog"></i>
+                        </a>
+                        <?php endif; ?>
+                        
+                        <button class="btn <?php echo $subEvent['status'] == 'activated' ? 'btn-warning' : 'btn-danger'; ?>"
+                                onclick="showActivationModal(<?php echo htmlspecialchars($subEvent['subevent_id']); ?>, '<?php echo htmlspecialchars($subEvent['event_name']); ?>', '<?php echo htmlspecialchars($subEvent['status']); ?>')">
+                            <i class="fa-solid <?php echo $subEvent['status'] == 'activated' ? 'fa-eye' : 'fa-eye-slash'; ?>"></i>
+                        </button>
+                    </div>
                 </td>
             </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-</div>
     </div>
     <!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
