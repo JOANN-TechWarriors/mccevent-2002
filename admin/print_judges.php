@@ -133,7 +133,7 @@
                         <tr>
                             <td><?php echo $judge_row['judge_ctr']; ?></td>
                             <td><?php echo $judge_row['fullname']; ?></td>
-                            <td ><span style="font-size: 20px;" class="judge-code"><?php echo $judge_row['code']; ?></span></td>
+                            <td ><span style="font-size: 17px;" class="judge-code"><?php echo $judge_row['code']; ?></span></td>
                         </tr>
                         <?php } ?>
                     </tbody>
