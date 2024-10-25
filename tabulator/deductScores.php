@@ -55,7 +55,7 @@
              
              <?php include('..//admin/doc_header.php'); ?>
              
-             
+             <br><br>
              <table>
              <tr>
              <td align="center">
@@ -68,6 +68,7 @@
               </td>
               </tr>
                <tr>
+                <br><br>
              <td align="center">
             <h4>Participant's Score Deductions</h4> 
              </td>
@@ -77,6 +78,7 @@
              
              </center>
           
+             <center>
           <table class="table table-bordered">
         <thead>
         
@@ -196,6 +198,7 @@ while ($tot_score_row = $tot_score_query->fetch())
      
           </table>
           
+          </center>
             
            <?php } } ?>
      
