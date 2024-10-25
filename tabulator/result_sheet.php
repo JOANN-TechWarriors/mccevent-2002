@@ -30,7 +30,7 @@
         .container {
             background: #ffffff;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            padding: 40px;
+            padding: 20px;
             margin: 0 auto;
             width: 100%;
             max-width: 8.5in;
@@ -40,24 +40,22 @@
         /* Header styles */
         .header-content {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
+            margin-bottom: 20px;
         }
 
-        .header-content h2 {
-            margin-bottom: 10px;
-            font-size: 24px;
+        .header-content table {
+            margin: 0 auto;
         }
 
-        .header-content h3 {
-            margin-bottom: 10px;
-            font-size: 20px;
+        .header-content td {
+            padding: 5px;
+            text-align: center;
         }
 
         /* Table styles */
         .table-responsive {
             overflow-x: auto;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .table {
@@ -78,20 +76,26 @@
         .table th {
             background-color: #f8f9fa;
             font-weight: bold;
-            text-align: left;
         }
 
-        .text-center {
-            text-align: center;
+        /* Nested table styles */
+        .table .table {
+            margin: 0;
+            background-color: transparent;
         }
 
-        /* Participant styles */
+        .table .table td,
+        .table .table th {
+            padding: 8px;
+        }
+
+        /* Participant name styles */
         .participant-name {
             font-size: 16px;
             font-weight: bold;
         }
 
-        /* Result styles */
+        /* Result highlight colors */
         .result-average {
             background-color: #C5EAF9;
             font-weight: bold;
@@ -102,71 +106,30 @@
             font-weight: bold;
         }
 
-        /* Signature styles */
-        .signatures-container {
-            margin-top: 40px;
+        /* Signature section styles */
+        .signature-section {
+            margin-top: 30px;
             page-break-inside: avoid;
+        }
+
+        .signature-table {
             width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
 
-        .signature-group {
-            margin-bottom: 30px;
-            break-inside: avoid;
-        }
-
-        .signature-header {
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 16px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 5px;
-        }
-
-        .signature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .signature-box {
+        .signature-table td {
             text-align: center;
             padding: 10px;
+            width: 33.33%;
         }
 
         .signature-line {
             border-top: 1px solid black;
-            width: 80%;
-            margin: 50px auto 5px auto;
-            max-width: 200px;
-        }
-
-        .signature-name {
-            font-weight: bold;
-            margin: 5px 0;
-            font-size: 14px;
-        }
-
-        .signature-title {
-            font-size: 12px;
-            color: #555;
-        }
-
-        /* Print button */
-        .btn-print {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            float: right;
-            margin-top: 20px;
-        }
-
-        .btn-print:hover {
-            background-color: #0056b3;
+            margin-top: 50px;
+            display: inline-block;
+            min-width: 200px;
+            margin-bottom: 5px;
         }
 
         /* Print styles */
@@ -181,47 +144,26 @@
                 box-shadow: none;
                 padding: 0.5in;
                 width: 8.5in;
-                min-height: 11in;
+                height: 11in;
+            }
+
+            .table {
+                page-break-inside: avoid;
+            }
+
+            .signature-section {
+                page-break-inside: avoid;
             }
 
             .btn-print {
                 display: none;
-            }
-
-            .signatures-container {
-                margin-top: 20px;
-            }
-
-            .signature-group {
-                margin-bottom: 20px;
-            }
-
-            .signature-grid {
-                gap: 10px;
-            }
-
-            .signature-line {
-                margin: 30px auto 5px auto;
-            }
-
-            @page {
-                size: letter;
-                margin: 0;
             }
         }
 
         /* Responsive styles */
         @media screen and (max-width: 768px) {
             .container {
-                padding: 15px;
-            }
-
-            .header-content h2 {
-                font-size: 20px;
-            }
-
-            .header-content h3 {
-                font-size: 16px;
+                padding: 10px;
             }
 
             .table {
@@ -230,29 +172,36 @@
 
             .table th,
             .table td {
-                padding: 8px 4px;
+                padding: 6px 4px;
             }
 
             .participant-name {
                 font-size: 14px;
             }
 
-            .signature-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 10px;
-            }
-
-            .signature-box {
+            .signature-table td {
                 padding: 5px;
             }
 
-            .signature-name {
-                font-size: 12px;
+            .signature-line {
+                min-width: 150px;
             }
+        }
 
-            .signature-title {
-                font-size: 11px;
-            }
+        /* Print button styles */
+        .btn-print {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            margin-top: 20px;
+        }
+
+        .btn-print:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -269,18 +218,33 @@
         
         <div class="header-content">
             <?php include('..//admin/doc_header.php'); ?>
-            <h2><?php echo $event_row['event_name']; ?></h2>
-            <h3><?php echo $s_event_row['event_name']; ?></h3>
-            <h2>Overall Results</h2>
+            
+            <table>
+                <tr>
+                    <td>
+                        <h2><?php echo $event_row['event_name']; ?></h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h3><?php echo $s_event_row['event_name']; ?></h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h2>Overall Results</h2>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th width="30%">Participants</th>
-                        <th width="20%">Placing</th>
-                        <th width="50%">Result Summary</th>
+                        <th>Participants</th>
+                        <th style="width: 120px;">Placing</th>
+                        <th>Result Summary</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -314,8 +278,8 @@
                         <td>
                             <table class="table">
                                 <tr>
-                                    <th width="50%">Average Score in all judges</th>
-                                    <th width="50%">Sum of Rank in all judges</th>
+                                    <th>Average Score in all judges</th>
+                                    <th>Sum of Rank in all judges</th>
                                 </tr>
                                 <?php
                                 $divz=0;
@@ -337,11 +301,11 @@
                                 }
                                 ?>
                                 <tr>
-                                    <td class="result-average text-center">
-                                        <?php echo round(($totx_score-$totx_deduct)/$divz,1) ?>
+                                    <td class="result-average">
+                                        Ave: <?php echo round(($totx_score-$totx_deduct)/$divz,1) ?>
                                     </td>
-                                    <td class="result-sum text-center">
-                                        <?php echo $rank_score; ?>
+                                    <td class="result-sum">
+                                        Sum: <?php echo $rank_score; ?>
                                     </td>
                                 </tr>
                             </table>
@@ -352,11 +316,10 @@
             </table>
         </div>
 
-        <div class="signatures-container">
+        <div class="signature-section">
             <!-- Judges Signatures -->
-            <div class="signature-group">
-                <div class="signature-header">BOARD OF JUDGES</div>
-                <div class="signature-grid">
+            <table class="signature-table">
+                <tr>
                     <?php
                     $jjn_result_query = $conn->query("select distinct judge_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by judge_id ASC") or die(mysql_error());
                     while ($jjn_result_row = $jjn_result_query->fetch()) {
@@ -364,54 +327,51 @@
                         $jname_query = $conn->query("select * from judges where judge_id='$jx_id'") or die(mysql_error());
                         $jname_row = $jname_query->fetch();
                     ?>
-                    <div class="signature-box">
-                        <div class="signature-line"></div>
-                        <div class="signature-name"><?php echo $jname_row['fullname'];?></div>
-                        <div class="signature-title">
-                            <?php echo ($jname_row['jtype']=="Chairman") ? "Chairman of the Board" : "Judge"; ?>
+                    <td>
+                        <div class="signature-line">
+                            <strong><?php echo $jname_row['fullname'];?></strong>
                         </div>
-                    </div>
+                        <div>
+                            <?php echo ($jname_row['jtype']=="Chairman") ? "Chairman Judge" : "Judge"; ?>
+                        </div>
+                    </td>
                     <?php } ?>
-                </div>
-            </div>
+                </tr>
+            </table>
 
             <!-- Tabulator Signature -->
-            <div class="signature-group">
-                <div class="signature-header">TABULATION COMMITTEE</div>
-                <div class="signature-grid">
+            <table class="signature-table">
+                <tr>
                     <?php
-                    $tab_query = $conn->query("select * from organizer where org_id='$session_id'") or die(mysql_error());
-                    while ($tab_row = $tab_query->fetch()) {
+                    $jjn_result_query = $conn->query("select * from organizer where org_id='$session_id'") or die(mysql_error());
+                    while ($jjn_result_row = $jjn_result_query->fetch()) {
                     ?>
-                    <div class="signature-box">
-                        <div class="signature-line"></div>
-                        <div class="signature-name">
-                            <?php echo $tab_row['fname']." ".$tab_row['mname']." ".$tab_row['lname'];?>
+                    <td>
+                        <div class="signature-line">
+                            <strong><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></strong>
                         </div>
-                        <div class="signature-title">Tabulator</div>
-                    </div>
+                        <div>Tabulator</div>
+                    </td>
                     <?php } ?>
-                </div>
-            </div>
+                </tr>
+            </table>
 
             <!-- Organizer Signature -->
-            <div class="signature-group">
-                <div class="signature-header">EVENT ORGANIZER</div>
-                <div class="signature-grid">
+            <table class="signature-table">
+                <tr>
                     <?php
-                    $org_query = $conn->query("select * from organizer where organizer_id='$session_id'") or die(mysql_error());
-                    while ($org_row = $org_query->fetch()) {
+                    $jjn_result_query = $conn->query("select * from organizer where organizer_id='$session_id'") or die(mysql_error());
+                    while ($jjn_result_row = $jjn_result_query->fetch()) {
                     ?>
-                    <div class="signature-box">
-                        <div class="signature-line"></div>
-                        <div class="signature-name">
-                            <?php echo $org_row['fname']." ".$org_row['mname']." ".$org_row['lname'];?>
+                    <td>
+                        <div class="signature-line">
+                            <strong><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></strong>
                         </div>
-                        <div class="signature-title">Event Organizer</div>
-                    </div>
+                        <div>Organizer</div>
+                    </td>
                     <?php } ?>
-                </div>
-            </div>
+                </tr>
+            </table>
         </div>
 
         <button type="button" onclick="window.print()" class="btn-print">
@@ -422,6 +382,7 @@
     </div>
 
     <!-- JavaScript -->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     <script src="..//assets/js/jquery.js"></script>
     <script src="..//assets/js/bootstrap-transition.js"></script>
     <script src="..//assets/js/bootstrap-alert.js"></script>
