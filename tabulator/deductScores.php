@@ -55,7 +55,7 @@
              
              <?php include('..//admin/doc_header.php'); ?>
              
-             <br><br>
+             <br>
              <table>
              <tr>
              <td align="center">
@@ -68,8 +68,8 @@
               </td>
               </tr>
                <tr>
-                <br><br>
              <td align="center">
+             <br><br>
             <h4>Participant's Score Deductions</h4> 
              </td>
               </tr>
