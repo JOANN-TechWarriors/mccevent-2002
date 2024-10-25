@@ -7,12 +7,45 @@ include('dbcon.php');
 if (isset($_GET['id'])) {
     $main_event_id = $_GET['id'];
 
-    // Fetch event details from the database
-    $query = "SELECT * FROM main_event WHERE mainevent_id = :event_id";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':event_id', $main_event_id);
-    $stmt->execute();
-    $event = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Pagination settings
+$records_per_page = isset($_GET['show']) ? (int)$_GET['show'] : 10;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $records_per_page;
+
+// Search functionality
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$search_condition = '';
+$params = [':event_id' => $session_id];
+
+if (!empty($search)) {
+    $search_condition = " AND (event_name LIKE :search OR event_place LIKE :search)";
+    $params[':search'] = "%{$search}%";
+}
+
+// Count total records for pagination
+$count_query = "SELECT COUNT(*) FROM main_event WHERE mainevent_id = :event_id" . $search_condition;
+$count_stmt = $conn->prepare($count_query);
+$count_stmt->execute($params);
+$total_records = $count_stmt->fetchColumn();
+$total_pages = ceil($total_records / $records_per_page);
+
+// Fetch streams with pagination and search
+$query = "SELECT * FROM main_event 
+          WHERE mainevent_id = :event_id" . 
+          $search_condition . 
+          " ORDER BY start_time DESC 
+          LIMIT :offset, :records_per_page";
+
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':event_id', $main_event_id);
+if (!empty($search)) {
+    $stmt->bindParam(':search', $params[':search']);
+}
+$stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+$stmt->bindParam(':records_per_page', $records_per_page, PDO::PARAM_INT);
+$stmt->execute();
+$streams = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
     if (!$event) {
         die('Event not found.');
