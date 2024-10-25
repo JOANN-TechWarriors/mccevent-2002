@@ -112,7 +112,7 @@
               <br><br>
             <div class="event-header">
                 <h2><?php echo $event_row['event_name']; ?></h2>
-                <h3>Judge Code for <?php echo $se_name; ?></h3>
+                <h4>Judge Code for <?php echo $se_name; ?></h4>
             </div>
 
             <div class="table-responsive">
@@ -133,7 +133,7 @@
                         <tr>
                             <td><?php echo $judge_row['judge_ctr']; ?></td>
                             <td><?php echo $judge_row['fullname']; ?></td>
-                            <td><span class="judge-code"><?php echo $judge_row['code']; ?></span></td>
+                            <td style="font-size: 10px;"><span class="judge-code"><?php echo $judge_row['code']; ?></span></td>
                         </tr>
                         <?php } ?>
                     </tbody>
