@@ -19,6 +19,7 @@
             padding: 2cm;
             margin: 0 auto;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
 
         @media print {
@@ -29,27 +30,56 @@
             }
         }
 
-        /* Responsive table */
+        /* Improved table styling */
+        .table-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin: 2rem 0;
+        }
+
         .table-responsive {
             overflow-x: auto;
             width: 100%;
-            margin-bottom: 1rem;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .table {
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            margin: 0 auto;
         }
 
         .table th,
         .table td {
-            padding: 0.75rem;
-            border: 1px solid #dee2e6;
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
         }
 
-        .table-striped tbody tr:nth-of-odd {
-            background-color: rgba(0,0,0,.05);
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .table td:first-child {
+            text-align: left;
+            font-weight: 500;
         }
 
         /* Center alignment */
@@ -59,19 +89,40 @@
 
         /* Header styling */
         .event-header {
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
         }
 
-        .event-header h2,
+        .event-header h2 {
+            margin: 0.5rem 0;
+            color: #2d3748;
+            font-size: 24px;
+        }
+
         .event-header h3 {
             margin: 0.5rem 0;
+            color: #4a5568;
+            font-size: 20px;
         }
 
         /* Judge signature section */
         .judge-signature {
-            margin-top: 2rem;
+            margin-top: 3rem;
             float: right;
             text-align: center;
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .judge-signature h4 {
+            margin: 0.5rem 0;
+            font-size: 18px;
+            color: #2d3748;
+        }
+
+        .judge-signature p {
+            margin: 0.25rem 0;
+            color: #4a5568;
         }
 
         /* Responsive adjustments */
@@ -80,20 +131,39 @@
                 width: 100%;
                 padding: 1cm;
             }
+            
+            .table td,
+            .table th {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
         }
 
         /* Alert styling */
         .alert {
             padding: 1rem;
-            margin-bottom: 1rem;
+            margin: 1rem auto;
             border: 1px solid transparent;
             border-radius: 0.25rem;
+            max-width: 600px;
+            text-align: center;
         }
 
         .alert-warning {
             color: #856404;
             background-color: #fff3cd;
             border-color: #ffeeba;
+        }
+
+        /* Score highlighting */
+        .total-score {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .rank {
+            font-weight: bold;
+            color: #059669;
         }
     </style>
 </head>
@@ -116,94 +186,95 @@
             while ($event_row = $event_query->fetch()) {
         ?>
             
-        <div class="text-center event-header">
-           <center> <?php include('..//admin/doc_header.php'); ?></center>
-           
-           <br><br>
+        <div class="event-header">
+            <center><?php include('..//admin/doc_header.php'); ?></center>
+            <br><br>
             <h2><?php echo $event_row['event_name']; ?></h2>
             <h3><?php echo $s_event_row['event_name']; ?></h3>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>No. &amp; Contestant Name</th>
-                        <?php
-                        $criteria_query = $conn->query("select * from criteria where subevent_id='$event_id' ORDER BY criteria_ctr ASC") or die(mysql_error());
-                        while ($crit_row = $criteria_query->fetch()) {
-                        ?>
-                        <th><?php echo $crit_row['criteria']; ?></th>
-                        <?php } ?>
-                        <th>Total Score</th>
-                        <th>Rank</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $score_query = $conn->query("select * from sub_results where subevent_id='$event_id' and judge_id='$judge_id' ORDER BY contestant_id ASC") or die(mysql_error());
-                    $num_rowxz = $score_query->rowcount();
-                    
-                    if($num_rowxz > 0) {
-                        while ($score_row = $score_query->fetch()) {
-                            $s1=$score_row['criteria_ctr1'];
-                            $s2=$score_row['criteria_ctr2'];
-                            $s3=$score_row['criteria_ctr3'];
-                            $s4=$score_row['criteria_ctr4'];
-                            $s5=$score_row['criteria_ctr5'];
-                            $s6=$score_row['criteria_ctr6'];
-                            $s7=$score_row['criteria_ctr7'];
-                            $s8=$score_row['criteria_ctr8'];
-                            $s9=$score_row['criteria_ctr9'];
-                            $s10=$score_row['criteria_ctr10'];
-                            $total_score=$score_row['total_score']; 
-                            $rank=$score_row['rank'];
-                            $s_result_id=$score_row['subresult_id'];
-                            $con_id=$score_row['contestant_id'];
-                    ?>
-                    <tr>
-                        <td>
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No. &amp; Contestant Name</th>
                             <?php
-                            $cont_query = $conn->query("select * from contestants where contestant_id='$con_id'") or die(mysql_error());
-                            while ($cont_row = $cont_query->fetch()) {
-                                $c_num=$cont_row['contestant_ctr'];
-                                echo $c_num.". ".$cfnme=$cont_row['fullname'];   
-                            }
+                            $criteria_query = $conn->query("select * from criteria where subevent_id='$event_id' ORDER BY criteria_ctr ASC") or die(mysql_error());
+                            while ($crit_row = $criteria_query->fetch()) {
                             ?>
-                        </td>
+                            <th><?php echo $crit_row['criteria']; ?></th>
+                            <?php } ?>
+                            <th>Total Score</th>
+                            <th>Rank</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         <?php
-                        $criteria_query = $conn->query("select * from criteria where subevent_id='$event_id' ORDER BY criteria_ctr ASC") or die(mysql_error());
-                        while ($crit_row = $criteria_query->fetch()) {
+                        $score_query = $conn->query("select * from sub_results where subevent_id='$event_id' and judge_id='$judge_id' ORDER BY contestant_id ASC") or die(mysql_error());
+                        $num_rowxz = $score_query->rowcount();
+                        
+                        if($num_rowxz > 0) {
+                            while ($score_row = $score_query->fetch()) {
+                                $s1=$score_row['criteria_ctr1'];
+                                $s2=$score_row['criteria_ctr2'];
+                                $s3=$score_row['criteria_ctr3'];
+                                $s4=$score_row['criteria_ctr4'];
+                                $s5=$score_row['criteria_ctr5'];
+                                $s6=$score_row['criteria_ctr6'];
+                                $s7=$score_row['criteria_ctr7'];
+                                $s8=$score_row['criteria_ctr8'];
+                                $s9=$score_row['criteria_ctr9'];
+                                $s10=$score_row['criteria_ctr10'];
+                                $total_score=$score_row['total_score']; 
+                                $rank=$score_row['rank'];
+                                $s_result_id=$score_row['subresult_id'];
+                                $con_id=$score_row['contestant_id'];
                         ?>
-                        <td>
+                        <tr>
+                            <td>
+                                <?php
+                                $cont_query = $conn->query("select * from contestants where contestant_id='$con_id'") or die(mysql_error());
+                                while ($cont_row = $cont_query->fetch()) {
+                                    $c_num=$cont_row['contestant_ctr'];
+                                    echo $c_num.". ".$cfnme=$cont_row['fullname'];   
+                                }
+                                ?>
+                            </td>
                             <?php
-                            switch($crit_row['criteria_ctr']) {
-                                case 1: echo $s1; break;
-                                case 2: echo $s2; break;
-                                case 3: echo $s3; break;
-                                case 4: echo $s4; break;
-                                case 5: echo $s5; break;
-                            }
+                            $criteria_query = $conn->query("select * from criteria where subevent_id='$event_id' ORDER BY criteria_ctr ASC") or die(mysql_error());
+                            while ($crit_row = $criteria_query->fetch()) {
                             ?>
-                        </td>
+                            <td>
+                                <?php
+                                switch($crit_row['criteria_ctr']) {
+                                    case 1: echo $s1; break;
+                                    case 2: echo $s2; break;
+                                    case 3: echo $s3; break;
+                                    case 4: echo $s4; break;
+                                    case 5: echo $s5; break;
+                                }
+                                ?>
+                            </td>
+                            <?php } ?>
+                            <td class="total-score"><?php echo $total_score; ?></td>
+                            <td class="rank"><?php echo $rank; ?></td>
+                        </tr>
+                        <?php 
+                            }
+                        } else {
+                        ?>
+                        <tr>
+                            <td colspan="8">
+                                <div class="alert alert-warning">
+                                    <h3>No data to Display... Judges not finish scoring at this moment.</h3>
+                                </div>
+                            </td>
+                        </tr>
                         <?php } ?>
-                        <td><?php echo $total_score; ?></td>
-                        <td><?php echo $rank; ?></td>
-                    </tr>
-                    <?php 
-                        }
-                    } else {
-                    ?>
-                    <tr>
-                        <td colspan="8">
-                            <div class="alert alert-warning">
-                                <h3>No data to Display... Judges not finish scoring at this moment.</h3>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <?php
