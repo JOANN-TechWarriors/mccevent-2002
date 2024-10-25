@@ -117,8 +117,9 @@
         ?>
             
         <div class="text-center event-header">
-            <?php include('..//admin/doc_header.php'); ?>
-            
+           <center> <?php include('..//admin/doc_header.php'); ?></center>
+           
+           <br><br>
             <h2><?php echo $event_row['event_name']; ?></h2>
             <h3><?php echo $s_event_row['event_name']; ?></h3>
         </div>
