@@ -756,7 +756,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="search-box">
                 <label>Search:</label>
-                <input type="text" id="searchInput" value="<?php echo htmlspecialchars($search); ?>" 
+                <input class="form-control btn-block" style="height: 30px !important;" type="text" id="searchInput" value="<?php echo htmlspecialchars($search); ?>" 
                        onkeyup="searchTable(this.value)">
             </div>
         </div>
