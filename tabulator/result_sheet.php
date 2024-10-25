@@ -222,17 +222,17 @@
             <table>
                 <tr>
                     <td>
-                        <h2><?php echo $event_row['event_name']; ?></h2>
+                        <h3><?php echo $event_row['event_name']; ?></h3>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <h3><?php echo $s_event_row['event_name']; ?></h3>
+                        <h4><?php echo $s_event_row['event_name']; ?></h4>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <h2>Overall Results</h2>
+                        <h4>Overall Results</h4>
                     </td>
                 </tr>
             </table>
