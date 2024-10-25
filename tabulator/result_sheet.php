@@ -106,25 +106,49 @@
             font-weight: bold;
         }
 
-        /* Improved signature section styles */
+        /* Signature section styles */
         .signature-section {
             margin-top: 40px;
             page-break-inside: avoid;
             padding: 0 20px;
         }
 
-        .signatures-container {
+        /* Judges Row Styles */
+        .judges-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
-            justify-content: space-around;
-            margin-bottom: 30px;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            padding: 0 20px;
         }
 
+        .judges-header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Admin Row Styles */
+        .admin-row {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+
+        /* Signature Group Styles */
         .signature-group {
-            flex: 1;
-            min-width: 250px;
-            max-width: 100%;
+            flex: 0 1 auto;
+            min-width: 200px;
+            max-width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-bottom: 20px;
         }
 
@@ -133,22 +157,25 @@
             margin-bottom: 15px;
             color: #333;
             font-size: 16px;
+            font-weight: bold;
+            width: 100%;
         }
 
         .signature-box {
-            border-bottom: 1px solid #000;
+            border-bottom: 2px solid #000;
             min-height: 60px;
             margin: 10px auto;
             width: 100%;
-            max-width: 300px;
+            max-width: 200px;
             position: relative;
         }
 
         .signature-name {
             text-align: center;
-            margin-top: 5px;
+            margin-top: 8px;
             font-weight: bold;
             font-size: 14px;
+            width: 100%;
         }
 
         .signature-title {
@@ -156,6 +183,7 @@
             font-size: 12px;
             color: #666;
             margin-top: 5px;
+            width: 100%;
         }
 
         /* Print button styles */
@@ -190,34 +218,34 @@
                 overflow: hidden;
             }
 
-            .signature-section {
-                margin-top: 20px;
-                padding: 0;
-            }
-
-            .signatures-container {
-                gap: 10px;
-            }
-
-            .signature-group {
-                min-width: 200px;
-            }
-
-            .signature-box {
-                min-height: 40px;
-            }
-
-            .btn-print {
-                display: none;
-            }
-
-            /* Ensure content fits on one page */
             .table {
                 font-size: 12px;
             }
 
             .participant-name {
                 font-size: 13px;
+            }
+
+            .signature-section {
+                margin-top: 20px;
+            }
+
+            .judges-row {
+                margin-bottom: 30px;
+                gap: 20px;
+            }
+
+            .admin-row {
+                gap: 60px;
+            }
+
+            .signature-group {
+                min-width: 180px;
+                max-width: 200px;
+            }
+
+            .signature-box {
+                min-height: 50px;
             }
 
             .signature-name {
@@ -227,6 +255,10 @@
             .signature-title {
                 font-size: 11px;
             }
+
+            .btn-print {
+                display: none;
+            }
         }
 
         /* Responsive styles */
@@ -235,16 +267,28 @@
                 padding: 10px;
             }
 
-            .signature-section {
+            .judges-row {
+                padding: 0 10px;
+                gap: 20px;
+            }
+
+            .admin-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
                 padding: 0 10px;
             }
 
             .signature-group {
-                min-width: 200px;
+                min-width: 180px;
             }
 
-            .signature-box {
-                min-height: 50px;
+            .table {
+                font-size: 12px;
+            }
+
+            .participant-name {
+                font-size: 14px;
             }
         }
     </style>
@@ -362,23 +406,26 @@
 
         <!-- Improved signature section -->
         <div class="signature-section">
-            <div class="signatures-container">
-                <!-- Judges signatures -->
+            <!-- Judges Row -->
+            <div class="judges-row">
+                <div class="judges-header">Panel of Judges</div>
+                <?php
+                $jjn_result_query = $conn->query("select distinct judge_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by judge_id ASC") or die(mysql_error());
+                while ($jjn_result_row = $jjn_result_query->fetch()) {
+                    $jx_id=$jjn_result_row['judge_id'];
+                    $jname_query = $conn->query("select * from judges where judge_id='$jx_id'") or die(mysql_error());
+                    $jname_row = $jname_query->fetch();
+                ?>
                 <div class="signature-group">
-                    <h4>Panel of Judges</h4>
-                    <?php
-                    $jjn_result_query = $conn->query("select distinct judge_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by judge_id ASC") or die(mysql_error());
-                    while ($jjn_result_row = $jjn_result_query->fetch()) {
-                        $jx_id=$jjn_result_row['judge_id'];
-                        $jname_query = $conn->query("select * from judges where judge_id='$jx_id'") or die(mysql_error());
-                        $jname_row = $jname_query->fetch();
-                    ?>
                     <div class="signature-box"></div>
                     <div class="signature-name"><?php echo $jname_row['fullname'];?></div>
                     <div class="signature-title"><?php echo ($jname_row['jtype']=="Chairman") ? "Chairman Judge" : "Judge"; ?></div>
-                    <?php } ?>
                 </div>
+                <?php } ?>
+            </div>
 
+            <!-- Admin Row -->
+            <div class="admin-row">
                 <!-- Tabulator signature -->
                 <div class="signature-group">
                     <h4>Tabulation Committee</h4>
