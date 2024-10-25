@@ -7,45 +7,12 @@ include('dbcon.php');
 if (isset($_GET['id'])) {
     $main_event_id = $_GET['id'];
 
-    // Pagination settings
-$records_per_page = isset($_GET['show']) ? (int)$_GET['show'] : 10;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $records_per_page;
-
-// Search functionality
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-$search_condition = '';
-$params = [':event_id' => $session_id];
-
-if (!empty($search)) {
-    $search_condition = " AND (event_name LIKE :search OR event_place LIKE :search)";
-    $params[':search'] = "%{$search}%";
-}
-
-// Count total records for pagination
-$count_query = "SELECT COUNT(*) FROM main_event WHERE mainevent_id = :event_id" . $search_condition;
-$count_stmt = $conn->prepare($count_query);
-$count_stmt->execute($params);
-$total_records = $count_stmt->fetchColumn();
-$total_pages = ceil($total_records / $records_per_page);
-
-// Fetch streams with pagination and search
-$query = "SELECT * FROM main_event 
-          WHERE mainevent_id = :event_id" . 
-          $search_condition . 
-          " ORDER BY start_time DESC 
-          LIMIT :offset, :records_per_page";
-
-$stmt = $conn->prepare($query);
-$stmt->bindParam(':event_id', $main_event_id);
-if (!empty($search)) {
-    $stmt->bindParam(':search', $params[':search']);
-}
-$stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-$stmt->bindParam(':records_per_page', $records_per_page, PDO::PARAM_INT);
-$stmt->execute();
-$streams = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    // Fetch event details from the database
+    $query = "SELECT * FROM main_event WHERE mainevent_id = :event_id";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':event_id', $main_event_id);
+    $stmt->execute();
+    $event = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$event) {
         die('Event not found.');
@@ -611,65 +578,6 @@ body {
         justify-content: flex-end;
     }
 }
-.pagination-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-            padding: 0 20px;
-        }
-
-        .pagination {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .pagination li {
-            margin: 0 5px;
-        }
-
-        .pagination li a {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        .pagination li.active a {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
-
-        .table-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 0 20px;
-        }
-
-        .show-entries {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .search-box input {
-            padding: 6px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 200px;
-        }
     </style>
 
 </head>
@@ -778,25 +686,7 @@ body {
                 </div>
             </div>
             <br> <br><br>
-            
             <div class="table-responsive-container">
-            <div class="table-controls">
-            <div class="show-entries">
-                <span>Show</span>
-                <select onchange="changeEntriesPerPage(this.value)">
-                    <option value="10" <?php echo $records_per_page == 10 ? 'selected' : ''; ?>>10</option>
-                    <option value="25" <?php echo $records_per_page == 25 ? 'selected' : ''; ?>>25</option>
-                    <option value="50" <?php echo $records_per_page == 50 ? 'selected' : ''; ?>>50</option>
-                    <option value="100" <?php echo $records_per_page == 100 ? 'selected' : ''; ?>>100</option>
-                </select>
-                <span>entries</span>
-            </div>
-            <div class="search-box">
-                <label>Search:</label>
-                <input type="text" id="searchInput" value="<?php echo htmlspecialchars($search); ?>" 
-                       onkeyup="searchTable(this.value)">
-            </div>
-        </div>
     <table class="table-custom">
         <thead>
             <tr>
@@ -851,27 +741,6 @@ body {
             <?php endforeach; ?>
         </tbody>
     </table>
-    </div>
-    <div class="pagination-container">
-            <div>
-                Showing <?php echo ($offset + 1); ?> to <?php echo min($offset + $records_per_page, $total_records); ?> of <?php echo $total_records; ?> entries
-            </div>
-            <ul class="pagination">
-                <?php if ($page > 1): ?>
-                    <li><a href="?page=<?php echo ($page - 1); ?>&show=<?php echo $records_per_page; ?>&search=<?php echo urlencode($search); ?>">Previous</a></li>
-                <?php endif; ?>
-                
-                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <li class="<?php echo $page == $i ? 'active' : ''; ?>">
-                        <a href="?page=<?php echo $i; ?>&show=<?php echo $records_per_page; ?>&search=<?php echo urlencode($search); ?>"><?php echo $i; ?></a>
-                    </li>
-                <?php endfor; ?>
-                
-                <?php if ($page < $total_pages): ?>
-                    <li><a href="?page=<?php echo ($page + 1); ?>&show=<?php echo $records_per_page; ?>&search=<?php echo urlencode($search); ?>">Next</a></li>
-                <?php endif; ?>
-            </ul>
-        </div>
     </div>
     <!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -964,19 +833,6 @@ body {
 </div>
 
 <script>
-    function changeEntriesPerPage(value) {
-        window.location.href = '?show=' + value + '&search=<?php echo urlencode($search); ?>';
-    }
-
-    function searchTable(value) {
-        // Add a small delay to prevent too many requests while typing
-        clearTimeout(window.searchTimeout);
-        window.searchTimeout = setTimeout(() => {
-            window.location.href = '?search=' + encodeURIComponent(value) + '&show=<?php echo $records_per_page; ?>';
-        }, 500);
-    }
-    </script>
-<script>
 function showEditModal(subEventId, subEventName) {
     document.getElementById('edit_sub_event_id').value = subEventId;
     document.getElementById('edit_se_name').value = subEventName;
@@ -1055,6 +911,7 @@ function showActivationModal(subEventId, subEventName, status) {
                 }
             });
         });
+
     });
     </script>
 <!-- SweetAlert for Success/Error Messages -->
