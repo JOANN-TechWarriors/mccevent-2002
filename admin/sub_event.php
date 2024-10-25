@@ -578,6 +578,65 @@ body {
         justify-content: flex-end;
     }
 }
+.pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .pagination li.active a {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .show-entries {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box input {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
     </style>
 
 </head>
@@ -686,6 +745,23 @@ body {
                 </div>
             </div>
             <br> <br><br>
+            <div class="table-controls">
+            <div class="show-entries">
+                <span>Show</span>
+                <select onchange="changeEntriesPerPage(this.value)">
+                    <option value="10" <?php echo $records_per_page == 10 ? 'selected' : ''; ?>>10</option>
+                    <option value="25" <?php echo $records_per_page == 25 ? 'selected' : ''; ?>>25</option>
+                    <option value="50" <?php echo $records_per_page == 50 ? 'selected' : ''; ?>>50</option>
+                    <option value="100" <?php echo $records_per_page == 100 ? 'selected' : ''; ?>>100</option>
+                </select>
+                <span>entries</span>
+            </div>
+            <div class="search-box">
+                <label>Search:</label>
+                <input type="text" id="searchInput" value="<?php echo htmlspecialchars($search); ?>" 
+                       onkeyup="searchTable(this.value)">
+            </div>
+        </div>
             <div class="table-responsive-container">
     <table class="table-custom">
         <thead>
