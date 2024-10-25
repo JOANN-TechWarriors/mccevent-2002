@@ -69,7 +69,7 @@
         .table th,
         .table td {
             padding: 12px 8px;
-            border: 1px solid #dee2e6;
+            border: 1px solid #000;
             vertical-align: middle;
         }
 
@@ -162,7 +162,7 @@
         }
 
         .signature-box {
-            border-bottom: 2px solid #000;
+            border-bottom: 1px solid #000;
             min-height: 60px;
             margin: 10px auto;
             width: 100%;
