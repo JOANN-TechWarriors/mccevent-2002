@@ -61,7 +61,8 @@
              
              </center>
           
-          <table class="table table-striped">
+             <center>
+              <table class="table table-striped">
         <thead>
      <th>No. &amp; Contestant Name</th>
         <?php
@@ -175,6 +176,8 @@ while ($crit_row = $criteria_query->fetch()) {
      </tbody>
      
           </table>
+
+          </center>
           
           <?php $j_query = $conn->query("select * from judges where subevent_id='$event_id' and judge_id='$judge_id'") or die(mysql_error());
 while ($j_row = $j_query->fetch()) { ?>
