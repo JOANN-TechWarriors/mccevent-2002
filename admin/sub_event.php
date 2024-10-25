@@ -788,7 +788,7 @@ body {
         entries
     </div>
     <div class="search-box">
-        Search: <input type="text" id="searchInput" value="<?php echo htmlspecialchars($search_query); ?>" onkeyup="searchTable(event)">
+        Search: <input class="form-control btn-block" style="height: 30px !important;" type="text" id="searchInput" value="<?php echo htmlspecialchars($search_query); ?>" onkeyup="searchTable(event)">
     </div>
 </div>
     <table class="table-custom">
