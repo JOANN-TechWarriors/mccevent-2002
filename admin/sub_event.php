@@ -433,12 +433,25 @@ body {
     overflow-x: auto;
 }
 
+/* Table Container */
+.table-responsive-container {
+    width: 100%;
+    max-width: 1200px; /* Added max-width to prevent over-stretching */
+    margin: 20px auto; /* Changed to auto for horizontal centering */
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
 /* Table Styles */
 .table-custom {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 0;
     background: #fff;
+    table-layout: fixed; /* Added for better column control */
 }
 
 .table-custom thead th {
@@ -455,34 +468,38 @@ body {
     padding: 12px 15px;
     border-bottom: 1px solid #dee2e6;
     vertical-align: middle;
+    word-wrap: break-word; /* Added to handle long content */
 }
 
 /* Column Widths */
 .table-custom th:nth-child(1),
 .table-custom td:nth-child(1) {
-    width: 25%;
+    width: 20%; /* Event title */
 }
 
 .table-custom th:nth-child(2),
-.table-custom td:nth-child(2),
+.table-custom td:nth-child(2) {
+    width: 12%; /* Date */
+}
+
 .table-custom th:nth-child(3),
 .table-custom td:nth-child(3) {
-    width: 15%;
+    width: 12%; /* Time */
 }
 
 .table-custom th:nth-child(4),
 .table-custom td:nth-child(4) {
-    width: 20%;
+    width: 20%; /* Venue */
 }
 
 .table-custom th:nth-child(5),
 .table-custom td:nth-child(5) {
-    width: 10%;
+    width: 12%; /* Status */
 }
 
 .table-custom th:nth-child(6),
 .table-custom td:nth-child(6) {
-    width: 15%;
+    width: 24%; /* Actions */
     text-align: center;
 }
 
@@ -491,41 +508,20 @@ body {
     display: flex;
     gap: 5px;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Changed to nowrap to prevent button wrapping */
 }
 
 .btn-group-custom .btn {
     padding: 6px 12px;
     margin: 2px;
-}
-
-/* Status Badge */
-.status-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.status-badge.active {
-    background-color: #28a745;
-    color: white;
-}
-
-.status-badge.inactive {
-    background-color: #dc3545;
-    color: white;
+    min-width: 35px; /* Added minimum width for buttons */
 }
 
 /* Responsive Design */
 @media screen and (max-width: 992px) {
-    .table-custom {
-        display: block;
-    }
-    
-    .btn-group-custom {
-        flex-direction: row;
+    .table-responsive-container {
+        padding: 15px;
+        margin: 15px auto;
     }
     
     .btn-group-custom .btn {
@@ -537,6 +533,7 @@ body {
 @media screen and (max-width: 768px) {
     .table-responsive-container {
         padding: 10px;
+        margin: 10px auto;
     }
 
     .table-custom thead {
@@ -557,6 +554,7 @@ body {
         position: relative;
         padding-left: 50%;
         border-bottom: 1px solid #eee;
+        width: 100% !important; /* Override fixed widths on mobile */
     }
     
     .table-custom tbody td:before {
