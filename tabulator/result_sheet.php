@@ -231,7 +231,7 @@
             }
 
             .judges-row {
-                margin-bottom: 30px;
+                margin-bottom: 10px;
                 gap: 20px;
             }
 
