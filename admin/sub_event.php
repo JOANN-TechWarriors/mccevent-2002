@@ -54,6 +54,44 @@ if (isset($_POST['add_event'])) {
     exit();
 }
 ?>
+    <?php
+    // At the top of your file, add these pagination variables
+    $entries_per_page = isset($_GET['entries']) ? (int)$_GET['entries'] : 10; // Default to 10 entries
+    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $search_query = isset($_GET['search']) ? $_GET['search'] : '';
+
+    // Modify your sub-events query to include search and pagination
+    $subEventsQuery = "SELECT * FROM sub_event WHERE mainevent_id = :event_id";
+    if (!empty($search_query)) {
+        $subEventsQuery .= " AND (event_name LIKE :search OR place LIKE :search)";
+    }
+    $subEventsQuery .= " ORDER BY eventdate DESC";
+
+    // First, get total number of records for pagination
+    $countStmt = $conn->prepare($subEventsQuery);
+    $countStmt->bindParam(':event_id', $main_event_id);
+    if (!empty($search_query)) {
+        $search_param = "%{$search_query}%";
+        $countStmt->bindParam(':search', $search_param);
+    }
+    $countStmt->execute();
+    $total_records = $countStmt->rowCount();
+    $total_pages = ceil($total_records / $entries_per_page);
+
+    // Add LIMIT clause for pagination
+    $offset = ($current_page - 1) * $entries_per_page;
+    $subEventsQuery .= " LIMIT :offset, :limit";
+
+    $subEventsStmt = $conn->prepare($subEventsQuery);
+    $subEventsStmt->bindParam(':event_id', $main_event_id);
+    if (!empty($search_query)) {
+        $subEventsStmt->bindParam(':search', $search_param);
+    }
+    $subEventsStmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $subEventsStmt->bindParam(':limit', $entries_per_page, PDO::PARAM_INT);
+    $subEventsStmt->execute();
+    $subEvents = $subEventsStmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>      
 
 <?php
 if (isset($_POST['activation'])) {
@@ -578,6 +616,57 @@ body {
         justify-content: flex-end;
     }
 }
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.entries-selector select {
+    margin: 0 5px;
+    padding: 5px;
+}
+
+.search-box input {
+    padding: 5px;
+    margin-left: 5px;
+    width: 200px;
+}
+
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    gap: 5px;
+}
+
+.pagination a {
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+.pagination a.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination a.disabled {
+    color: #999;
+    pointer-events: none;
+}
+
+.showing-entries {
+    color: #666;
+}
     </style>
 
 </head>
@@ -687,6 +776,21 @@ body {
             </div>
             <br> <br><br>
             <div class="table-responsive-container">
+            <div class="table-header">
+    <div class="entries-selector">
+        Show 
+        <select id="entriesSelect" onchange="changeEntries(this.value)">
+            <option value="10" <?php echo $entries_per_page == 10 ? 'selected' : ''; ?>>10</option>
+            <option value="25" <?php echo $entries_per_page == 25 ? 'selected' : ''; ?>>25</option>
+            <option value="50" <?php echo $entries_per_page == 50 ? 'selected' : ''; ?>>50</option>
+            <option value="100" <?php echo $entries_per_page == 100 ? 'selected' : ''; ?>>100</option>
+        </select>
+        entries
+    </div>
+    <div class="search-box">
+        Search: <input type="text" id="searchInput" value="<?php echo htmlspecialchars($search_query); ?>" onkeyup="searchTable(event)">
+    </div>
+</div>
     <table class="table-custom">
         <thead>
             <tr>
@@ -741,6 +845,28 @@ body {
             <?php endforeach; ?>
         </tbody>
     </table>
+    <div class="table-footer">
+    <div class="showing-entries">
+        Showing <?php echo $offset + 1; ?> to <?php echo min($offset + $entries_per_page, $total_records); ?> of <?php echo $total_records; ?> entries
+        <?php if (!empty($search_query)): ?>
+            (filtered from <?php echo $total_records; ?> total entries)
+        <?php endif; ?>
+    </div>
+    <div class="pagination">
+        <?php if ($total_pages > 1): ?>
+            <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo max(1, $current_page - 1); ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
+               class="<?php echo $current_page == 1 ? 'disabled' : ''; ?>">Previous</a>
+            
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo $i; ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
+                   class="<?php echo $current_page == $i ? 'active' : ''; ?>"><?php echo $i; ?></a>
+            <?php endfor; ?>
+            
+            <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo min($total_pages, $current_page + 1); ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
+               class="<?php echo $current_page == $total_pages ? 'disabled' : ''; ?>">Next</a>
+        <?php endif; ?>
+    </div>
+</div>
     </div>
     <!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -864,6 +990,19 @@ function showActivationModal(subEventId, subEventName, status) {
     $('#activationModal').modal('show');
 }
 </script>
+
+<script>
+function changeEntries(value) {
+    window.location.href = `?id=<?php echo $main_event_id; ?>&entries=${value}&search=<?php echo urlencode($search_query); ?>`;
+}
+
+function searchTable(event) {
+    if (event.key === 'Enter') {
+        const searchValue = document.getElementById('searchInput').value;
+        window.location.href = `?id=<?php echo $main_event_id; ?>&entries=<?php echo $entries_per_page; ?>&search=${encodeURIComponent(searchValue)}`;
+    }
+}
+</script>
     </section>
     </div>
     <script src="../assets/js/jquery.js"></script>
@@ -976,5 +1115,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </script>
 </body>
-
 </html>
