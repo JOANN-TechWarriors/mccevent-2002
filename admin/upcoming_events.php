@@ -42,55 +42,53 @@
     transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
     }
     .sidebar .toggle-btn {
-        position: absolute;
-        top: 10px;
-        right: 18px;
-        background-color: transparent;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
 
-    .sidebar .toggle-btn i {
-        font-size: 20px;
-    }
+.sidebar .toggle-btn i {
+    font-size: 20px;
+}
 
-    .sidebar-heading {
-        text-align: center;
-        padding: 10px 0;
-        font-size: 18px;
-        margin-bottom: 10px;
-    }
+.sidebar-heading {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
 
-    .sidebar-heading img {
-        max-width: 100px;
-        max-height: 100px;
-    }
+.sidebar-heading img {
+    max-width: 100px;
+    max-height: 100px;
+}
 
-    .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 
-    .sidebar ul li {
-        padding: 15px 20px;
-        transition: all 0.3s;
-    }
+.sidebar ul li {
+    padding: 15px 20px;
+    transition: all 0.3s;
+}
 
-    .sidebar ul li a {
-        color: #fff;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-    }
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
 
-    .sidebar ul li a i {
-        margin-right: 10px;
-        transition: margin 0.3s;
-    }
-
+.sidebar ul li a i {
+    margin-right: 10px;
+}
 /*     .sidebar.collapsed ul li a i {
         margin-right: 0;
     }
@@ -525,11 +523,11 @@
     validateTimeInput(this);
   });
 
-  $('#toggle-btn').on('click', function() {
-    $('#sidebar').toggleClass('collapsed');
-    $('#main-content').toggleClass('collapsed');
-    $(this).toggleClass('collapsed');
-  });
+  // $('#toggle-btn').on('click', function() {
+  //   $('#sidebar').toggleClass('collapsed');
+  //   $('#main-content').toggleClass('collapsed');
+  //   $(this).toggleClass('collapsed');
+  // });
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
