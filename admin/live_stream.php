@@ -676,24 +676,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1 style="font-size: 35px;">Live Stream</h1>
         </div>
 
-        <div class="table-controls">
-            <div class="show-entries">
-                <span>Show</span>
-                <select onchange="changeEntriesPerPage(this.value)">
-                    <option value="10" <?php echo $records_per_page == 10 ? 'selected' : ''; ?>>10</option>
-                    <option value="25" <?php echo $records_per_page == 25 ? 'selected' : ''; ?>>25</option>
-                    <option value="50" <?php echo $records_per_page == 50 ? 'selected' : ''; ?>>50</option>
-                    <option value="100" <?php echo $records_per_page == 100 ? 'selected' : ''; ?>>100</option>
-                </select>
-                <span>entries</span>
-            </div>
-            <div class="search-box">
-                <label>Search:</label>
-                <input type="text" id="searchInput" value="<?php echo htmlspecialchars($search); ?>" 
-                       onkeyup="searchTable(this.value)">
-            </div>
-        </div>
-
         <section id="download-bootstrap">
             <div class="page-header">
                 <a data-toggle="modal" class="btn btn-info pull-right" href="#addMEcollapse"
@@ -760,6 +742,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <!-- Display events -->
 
             </div>
+
+            <div class="table-controls">
+            <div class="show-entries">
+                <span>Show</span>
+                <select onchange="changeEntriesPerPage(this.value)">
+                    <option value="10" <?php echo $records_per_page == 10 ? 'selected' : ''; ?>>10</option>
+                    <option value="25" <?php echo $records_per_page == 25 ? 'selected' : ''; ?>>25</option>
+                    <option value="50" <?php echo $records_per_page == 50 ? 'selected' : ''; ?>>50</option>
+                    <option value="100" <?php echo $records_per_page == 100 ? 'selected' : ''; ?>>100</option>
+                </select>
+                <span>entries</span>
+            </div>
+            <div class="search-box">
+                <label>Search:</label>
+                <input type="text" id="searchInput" value="<?php echo htmlspecialchars($search); ?>" 
+                       onkeyup="searchTable(this.value)">
+            </div>
+        </div>
 
             <div class="table-container">
         <table class="table-responsive">
