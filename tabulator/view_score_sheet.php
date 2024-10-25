@@ -44,7 +44,7 @@
              
              <?php include('..//admin/doc_header.php'); ?>
              
-             
+             <br><br>
              <table>
              <tr>
              <td align="center">
@@ -60,7 +60,7 @@
              </table>
              
              </center>
-          
+             <br><br>
              <center>
               <table class="table table-striped">
         <thead>
