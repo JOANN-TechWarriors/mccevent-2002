@@ -451,10 +451,6 @@
             </div>
         </div>
 
-        <button type="button" onclick="window.print()" class="btn-print">
-            Print Results
-        </button>
-
         <?php } } ?>
     </div>
 
