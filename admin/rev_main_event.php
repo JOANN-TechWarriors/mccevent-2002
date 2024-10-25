@@ -273,7 +273,7 @@
     <div class="col-lg-6">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <h2 class="panel-title">Select Main Event</h2>
+          <h4 class="panel-title">Select Main Event</h4>
         </div>
         <div class="panel-body">
           <form method="POST" action="rev_sub_event.php">
