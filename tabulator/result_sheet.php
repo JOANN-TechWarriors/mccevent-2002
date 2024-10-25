@@ -408,7 +408,6 @@
         <div class="signature-section">
             <!-- Judges Row -->
             <div class="judges-row">
-                <div class="judges-header">Panel of Judges</div>
                 <?php
                 $jjn_result_query = $conn->query("select distinct judge_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by judge_id ASC") or die(mysql_error());
                 while ($jjn_result_row = $jjn_result_query->fetch()) {
@@ -428,7 +427,6 @@
             <div class="admin-row">
                 <!-- Tabulator signature -->
                 <div class="signature-group">
-                    <h4>Tabulation Committee</h4>
                     <?php
                     $jjn_result_query = $conn->query("select * from organizer where org_id='$session_id'") or die(mysql_error());
                     while ($jjn_result_row = $jjn_result_query->fetch()) {
@@ -441,7 +439,6 @@
 
                 <!-- Organizer signature -->
                 <div class="signature-group">
-                    <h4>Event Organizer</h4>
                     <?php
                     $jjn_result_query = $conn->query("select * from organizer where organizer_id='$session_id'") or die(mysql_error());
                     while ($jjn_result_row = $jjn_result_query->fetch()) {
