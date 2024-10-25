@@ -142,7 +142,7 @@ while ($s_event_row = $s_event_query->fetch())
                 <?php include('..//admin/doc_header.php'); ?>
                 
    
-      
+      <br>
              <table>
              <tr>
              <td align="center">
@@ -156,6 +156,7 @@ while ($s_event_row = $s_event_query->fetch())
               </tr>
                <tr>
              <td align="center">
+              <br><br>
             <h4>Participant's Placing Results</h4> 
              </td>
               </tr>
@@ -164,6 +165,8 @@ while ($s_event_row = $s_event_query->fetch())
              
              </center>
           
+
+             <center>
           <table class="table table-bordered">
         <thead>
         
@@ -303,7 +306,7 @@ $jname_row = $jname_query->fetch();
      
           </table>
           
-            
+          </center>
            <?php }  } ?>
      
     </div>
