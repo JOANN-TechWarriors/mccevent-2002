@@ -200,124 +200,139 @@
         }
 
         /* Form styles */
-        .criteria-form {
-            width: 100%;
-        }
+       /* Updated and new form styles */
+    .criteria-form {
+        width: 100%;
+        overflow-x: visible; /* Ensure dropdowns aren't cut */
+    }
 
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px; /* Increased gap for better spacing */
+        margin-bottom: 25px;
+        width: 100%;
+    }
+
+    .form-group {
+        flex: 1;
+        min-width: 200px; /* Ensure minimum width */
+        max-width: 100%; /* Allow full width on small screens */
+        position: relative; /* For dropdown positioning */
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-weight: 500;
+        white-space: nowrap; /* Prevent label wrapping */
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+        height: 40px; /* Consistent height */
+        background-color: #fff;
+    }
+
+    /* Specific styles for different input types */
+    input.form-control {
+        min-width: 200px; /* Minimum width for text inputs */
+    }
+
+    select.form-control {
+        min-width: 120px; /* Minimum width for dropdowns */
+        padding-right: 30px; /* Space for dropdown arrow */
+        cursor: pointer;
+    }
+
+    /* Panel body padding adjustment */
+    .panel-body {
+        padding: 25px;
+        overflow: visible; /* Ensure dropdowns aren't cut */
+    }
+
+    /* Container adjustments */
+    .settings-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        overflow: visible; /* Ensure dropdowns aren't cut */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
         .form-row {
-            display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 20px;
-            margin-bottom: 25px;
         }
 
         .form-group {
-            flex: 1 1 250px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 500;
+            width: 100%;
         }
 
         .form-control {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: border-color 0.3s;
+            min-width: unset;
         }
 
-        .form-control:focus {
-            border-color: #007bff;
-            outline: none;
+        .panel-body {
+            padding: 15px;
         }
+    }
 
-        select.form-control {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23555' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 30px;
-        }
+    /* Additional styles for better form layout */
+    .criteria-number {
+        flex: 0 0 150px; /* Fixed width for criteria number */
+    }
 
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 30px;
-        }
+    .criteria-name {
+        flex: 1 1 300px; /* Flexible width for criteria name */
+    }
 
-        .btn {
-            padding: 10px 20px;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
+    .criteria-percentage {
+        flex: 0 0 150px; /* Fixed width for percentage */
+    }
 
-        .btn-default {
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            color: #333;
-        }
+    /* Ensure dropdown menus are visible */
+    select.form-control {
+        position: relative;
+        z-index: 1;
+    }
 
-        .btn-success {
-            background-color: #28a745;
-            color: #fff;
-        }
+    /* Better focus states */
+    .form-control:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
 
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+    /* Container for the entire form section */
+    .form-container {
+        width: 100%;
+        max-width: 1000px; /* Limit maximum width */
+        margin: 0 auto;
+        padding: 0 15px;
+    }
 
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
+    /* Button container adjustments */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 30px;
+        padding: 0 15px;
+    }
 
-            .sidebar.collapsed {
-                transform: translateX(0);
-            }
-
-            .main {
-                margin-left: 0;
-                padding: 15px;
-            }
-
-            .form-row {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .form-group {
-                flex: 1 1 100%;
-            }
-
-            .form-actions {
-                flex-direction: column-reverse;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .header {
-                padding: 10px 15px;
-            }
-
-            h1 {
-                font-size: 20px;
-                margin-bottom: 20px;
-            }
-        }
+    .btn {
+        min-width: 100px; /* Ensure buttons have minimum width */
+        padding: 10px 20px;
+    }
     </style>
 </head>
 <body>
@@ -352,29 +367,30 @@
 
     <!-- Main Content -->
     <div class="main" id="main-content">
-        <div class="settings-container">
-            <h1><?php echo $se_name; ?> Settings</h1>
-            
-            <form method="POST">
-                <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
-                <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
-                <input value="<?php echo $crit_id; ?>" name="crit_id" type="hidden" />
+    <div class="settings-container">
+        <h1><?php echo $se_name; ?> Settings</h1>
+        
+        <form method="POST">
+            <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
+            <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
+            <input value="<?php echo $crit_id; ?>" name="crit_id" type="hidden" />
 
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Edit Criteria</h3>
-                    </div>
-                    <div class="panel-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Edit Criteria</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-container">
                         <div class="criteria-form">
                             <?php    
                             $crit_query = $conn->query("SELECT * FROM criteria WHERE criteria_id='$crit_id'") or die(mysql_error());
                             while ($crit_row = $crit_query->fetch()) { 
                             ?>
                             <div class="form-row">
-                                <div class="form-group">
+                                <div class="form-group criteria-number">
                                     <label>Criteria no.</label>
                                     <select name="crit_ctr" class="form-control">
-                                        <option><?php echo $crit_row['criteria_ctr']; ?></option>
+                                        <option value="<?php echo $crit_row['criteria_ctr']; ?>"><?php echo $crit_row['criteria_ctr']; ?></option>
                                         <?php 
                                         $n1=0;
                                         while($n1<8) { 
@@ -383,28 +399,28 @@
                                             if($cont_query->rowCount()>0) {
                                                 // Skip if exists
                                             } else {
-                                                echo "<option>".$n1."</option>";
+                                                echo "<option value='".$n1."'>".$n1."</option>";
                                             }
                                         } 
                                         ?>
                                     </select>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group criteria-name">
                                     <label>Criteria</label>
-                                    <input name="criteria" type="text" class="form-control" value="<?php echo $crit_row['criteria']; ?>" />
+                                    <input name="criteria" type="text" class="form-control" value="<?php echo htmlspecialchars($crit_row['criteria']); ?>" />
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group criteria-percentage">
                                     <label>Percentage</label>
                                     <select name="percentage" class="form-control">
-                                        <option><?php echo $crit_row['percentage']; ?></option>
+                                        <option value="<?php echo $crit_row['percentage']; ?>"><?php echo $crit_row['percentage']; ?></option>
                                         <?php
                                         $n5=-5;
                                         while($n5<100) { 
                                             $n5=$n5+5;
                                         ?>
-                                        <option><?php echo $n5; ?></option>
+                                        <option value="<?php echo $n5; ?>"><?php echo $n5; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -418,9 +434,10 @@
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
+</div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
