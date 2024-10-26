@@ -306,8 +306,6 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     }
 
-
-
     .tile {
     position: relative;
     /* ... other existing styles ... */
@@ -353,6 +351,107 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     .dropdown:hover .dropbtn {
         background-color: #f1f1f1;
     }
+    .tile-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.tile {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+}
+
+/* Dropdown Styling */
+.dropdown {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.dropbtn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: #666;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.dropbtn:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    z-index: 1;
+    padding: 8px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Button Styling */
+.dropdown-content a {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    transition: background-color 0.2s;
+}
+
+.dropdown-content a:last-child {
+    margin-bottom: 0;
+}
+
+.dropdown-content a.btn-success {
+    color: #28a745;
+}
+
+.dropdown-content a.btn-danger {
+    color: #dc3545;
+}
+
+.dropdown-content a:hover {
+    background-color: #f8f9fa;
+}
+
+/* Icon Styling */
+.dropdown-content a i {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* Event Content Styling */
+.tile h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 18px;
+    padding-right: 30px; /* Make room for dropdown */
+}
+
+.tile p {
+    margin: 8px 0;
+    color: #666;
+    font-size: 14px;
+}
     </style>
 </head>
 
@@ -453,27 +552,27 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <br> <br><br>
                 <!-- Display events -->
-                        <div class="tile-container">
-            <?php foreach ($events as $event) { ?>
-            <div class="tile" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                <div class="dropdown">
-                    <button class="dropbtn">&#8942;</button>
-                    <div class="dropdown-content">
-                        <a href="#editEvent" class="btn btn-success edit-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                            <i class="icon-pencil"></i> Edit
-                        </a>
-                        <a href="#" class="btn btn-danger delete-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                            <i class="icon-remove"></i> Delete
-                        </a>
+            <div class="tile-container">
+                 <?php foreach ($events as $event) { ?>
+                <div class="tile" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                    <div class="dropdown">
+                        <button class="dropbtn">⋮</button>
+                        <div class="dropdown-content">
+                            <a href="#editEvent" class="btn-success edit-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                                <i class="icon-pencil"></i> Edit
+                            </a>
+                            <a href="#" class="btn-danger delete-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                                <i class="icon-remove"></i> Delete
+                            </a>
+                        </div>
                     </div>
+                    <h3><b><?php echo htmlspecialchars($event['event_name']); ?></b></h3>
+                    <p><?php echo date('m-d-Y', strtotime($event['date_start'])); ?> to
+                    <?php echo date('m-d-Y', strtotime($event['date_end'])); ?></p>
+                    <p><?php echo htmlspecialchars($event['place']); ?></p>
                 </div>
-                <h3 style="color:black; font-size: large;"><b><?php echo htmlspecialchars($event['event_name']); ?></b></h3>
-                <p style="color:black; font-size: small;"><?php echo date('m-d-Y', strtotime($event['date_start'])); ?> to
-                <?php echo date('m-d-Y', strtotime($event['date_end'])); ?></p>
-                <p style="color:black; font-size: small;"><?php echo htmlspecialchars($event['place']); ?></p>
+                <?php } ?>
             </div>
-            <?php } ?>
-        </div>
 
 
 <!-- Update the edit event modal HTML -->
