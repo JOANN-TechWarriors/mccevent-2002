@@ -308,6 +308,52 @@
             background-color: #333;
             color:red;
         }
+        .client_section {
+        padding: 50px 0;
+    }
+    
+    .client_left img {
+        max-width: 400px; /* Control image width */
+        height: auto;
+        object-fit: cover;
+        margin-right: 30px; /* Add space between image and text */
+    }
+    
+    .client_taital_main {
+        display: flex;
+        align-items: center;
+        gap: 40px; /* Creates consistent gap between image and content */
+        padding: 20px;
+    }
+    
+    .client_right {
+        flex: 1;
+        padding: 20px;
+    }
+    
+    .about_taital {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    
+    .moark_text {
+        margin-bottom: 15px;
+    }
+    
+    .client_text {
+        line-height: 1.6;
+    }
+    
+    /* Carousel control adjustments */
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+    }
     </style>
    <body style="background-color: lightgray;">
                     <div class="header_section">
@@ -546,6 +592,7 @@ $conn->close();
 ?>
 
 <!-- client section start -->
+
 <div class="client_section layout_padding">
     <div class="container">
         <div id="custom_slider" class="carousel slide" data-ride="carousel">
@@ -558,7 +605,6 @@ $conn->close();
             <a class="carousel-control-next" href="#custom_slider" role="button" data-slide="next">
                 <i class="fa fa-arrow-right"></i>
             </a>
-            <br><br><br>
         </div>
     </div>
 </div>
