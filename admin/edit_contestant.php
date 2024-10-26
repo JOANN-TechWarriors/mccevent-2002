@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <?php 
 include('header.php');
 include('session.php');
@@ -11,16 +10,151 @@ $contestant_id = $_GET['contestant_id'];
 ?>
 
 <head>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.min.css" rel="stylesheet">
-  <link rel="shortcut icon" href="../images/logo copy.png"/>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fff;
-      margin: 0;
-      padding: 0;
-    }
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../images/logo copy.png"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding-top: 20px;
+            transition: all 0.3s;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        /* Rest of the sidebar styles remain the same */
+
+        .main {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .main.collapsed {
+            margin-left: 80px;
+        }
+
+        .panel {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .panel-primary > .panel-heading {
+            background-color: #337ab7;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .panel-body {
+            padding: 15px;
+        }
+
+        .responsive-table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .responsive-table td {
+            padding: 12px;
+            vertical-align: top;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin: 4px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn-container {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        .btn-success {
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .btn-default {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .main.collapsed {
+                margin-left: 0;
+            }
+
+            .responsive-table {
+                display: block;
+            }
+
+            .responsive-table tr {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 1rem;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .responsive-table td {
+                display: block;
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+            }
+
+            .form-control {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .btn-container {
+                text-align: center;
+            }
+        }
 
     .sidebar {
       position: fixed;
@@ -151,71 +285,57 @@ $contestant_id = $_GET['contestant_id'];
   </div>
 
   <div class="main" id="main-content">
-    <div class="container">
-      <h1 style="font-size: 23px;"><?php echo $se_name; ?> Settings</h1>
-    </div>
-    <br><br><br>
-    <div class="container">
-      <form method="POST" enctype="multipart/form-data">
-        <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
-        <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
-        <input value="<?php echo $contestant_id; ?>" name="contestant_id" type="hidden" />
-
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title">Edit Contestant</h3>
-            </div>
-            <div class="panel-body">
-              <table align="center">
-                <?php    
-                $cont_query = $conn->query("SELECT * FROM contestants WHERE contestant_id='$contestant_id'") or die(mysql_error());
-                while ($cont_row = $cont_query->fetch()) { ?>
-                <tr>
-                  <td>
-                    Contestant no. <br />
-                    <select name="contestant_ctr" class="form-control">
-                      <option><?php echo $cont_row['contestant_ctr']; ?></option>
-                    </select>
-                  </td>
-                  <td>&nbsp;</td>
-                  <td>
-                    Contestant Fullname <br />
-                    <input name="fullname" type="text" class="form-control" value="<?php echo $cont_row['fullname']; ?>" />
-                  </td>
-                </tr>
-                
-                <tr>
-                <td>
-                  <strong>Upload Photo:</strong> <br />
-                  <input type="file" name="picture" value="<?php echo $cont_row['Picture']; ?>">
-                  <div id="wrapper">
-                  </div>
-                </td>
-                <td>&nbsp;</td>
-                  <td>
-                  Year/Course & Section<br />
-                <input name="addon" type="text" class="form-control" value="<?php echo $cont_row['AddOn']; ?>" />
-                </td>
-                </tr>
-                <?php } ?>
-                <tr>
-                  <td colspan="3">&nbsp;</td>
-                </tr>
-                <tr>
-                  <td colspan="3" align="right">
-                    <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
-                    <button name="edit_contestant" class="btn btn-success">Update</button>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
+        <div class="container">
+            <h1 style="font-size: 23px;"><?php echo $se_name; ?> Settings</h1>
         </div>
-        <div class="col-lg-3"></div>
-      </form>
-    </div>
+        
+        <div class="container">
+            <form method="POST" enctype="multipart/form-data">
+                <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
+                <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
+                <input value="<?php echo $contestant_id; ?>" name="contestant_id" type="hidden" />
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Edit Contestant</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="responsive-table">
+                            <?php    
+                            $cont_query = $conn->query("SELECT * FROM contestants WHERE contestant_id='$contestant_id'") or die(mysql_error());
+                            while ($cont_row = $cont_query->fetch()) { ?>
+                            <tr>
+                                <td>
+                                    <label>Contestant no.</label>
+                                    <select name="contestant_ctr" class="form-control">
+                                        <option><?php echo $cont_row['contestant_ctr']; ?></option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <label>Contestant Fullname</label>
+                                    <input name="fullname" type="text" class="form-control" value="<?php echo $cont_row['fullname']; ?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Upload Photo</label>
+                                    <input type="file" name="picture" class="form-control" value="<?php echo $cont_row['Picture']; ?>">
+                                </td>
+                                <td>
+                                    <label>Year/Course & Section</label>
+                                    <input name="addon" type="text" class="form-control" value="<?php echo $cont_row['AddOn']; ?>" />
+                                </td>
+                            </tr>
+                            <?php } ?>
+                        </table>
+                        <div class="btn-container">
+                            <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
+                            <button name="edit_contestant" class="btn btn-success">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
 
     <?php
 if (isset($_POST['edit_contestant'])) {
@@ -258,15 +378,15 @@ if (isset($_POST['edit_contestant'])) {
   </div>
 
   <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
-  <script>
-    document.getElementById("toggle-btn").addEventListener("click", function () {
-      var sidebar = document.getElementById("sidebar");
-      var mainContent = document.getElementById("main-content");
-
-      sidebar.classList.toggle("collapsed");
-      mainContent.classList.toggle("collapsed");
-    });
-  </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
+    <script>
+        document.getElementById("toggle-btn").addEventListener("click", function () {
+            var sidebar = document.getElementById("sidebar");
+            var mainContent = document.getElementById("main-content");
+            
+            sidebar.classList.toggle("collapsed");
+            mainContent.classList.toggle("collapsed");
+        });
+    </script>
 </body>
 </html>
