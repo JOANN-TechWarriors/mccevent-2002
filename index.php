@@ -370,6 +370,9 @@ $conn->close();
 <div class="coffee_section layout_padding">
     <div class="container">
         <div class="row">
+        <div class="col-md-12 text-center mb-5">
+                <img src="img/Community-College-Madridejos.jpeg" alt="Madridejos Community College" class="img-fluid" style="max-width: 800px; width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            </div>
             <div class="col-md-12" style="z-index:-1000;">
                 <h1 class="coffee_taital">ONGOING EVENTS</h1>
             </div>
