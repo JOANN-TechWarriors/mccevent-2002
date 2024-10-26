@@ -358,7 +358,7 @@
         <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
     </div>
  </div>
-
+<br><br><br>
  <div class="main" id="main-content">
         <div class="container">
             <h1><?php echo $se_name; ?> Settings</h1>
