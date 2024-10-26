@@ -358,7 +358,7 @@
         <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
     </div>
  </div>
-<br><br><br>
+
  <div class="main" id="main-content">
         <div class="container">
             <h1><?php echo $se_name; ?> Settings</h1>
@@ -371,7 +371,7 @@
                     <li>Add Criteria</li>
                 </ul>
             </div>
-
+            <br><br><br>
             <form method="POST">
                 <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
                 <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
