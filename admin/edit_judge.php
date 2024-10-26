@@ -149,7 +149,7 @@
         /* Improved Edit Form Styles */
         .edit-form-container {
             padding: 20px;
-            max-width: 1200px;
+            max-width: 800px; /* Reduced from 1200px */
             margin: 0 auto;
         }
 
@@ -164,46 +164,52 @@
         .panel-heading {
             background-color: #337ab7;
             color: white;
-            padding: 15px;
+            padding: 12px 15px;
             border-radius: 7px 7px 0 0;
         }
 
         .panel-title {
             margin: 0;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 500;
         }
 
         .panel-body {
-            padding: 25px;
+            padding: 20px;
         }
 
-        /* Improved Table Styles */
+        /* Resized Table Styles */
         .edit-table {
-            width: 50%;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 25px;
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
         }
 
-        .edit-table-cell {
-            display: flex;
-            flex-direction: column;
+        .table-row {
+            display: table-row;
+        }
+
+        .table-cell {
+            display: table-cell;
+            padding: 0 10px;
+            vertical-align: top;
+            width: 33.33%;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 600;
             color: #333;
+            font-size: 14px;
         }
 
         .form-control {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.4;
             color: #495057;
             background-color: #fff;
             border: 1px solid #ced4da;
@@ -222,10 +228,11 @@
             justify-content: flex-end;
             gap: 10px;
             margin-top: 20px;
+            padding: 0 10px;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 8px 16px;
             font-size: 14px;
             font-weight: 500;
             border-radius: 4px;
@@ -252,25 +259,41 @@
 
         /* Responsive Styles */
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
+            .edit-form-container {
+                padding: 10px;
+            }
+
+            .edit-table {
+                display: block;
+            }
+
+            .table-row {
+                display: block;
+                margin-bottom: 15px;
+            }
+
+            .table-cell {
+                display: block;
+                width: 100%;
+                padding: 5px 0;
+            }
+
+            .button-group {
+                flex-direction: column;
+                padding: 0;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 5px 0;
             }
 
             .main {
                 margin-left: 0;
             }
 
-            .edit-table {
-                grid-template-columns: 1fr;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                margin: 5px 0;
+            .sidebar {
+                transform: translateX(-100%);
             }
         }
     </style>
@@ -323,33 +346,35 @@
                                 $judge_query = $conn->query("SELECT * FROM judges WHERE judge_id='$judge_id'") or die(mysql_error());
                                 while ($judge_row = $judge_query->fetch()) { 
                                 ?>
-                                <div class="edit-table-cell">
-                                    <label class="form-label">Judge no.</label>
-                                    <select name="judge_ctr" class="form-control">
-                                        <option><?php echo $judge_row['judge_ctr']; ?></option>
-                                        <?php 
-                                        $n1=0;
-                                        while($n1<4) { 
-                                            $n1++;
-                                            $cont_query = $conn->query("SELECT * FROM judges WHERE judge_ctr='$n1' AND subevent_id='$sub_event_id'") or die(mysql_error());
-                                            if($cont_query->rowCount()>0) {
-                                            } else {
-                                                echo "<option>".$n1."</option>";
-                                            }
-                                        } 
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="edit-table-cell">
-                                    <label class="form-label">Judge Fullname</label>
-                                    <input name="fullname" type="text" class="form-control" value="<?php echo $judge_row['fullname']; ?>" />
-                                </div>
-                                <div class="edit-table-cell">
-                                    <label class="form-label">Type</label>
-                                    <select class="form-control" name="jtype">
-                                        <option><?php echo $judge_row['jtype']; ?></option>
-                                        <option>Chairman</option>
-                                    </select>
+                                <div class="table-row">
+                                    <div class="table-cell">
+                                        <label class="form-label">Judge no.</label>
+                                        <select name="judge_ctr" class="form-control">
+                                            <option><?php echo $judge_row['judge_ctr']; ?></option>
+                                            <?php 
+                                            $n1=0;
+                                            while($n1<4) { 
+                                                $n1++;
+                                                $cont_query = $conn->query("SELECT * FROM judges WHERE judge_ctr='$n1' AND subevent_id='$sub_event_id'") or die(mysql_error());
+                                                if($cont_query->rowCount()>0) {
+                                                } else {
+                                                    echo "<option>".$n1."</option>";
+                                                }
+                                            } 
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="table-cell">
+                                        <label class="form-label">Judge Fullname</label>
+                                        <input name="fullname" type="text" class="form-control" value="<?php echo $judge_row['fullname']; ?>" />
+                                    </div>
+                                    <div class="table-cell">
+                                        <label class="form-label">Type</label>
+                                        <select class="form-control" name="jtype">
+                                            <option><?php echo $judge_row['jtype']; ?></option>
+                                            <option>Chairman</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <?php } ?>
                             </div>
