@@ -552,10 +552,10 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <button class="dropbtn">⋮</button>
                         <div class="dropdown-content">
                             <a href="#editEvent" class="btn-success edit-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                                <i class="icon-pencil">Edit</i> 
+                                <i class="icon-pencil"></i> Edit
                             </a>
-                            <a href="#" class="btn-danger delete-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                                <i class="icon-remove">Delete</i> 
+                            <a href="#" style="color: black;" class="btn-danger delete-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                                <i class="icon-remove"></i> Delete
                             </a>
                         </div>
                     </div>
