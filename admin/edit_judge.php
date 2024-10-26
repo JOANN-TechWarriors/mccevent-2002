@@ -180,7 +180,7 @@
 
         /* Improved Table Styles */
         .edit-table {
-            width: 100%;
+            width: 50%;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
