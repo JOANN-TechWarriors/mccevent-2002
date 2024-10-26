@@ -442,7 +442,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 /* Event Content Styling */
 .tile h3 {
     margin: 0 0 15px 0;
-    color: #333;
+    color: #000;
     font-size: 18px;
     padding-right: 30px; /* Make room for dropdown */
 }
