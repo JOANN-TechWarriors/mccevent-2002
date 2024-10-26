@@ -1,29 +1,41 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="../img/logo.png"/>
-    <title>Event Judging System</title>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    
-    <style>
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- site metas -->
+      <link rel="shortcut icon" href="../img/logo.png"/>
+      <title>Event Judging System</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" type="text/css" href="css1/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" type="text/css" href="css1/style.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css1/responsive.css">
+      <!-- font css -->
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="css1/jquery.mCustomScrollbar.min.css">
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+   
+   <style type="text/css">
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             transition: all 0.4s;
-            font-family: 'Poppins', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* Navigation Styles */
         .nav {
             width: 100%;
             height: 65px;
@@ -111,132 +123,6 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
-        /* Banner Section */
-        .banner_section {
-            padding-top: 65px;
-            position: relative;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            min-height: 600px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .banner_taital_main {
-            padding: 20px;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .banner_taital {
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            font-size: 4rem;
-            font-weight: bold;
-            margin-bottom: 30px;
-            line-height: 1.2;
-        }
-
-        .btn_main {
-            display: flex;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        /* Ongoing Events Section */
-        .coffee_section {
-            padding: 50px 0;
-            background-color: #f8f9fa;
-        }
-
-        .coffee_taital {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            color: #333;
-        }
-
-        .coffee_box {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .coffee_img img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        /* Upcoming Events Section */
-        .client_section {
-            padding: 50px 0;
-            background-color: white;
-        }
-
-        .client_taital_main {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            padding: 20px;
-        }
-
-        .client_left img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        /* About Section */
-        .about_section {
-            padding: 50px 0;
-            background-color: #f8f9fa;
-        }
-
-        .about_img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        /* Contact Section */
-        .contact_section {
-            padding: 50px 0;
-        }
-
-        .map-responsive {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-        }
-
-        .map-responsive iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /* Footer */
-        .copyright_section {
-            background-color: #333;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-
-        /* Media Button for Mobile */
         .media_button {
             display: none;
             position: absolute;
@@ -257,25 +143,46 @@
             transition: 0.3s;
         }
 
-        /* Responsive Styles */
-        @media screen and (max-width: 1200px) {
-            .banner_taital {
-                font-size: 3.5rem;
-            }
+        .banner_section {
+            padding-top: 100px; /* Adjusted to account for fixed navbar */
         }
 
-        @media screen and (max-width: 992px) {
-            .banner_section {
-                min-height: 500px;
-            }
-            
-            .banner_taital {
-                font-size: 3rem;
-            }
-
-            .client_taital_main {
-                flex-direction: column;
-            }
+        .client_section {
+            padding: 50px 0;
+        }
+        
+        .client_left img {
+            max-width: 400px;
+            height: auto;
+            object-fit: cover;
+            margin-right: 30px;
+        }
+        
+        .client_taital_main {
+            display: flex;
+            align-items: center;
+            gap: 270px;
+            padding: 20px;
+        }
+        
+        .client_right {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .about_taital {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         @media screen and (max-width: 768px) {
@@ -329,101 +236,105 @@
                 padding-left: 3rem;
             }
 
-            .banner_section {
-                min-height: 400px;
+            .client_taital_main {
+                flex-direction: column;
+                gap: 30px;
             }
-            
-            .banner_taital {
-                font-size: 2.5rem;
-            }
-            
-            .banner_taital_main {
-                padding: 15px;
-                text-align: center;
-            }
-            
-            .btn_main {
-                justify-content: center;
+
+            .client_left img {
+                max-width: 100%;
+                margin-right: 0;
             }
         }
 
-        @media screen and (max-width: 576px) {
-            .banner_section {
-                min-height: 300px;
-            }
-            
-            .banner_taital {
-                font-size: 2rem;
-            }
-            
-            .coffee_taital {
-                font-size: 2rem;
-            }
+        .fa {
+            padding: 10px;
+            font-size: 10px;
+            width: 8px;
+            text-align: center;
+            text-decoration: none;
+            margin: 5px 5px;
+            border-radius: 30%;
         }
 
-        @media screen and (max-width: 320px) {
-            .banner_taital {
-                font-size: 1.75rem;
-            }
-            
-            .banner_section {
-                min-height: 250px;
-            }
+        .fa:hover {
+            opacity: 0.5;
+        }
+
+        button.btn.btn-primary {
+            z-index: 1000;
+            position: relative;
         }
     </style>
-</head>
-<body style="background-color: lightgray;">
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="logo">
-            <a href="#" style="font-family: impact; color: #1153D0;">
-                <img src="img/logo.png" alt="Logo"> MCC Event
-            </a>
-        </div>
-        <div class="main_list" id="mainListDiv">
-            <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="ongoing.php">Ongoing</a></li>
-                <li><a href="upcoming.php">Upcoming</a></li>
-                <li><a href="about.php">About</a></li>
-                <li><a href="admin/stream/index.php">Live</a></li>
-                <li>
-                    <a href="#login">Login</a>
-                    <div class="dropdown">
-                        <a href="admin/admin_login.php">Admin Login</a>
-                        <a href="admin/index.php">Organizer Login</a>
-                        <a href="tabulator/index.php">Tabulator Login</a>
-                        <a href="admin/welcome.php">Judge Login</a>
-                        <a href="student/index.php">Student Login</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <button class="media_button" id="mediaButton">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </nav>
+   </head>
+   <body style="background-color: lightgray;">
+      <nav class="nav">
+          <div class="logo">
+              <a href="#" style="font-family: impact; color: #1153D0;">
+                  <img src="img/logo.png" style="height: 40px; vertical-align: middle;"> MCC Event
+              </a>
+          </div>
+          <div class="main_list" id="mainListDiv">
+              <ul>
+                  <li><a href="index.php">Home</a></li>
+                  <li><a href="ongoing.php">Ongoing</a></li>
+                  <li><a href="upcoming.php">Upcoming</a></li>
+                  <li><a href="about.php">About</a></li>
+                  <li><a href="admin/stream/index.php">Live</a></li>
+                  <li>
+                      <a href="#login">Login</a>
+                      <div class="dropdown">
+                          <a href="admin/admin_login.php">Admin Login</a>
+                          <a href="admin/index.php">Organizer Login</a>
+                          <a href="tabulator/index.php">Tabulator Login</a>
+                          <a href="admin/welcome.php">Judge Login</a>
+                          <a href="student/index.php">Student Login</a>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+          <button class="media_button" id="mediaButton">
+              <span></span>
+              <span></span>
+              <span></span>
+          </button>
+      </nav>
 
-    <!-- Banner Section -->
-    <div class="banner_section">
-        <div class="container">
-            <div id="banner_slider" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="banner_taital_main">
-                            <h1 class="banner_taital">MCC <br>EVENTS</h1>
-                            <div class="btn_main">
-                                <div class="about_bt active"><a href="#"></a></div>
-                                <div class="callnow_bt"><a href="#"></a></div>
-                            </div>
+      <!-- banner section start --> 
+<div class="banner_section layout_padding" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 600px; position: relative;">
+   <div class="container">
+      <div id="banner_slider" class="carousel slide" data-ride="carousel">
+         <div class="carousel-inner">
+            <div class="carousel-item active">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="banner_taital_main">
+                        <h1 class="banner_taital" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">MCC <br>EVENTS</h1>
+                        <div class="btn_main">
+                           <div class="about_bt active"><a href="#"></a></div>
+                           <div class="callnow_bt"><a href="#"></a></div>
                         </div>
-                    </div>
-                </div>
+                     </div>
+                  </div>
+               </div>
             </div>
-        </div>
-    </div>
+            <div class="carousel-item">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="banner_taital_main">
+                        <h1 class="banner_taital" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">MCC <br>EVENTS</h1>
+                        <div class="btn_main">
+                           <div class="about_bt active"><a href="#"></a></div>
+                           <div class="callnow_bt"><a href="#"></a></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
 <!-- banner section end -->
 <!-- ongoing section start -->
 <?php
@@ -648,37 +559,36 @@ $conn->close();
          </div>
       </div>
 
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mediaButton = document.getElementById('mediaButton');
-            const mainListDiv = document.getElementById('mainListDiv');
-            
-            mediaButton.addEventListener('click', function(e) {
-                e.stopPropagation();
-                mainListDiv.classList.toggle('show_list');
-                this.classList.toggle('active');
-            });
+      <!-- Scripts -->
+      <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              const mediaButton = document.getElementById('mediaButton');
+              const mainListDiv = document.getElementById('mainListDiv');
+              
+              mediaButton.addEventListener('click', function(e) {
+                  e.stopPropagation();
+                  mainListDiv.classList.toggle('show_list');
+                  this.classList.toggle('active');
+              });
 
-            // Close menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const isClickInsideNav = event.target.closest('.nav');
-                if (!isClickInsideNav && mainListDiv.classList.contains('show_list')) {
-                    mainListDiv.classList.remove('show_list');
-                    mediaButton.classList.remove('active');
-                }
-            });
+              // Close menu when clicking outside
+              document.addEventListener('click', function(event) {
+                  const isClickInsideNav = event.target.closest('.nav');
+                  if (!isClickInsideNav && mainListDiv.classList.contains('show_list')) {
+                      mainListDiv.classList.remove('show_list');
+                      mediaButton.classList.remove('active');
+                  }
+              });
 
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    mainListDiv.classList.remove('show_list');
-                    mediaButton.classList.remove('active');
-                }
-            });
-        });
-    </script>
+              // Handle window resize
+              window.addEventListener('resize', function() {
+                  if (window.innerWidth > 768) {
+                      mainListDiv.classList.remove('show_list');
+                      mediaButton.classList.remove('active');
+                  }
+              });
+          });
+      </script>
 
       <!-- Your existing scripts -->
       <script src="js/jquery.min.js"></script>
