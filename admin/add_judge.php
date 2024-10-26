@@ -103,7 +103,7 @@
             padding: 10px 0;
             margin-bottom: 20px;
             list-style: none;
-            background-color: transparent;
+            background-color: #e9ecef;
         }
 
         .breadcrumb li {
