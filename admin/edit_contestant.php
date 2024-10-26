@@ -39,8 +39,6 @@ $contestant_id = $_GET['contestant_id'];
             width: 80px;
         }
 
-        /* Rest of the sidebar styles remain the same */
-
         .main {
             margin-left: 250px;
             padding: 20px;
@@ -51,14 +49,22 @@ $contestant_id = $_GET['contestant_id'];
             margin-left: 80px;
         }
 
+        .container {
+            padding: 0 15px;
+        }
+
+        .settings-container {
+            max-width: 600px;
+            margin-left: 0;  /* Align to the left */
+            padding: 20px;
+        }
+
         .panel {
             border: 1px solid #ddd;
             border-radius: 4px;
-            margin-bottom: 20px;
             background-color: #fff;
             box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            max-width: 800px;
-            margin: 0 auto;
+            margin-bottom: 20px;
         }
 
         .panel-primary > .panel-heading {
@@ -74,14 +80,12 @@ $contestant_id = $_GET['contestant_id'];
 
         .form-table {
             width: 100%;
-            max-width: 700px;
-            margin: 0 auto;
             border-collapse: separate;
-            border-spacing: 10px;
+            border-spacing: 0;
         }
 
         .form-table td {
-            padding: 8px;
+            padding: 8px 15px;
             vertical-align: top;
             width: 50%;
         }
@@ -95,21 +99,26 @@ $contestant_id = $_GET['contestant_id'];
             margin-bottom: 5px;
             font-weight: bold;
             color: #333;
+            font-size: 14px;
         }
 
         .form-control {
-            width: calc(100% - 20px);
+            width: 100%;
             padding: 8px;
-            margin: 4px 0;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
+            margin-top: 4px;
+        }
+
+        select.form-control {
+            height: 36px;
         }
 
         .btn-container {
             text-align: right;
             margin-top: 20px;
-            padding: 0 10px;
+            padding: 0 15px;
         }
 
         .btn {
@@ -119,6 +128,7 @@ $contestant_id = $_GET['contestant_id'];
             cursor: pointer;
             margin-left: 8px;
             font-size: 14px;
+            transition: all 0.3s ease;
         }
 
         .btn-success {
@@ -126,19 +136,22 @@ $contestant_id = $_GET['contestant_id'];
             color: white;
         }
 
+        .btn-success:hover {
+            background-color: #4cae4c;
+        }
+
         .btn-default {
             background-color: #f0f0f0;
             color: #333;
         }
 
-        @media (max-width: 768px) {
-            .panel {
-                margin: 10px;
-            }
+        .btn-default:hover {
+            background-color: #e0e0e0;
+        }
 
-            .form-table {
-                width: 100%;
-                border-spacing: 0;
+        @media (max-width: 768px) {
+            .settings-container {
+                padding: 10px;
             }
 
             .form-table, 
@@ -151,16 +164,10 @@ $contestant_id = $_GET['contestant_id'];
                 display: block;
                 width: 100%;
                 padding: 5px 10px;
-                box-sizing: border-box;
-            }
-
-            .form-control {
-                width: 100%;
             }
 
             .btn-container {
                 text-align: center;
-                margin-top: 15px;
             }
         }
 
@@ -294,63 +301,63 @@ $contestant_id = $_GET['contestant_id'];
 
   <div class="main" id="main-content">
         <div class="container">
-            <h1 style="font-size: 23px;"><?php echo $se_name; ?> Settings</h1>
-        </div>
+            <h1 style="font-size: 23px; margin-bottom: 20px;"><?php echo $se_name; ?> Settings</h1>
         
-        <div class="container">
-            <form method="POST" enctype="multipart/form-data">
-                <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
-                <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
-                <input value="<?php echo $contestant_id; ?>" name="contestant_id" type="hidden" />
+            <div class="settings-container">
+                <form method="POST" enctype="multipart/form-data">
+                    <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
+                    <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
+                    <input value="<?php echo $contestant_id; ?>" name="contestant_id" type="hidden" />
 
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Edit Contestant</h3>
-                    </div>
-                    <div class="panel-body">
-                        <table class="form-table">
-                            <?php    
-                            $cont_query = $conn->query("SELECT * FROM contestants WHERE contestant_id='$contestant_id'") or die(mysql_error());
-                            while ($cont_row = $cont_query->fetch()) { ?>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="form-label">Contestant no.</label>
-                                        <select name="contestant_ctr" class="form-control">
-                                            <option><?php echo $cont_row['contestant_ctr']; ?></option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="form-label">Contestant Fullname</label>
-                                        <input name="fullname" type="text" class="form-control" value="<?php echo $cont_row['fullname']; ?>" />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="form-label">Upload Photo</label>
-                                        <input type="file" name="picture" class="form-control" value="<?php echo $cont_row['Picture']; ?>">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="form-label">Year/Course & Section</label>
-                                        <input name="addon" type="text" class="form-control" value="<?php echo $cont_row['AddOn']; ?>" />
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php } ?>
-                        </table>
-                        <div class="btn-container">
-                            <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
-                            <button name="edit_contestant" class="btn btn-success">Update</button>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Edit Contestant</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="form-table">
+                                <?php    
+                                $cont_query = $conn->query("SELECT * FROM contestants WHERE contestant_id='$contestant_id'") or die(mysql_error());
+                                while ($cont_row = $cont_query->fetch()) { ?>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label class="form-label">Contestant no.</label>
+                                            <select name="contestant_ctr" class="form-control">
+                                                <option><?php echo $cont_row['contestant_ctr']; ?></option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label class="form-label">Contestant Fullname</label>
+                                            <input name="fullname" type="text" class="form-control" value="<?php echo $cont_row['fullname']; ?>" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label class="form-label">Upload Photo</label>
+                                            <input type="file" name="picture" class="form-control" value="<?php echo $cont_row['Picture']; ?>">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label class="form-label">Year/Course & Section</label>
+                                            <input name="addon" type="text" class="form-control" value="<?php echo $cont_row['AddOn']; ?>" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </table>
+                            <div class="btn-container">
+                                <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
+                                <button name="edit_contestant" class="btn btn-success">Update</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 
