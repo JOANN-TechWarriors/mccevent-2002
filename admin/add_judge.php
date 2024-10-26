@@ -360,12 +360,14 @@
         <div class="container">
             <h1 style="font-size: 20px;"><?php echo $se_name; ?> Settings</h1>
 
-            <div class="breadcrumb">
+        <div class="col-md-10">
+            <ul class="breadcrumb">
                 <li><a href="selection.php">Dashboard</a></li>
                 <li><a href="home.php">List of Events</a></li>
                 <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
                 <li>Add Judge</li>
-            </div>
+            </ul>
+        </div>
 
             <div class="table-container">
                 <form method="POST">
