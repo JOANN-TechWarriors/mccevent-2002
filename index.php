@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <!-- basic -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <!-- site metas -->
-      <link rel="shortcut icon" href="../img/logo.png"/>
-      <title>Event Judging System</title>
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <!-- bootstrap css -->
-      <link rel="stylesheet" type="text/css" href="css1/bootstrap.min.css">
-      <!-- style css -->
-      <link rel="stylesheet" type="text/css" href="css1/style.css">
-      <!-- Responsive-->
-      <link rel="stylesheet" href="css1/responsive.css">
-      <!-- font css -->
-      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-      <!-- Scrollbar Custom CSS -->
-      <link rel="stylesheet" href="css1/jquery.mCustomScrollbar.min.css">
-      <!-- Tweaks for older IEs-->
-      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-   
-   <style type="text/css">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../img/logo.png"/>
+    <title>Event Judging System</title>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" type="text/css" href="css1/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css1/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -36,6 +23,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
+        /* Navigation Styles */
         .nav {
             width: 100%;
             height: 65px;
@@ -46,13 +34,14 @@
             z-index: 1000;
             top: 0;
             left: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
         }
 
         .nav .logo {
-            float: left;
             width: auto;
             height: 65px;
-            padding-left: 1rem;
         }
 
         .nav .logo a {
@@ -60,26 +49,27 @@
             color: #fff;
             font-size: 25px;
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            height: 100%;
         }
 
         .nav .logo img {
             height: 40px;
-            vertical-align: middle;
+            margin-right: 8px;
         }
 
         .nav .main_list {
             height: 65px;
-            float: right;
-            margin-right: 1rem;
         }
 
         .main_list ul {
-            width: 100%;
             height: 65px;
             display: flex;
             list-style: none;
             margin: 0;
             padding: 0;
+            align-items: center;
         }
 
         .main_list ul li {
@@ -123,6 +113,7 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        /* Mobile Menu Button */
         .media_button {
             display: none;
             position: absolute;
@@ -143,53 +134,50 @@
             transition: 0.3s;
         }
 
+        /* Banner Section */
         .banner_section {
-            padding-top: 100px; /* Adjusted to account for fixed navbar */
-        }
-
-        .client_section {
-            padding: 50px 0;
-        }
-        
-        .client_left img {
-            max-width: 400px;
-            height: auto;
-            object-fit: cover;
-            margin-right: 30px;
-        }
-        
-        .client_taital_main {
+            padding-top: 65px;
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 640px;
+            width: 100%;
             display: flex;
             align-items: center;
-            gap: 270px;
-            padding: 20px;
-        }
-        
-        .client_right {
-            flex: 1;
-            padding: 20px;
-        }
-        
-        .about_taital {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
         }
 
+        .banner_taital_main {
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .banner_taital {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        /* Responsive Styles */
         @media screen and (max-width: 768px) {
+            .nav {
+                padding: 0;
+            }
+            
+            .nav .logo {
+                padding-left: 1rem;
+            }
+            
             .media_button {
                 display: block;
             }
-
+            
             .nav .main_list {
                 width: 100%;
                 height: 0;
@@ -205,48 +193,51 @@
             .nav .main_list.show_list {
                 height: auto;
             }
-
+            
             .main_list ul {
                 flex-direction: column;
                 height: auto;
                 padding: 1rem 0;
             }
-
+            
             .main_list ul li {
                 width: 100%;
                 height: auto;
                 padding: 0;
             }
-
+            
             .main_list ul li a {
                 line-height: 45px;
                 display: block;
                 padding: 0 2rem;
                 text-align: left;
             }
-
+            
             .dropdown {
                 position: static;
                 width: 100%;
                 background-color: rgba(255, 255, 255, 0.1);
                 box-shadow: none;
             }
-
+            
             .dropdown a {
                 padding-left: 3rem;
             }
 
-            .client_taital_main {
-                flex-direction: column;
-                gap: 30px;
+            .banner_section {
+                min-height: 400px;
             }
-
-            .client_left img {
-                max-width: 100%;
-                margin-right: 0;
+            
+            .banner_taital {
+                font-size: 2.5rem;
+            }
+            
+            .banner_taital_main {
+                text-align: center;
             }
         }
 
+        /* Additional Utility Classes */
         .fa {
             padding: 10px;
             font-size: 10px;
@@ -265,176 +256,60 @@
             z-index: 1000;
             position: relative;
         }
-        /* Banner Section Base Styles */
-.banner_section {
-    padding-top: 65px; /* Account for fixed navbar */
-    position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 640px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
-
-.banner_taital_main {
-    padding: 20px;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.banner_taital {
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    font-size: 4rem;
-    font-weight: bold;
-    margin-bottom: 30px;
-    line-height: 1.2;
-}
-
-.btn_main {
-    display: flex;
-    gap: 20px;
-    margin-top: 30px;
-}
-
-/* Responsive Breakpoints */
-@media screen and (max-width: 1200px) {
-    .banner_taital {
-        font-size: 3.5rem;
-    }
-}
-
-@media screen and (max-width: 992px) {
-    .banner_section {
-        min-height: 500px;
-    }
-    
-    .banner_taital {
-        font-size: 3rem;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .banner_section {
-        min-height: 400px;
-    }
-    
-    .banner_taital {
-        font-size: 2.5rem;
-    }
-    
-    .banner_taital_main {
-        padding: 15px;
-        text-align: center;
-    }
-    
-    .btn_main {
-        justify-content: center;
-    }
-}
-
-@media screen and (max-width: 576px) {
-    .banner_section {
-        min-height: 300px;
-    }
-    
-    .banner_taital {
-        font-size: 2rem;
-    }
-    
-    .banner_taital_main {
-        padding: 10px;
-    }
-}
-
-/* Ensure carousel controls stay visible */
-.banner_section .carousel-control-prev,
-.banner_section .carousel-control-next {
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/* Ensure content stays within viewport on very small devices */
-@media screen and (max-width: 320px) {
-    .banner_taital {
-        font-size: 1.75rem;
-    }
-    
-    .banner_section {
-        min-height: 250px;
-    }
-}
     </style>
-   </head>
-   <body style="background-color: lightgray;">
-      <nav class="nav">
-          <div class="logo">
-              <a href="#" style="font-family: impact; color: #1153D0;">
-                  <img src="img/logo.png" style="height: 40px; vertical-align: middle;"> MCC Event
-              </a>
-          </div>
-          <div class="main_list" id="mainListDiv">
-              <ul>
-                  <li><a href="index.php">Home</a></li>
-                  <li><a href="ongoing.php">Ongoing</a></li>
-                  <li><a href="upcoming.php">Upcoming</a></li>
-                  <li><a href="about.php">About</a></li>
-                  <li><a href="admin/stream/index.php">Live</a></li>
-                  <li>
-                      <a href="#login">Login</a>
-                      <div class="dropdown">
-                          <a href="admin/admin_login.php">Admin Login</a>
-                          <a href="admin/index.php">Organizer Login</a>
-                          <a href="tabulator/index.php">Tabulator Login</a>
-                          <a href="admin/welcome.php">Judge Login</a>
-                          <a href="student/index.php">Student Login</a>
-                      </div>
-                  </li>
-              </ul>
-          </div>
-          <button class="media_button" id="mediaButton">
-              <span></span>
-              <span></span>
-              <span></span>
-          </button>
-      </nav>
+</head>
+<body style="background-color: lightgray;">
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="logo">
+            <a href="#" style="font-family: impact; color: #1153D0;">
+                <img src="img/logo.png" alt="MCC Logo"> MCC Event
+            </a>
+        </div>
+        <div class="main_list" id="mainListDiv">
+            <ul>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="ongoing.php">Ongoing</a></li>
+                <li><a href="upcoming.php">Upcoming</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="admin/stream/index.php">Live</a></li>
+                <li>
+                    <a href="#login">Login</a>
+                    <div class="dropdown">
+                        <a href="admin/admin_login.php">Admin Login</a>
+                        <a href="admin/index.php">Organizer Login</a>
+                        <a href="tabulator/index.php">Tabulator Login</a>
+                        <a href="admin/welcome.php">Judge Login</a>
+                        <a href="student/index.php">Student Login</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <button class="media_button" id="mediaButton">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
 
-      <!-- banner section start --> 
-      <div class="banner_section">
-   <div class="container">
-      <div id="banner_slider" class="carousel slide" data-ride="carousel">
-         <div class="carousel-inner">
-            <div class="carousel-item active">
-               <div class="banner_taital_main">
-                  <h1 class="banner_taital">MCC <br>EVENTS</h1>
-                  <div class="btn_main">
-                     <div class="about_bt active"><a href="#"></a></div>
-                     <div class="callnow_bt"><a href="#"></a></div>
-                  </div>
-               </div>
+    <!-- Banner Section -->
+    <div class="banner_section">
+        <div class="container">
+            <div id="banner_slider" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="banner_taital_main">
+                            <h1 class="banner_taital">MCC <br>EVENTS</h1>
+                            <div class="btn_main">
+                                <div class="about_bt active"><a href="#"></a></div>
+                                <div class="callnow_bt"><a href="#"></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="carousel-item active">
-               <div class="banner_taital_main">
-                  <h1 class="banner_taital">MCC <br>EVENTS</h1>
-                  <div class="btn_main">
-                     <div class="about_bt active"><a href="#"></a></div>
-                     <div class="callnow_bt"><a href="#"></a></div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-</div>
-<!-- banner section end -->
+        </div>
+    </div>
 <!-- ongoing section start -->
 <?php
 $host = '127.0.0.1';
@@ -659,35 +534,35 @@ $conn->close();
       </div>
 
       <!-- Scripts -->
-      <script>
-          document.addEventListener('DOMContentLoaded', function() {
-              const mediaButton = document.getElementById('mediaButton');
-              const mainListDiv = document.getElementById('mainListDiv');
-              
-              mediaButton.addEventListener('click', function(e) {
-                  e.stopPropagation();
-                  mainListDiv.classList.toggle('show_list');
-                  this.classList.toggle('active');
-              });
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mediaButton = document.getElementById('mediaButton');
+            const mainListDiv = document.getElementById('mainListDiv');
+            
+            mediaButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mainListDiv.classList.toggle('show_list');
+                this.classList.toggle('active');
+            });
 
-              // Close menu when clicking outside
-              document.addEventListener('click', function(event) {
-                  const isClickInsideNav = event.target.closest('.nav');
-                  if (!isClickInsideNav && mainListDiv.classList.contains('show_list')) {
-                      mainListDiv.classList.remove('show_list');
-                      mediaButton.classList.remove('active');
-                  }
-              });
+            document.addEventListener('click', function(event) {
+                const isClickInsideNav = event.target.closest('.nav');
+                if (!isClickInsideNav && mainListDiv.classList.contains('show_list')) {
+                    mainListDiv.classList.remove('show_list');
+                    mediaButton.classList.remove('active');
+                }
+            });
 
-              // Handle window resize
-              window.addEventListener('resize', function() {
-                  if (window.innerWidth > 768) {
-                      mainListDiv.classList.remove('show_list');
-                      mediaButton.classList.remove('active');
-                  }
-              });
-          });
-      </script>
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    mainListDiv.classList.remove('show_list');
+                    mediaButton.classList.remove('active');
+                }
+            });
+        });
+    </script>
 
       <!-- Your existing scripts -->
       <script src="js/jquery.min.js"></script>
