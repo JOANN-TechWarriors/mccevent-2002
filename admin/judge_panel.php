@@ -1531,38 +1531,7 @@ if( $jstat_rowx == 1 )
     <script src="..//assets/js/google-code-prettify/prettify.js"></script>
 
     <script src="..//assets/js/application.js"></script>
-    <script>
-// Disable right-click
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
-
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        document.onkeydown = function (e) {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
-                e.preventDefault();
-            }
-        };
-
-        // Disable developer tools
-        function disableDevTools() {
-            if (window.devtools.isOpen) {
-                window.location.href = "about:blank";
-            }
-        }
-
-        // Check for developer tools every 100ms
-        setInterval(disableDevTools, 100);
-
-        // Disable selecting text
-        document.onselectstart = function (e) {
-            e.preventDefault();
-        };
-</script>
+    
   
   </body>
 </html>
