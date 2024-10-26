@@ -1,338 +1,403 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="../img/logo.png"/>
-    <title>Event Judging System</title>
-    
-    <!-- Existing CSS links -->
-    <link rel="stylesheet" type="text/css" href="css1/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css1/style.css">
-    <link rel="stylesheet" href="css1/responsive.css">
-    <link rel="icon" href="images/fevicon.png" type="image/gif" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css1/jquery.mCustomScrollbar.min.css">
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-    <style>
-        /* Reset and Base Styles */
-        * {
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <link rel="shortcut icon" href="../img/logo.png"/>
+      <title>Event Judging System</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" type="text/css" href="css1/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" type="text/css" href="css1/style.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css1/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <!-- font css -->
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="css1/jquery.mCustomScrollbar.min.css">
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+   </head>
+   <style type="text/css">
+        *{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             transition: all 0.4s;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
-
-        body {
-            padding-top: 70px; /* Space for fixed navbar */
+        .container{
+            margin-left: 5%;
+            margin-right: 5%;
         }
-
-        /* Navigation Styles */
-        .nav {
+        .nav{
             width: 100%;
-            height: 70px;
+            height: 65px;
             position: fixed;
-            line-height: 70px;
-            background-color: rgba(6, 6, 7, 0.9);
+            line-height: 65px;
+            text-align: center;
+            background-color: rgba(6, 6, 7, 0.8);
             z-index: 1000;
-            top: 0;
+            top: 0; /* Ensure it's at the top */
             left: 0;
-            transition: all 0.4s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
-        .nav .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 100%;
+        .nav div.logo{
+            width: 180px;
+            height: 10px;
+            position: absolute;
+            left: 15px; /* Adjust as needed */
         }
-
-        .nav .logo {
-            display: flex;
-            align-items: center;
-            height: 100%;
-        }
-
-        .nav .logo a {
-            display: flex;
-            align-items: center;
+        .nav div.logo a{
             text-decoration: none;
             color: #fff;
-            font-family: impact;
-            font-size: 24px;
-            transition: color 0.3s ease;
+            font-size: 25px;
+            text-transform: uppercase;
         }
-
-        .nav .logo img {
-            height: 40px;
-            margin-right: 10px;
+        .nav div.logo a:hover {
+            color: #c0c0c0;
         }
-
-        .nav .main_list {
-            display: flex;
-            align-items: center;
+        .nav div.main_list{
+            width: 600px;
+            height: 65px;
+            float: right;
         }
-
-        .nav .main_list ul {
+        .nav div.main_list ul{
+            width:100%;
+            height: 65px;
             display: flex;
             list-style: none;
+        }
+        .nav div.main_list ul li{
+            width: 120px;
+            height: 65px;
+        }
+        .nav div.main_list ul li a{
+            text-decoration: none;
+            color: #fff;
+            line-height: 65px;
+            text-transform: uppercase;
+        }
+        .nav div.main_list ul li a:hover{
+            color: #c0c0c0;
+        }
+        .nav div.media_button {
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            display: none;
+        }
+        .nav div.media_button button.main_media_button {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;;
+            outline: 0;
+            border: none;
+            cursor: pointer;
+        }
+        .nav div.media_button button.main_media_button span{
+            width: 98%;
+            height: 1px;
+            display: block;
+            background-color: #fff;
+            margin-top: 9px;
+            margin-bottom: 10px;
+        }
+        .nav div.media_button button.main_media_button:hover span:nth-of-type(1){
+            transform: rotateY(180deg);
+            transition: all 0.5s;
+            background-color: #c0c0c0;
+        }
+        .nav div.media_button button.main_media_button:hover span:nth-of-type(2){
+            transform: rotateY(180deg);
+            transition: all 0.4s;
+            background-color: #c0c0c0;
+        }
+        .nav div.media_button button.main_media_button:hover span:nth-of-type(3){
+            transform: rotateY(180deg);
+            transition: all 0.3s;
+            background-color: #c0c0c0;
+        }
+        .nav div.media_button button.active span:nth-of-type(1) {
+            transform: rotate3d(0, 0, 1, 45deg);
+            position: absolute;
             margin: 0;
+        }
+        .nav div.media_button button.active span:nth-of-type(2) {
+            display: none;
+        }
+        .nav div.media_button button.active span:nth-of-type(3) {
+            transform: rotate3d(0, 0, 1, -45deg);
+            position: absolute;
+            margin: 0;
+        }
+        .nav div.media_button button.active:hover span:nth-of-type(1) {
+            transform: rotate3d(0, 0, 1, 20deg);
+        }
+        .nav div.media_button button.active:hover span:nth-of-type(3) {
+            transform: rotate3d(0, 0, 1, -20deg);
+        }
+        .fa {
+            padding: 10px;
+            font-size: 10px;
+            width: 8px;
+            text-align: center;
+            text-decoration: none;
+            margin: 5px 5px;
+            border-radius: 30%;
+        }
+        .fa:hover {
+            opacity: 0.5;
+        }
+        .home{
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+        }
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .container{
+                margin: 0;
+            }
+        }
+        @media screen and (max-width:768px) {
+            .container{
+                margin: 0;
+            }
+            .nav div.logo{
+                margin-left: 15px;
+            }
+            .nav div.main_list{
+                width: 100%;
+                margin-top: 65px;
+                height: 0px;
+                overflow: hidden;
+            }
+            .nav div.show_list{
+                height: 200px;
+            }
+            .nav div.main_list ul{
+                flex-direction: column;
+                width: 100%;
+                height: 200px;
+                top: 80px;
+                right: 0;
+                left: 0;
+            }
+            .nav div.main_list ul li{
+                width: 100%;
+                height: 40px;
+                background-color:rgba(6, 6, 7, 0.8);
+            }
+            .nav div.main_list ul li a{
+                text-align: center;
+                line-height: 40px;
+                width: 100%;
+                height: 40px;
+                display: table;
+            }
+            .nav div.media_button{
+                display: block;
+            }
+        }
+        .main_list ul {
+            list-style-type: none;
             padding: 0;
         }
 
-        .nav .main_list ul li {
+        .main_list ul li {
+            display: inline-block;
             position: relative;
-            margin: 0 5px;
         }
 
-        .nav .main_list ul li a {
+        .main_list ul li a {
             text-decoration: none;
-            color: #fff;
-            padding: 10px 15px;
+            padding: 10px;
+            color: #000;
+        }
+
+        .main_list ul li:hover .dropdown {
             display: block;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-weight: 500;
         }
 
-        .nav .main_list ul li a:hover {
-            color: #1153D0;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 4px;
-        }
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .container {
+        margin: 0;
+    }
+}
 
-        /* Dropdown Menu */
+@media screen and (max-width: 768px) {
+    .container {
+        margin: 0;
+    }
+
+    .nav div.logo {
+        margin-left: 15px;
+    }
+
+    .nav div.main_list {
+        width: 100%;
+        margin-top: 65px;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .nav div.show_list {
+        height: 200px;
+    }
+
+    .nav div.main_list ul {
+        flex-direction: column;
+        width: 100%;
+        height: 200px;
+        top: 80px;
+        right: 0;
+        left: 0;
+    }
+
+    .nav div.main_list ul li {
+        width: 100%;
+        height: 40px;
+        background-color: rgba(6, 6, 7, 0.8);
+    }
+
+    .nav div.main_list ul li a {
+        text-align: center;
+        line-height: 40px;
+        width: 100%;
+        height: 40px;
+        display: table;
+    }
+
+    .nav div.media_button {
+        display: block;
+    }
+}
         .dropdown {
             display: none;
             position: absolute;
-            background-color: rgba(6, 6, 7, 0.95);
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            border-radius: 4px;
-            overflow: hidden;
-            z-index: 1001;
+            background-color: black;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
         }
 
         .dropdown a {
-            color: #fff !important;
-            padding: 12px 20px !important;
-            font-size: 14px !important;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
         }
 
         .dropdown a:hover {
-            background-color: #1153D0 !important;
-            color: #fff !important;
+            background-color: #333;
+            color:red;
         }
-
-        .nav .main_list ul li:hover .dropdown {
-            display: block;
-        }
-
-        /* Mobile Menu Button */
-        .nav .media_button {
-            display: none;
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .nav .media_button button.main_media_button {
-            width: 30px;
-            height: 25px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            outline: none;
-            position: relative;
-        }
-
-        .nav .media_button button.main_media_button span {
-            width: 100%;
-            height: 2px;
-            background-color: #fff;
-            display: block;
-            position: absolute;
-            transition: all 0.3s ease;
-        }
-
-        .nav .media_button button.main_media_button span:nth-child(1) {
-            top: 0;
-        }
-
-        .nav .media_button button.main_media_button span:nth-child(2) {
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .nav .media_button button.main_media_button span:nth-child(3) {
-            bottom: 0;
-        }
-
-        .nav .media_button button.active span:nth-child(1) {
-            transform: rotate(45deg);
-            top: 11px;
-        }
-
-        .nav .media_button button.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .nav .media_button button.active span:nth-child(3) {
-            transform: rotate(-45deg);
-            bottom: 11px;
-        }
-
-        /* Responsive Styles */
-        @media screen and (max-width: 768px) {
-            .nav .media_button {
-                display: block;
-            }
-
-            .nav .main_list {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                height: 0;
-                background-color: rgba(6, 6, 7, 0.95);
-                overflow: hidden;
-                transition: all 0.3s ease;
-            }
-
-            .nav .main_list.show_list {
-                height: auto;
-            }
-
-            .nav .main_list ul {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .nav .main_list ul li {
-                width: 100%;
-                margin: 0;
-            }
-
-            .nav .main_list ul li a {
-                text-align: center;
-                padding: 15px;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-            }
-
-            .dropdown {
-                position: static;
-                width: 100%;
-                display: none;
-            }
-
-            .nav .main_list ul li:hover .dropdown {
-                display: none;
-            }
-
-            .nav .main_list ul li.show_dropdown .dropdown {
-                display: block;
-            }
-        }
-
-        /* Existing styles for other sections */
-        .coffee_section {
-            padding: 50px 0;
-        }
-
         .client_section {
-            padding: 50px 0;
-        }
-
-        .client_left img {
-            max-width: 400px;
-            height: auto;
-            object-fit: cover;
-            margin-right: 30px;
-        }
-
-        .client_taital_main {
-            display: flex;
-            align-items: center;
-            gap: 270px;
-            padding: 20px;
-        }
-
-        .client_right {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .about_taital {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+        padding: 50px 0;
+    }
+    
+    .client_left img {
+        max-width: 400px; /* Control image width */
+        height: auto;
+        object-fit: cover;
+        margin-right: 30px; /* Add space between image and text */
+    }
+    
+    .client_taital_main {
+        display: flex;
+        align-items: center;
+        gap: 270px; /* Creates consistent gap between image and content */
+        padding: 20px;
+    }
+    
+    .client_right {
+        flex: 1;
+        padding: 20px;
+    }
+    
+    .about_taital {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    
+    .moark_text {
+        margin-bottom: 15px;
+    }
+    
+    .client_text {
+        line-height: 1.6;
+    }
+    
+    /* Carousel control adjustments */
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+    }
     </style>
-</head>
-<body style="background-color: lightgray;">
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="container">
-            <div class="logo">
-                <a href="#">
-                    <img src="img/logo.png" alt="MCC Logo">
-                    <span style="color: #1153D0;">MCC Event</span>
-                </a>
-            </div>
-            <div class="main_list" id="mainListDiv">
-                <ul>
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="ongoing.php">Ongoing</a></li>
-                    <li><a href="upcoming.php">Upcoming</a></li>
-                    <li><a href="about.php">About</a></li>
-                    <li><a href="admin/stream/index.php">Live</a></li>
-                    <li>
-                        <a href="#login">Login</a>
-                        <div class="dropdown">
-                            <a href="admin/admin_login.php">Admin Login</a>
-                            <a href="admin/index.php">Organizer Login</a>
-                            <a href="tabulator/index.php">Tabulator Login</a>
-                            <a href="admin/welcome.php">Judge Login</a>
-                            <a href="student/index.php">Student Login</a>
+   <body style="background-color: lightgray;">
+                    <div class="header_section">
+                        <div class="container">
+                        <nav class="nav">
+                    <div class="container">
+                        <div class="logo">
+                            <a href="#" style="font-family: impact; color: #1153D0;">
+                                <img src="img/logo.png" style="height: 40px;  vertical-align: middle;"> MCC Event
+                            </a>
+                            <span class="text-light"MCC>
                         </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="media_button">
-                <button class="main_media_button">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Your existing content sections -->
-    <div class="banner_section layout_padding">
-       <div class="container">
+                        <div class="main_list" id="mainListDiv">
+                        <ul>
+                            <li><a href="index.php">Home</a></li>
+                            <li><a href="ongoing.php">Ongoing</a></li>
+                            <li><a href="upcoming.php">Upcoming</a></li>
+                            <li><a href="about.php">About</a></li>
+                            <li><a href="admin/stream/index.php">Live</a></li>
+                            <li>
+                                <a href="#login">Login</a>
+                                <div class="dropdown">
+			                        <a href="admin/admin_login.php">Admin Login</a>
+                                    <a href="admin/index.php">Organizer Login</a>
+                                    <a href="tabulator/index.php">Tabulator Login</a>
+                                    <a href="admin/welcome.php">Judge Login</a>
+                                    <a href="student/index.php">Student Login</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                        <div class="media_button">
+                            <button class="main_media_button" id="mediaButton">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+                        </div>
+        <!-- banner section start --> 
+<div class="banner_section layout_padding">
+   <div class="container">
       <div id="banner_slider" class="carousel slide" data-ride="carousel">
          <div class="carousel-inner">
             <div class="carousel-item active">
@@ -365,10 +430,13 @@
         
       </div>
    </div>
-    </div>
+</div>
 
-    <!-- Ongoing Events Section -->
-    <?php
+         <!-- banner section end -->
+         </div>
+<!-- header section end -->
+<!-- ongoing section start -->
+<?php
 $host = '127.0.0.1';
     $username = 'u510162695_judging_root';
     $password = '1Judging_root';  // Replace with the actual password
@@ -461,8 +529,7 @@ $conn->close();
 
 
 <!-- ongoing section end -->
-
-    <!-- upcoming section start -->
+<!-- upcoming section start -->
 <?php
 // Database connection setup
 $host = '127.0.0.1';
@@ -543,10 +610,11 @@ $conn->close();
 </div>
 <!-- client section end -->
 <!-- upcoming section end -->
-
-    <!-- About Section -->
-    <div class="about_section layout_padding">
-       <div class="container">
+ 
+<!-- about section start -->
+      </div>
+      <div class="about_section layout_padding">
+         <div class="container">
             <div class="about_section_2">
                <div class="row">
                   <div class="col-md-6" style="z-index:-1000;"> 
@@ -563,9 +631,9 @@ $conn->close();
          </div>
       </div>
       <!-- about section end -->
-
-    <!-- Contact Section -->
-    <div class="contact_section layout_padding">
+      <!-- contact section start -->
+      <div class="contact_section layout_padding">
+         
          <div class="container-fluid">
             <div class="contact_section_2">
                <div class="row">
@@ -579,10 +647,9 @@ $conn->close();
          </div>
       </div>
       <!-- contact section end -->
-
-    <!-- Footer -->
-    <div class="copyright_section">
-        <div class="container">
+      <!-- copyright section start -->
+      <div class="copyright_section">
+         <div class="container">
             <div class="row">
                <div class="col-sm-12">
                   <p class="copyright_text"><strong> Event Judging  System &COPY; <?= date("Y") ?>  </strong></p>
@@ -591,69 +658,15 @@ $conn->close();
          </div>
       </div>
       <!-- copyright section end -->
-
-    <!-- Scripts -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/jquery-3.0.0.min.js"></script>
-    <script src="js/plugin.js"></script>
-    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="js/custom.js"></script>
-    
-    <!-- Navigation JavaScript -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mediaButton = document.querySelector('.main_media_button');
-            const mainList = document.querySelector('.main_list');
-            const navItems = document.querySelectorAll('.main_list ul li');
-
-            // Toggle mobile menu
-            mediaButton.addEventListener('click', function() {
-                this.classList.toggle('active');
-                mainList.classList.toggle('show_list');
-            });
-
-            // Handle dropdown on mobile
-            navItems.forEach(item => {
-                if (item.querySelector('.dropdown')) {
-                    item.addEventListener('click', function(e) {
-                        if (window.innerWidth <= 768) {
-                            e.preventDefault();
-                            this.classList.toggle('show_dropdown');
-                        }
-                    });
-                }
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.nav')) {
-                    mediaButton.classList.remove('active');
-                    mainList.classList.remove('show_list');
-                    navItems.forEach(item => item.classList.remove('show_dropdown'));
-                }
-            });
-
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    mediaButton.classList.remove('active');
-                    mainList.classList.remove('show_list');
-                    navItems.forEach(item => item.classList.remove('show_dropdown'));
-                }
-            });
-
-            // Add scroll event for navbar transparency
-            window.addEventListener('scroll', function() {
-                const nav = document.querySelector('.nav');
-                if (window.scrollY > 100) {
-                    nav.style.backgroundColor = 'rgba(6, 6, 7, 0.95)';
-                } else {
-                    nav.style.backgroundColor = 'rgba(6, 6, 7, 0.9)';
-                }
-            });
-        });
-    </script>
-</body>
+      <!-- Javascript files-->
+      <script src="js/jquery.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/jquery-3.0.0.min.js"></script>
+      <script src="js/plugin.js"></script>
+      <!-- sidebar -->
+      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="js/custom.js"></script>
+      
+   </body>
 </html>
