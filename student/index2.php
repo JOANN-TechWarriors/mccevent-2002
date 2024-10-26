@@ -1,175 +1,172 @@
-<?php 
-session_start();
-include('../admin/dbcon.php');
-date_default_timezone_set('Asia/Manila'); 
-
-// Check if form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $student_id = $_POST['student_id'];
-
-    try {
-        // Prepare and execute the query
-        $stmt = $conn->prepare("SELECT * FROM student WHERE student_id = :student_id");
-        $stmt->bindParam(':student_id', $student_id, PDO::PARAM_STR);
-        $stmt->execute();
-        $row = $stmt->fetch();
-        
-        if ($stmt->rowCount() > 0) {
-            if ($row['request_status'] == '') {
-                $_SESSION['login_error'] = "Sorry, Your account is not yet approve by the admin";
-            } elseif($row['request_status'] == 'Approved'){
-                 // Student exists, start session
-                $_SESSION['student_id'] = $student_id;
-                $_SESSION['login_success'] = true;
-                // Redirect to the login page to trigger JavaScript
-                header("Location: index.php");
-                exit();
-            }
-        } else {
-            $_SESSION['login_error'] = "Invalid Student ID";
-        }
-    } catch(PDOException $e) {
-        $_SESSION['login_error'] = "Database error: " . $e->getMessage();
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        body#login {
+            background: url(../img/Community-College-Madridejos.jpeg) no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+        .main-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
 
-<?php
-include_once('../admin/header2.php');
-?>
-<style>
-  .alert {
-    font-size: 14px;
-    padding: 8px 12px;
-    text-align: center;
-    margin: 10px;
-    max-width: 600px;
-    position: fixed;
-    top: 40px;
-    right: 20px;
-    z-index: 9999;
-  }
+        .logo-section {
+            text-align: center;
+            padding: 20px;
+        }
 
-  .logo-small {
-    width: 300px; 
-    height: auto; 
-    margin-top: 100px; 
-  }
+        .logo-small {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
 
-  .motto {
-    margin-top: 20px; 
-    margin-right: 100px; 
-  }
+        .motto {
+            margin-top: 20px;
+            text-align: center;
+        }
 
-  .form-container {
-    width: 400%; 
-    max-width: 600px;
-    margin: 2 auto;
-  }
+        .motto h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
 
-  thead th {
-    background-color: aquamarine;
-    text-indent: 10px;
-    font-size: 14px; 
-    padding: 10px;
-  }
-</style>
+        .motto h2 {
+            color: #1a5f7a;
+            font-weight: bold;
+        }
 
+        .login-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-<body id="login" style="background:url(../img/Community-College-Madridejos.jpeg)">
-<?php
-if (isset($_SESSION['login_error'])) {
-    echo '<div class="alert alert-danger">' . $_SESSION['login_error'] . '</div>';
-    unset($_SESSION['login_error']);
-}
-?>
+        .login-header {
+            background-color: aquamarine;
+            padding: 15px;
+            border-radius: 5px 5px 0 0;
+            margin-bottom: 20px;
+        }
 
-<div class="container">
-  <div class="row-fluid">
-    <div class="span6">
-      <div class="title_index">
-        <div class="row-fluid">
-          <div class="span12"></div>
-          <div class="row-fluid">
-            <div class="span10">
-              <img class="index_logo logo-small" src="../img/logo.png">
+        .login-header h4 {
+            margin: 0;
+            color: black;
+            font-weight: bold;
+        }
+
+        .form-control {
+            height: 45px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .btn-login {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 30px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .signup-link {
+            margin-top: 15px;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .logo-small {
+                max-width: 200px;
+            }
+            
+            .motto h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body id="login">
+    <div class="container">
+        <div class="row main-container">
+            <!-- Logo and Title Section -->
+            <div class="col-md-6">
+                <div class="logo-section">
+                    <img class="logo-small" src="../img/logo.png" alt="MCC Logo">
+                    <div class="motto">
+                        <h3>WELCOME TO:</h3>
+                        <h2>MCC Event Judging Systems</h2>
+                    </div>
+                </div>
             </div>
-            <div class="span12">
-              <div class="motto">
-                <h3><p>WELCOME&nbsp;&nbsp;TO:</p></h3>
-                <h2><p><strong>MCC Event Judging Systems</strong></p></h2>
-              </div>
+            
+            <!-- Login Form Section -->
+            <div class="col-md-6">
+                <div class="login-form">
+                    <div class="login-header">
+                        <h4><i class="icon-user"></i> STUDENT LOGIN</h4>
+                    </div>
+                    <form method="POST" action="">
+                        <div class="form-group">
+                            <label><h5><i class="icon-user"></i> STUDENT ID:</h5></label>
+                            <input type="text" class="form-control" name="student_id" placeholder="Student ID #" required autofocus>
+                        </div>
+                        <button type="submit" class="btn btn-login btn-block">
+                            <i class="icon-ok"></i> <strong>LOGIN</strong>
+                        </button>
+                        <div class="text-center signup-link">
+                            <strong><a href="student_register.php">Sign Up</a></strong>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-    <br><br><br><br>
-    <div class="span6">
-      <div class="pull-left">
-        <div id="home">
-          <div class="overlay">
-            <div class="form-container">
-            <form method="POST" action="">
-                <br />
-                <table cellpadding="10" cellspacing="0" border="0" align="center">
-                  <thead>
-                    <th align="left" style="background-color: aquamarine; text-indent: 10px; color: black;">
-                      <h4> &nbsp;STUDENT LOGIN</h4>
-                    </th>
-                  </thead>
-                  <tr style="background-color: #fff;">
-                    <td>
-                      <h5><i class="icon-user"></i> STUDENT ID:</h5>
-                      &nbsp;
-                      <input style="font-size: large; height: 35px !important; text-indent: 7px !important;" class="form-control btn-block" type="text" name="student_id" placeholder="Student ID #" required="true" autofocus="true" />
-                      <br />
-                      &nbsp;
-                      <button style="width: 160px !important;" type="submit" class="btn btn-primary pull-right"><i class="icon-ok"></i> <strong>LOGIN</strong></button>
-                      &nbsp;
-                      <strong><a href="student_register.php">Sign Up</a></strong> &nbsp;&nbsp;&nbsp;<br><br>
-                    </td>
-                  </tr>
-                </table>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    
+    <!-- Success Alert Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            <?php if (isset($_SESSION['login_success']) && $_SESSION['login_success'] === true): ?>
+            Swal.fire({
+                title: "Success!",
+                text: "You are successfully logged in!",
+                icon: "success",
+                confirmButtonText: "Ok",
+            }).then(() => {
+                window.location.href = '../index.php';
+            });
+            <?php unset($_SESSION['login_success']); ?>
+            <?php endif; ?>
+        });
 
-<script src="..//assets/js/jquery.js"></script>
-<script src="..//assets/js/bootstrap-transition.js"></script>
-<script src="..//assets/js/bootstrap-alert.js"></script>
-<script src="..//assets/js/bootstrap-modal.js"></script>
-<script src="..//assets/js/bootstrap-dropdown.js"></script>
-<script src="..//assets/js/bootstrap-scrollspy.js"></script>
-<script src="..//assets/js/bootstrap-tab.js"></script>
-<script src="..//assets/js/bootstrap-tooltip.js"></script>
-<script src="..//assets/js/bootstrap-popover.js"></script>
-<script src="..//assets/js/bootstrap-button.js"></script>
-<script src="..//assets/js/bootstrap-collapse.js"></script>
-<script src="..//assets/js/bootstrap-carousel.js"></script>
-<script src="..//assets/js/bootstrap-typeahead.js"></script>
-<script src="..//assets/js/bootstrap-affix.js"></script>
-<script src="..//assets/js/holder/holder.js"></script>
-<script src="..//assets/js/google-code-prettify/prettify.js"></script>
-<script src="..//assets/js/application.js"></script>
-<script>
-// Disable right-click
+        // Security Scripts
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
         document.onkeydown = function (e) {
             if (
                 e.key === 'F12' ||
@@ -180,42 +177,9 @@ if (isset($_SESSION['login_error'])) {
             }
         };
 
-        // Disable developer tools
-        function disableDevTools() {
-            if (window.devtools.isOpen) {
-                window.location.href = "about:blank";
-            }
-        }
-
-        // Check for developer tools every 100ms
-        setInterval(disableDevTools, 100);
-
-        // Disable selecting text
         document.onselectstart = function (e) {
             e.preventDefault();
         };
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-      <?php if (isset($_SESSION['login_success']) && $_SESSION['login_success'] === true): ?>
-        Swal.fire({
-          ititle: "Success!",
-        text: "You are successfully logged in!",
-        icon: "success",
-        confirmButtonText: "Ok",
-        }).then(() => {
-          window.location.href = '../index.php'; // Redirect after alert
-        });
-        <?php unset($_SESSION['login_success']); ?> // Clear the session variable
-      <?php endif; ?>
-    });
-  </script>
+    </script>
 </body>
 </html>
-<!--  -->
-        <!-- title: "Success!",
-        text: "You are successfully logged in!",
-        icon: "success",
-        confirmButtonText: "Ok", -->
-
