@@ -5,16 +5,16 @@ date_default_timezone_set('Asia/Manila');
 ?>
 <!DOCTYPE html>
 <html lang="en">
+  
+<?php
+include_once('header2.php');
+?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCC Event Judging System</title>
     <link rel="shortcut icon" href="../images/logo copy.png"/>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Custom CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .alert {
             font-size: 14px;
@@ -28,116 +28,160 @@ date_default_timezone_set('Asia/Manila');
             z-index: 9999;
         }
 
-        /* Prevent text selection */
-        body {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        /* Custom background with overlay */
-        .bg-custom {
-            background: url('../img/Community-College-Madridejos.jpeg');
+        .login-container {
+            display: flex;
+            min-height: 100vh;
+            background: url(../img/Community-College-Madridejos.jpeg);
             background-size: cover;
             background-position: center;
         }
 
-        /* Custom input focus effect */
-        .input-focus:focus {
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        .login-box {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            width: 90%;
+            max-width: 1200px;
+            overflow: hidden;
+        }
+
+        .logo-section {
+            flex: 1;
+            background: linear-gradient(to bottom right, #f0f7ff, white);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .form-section {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .logo-image {
+            width: 300px;
+            height: auto;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #2980b9;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .links a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .login-box {
+                flex-direction: column;
+            }
+            
+            .logo-section, .form-section {
+                width: 100%;
+            }
         }
     </style>
 </head>
-<body class="bg-custom min-h-screen">
-    <div class="container mx-auto px-4 h-screen flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-6xl flex flex-col md:flex-row overflow-hidden">
-            <!-- Left Column -->
-            <div class="w-full md:w-1/2 bg-gradient-to-br from-blue-50 to-white p-8 flex flex-col items-center justify-center">
-                <img class="w-64 h-auto mb-8" src="../img/logo.png" alt="MCC Logo">
-                <div class="text-center">
-                    <h3 class="text-gray-600 text-xl mb-2">WELCOME TO:</h3>
-                    <h2 class="text-gray-800 text-3xl font-bold">MCC Event Judging System</h2>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <img class="logo-image" src="../img/logo.png" alt="MCC Logo">
+                <div>
+                    <h3 style="color: #666; font-size: 1.2rem; margin-bottom: 0.5rem;">WELCOME TO:</h3>
+                    <h2 style="color: #333; font-size: 1.8rem; font-weight: bold;">MCC Event Judging System</h2>
                 </div>
             </div>
 
-            <!-- Right Column -->
-            <div class="w-full md:w-1/2 p-8">
-                <div class="max-w-md mx-auto">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-8">ORGANIZER LOGIN</h2>
-                    
-                    <form id="login-form" method="POST" action="login.php">
-                        <!-- Username Input -->
-                        <div class="mb-6">
-                            <label class="block text-gray-700 text-sm font-semibold mb-2">
-                                USERNAME
-                            </label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-3 text-gray-400">
-                                    <i class="fas fa-user"></i>
-                                </span>
-                                <input 
-                                    type="email" 
-                                    name="username" 
-                                    required 
-                                    class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg input-focus focus:outline-none focus:border-blue-500"
-                                    placeholder="Enter your username"
-                                >
-                            </div>
-                        </div>
+            <!-- Form Section -->
+            <div class="form-section">
+                <h2 style="color: #333; font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem;">ORGANIZER LOGIN</h2>
+                
+                <form id="login-form" method="POST" action="login.php">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="email" name="username" required placeholder="Username" 
+                               style="height: 45px;">
+                    </div>
 
-                        <!-- Password Input -->
-                        <div class="mb-6">
-                            <label class="block text-gray-700 text-sm font-semibold mb-2">
-                                PASSWORD
-                            </label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-3 text-gray-400">
-                                    <i class="fas fa-lock"></i>
-                                </span>
-                                <input 
-                                    type="password" 
-                                    name="password" 
-                                    required 
-                                    class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg input-focus focus:outline-none focus:border-blue-500"
-                                    placeholder="Enter your password"
-                                >
-                            </div>
-                        </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" required placeholder="Password" 
+                               style="height: 45px;">
+                    </div>
 
-                        <!-- Forgot Password Link -->
-                        <div class="flex items-center justify-between mb-6">
-                            <a href="#" 
-                               data-toggle="modal" 
-                               data-target="#forgot-password-modal" 
-                               class="text-blue-500 hover:text-blue-600 text-sm transition duration-200">
-                                Forgot password?
-                            </a>
-                        </div>
+                    <div style="margin-bottom: 1rem;">
+                        <a href="#" data-toggle="modal" data-target="#forgot-password-modal" 
+                           style="color: #3498db; text-decoration: none;">
+                            Forgot password?
+                        </a>
+                    </div>
 
-                        <!-- Login Button -->
-                        <button 
-                            type="button"
-                            id="login-button"
-                            class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-200 font-semibold"
-                        >
-                            <i class="fas fa-sign-in-alt mr-2"></i> Sign in
-                        </button>
+                    <button type="button" id="login-button" class="btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Sign in
+                    </button>
 
-                        <!-- Register Link -->
-                        <p class="mt-6 text-center text-gray-600 text-sm">
-                            Don't have an account? 
-                            <a href="create_account.php" class="text-blue-500 hover:text-blue-600 transition duration-200">
-                                Register here
-                            </a>
+                    <div class="links">
+                        <p>Don't have an account? 
+                            <a href="create_account.php">Register here</a>
                         </p>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Forgot Password Modal -->
+    <!-- Forgot Password Modal (Keeping your original modal) -->
     <div class="modal fade" id="forgot-password-modal" tabindex="-1" role="dialog" aria-labelledby="forgot-password-modal-label" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -160,13 +204,28 @@ date_default_timezone_set('Asia/Manila');
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Keeping your original scripts -->
     <script src="../assets/js/jquery.js"></script>
+    <script src="../assets/js/bootstrap-transition.js"></script>
+    <script src="../assets/js/bootstrap-alert.js"></script>
     <script src="../assets/js/bootstrap-modal.js"></script>
+    <script src="../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../assets/js/bootstrap-scrollspy.js"></script>
+    <script src="../assets/js/bootstrap-tab.js"></script>
+    <script src="../assets/js/bootstrap-tooltip.js"></script>
+    <script src="../assets/js/bootstrap-popover.js"></script>
+    <script src="../assets/js/bootstrap-button.js"></script>
+    <script src="../assets/js/bootstrap-collapse.js"></script>
+    <script src="../assets/js/bootstrap-carousel.js"></script>
+    <script src="../assets/js/bootstrap-typeahead.js"></script>
+    <script src="../assets/js/bootstrap-affix.js"></script>
+    <script src="../assets/js/holder/holder.js"></script>
+    <script src="../assets/js/google-code-prettify/prettify.js"></script>
+    <script src="../assets/js/application.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <script>
-        // Login success alert
+        // Keeping all your original JavaScript
         window.onload = function() {
             <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
                 Swal.fire({
@@ -182,7 +241,6 @@ date_default_timezone_set('Asia/Manila');
             <?php endif; ?>
         };
 
-        // Login button click handler
         document.getElementById("login-button").addEventListener("click", function() {
             Swal.fire({
                 title: "Success!",
@@ -196,12 +254,10 @@ date_default_timezone_set('Asia/Manila');
             });
         });
 
-        // Clear email in forgot password form
         function clearEmail() {
             document.getElementById("forgot-password-form").reset();
         }
 
-        // Hide alert after 3 seconds
         setTimeout(function(){
             var alert = document.querySelector('.alert');
             if (alert) {
