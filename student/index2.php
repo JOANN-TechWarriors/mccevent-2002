@@ -35,136 +35,149 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login - MCC Event Judging System</title>
+    
+    <!-- Include your existing header -->
+    <?php include_once('../admin/header2.php'); ?>
+    
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Custom styles */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        /* Prevent text selection */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Background image overlay */
+        .bg-overlay {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        url(../img/Community-College-Madridejos.jpeg);
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
-<?php
-include_once('../admin/header2.php');
-?>
-<style>
-  .alert {
-    font-size: 14px;
-    padding: 8px 12px;
-    text-align: center;
-    margin: 10px;
-    max-width: 600px;
-    position: fixed;
-    top: 40px;
-    right: 20px;
-    z-index: 9999;
-  }
-
-  .logo-small {
-    width: 300px; 
-    height: auto; 
-    margin-top: 100px; 
-  }
-
-  .motto {
-    margin-top: 20px; 
-    margin-right: 100px; 
-  }
-
-  .form-container {
-    width: 400%; 
-    max-width: 600px;
-    margin: 2 auto;
-  }
-
-  thead th {
-    background-color: aquamarine;
-    text-indent: 10px;
-    font-size: 14px; 
-    padding: 10px;
-  }
-</style>
-
-
-<body id="login" style="background:url(../img/Community-College-Madridejos.jpeg)">
-<?php
-if (isset($_SESSION['login_error'])) {
-    echo '<div class="alert alert-danger">' . $_SESSION['login_error'] . '</div>';
-    unset($_SESSION['login_error']);
-}
-?>
-
-<div class="container">
-  <div class="row-fluid">
-    <div class="span6">
-      <div class="title_index">
-        <div class="row-fluid">
-          <div class="span12"></div>
-          <div class="row-fluid">
-            <div class="span10">
-              <img class="index_logo logo-small" src="../img/logo.png">
-            </div>
-            <div class="span12">
-              <div class="motto">
-                <h3><p>WELCOME&nbsp;&nbsp;TO:</p></h3>
-                <h2><p><strong>MCC Event Judging Systems</strong></p></h2>
-              </div>
-            </div>
-          </div>
+<body class="bg-overlay no-select">
+    <!-- Alert Messages -->
+    <?php if (isset($_SESSION['login_error'])): ?>
+        <div class="alert bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+            <p><?php echo $_SESSION['login_error']; ?></p>
         </div>
-      </div>
-    </div>
-    <br><br><br><br>
-    <div class="span6">
-      <div class="pull-left">
-        <div id="home">
-          <div class="overlay">
-            <div class="form-container">
-            <form method="POST" action="">
-                <br />
-                <table cellpadding="10" cellspacing="0" border="0" align="center">
-                  <thead>
-                    <th align="left" style="background-color: aquamarine; text-indent: 10px; color: black;">
-                      <h4> &nbsp;STUDENT LOGIN</h4>
-                    </th>
-                  </thead>
-                  <tr style="background-color: #fff;">
-                    <td>
-                      <h5><i class="icon-user"></i> STUDENT ID:</h5>
-                      &nbsp;
-                      <input style="font-size: large; height: 35px !important; text-indent: 7px !important;" class="form-control btn-block" type="text" name="student_id" placeholder="Student ID #" required="true" autofocus="true" />
-                      <br />
-                      &nbsp;
-                      <button style="width: 160px !important;" type="submit" class="btn btn-primary pull-right"><i class="icon-ok"></i> <strong>LOGIN</strong></button>
-                      &nbsp;
-                      <strong><a href="student_register.php">Sign Up</a></strong> &nbsp;&nbsp;&nbsp;<br><br>
-                    </td>
-                  </tr>
-                </table>
-              </form>
+        <?php unset($_SESSION['login_error']); ?>
+    <?php endif; ?>
+
+    <!-- Main Container -->
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <!-- Login Card -->
+        <div class="w-full max-w-6xl bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row">
+                <!-- Left Side - Logo and Title -->
+                <div class="w-full md:w-1/2 p-8 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-white">
+                    <img src="../img/logo.png" alt="MCC Logo" class="w-64 h-auto mb-8">
+                    <div class="text-center space-y-2">
+                        <h3 class="text-xl text-gray-600">WELCOME TO:</h3>
+                        <h2 class="text-3xl font-bold text-gray-800">MCC Event Judging Systems</h2>
+                    </div>
+                </div>
+
+                <!-- Right Side - Login Form -->
+                <div class="w-full md:w-1/2 p-8 bg-white">
+                    <div class="max-w-md mx-auto">
+                        <div class="bg-aquamarine p-4 rounded-lg mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">Student Login</h2>
+                        </div>
+                        
+                        <form method="POST" action="" class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">
+                                    <i class="icon-user"></i> STUDENT ID
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="student_id" 
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
+                                    placeholder="Enter Student ID #" 
+                                    required 
+                                    autofocus
+                                >
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <button 
+                                    type="submit" 
+                                    class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
+                                >
+                                    <i class="icon-ok"></i> LOGIN
+                                </button>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <p class="text-gray-600">
+                                    Don't have an account? 
+                                    <a href="student_register.php" class="text-blue-500 hover:text-blue-600 font-medium">
+                                        Sign Up
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
 
+    <!-- Your existing scripts -->
+    <script src="../assets/js/jquery.js"></script>
+    <script src="../assets/js/bootstrap-transition.js"></script>
+    <script src="../assets/js/bootstrap-alert.js"></script>
+    <script src="../assets/js/bootstrap-modal.js"></script>
+    <script src="../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../assets/js/bootstrap-scrollspy.js"></script>
+    <script src="../assets/js/bootstrap-tab.js"></script>
+    <script src="../assets/js/bootstrap-tooltip.js"></script>
+    <script src="../assets/js/bootstrap-popover.js"></script>
+    <script src="../assets/js/bootstrap-button.js"></script>
+    <script src="../assets/js/bootstrap-collapse.js"></script>
+    <script src="../assets/js/bootstrap-carousel.js"></script>
+    <script src="../assets/js/bootstrap-typeahead.js"></script>
+    <script src="../assets/js/bootstrap-affix.js"></script>
+    <script src="../assets/js/holder/holder.js"></script>
+    <script src="../assets/js/google-code-prettify/prettify.js"></script>
+    <script src="../assets/js/application.js"></script>
 
-<script src="..//assets/js/jquery.js"></script>
-<script src="..//assets/js/bootstrap-transition.js"></script>
-<script src="..//assets/js/bootstrap-alert.js"></script>
-<script src="..//assets/js/bootstrap-modal.js"></script>
-<script src="..//assets/js/bootstrap-dropdown.js"></script>
-<script src="..//assets/js/bootstrap-scrollspy.js"></script>
-<script src="..//assets/js/bootstrap-tab.js"></script>
-<script src="..//assets/js/bootstrap-tooltip.js"></script>
-<script src="..//assets/js/bootstrap-popover.js"></script>
-<script src="..//assets/js/bootstrap-button.js"></script>
-<script src="..//assets/js/bootstrap-collapse.js"></script>
-<script src="..//assets/js/bootstrap-carousel.js"></script>
-<script src="..//assets/js/bootstrap-typeahead.js"></script>
-<script src="..//assets/js/bootstrap-affix.js"></script>
-<script src="..//assets/js/holder/holder.js"></script>
-<script src="..//assets/js/google-code-prettify/prettify.js"></script>
-<script src="..//assets/js/application.js"></script>
-<script>
-// Disable right-click
+    <!-- Security Scripts -->
+    <script>
+        // Disable right-click
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
@@ -180,42 +193,30 @@ if (isset($_SESSION['login_error'])) {
             }
         };
 
-        // Disable developer tools
+        // Check for developer tools
         function disableDevTools() {
-            if (window.devtools.isOpen) {
+            if (window.devtools && window.devtools.isOpen) {
                 window.location.href = "about:blank";
             }
         }
-
-        // Check for developer tools every 100ms
         setInterval(disableDevTools, 100);
+    </script>
 
-        // Disable selecting text
-        document.onselectstart = function (e) {
-            e.preventDefault();
-        };
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-      <?php if (isset($_SESSION['login_success']) && $_SESSION['login_success'] === true): ?>
-        Swal.fire({
-          ititle: "Success!",
-        text: "You are successfully logged in!",
-        icon: "success",
-        confirmButtonText: "Ok",
-        }).then(() => {
-          window.location.href = '../index.php'; // Redirect after alert
+    <!-- Success Alert Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            <?php if (isset($_SESSION['login_success']) && $_SESSION['login_success'] === true): ?>
+                Swal.fire({
+                    title: "Success!",
+                    text: "You are successfully logged in!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                }).then(() => {
+                    window.location.href = '../index.php';
+                });
+                <?php unset($_SESSION['login_success']); ?>
+            <?php endif; ?>
         });
-        <?php unset($_SESSION['login_success']); ?> // Clear the session variable
-      <?php endif; ?>
-    });
-  </script>
+    </script>
 </body>
 </html>
-<!--  -->
-        <!-- title: "Success!",
-        text: "You are successfully logged in!",
-        icon: "success",
-        confirmButtonText: "Ok", -->
-
