@@ -16,7 +16,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #fff;
+            background-color: #f5f5f5;
             margin: 0;
             padding: 0;
             min-height: 100vh;
@@ -68,6 +68,7 @@
         .sidebar-heading img {
             max-width: 100px;
             max-height: 100px;
+            margin-bottom: 10px;
         }
 
         .sidebar ul {
@@ -90,9 +91,11 @@
 
         .sidebar ul li a i {
             margin-right: 10px;
+            width: 20px;
+            text-align: center;
         }
 
-        .sidebar ul li a:hover {
+        .sidebar ul li:hover {
             background-color: #1a1a2e;
         }
 
@@ -107,27 +110,37 @@
         }
 
         .header {
-            background-color: #f8f9fa;
-            padding: 10px 20px;
+            background-color: #fff;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .header .profile-dropdown {
             position: relative;
             display: inline-block;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        .header .profile-dropdown:hover {
+            background-color: #f8f9fa;
+            border-radius: 4px;
         }
 
         .header .profile-dropdown .dropdown-menu {
             display: none;
             position: absolute;
             right: 0;
+            top: 100%;
             background-color: #fff;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
+            border-radius: 4px;
+            min-width: 180px;
             z-index: 1000;
         }
 
@@ -137,9 +150,10 @@
 
         .header .profile-dropdown .dropdown-menu a {
             display: block;
-            padding: 10px;
+            padding: 10px 15px;
             color: #333;
             text-decoration: none;
+            transition: background-color 0.2s;
         }
 
         .header .profile-dropdown .dropdown-menu a:hover {
@@ -147,59 +161,78 @@
         }
 
         /* Improved Edit Form Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .container h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #337ab7;
+        }
+
         .edit-form-container {
             padding: 20px;
-            max-width: 800px; /* Reduced from 1200px */
+            max-width: 800px;
             margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .panel-primary {
-            border: 1px solid #ddd;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
             margin-bottom: 20px;
             background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .panel-heading {
             background-color: #337ab7;
             color: white;
-            padding: 12px 15px;
+            padding: 15px 20px;
             border-radius: 7px 7px 0 0;
+            display: flex;
+            align-items: center;
         }
 
         .panel-title {
             margin: 0;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 500;
         }
 
         .panel-body {
-            padding: 20px;
+            padding: 25px;
         }
 
-        /* Resized Table Styles */
+        /* Improved Table Styles */
         .edit-table {
-            display: table;
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 15px;
+            margin: 0 auto;
         }
 
         .table-row {
-            display: table-row;
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+            align-items: flex-start;
         }
 
         .table-cell {
-            display: table-cell;
+            flex: 1;
             padding: 0 10px;
-            vertical-align: top;
-            width: 33.33%;
+            margin-bottom: 20px;
+            min-width: 200px;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #333;
             font-size: 14px;
@@ -207,37 +240,54 @@
 
         .form-control {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             font-size: 14px;
-            line-height: 1.4;
+            line-height: 1.5;
             color: #495057;
             background-color: #fff;
             border: 1px solid #ced4da;
             border-radius: 4px;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            transition: all 0.2s ease-in-out;
         }
 
         .form-control:focus {
             border-color: #80bdff;
             outline: 0;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.15);
+        }
+
+        select.form-control {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
         .button-group {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-            padding: 0 10px;
+            gap: 12px;
+            margin-top: 25px;
+            padding: 0;
         }
 
         .btn {
-            padding: 8px 16px;
+            padding: 10px 20px;
             font-size: 14px;
             font-weight: 500;
             border-radius: 4px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 100px;
         }
 
         .btn-default {
@@ -257,43 +307,59 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        .btn-default:hover {
+            background-color: #e2e6ea;
+            border-color: #dae0e5;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
         /* Responsive Styles */
         @media (max-width: 768px) {
             .edit-form-container {
-                padding: 10px;
-            }
-
-            .edit-table {
-                display: block;
+                padding: 15px;
+                margin: 10px;
             }
 
             .table-row {
-                display: block;
-                margin-bottom: 15px;
+                margin: 0;
             }
 
             .table-cell {
-                display: block;
-                width: 100%;
-                padding: 5px 0;
+                flex: 0 0 100%;
+                padding: 0;
+                margin-bottom: 15px;
             }
 
             .button-group {
                 flex-direction: column;
-                padding: 0;
+                gap: 8px;
             }
 
             .btn {
                 width: 100%;
-                margin: 5px 0;
+                margin: 0;
             }
 
             .main {
                 margin-left: 0;
+                padding: 10px;
             }
 
             .sidebar {
                 transform: translateX(-100%);
+            }
+
+            .header {
+                padding: 10px;
+            }
+
+            .container h1 {
+                font-size: 20px;
+                margin-bottom: 15px;
             }
         }
     </style>
