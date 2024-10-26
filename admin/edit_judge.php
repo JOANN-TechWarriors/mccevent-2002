@@ -14,6 +14,8 @@
      
   ?>
   <head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.min.css" rel="stylesheet">
   <link rel="shortcut icon" href="../images/logo copy.png"/>
   <style>
     body {
@@ -23,8 +25,7 @@
           padding: 0;
           min-height: 100vh; /* Ensures the body takes at least the full viewport height */
           width: 100vw;      /* Ensures full width */
-          overflow-y: auto;  /* Enables vertical scrolling */
-          overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
+          
         }
     .sidebar {
         position: fixed;
