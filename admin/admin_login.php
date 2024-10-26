@@ -149,8 +149,8 @@ if (isset($_POST['admin_login'])) {
                     <div class="logo-section">
                         <img src="../img/logo.png" alt="MCC Logo" class="logo-img">
                         <div class="system-title">
-                            <h3>WELCOME TO:</h3>
-                            <h1>MCC Event Judging System</h1>
+                            <h4>WELCOME TO:</h4>
+                            <h3>MCC Event Judging System</h3>
                         </div>
                     </div>
                 </div>
@@ -208,7 +208,22 @@ if (isset($_POST['admin_login'])) {
         <?php unset($_SESSION['login_success']); ?>
         <?php endif; ?>
 
-        
+        // Security measures
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        document.onkeydown = function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || 
+                (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        };
+
+        document.onselectstart = function(e) {
+            e.preventDefault();
+        };
 
         // Hide alert after 3 seconds
         setTimeout(function() {
