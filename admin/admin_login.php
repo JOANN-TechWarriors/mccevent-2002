@@ -150,7 +150,7 @@ if (isset($_POST['admin_login'])) {
                         <img src="../img/logo.png" alt="MCC Logo" class="logo-img">
                         <div class="system-title">
                             <h4>WELCOME TO:</h4>
-                            <h3>MCC Event Judging System</h3>
+                            <h3><strong>MCC Event Judging System</strong></h3>
                         </div>
                     </div>
                 </div>
