@@ -79,8 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         /* Background image overlay */
         .bg-overlay {
-            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
-                        url(../img/Community-College-Madridejos.jpeg);
+            background: url(../img/Community-College-Madridejos.jpeg);
             background-size: cover;
             background-position: center;
         }
@@ -122,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     <i class="icon-user"></i> STUDENT ID
                                 </label>
-                                <input 
+                                <input class="form-control btn-block" style="text-indent: 7px !important;"
                                     type="text" 
                                     name="student_id" 
                                     class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
@@ -176,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="../assets/js/application.js"></script>
 
     <!-- Security Scripts -->
-
+    
 
     <!-- Success Alert Script -->
     <script>
