@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCC Event Judging System - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .bg-custom {
+            background: url(../img/Community-College-Madridejos.jpeg) center/cover no-repeat;
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <div class="min-h-screen flex items-center justify-center">
+<body class="bg-custom">
+    <div class="min-h-screen flex items-center justify-center bg-black bg-opacity-50"> <!-- Added overlay -->
         <div class="bg-white rounded-xl shadow-lg flex flex-col md:flex-row w-full max-w-4xl m-4">
             <!-- Left Side - Logo and Title -->
-            <div class="w-full md:w-1/2 p-8 bg-gradient-to-br from-teal-50 to-white flex flex-col items-center justify-center">
+            <div class="w-full md:w-1/2 p-8 bg-gradient-to-br from-teal-50 to-white flex flex-col items-center justify-center rounded-l-xl">
                 <img src="../img/logo.png" alt="MCC Logo" class="w-64 h-auto mb-8">
                 <div class="text-center space-y-2">
                     <h3 class="text-xl text-gray-600">WELCOME TO:</h3>
@@ -19,7 +24,7 @@
             </div>
 
             <!-- Right Side - Login Form -->
-            <div class="w-full md:w-1/2 p-8">
+            <div class="w-full md:w-1/2 p-8 bg-white rounded-r-xl">
                 <div class="max-w-md mx-auto">
                     <h2 class="text-2xl font-bold mb-8 text-gray-800">Log In</h2>
                     <form method="POST" action="judge_profile.php">
@@ -60,7 +65,6 @@
                             </button>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
