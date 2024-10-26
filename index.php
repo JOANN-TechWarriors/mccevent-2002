@@ -301,7 +301,7 @@
       </nav>
 
       <!-- banner section start --> 
-<div class="banner_section layout_padding" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 500px; max-width:100%; position: relative;">
+<div class="banner_section layout_padding" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 600px; position: relative;">
    <div class="container">
       <div id="banner_slider" class="carousel slide" data-ride="carousel">
          <div class="carousel-inner">
