@@ -60,7 +60,7 @@ if (isset($_POST['admin_login'])) {
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             margin: 50px auto;
             max-width: 1000px;
-            min-height: 500px;
+            min-height: 400px;
         }
 
         .logo-section {
