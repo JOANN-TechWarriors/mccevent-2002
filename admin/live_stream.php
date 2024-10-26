@@ -534,26 +534,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         /* Status badge styling */
         .status-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.875rem;
             font-weight: 500;
-            text-transform: capitalize;
         }
 
         .status-scheduled {
-            background-color: #e3f2fd;
-            color: #1976d2;
+            background-color: #fef3c7;
+            color: #92400e;
         }
 
         .status-live {
-            background-color: #e8f5e9;
-            color: #2e7d32;
+            background-color: #dcfce7;
+            color: #166534;
         }
 
         .status-ended {
-            background-color: #fafafa;
-            color: #616161;
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin-left: 0;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+            
+            .pagination-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .pagination {
+                justify-content: center;
+            }
+            
+            .show-entries {
+                justify-content: center;
+            }
+        }
+
+        /* Additional Responsive Fixes */
+        @media screen and (max-width: 576px) {
+            .table-controls, .pagination-container {
+                margin: 10px;
+                padding: 10px;
+            }
+            
+            .pagination li a {
+                padding: 6px 10px;
+            }
         }
 
         /* Responsive adjustments */
@@ -578,66 +619,123 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 height: 48px;
             }
         }
-        /* Add these styles to your existing CSS */
-        .pagination-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-            padding: 0 20px;
-        }
+        /* Table Controls Layout */
+            .table-controls {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                padding: 0 20px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                padding: 15px;
+            }
 
-        .pagination {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+            .show-entries {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                white-space: nowrap;
+            }
 
-        .pagination li {
-            margin: 0 5px;
-        }
+            .show-entries select {
+                padding: 6px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                min-width: 80px;
+                background-color: white;
+            }
 
-        .pagination li a {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-decoration: none;
-            color: #007bff;
-        }
+            .search-box {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-left: auto;
+            }
 
-        .pagination li.active a {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
+            .search-box input {
+                padding: 6px 12px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                width: 250px;
+                background-color: white;
+            }
 
-        .table-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 0 20px;
-        }
+            /* Table Container */
+            .table-container {
+                overflow-x: auto;
+                margin: 0 20px;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
 
-        .show-entries {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+            .table-responsive {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 0;
+            }
 
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+            .table-responsive th,
+            .table-responsive td {
+                padding: 12px;
+                border: 1px solid #ddd;
+            }
 
-        .search-box input {
-            padding: 6px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 200px;
-        }
+            .table-responsive th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+                text-align: left;
+            }
+
+            /* Pagination Layout */
+            .pagination-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: space-between;
+                align-items: center;
+                margin: 20px;
+                padding: 15px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+            }
+
+            .pagination {
+                display: flex;
+                flex-wrap: wrap;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                gap: 5px;
+            }
+
+            .pagination li {
+                margin: 0;
+            }
+
+            .pagination li a {
+                display: inline-block;
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                text-decoration: none;
+                color: #007bff;
+                background-color: white;
+                transition: all 0.2s ease;
+            }
+
+            .pagination li.active a {
+                background-color: #007bff;
+                color: white;
+                border-color: #007bff;
+            }
+
+            .pagination li a:hover:not(.active) {
+                background-color: #e9ecef;
+            }
     </style>
 </head>
 
