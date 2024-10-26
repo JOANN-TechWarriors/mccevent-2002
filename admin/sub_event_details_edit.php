@@ -271,11 +271,18 @@ $se_row = $se_query->fetch();
   </div>
 
 <!-- Header -->
-   <div class="header">
-    <div>
-        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
-    </div>
-    </div>
+    <div class="header">
+            <div>
+                <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="profile-dropdown">
+                <div style="font-size:small;"><?php echo $name; ?></div>
+                <div class="dropdown-menu">
+                    <a href="edit_organizer.php">Account Settings</a>
+                    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                </div>
+            </div>
+      </div>
 
 <div class="main" id="main-content">
     <div class="container">

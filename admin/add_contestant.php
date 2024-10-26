@@ -97,23 +97,61 @@ $se_name=$_GET['se_name'];
         }
 
         .main {
-            margin-left: 250px;
-            padding: 20px;
-            transition: margin-left 0.3s ease;
-        }
+                margin-left: 250px; /* Space for the sidebar */
+                padding: 20px;
+                transition: margin-left 0.3s ease; /* Smooth transition for main content */
+            }
 
-        .main.collapsed {
-            margin-left: 0;
-        }
+            .main.collapsed {
+                margin-left: 0; /* No space for sidebar when collapsed */
+            }
 
-        .header {
-            background-color: #f8f9fa;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-        }
+            .header {
+                background-color: #f8f9fa;
+                padding: 10px 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .header .profile-dropdown {
+                position: relative;
+                display: inline-block;
+            }
+
+            .header .profile-dropdown img {
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+            }
+
+            .header .profile-dropdown .dropdown-menu {
+                display: none;
+                position: absolute;
+                right: 0;
+                background-color: #fff;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+                overflow: hidden;
+                z-index: 1000;
+            }
+
+            .header .profile-dropdown:hover .dropdown-menu {
+                display: block;
+            }
+
+            .header .profile-dropdown .dropdown-menu a {
+                display: block;
+                padding: 10px;
+                color: #333;
+                text-decoration: none;
+            }
+
+            .header .profile-dropdown .dropdown-menu a:hover {
+                background-color: #f1f1f1;
+            }
 
         /* Updated form container styles */
         .form-container {
@@ -294,10 +332,17 @@ $se_name=$_GET['se_name'];
     </div>
 
     <div class="header">
-        <div>
-            <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
-        </div>
-    </div>
+            <div>
+                <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="profile-dropdown">
+                <div style="font-size:small;"><?php echo $name; ?></div>
+                <div class="dropdown-menu">
+                    <a href="edit_organizer.php">Account Settings</a>
+                    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                </div>
+            </div>
+      </div>
 
     <div class="main" id="main-content">
         <div class="container">
