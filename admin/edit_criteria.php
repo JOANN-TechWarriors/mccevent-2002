@@ -109,7 +109,7 @@
 
         /* Header styles */
         .header {
-            background-color: #fff;
+            background-color: #f8f9fa;
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
