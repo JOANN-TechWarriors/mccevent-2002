@@ -31,7 +31,8 @@ include_once('header2.php');
         .login-container {
             display: flex;
             min-height: 100vh;
-            background: url(../img/Community-College-Madridejos.jpeg);
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url(../img/Community-College-Madridejos.jpeg);
             background-size: cover;
             background-position: center;
         }
