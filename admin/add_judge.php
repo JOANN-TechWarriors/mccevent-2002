@@ -358,7 +358,7 @@
 
     <div class="main" id="main-content">
         <div class="container">
-            <h1><?php echo $se_name; ?> Settings</h1>
+            <h1 style="font-size: 20px;"><?php echo $se_name; ?> Settings</h1>
 
             <div class="breadcrumb">
                 <li><a href="selection.php">Dashboard</a></li>
