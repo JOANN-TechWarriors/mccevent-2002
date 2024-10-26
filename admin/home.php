@@ -231,14 +231,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         gap: 20px;
         max-width: 1200px;
         margin: 0 auto;
-    }
-
-    .tile {
-        background-color: #FEFFA7;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        transition: transform 0.3s, box-shadow 0.3s;
+    
     }
 
     .tile i {
@@ -359,7 +352,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 .tile {
-    background: #fff;
+    background: #FEFFA7;
     border-radius: 8px;
     padding: 20px;
     position: relative;
