@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../images/logo copy.png"/>
     <title>MCC Event Judging System - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -79,7 +80,7 @@
                 x.type = "password";
             }
         }
-        
+
         // Security measures
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();

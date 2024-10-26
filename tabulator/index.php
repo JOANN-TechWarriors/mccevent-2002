@@ -12,6 +12,7 @@ date_default_timezone_set('Asia/Manila');
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- SweetAlert2 -->
+    <link rel="shortcut icon" href="../images/logo copy.png"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <style>
