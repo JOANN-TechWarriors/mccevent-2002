@@ -26,7 +26,7 @@
             <!-- Right Side - Login Form -->
             <div class="w-full md:w-1/2 p-8 bg-white rounded-r-xl">
                 <div class="max-w-md mx-auto">
-                    <h2 class="text-2xl font-bold mb-8 text-gray-800">Log In</h2>
+                    <h2 class="text-2xl font-bold mb-8 text-gray-800">Judge Log In</h2>
                     <form method="POST" action="judge_profile.php">
                         <div class="space-y-6">
                             <!-- Judge Code Input -->
