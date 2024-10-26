@@ -179,6 +179,128 @@
             display: block; /* Show toggle button on mobile */
         }
     }
+    .edit-form-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .panel-primary {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        
+        .panel-heading {
+            background-color: #337ab7;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .panel-title {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 16px;
+        }
+        
+        .panel-body {
+            padding: 15px;
+        }
+        
+        .edit-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 10px;
+        }
+        
+        .edit-table td {
+            padding: 5px;
+            vertical-align: top;
+        }
+        
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .button-group {
+            text-align: right;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        
+        .btn-default {
+            color: #333;
+            background-color: #fff;
+            border-color: #ccc;
+            margin-right: 10px;
+        }
+        
+        .btn-success {
+            color: #fff;
+            background-color: #5cb85c;
+            border-color: #4cae4c;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .edit-table {
+                border-spacing: 5px;
+            }
+            
+            .edit-table, .edit-table tbody, .edit-table tr, .edit-table td {
+                display: block;
+                width: 100%;
+            }
+            
+            .edit-table td {
+                margin-bottom: 15px;
+            }
+            
+            .button-group {
+                text-align: center;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .btn-default {
+                margin-right: 0;
+            }
+        }
     </style>
   </head>
   <body>
@@ -214,108 +336,69 @@
     </div>
 
     <div class="main" id="main-content">
-  <div class="container">
-    <h1><?php echo $se_name; ?> Settings</h1>
-  </div>
-    <div class="container">
-
-   <form method="POST">
-    <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
- <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
- <input value="<?php echo $judge_id; ?>" name="judge_id" type="hidden" />
- 
-  
-   <div class="col-lg-3">
-   </div>
-   <div class="col-lg-6">
- <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title">Edit Judge</h3>
-            </div>
- 
- 
-
-
- 
-     <div class="panel-body">
-  
-   <table align="center">
-  
-  
-  <?php    
-   	$judge_query = $conn->query("SELECT * FROM judges WHERE judge_id='$judge_id'") or die(mysql_error());
-    while ($judge_row = $judge_query->fetch()) 
-        { ?>
-   <tr>
-    
-   <td>
-   Judge no. <br />
-   <select name="judge_ctr" class="form-control">
-   <option><?php echo $judge_row['judge_ctr']; ?></option>
-   
-                    <?php 
-                    
-                    $n1=0;
-                    
-                    while($n1<4)
-                    { 
-                        $n1++;
-                     
-                    
-                    $cont_query = $conn->query("SELECT * FROM judges WHERE judge_ctr='$n1' AND subevent_id='$sub_event_id'") or die(mysql_error());
-                   
+        <div class="container">
+            <h1><?php echo $se_name; ?> Settings</h1>
             
-                    if($cont_query->rowCount()>0)
-                    {
-                        
-                    }
-                    else
-                    {
-                        echo "<option>".$n1."</option>";
-                    }
-                      
-                    } 
+            <div class="edit-form-container">
+                <form method="POST">
+                    <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
+                    <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
+                    <input value="<?php echo $judge_id; ?>" name="judge_id" type="hidden" />
                     
-                    ?>
- 
-   </select></td>
-   <td>&nbsp;</td>
-   <td>
-    Judge Fullname <br />
-   <input name="fullname" type="text" class="form-control" value="<?php echo $judge_row['fullname']; ?>" /></td>
-   <td>&nbsp;</td>
-   <td>
-    Type <br />
-    <select class="form-control" name="jtype">
-    <option><?php echo $judge_row['jtype']; ?></option>
-    <option>Chairman</option>
-    </select>
-   
-   
-   </tr>
-  <?php } ?>
-  <tr>
-  <td colspan="5">&nbsp;</td>
-  </tr>
-  <tr>
-  <td colspan="5" align="right"><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>&nbsp;<button name="edit_judge" class="btn btn-success">Update</button></td>
-  </tr>
-  </table>
- 
-</div>
- 
-          </div>
-          
-        
-  </div>
-  
- <div class="col-lg-3">
-   </div>
- 
-</form>
-          </div>
-          
-          </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Edit Judge</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="edit-table">
+                                <?php    
+                                $judge_query = $conn->query("SELECT * FROM judges WHERE judge_id='$judge_id'") or die(mysql_error());
+                                while ($judge_row = $judge_query->fetch()) { 
+                                ?>
+                                <tr>
+                                    <td>
+                                        <label class="form-label">Judge no.</label>
+                                        <select name="judge_ctr" class="form-control">
+                                            <option><?php echo $judge_row['judge_ctr']; ?></option>
+                                            <?php 
+                                            $n1=0;
+                                            while($n1<4) { 
+                                                $n1++;
+                                                $cont_query = $conn->query("SELECT * FROM judges WHERE judge_ctr='$n1' AND subevent_id='$sub_event_id'") or die(mysql_error());
+                                                if($cont_query->rowCount()>0) {
+                                                } else {
+                                                    echo "<option>".$n1."</option>";
+                                                }
+                                            } 
+                                            ?>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <label class="form-label">Judge Fullname</label>
+                                        <input name="fullname" type="text" class="form-control" value="<?php echo $judge_row['fullname']; ?>" />
+                                    </td>
+                                    <td>
+                                        <label class="form-label">Type</label>
+                                        <select class="form-control" name="jtype">
+                                            <option><?php echo $judge_row['jtype']; ?></option>
+                                            <option>Chairman</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </table>
+                            
+                            <div class="button-group">
+                                <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
+                                <button name="edit_judge" class="btn btn-success">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 <?php 
 
 if(isset($_POST['edit_judge']))
@@ -349,42 +432,37 @@ if(isset($_POST['edit_judge']))
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
-
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-          const toggleButtons = document.querySelectorAll(".toggle-btn");
-          const sidebar = document.getElementById("sidebar");
-          const mainContent = document.querySelector(".main");
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleButtons = document.querySelectorAll(".toggle-btn");
+            const sidebar = document.getElementById("sidebar");
+            const mainContent = document.querySelector(".main");
 
-          toggleButtons.forEach(button => {
-              button.addEventListener("click", function() {
-                  // Toggle the collapsed class on sidebar
-                  sidebar.classList.toggle("collapsed");
-                  // Toggle the collapsed class on main content
-                  mainContent.classList.toggle("collapsed");
-              });
-          });
-
-          // Updated logout confirmation
-    const logoutLink = document.querySelector('a[href="logout.php"]');
-    if (logoutLink) {
-        logoutLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Are you sure you want to log out?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'logout.php';
-                }
+            toggleButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    sidebar.classList.toggle("collapsed");
+                    mainContent.classList.toggle("collapsed");
+                });
             });
-        });
-    }
-      });
 
-</script>
+            const logoutLink = document.querySelector('a[href="logout.php"]');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: 'Are you sure you want to log out?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'logout.php';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
   </body>
 </html>
