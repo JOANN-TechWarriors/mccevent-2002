@@ -174,8 +174,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="../assets/js/google-code-prettify/prettify.js"></script>
     <script src="../assets/js/application.js"></script>
 
-    <!-- Security Scripts -->
     
+    <!-- Security Scripts -->
+     <script>
+    // Disable right-click
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        document.onkeydown = function (e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+            }
+        };
+
+        // Hide the alert after 3 seconds
+        setTimeout(function(){
+            var alert = document.querySelector('.alert');
+            if (alert) {
+                alert.style.display = 'none';
+            }
+        }, 3000);
+    </script>
 
     <!-- Success Alert Script -->
     <script>
