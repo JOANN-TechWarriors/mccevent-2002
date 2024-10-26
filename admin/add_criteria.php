@@ -371,7 +371,7 @@
                     <li>Add Criteria</li>
                 </ul>
             </div>
-            <br><br>
+            <br><br><br>
             <form method="POST">
                 <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
                 <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
