@@ -124,7 +124,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input class="form-control btn-block" style="text-indent: 7px !important;"
                                     type="text" 
                                     name="student_id" 
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
                                     placeholder="Enter Student ID #" 
                                     required 
                                     autofocus
