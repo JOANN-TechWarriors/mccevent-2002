@@ -620,7 +620,7 @@ $conn->close();
                   <div class="col-md-6" style="z-index:-1000;"> 
                      <div class="about_taital_box">
                         <h1 class="about_taital">ABOUT</h1>
-                        <p class=" about_text">Madridejos Community College (MCC) is an educational institution that serves the local community in Madridejos, a municipality in the province of Cebu, Philippines. It is dedicated to providing quality education and fostering a supportive learning environment for its students.</p>
+                        <p class=" about_text" style="text-align:justify;">Madridejos Community College (MCC) is an educational institution that serves the local community in Madridejos, a municipality in the province of Cebu, Philippines. It is dedicated to providing quality education and fostering a supportive learning environment for its students.</p>
                      </div>
                   </div>
                   <div class="col-md-6" style="z-index:-1000;"> 
