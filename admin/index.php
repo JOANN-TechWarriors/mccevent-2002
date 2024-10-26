@@ -38,8 +38,7 @@ date_default_timezone_set('Asia/Manila');
 
         /* Custom background with overlay */
         .bg-custom {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('../img/Community-College-Madridejos.jpeg');
+            background: url('../img/Community-College-Madridejos.jpeg');
             background-size: cover;
             background-position: center;
         }
