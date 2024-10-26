@@ -725,23 +725,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-        <div class="sidebar" id="sidebar">
-                <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
-                <div class="sidebar-heading">
-                    <img src="../img/logo.png" alt="Logo">
-                    <div>Event Judging System</div>
-                </div>
-                <ul>
-                    <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-                    <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-                    <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-                    <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
-                </ul>
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn" id="toggle-btn">☰</button>
+        <div class="sidebar-heading">
+            <img src="../img/logo.png" alt="Logo">
+            <div>Event Judging System</div>
         </div>
+        <ul>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+            <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+            <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
+
+        </ul>
+    </div>
     <!-- Header -->
     <div class="header">
         <div>
-        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+            <!-- Add any left-aligned content here if needed -->
         </div>
         <div class="profile-dropdown">
             <div style="font-size:small;"> <?php echo $name; ?></div>
@@ -970,23 +971,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 });
             });
+
+            $('#toggle-btn').on('click', function() {
+                $('#sidebar').toggleClass('collapsed');
+                $('#main-content').toggleClass('collapsed');
+                $(this).toggleClass('collapsed');
+            });
         });
         </script>
-
-        <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    const toggleButtons = document.querySelectorAll(".toggle-btn");
-                    const sidebar = document.getElementById("sidebar");
-                    const mainContent = document.querySelector(".main");
-
-                    toggleButtons.forEach(button => {
-                        button.addEventListener("click", function() {
-                            sidebar.classList.toggle("collapsed");
-                            mainContent.classList.toggle("collapsed");
-                        });
-                    });
-                });
-            </script>
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.tile').forEach(function(tile) {
