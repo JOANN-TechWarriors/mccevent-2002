@@ -19,6 +19,10 @@ $se_name=$_GET['se_name'];
             background-color: #fff;
             margin: 0;
             padding: 0;
+            min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+            width: 100vw;      /* Ensures full width */
+            overflow-y: auto;  /* Enables vertical scrolling */
+            overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
         }
 
         .sidebar {
