@@ -666,6 +666,151 @@ body {
 
 .showing-entries {
     color: #666;
+}/* Table Header and Controls */
+.table-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.entries-selector {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.entries-selector select {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    max-width: 300px;
+    margin-left: auto;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* Table Footer and Pagination */
+.table-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.showing-entries {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.pagination-container {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination-button {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    background-color: white;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 35px;
+    text-align: center;
+}
+
+.pagination-button:hover:not(.disabled):not(.active) {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+}
+
+.pagination-button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination-button.disabled {
+    color: #999;
+    cursor: not-allowed;
+    background-color: #f5f5f5;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .search-box {
+        max-width: 100%;
+        margin-left: 0;
+    }
+    
+    .table-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .showing-entries {
+        order: 2;
+    }
+    
+    .pagination-container {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .pagination {
+        gap: 3px;
+    }
+    
+    .pagination-button {
+        padding: 4px 8px;
+        min-width: 30px;
+        font-size: 0.8rem;
+    }
 }
     </style>
 
@@ -776,21 +921,27 @@ body {
             </div>
             <br> <br><br>
             <div class="table-responsive-container">
-            <div class="table-header">
-    <div class="entries-selector">
-        Show 
-        <select id="entriesSelect" onchange="changeEntries(this.value)">
-            <option value="10" <?php echo $entries_per_page == 10 ? 'selected' : ''; ?>>10</option>
-            <option value="25" <?php echo $entries_per_page == 25 ? 'selected' : ''; ?>>25</option>
-            <option value="50" <?php echo $entries_per_page == 50 ? 'selected' : ''; ?>>50</option>
-            <option value="100" <?php echo $entries_per_page == 100 ? 'selected' : ''; ?>>100</option>
-        </select>
-        entries
-    </div>
-    <div class="search-box">
-        Search: <input class="form-control btn-block" style="height: 30px !important;" type="text" id="searchInput" value="<?php echo htmlspecialchars($search_query); ?>" onkeyup="searchTable(event)">
-    </div>
-</div>
+            <!-- Table Header with Search and Entries Selector -->
+        <div class="table-header">
+            <div class="entries-selector">
+                Show 
+                <select id="entriesSelect" onchange="changeEntries(this.value)">
+                    <option value="10" <?php echo $entries_per_page == 10 ? 'selected' : ''; ?>>10</option>
+                    <option value="25" <?php echo $entries_per_page == 25 ? 'selected' : ''; ?>>25</option>
+                    <option value="50" <?php echo $entries_per_page == 50 ? 'selected' : ''; ?>>50</option>
+                    <option value="100" <?php echo $entries_per_page == 100 ? 'selected' : ''; ?>>100</option>
+                </select>
+                entries
+            </div>
+            <div class="search-box">
+                <label for="searchInput">Search:</label>
+                <input type="text" 
+                    id="searchInput" 
+                    value="<?php echo htmlspecialchars($search_query); ?>" 
+                    onkeyup="searchTable(event)" 
+                    placeholder="Search...">
+            </div>
+        </div>  
     <table class="table-custom">
         <thead>
             <tr>
@@ -845,26 +996,61 @@ body {
             <?php endforeach; ?>
         </tbody>
     </table>
-    <div class="table-footer">
+    <!-- Table Footer with Pagination -->
+<div class="table-footer">
     <div class="showing-entries">
         Showing <?php echo $offset + 1; ?> to <?php echo min($offset + $entries_per_page, $total_records); ?> of <?php echo $total_records; ?> entries
         <?php if (!empty($search_query)): ?>
             (filtered from <?php echo $total_records; ?> total entries)
         <?php endif; ?>
     </div>
-    <div class="pagination">
-        <?php if ($total_pages > 1): ?>
-            <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo max(1, $current_page - 1); ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
-               class="<?php echo $current_page == 1 ? 'disabled' : ''; ?>">Previous</a>
-            
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo $i; ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
-                   class="<?php echo $current_page == $i ? 'active' : ''; ?>"><?php echo $i; ?></a>
-            <?php endfor; ?>
-            
-            <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo min($total_pages, $current_page + 1); ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
-               class="<?php echo $current_page == $total_pages ? 'disabled' : ''; ?>">Next</a>
-        <?php endif; ?>
+    
+    <div class="pagination-container">
+        <div class="pagination">
+            <?php if ($total_pages > 1): ?>
+                <!-- Previous button -->
+                <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo max(1, $current_page - 1); ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
+                   class="pagination-button <?php echo $current_page == 1 ? 'disabled' : ''; ?>">
+                    Previous
+                </a>
+                
+                <!-- First page -->
+                <?php if ($current_page > 3): ?>
+                    <a href="?id=<?php echo $main_event_id; ?>&page=1&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
+                       class="pagination-button">1</a>
+                    <?php if ($current_page > 4): ?>
+                        <span class="pagination-button disabled">...</span>
+                    <?php endif; ?>
+                <?php endif; ?>
+                
+                <!-- Page numbers -->
+                <?php
+                for ($i = max(1, $current_page - 2); $i <= min($total_pages, $current_page + 2); $i++):
+                ?>
+                    <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo $i; ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
+                       class="pagination-button <?php echo $current_page == $i ? 'active' : ''; ?>">
+                        <?php echo $i; ?>
+                    </a>
+                <?php endfor; ?>
+                
+                <!-- Last page -->
+                <?php if ($current_page < $total_pages - 2): ?>
+                    <?php if ($current_page < $total_pages - 3): ?>
+                        <span class="pagination-button disabled">...</span>
+                    <?php endif; ?>
+                    <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo $total_pages; ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
+                       class="pagination-button">
+                        <?php echo $total_pages; ?>
+                    </a>
+                <?php endif; ?>
+                
+                <!-- Next button -->
+                <a href="?id=<?php echo $main_event_id; ?>&page=<?php echo min($total_pages, $current_page + 1); ?>&entries=<?php echo $entries_per_page; ?>&search=<?php echo urlencode($search_query); ?>" 
+                   class="pagination-button <?php echo $current_page == $total_pages ? 'disabled' : ''; ?>">
+                    Next
+                </a>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
     </div>
@@ -992,16 +1178,33 @@ function showActivationModal(subEventId, subEventName, status) {
 </script>
 
 <script>
-function changeEntries(value) {
-    window.location.href = `?id=<?php echo $main_event_id; ?>&entries=${value}&search=<?php echo urlencode($search_query); ?>`;
-}
+        // Function to handle entries per page change
+        function changeEntries(value) {
+            window.location.href = `?id=<?php echo $main_event_id; ?>&entries=${value}&search=<?php echo urlencode($search_query); ?>`;
+        }
 
-function searchTable(event) {
-    if (event.key === 'Enter') {
-        const searchValue = document.getElementById('searchInput').value;
-        window.location.href = `?id=<?php echo $main_event_id; ?>&entries=<?php echo $entries_per_page; ?>&search=${encodeURIComponent(searchValue)}`;
-    }
-}
+        // Function to handle search
+        function searchTable(event) {
+            // If Enter key is pressed or 500ms has passed since last keypress
+            if (event.key === 'Enter' || event.type === 'keyup') {
+                clearTimeout(window.searchTimeout);
+                window.searchTimeout = setTimeout(() => {
+                    const searchValue = document.getElementById('searchInput').value;
+                    window.location.href = `?id=<?php echo $main_event_id; ?>&entries=<?php echo $entries_per_page; ?>&search=${encodeURIComponent(searchValue)}`;
+                }, event.key === 'Enter' ? 0 : 500);
+            }
+        }
+
+        // Add event listener for search input
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.focus();
+                // Place cursor at the end of the search input
+                const len = searchInput.value.length;
+                searchInput.setSelectionRange(len, len);
+            }
+        });
 </script>
     </section>
     </div>
