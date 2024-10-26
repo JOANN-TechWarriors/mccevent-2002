@@ -86,7 +86,7 @@
         }
 
         .btn-success {
-            background: #28a745;
+            background: #007bff;
             color: #fff;
         }
 
