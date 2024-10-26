@@ -265,6 +265,113 @@
             z-index: 1000;
             position: relative;
         }
+        /* Banner Section Base Styles */
+.banner_section {
+    padding-top: 65px; /* Account for fixed navbar */
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 600px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.banner_taital_main {
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.banner_taital {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    line-height: 1.2;
+}
+
+.btn_main {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* Responsive Breakpoints */
+@media screen and (max-width: 1200px) {
+    .banner_taital {
+        font-size: 3.5rem;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .banner_section {
+        min-height: 500px;
+    }
+    
+    .banner_taital {
+        font-size: 3rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .banner_section {
+        min-height: 400px;
+    }
+    
+    .banner_taital {
+        font-size: 2.5rem;
+    }
+    
+    .banner_taital_main {
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .btn_main {
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .banner_section {
+        min-height: 300px;
+    }
+    
+    .banner_taital {
+        font-size: 2rem;
+    }
+    
+    .banner_taital_main {
+        padding: 10px;
+    }
+}
+
+/* Ensure carousel controls stay visible */
+.banner_section .carousel-control-prev,
+.banner_section .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Ensure content stays within viewport on very small devices */
+@media screen and (max-width: 320px) {
+    .banner_taital {
+        font-size: 1.75rem;
+    }
+    
+    .banner_section {
+        min-height: 250px;
+    }
+}
     </style>
    </head>
    <body style="background-color: lightgray;">
@@ -301,33 +408,25 @@
       </nav>
 
       <!-- banner section start --> 
-<div class="banner_section layout_padding" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 600px; position: relative;">
+      <div class="banner_section">
    <div class="container">
       <div id="banner_slider" class="carousel slide" data-ride="carousel">
          <div class="carousel-inner">
             <div class="carousel-item active">
-               <div class="row">
-                  <div class="col-md-12">
-                     <div class="banner_taital_main">
-                        <h1 class="banner_taital" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">MCC <br>EVENTS</h1>
-                        <div class="btn_main">
-                           <div class="about_bt active"><a href="#"></a></div>
-                           <div class="callnow_bt"><a href="#"></a></div>
-                        </div>
-                     </div>
+               <div class="banner_taital_main">
+                  <h1 class="banner_taital">MCC <br>EVENTS</h1>
+                  <div class="btn_main">
+                     <div class="about_bt active"><a href="#"></a></div>
+                     <div class="callnow_bt"><a href="#"></a></div>
                   </div>
                </div>
             </div>
-            <div class="carousel-item">
-               <div class="row">
-                  <div class="col-md-12">
-                     <div class="banner_taital_main">
-                        <h1 class="banner_taital" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">MCC <br>EVENTS</h1>
-                        <div class="btn_main">
-                           <div class="about_bt active"><a href="#"></a></div>
-                           <div class="callnow_bt"><a href="#"></a></div>
-                        </div>
-                     </div>
+            <div class="carousel-item active">
+               <div class="banner_taital_main">
+                  <h1 class="banner_taital">MCC <br>EVENTS</h1>
+                  <div class="btn_main">
+                     <div class="about_bt active"><a href="#"></a></div>
+                     <div class="callnow_bt"><a href="#"></a></div>
                   </div>
                </div>
             </div>
