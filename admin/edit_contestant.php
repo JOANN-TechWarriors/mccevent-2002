@@ -57,6 +57,8 @@ $contestant_id = $_GET['contestant_id'];
             margin-bottom: 20px;
             background-color: #fff;
             box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .panel-primary > .panel-heading {
@@ -67,31 +69,47 @@ $contestant_id = $_GET['contestant_id'];
         }
 
         .panel-body {
-            padding: 15px;
+            padding: 20px;
         }
 
-        .responsive-table {
+        .form-table {
             width: 100%;
-            max-width: 100%;
-            margin-bottom: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            border-collapse: separate;
+            border-spacing: 10px;
         }
 
-        .responsive-table td {
-            padding: 12px;
+        .form-table td {
+            padding: 8px;
             vertical-align: top;
+            width: 50%;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
         }
 
         .form-control {
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 8px;
             margin: 4px 0;
             border: 1px solid #ddd;
             border-radius: 4px;
+            box-sizing: border-box;
         }
 
         .btn-container {
             text-align: right;
             margin-top: 20px;
+            padding: 0 10px;
         }
 
         .btn {
@@ -100,6 +118,7 @@ $contestant_id = $_GET['contestant_id'];
             border: none;
             cursor: pointer;
             margin-left: 8px;
+            font-size: 14px;
         }
 
         .btn-success {
@@ -113,46 +132,35 @@ $contestant_id = $_GET['contestant_id'];
         }
 
         @media (max-width: 768px) {
-            .sidebar {
+            .panel {
+                margin: 10px;
+            }
+
+            .form-table {
                 width: 100%;
-                height: auto;
-                position: relative;
+                border-spacing: 0;
             }
 
-            .main {
-                margin-left: 0;
-                padding: 15px;
-            }
-
-            .main.collapsed {
-                margin-left: 0;
-            }
-
-            .responsive-table {
+            .form-table, 
+            .form-table tbody, 
+            .form-table tr {
                 display: block;
             }
 
-            .responsive-table tr {
-                display: flex;
-                flex-direction: column;
-                margin-bottom: 1rem;
-                border-bottom: 1px solid #ddd;
-            }
-
-            .responsive-table td {
+            .form-table td {
                 display: block;
                 width: 100%;
-                padding: 8px;
+                padding: 5px 10px;
                 box-sizing: border-box;
             }
 
             .form-control {
                 width: 100%;
-                box-sizing: border-box;
             }
 
             .btn-container {
                 text-align: center;
+                margin-top: 15px;
             }
         }
 
@@ -300,30 +308,38 @@ $contestant_id = $_GET['contestant_id'];
                         <h3 class="panel-title">Edit Contestant</h3>
                     </div>
                     <div class="panel-body">
-                        <table class="responsive-table">
+                        <table class="form-table">
                             <?php    
                             $cont_query = $conn->query("SELECT * FROM contestants WHERE contestant_id='$contestant_id'") or die(mysql_error());
                             while ($cont_row = $cont_query->fetch()) { ?>
                             <tr>
                                 <td>
-                                    <label>Contestant no.</label>
-                                    <select name="contestant_ctr" class="form-control">
-                                        <option><?php echo $cont_row['contestant_ctr']; ?></option>
-                                    </select>
+                                    <div class="form-group">
+                                        <label class="form-label">Contestant no.</label>
+                                        <select name="contestant_ctr" class="form-control">
+                                            <option><?php echo $cont_row['contestant_ctr']; ?></option>
+                                        </select>
+                                    </div>
                                 </td>
                                 <td>
-                                    <label>Contestant Fullname</label>
-                                    <input name="fullname" type="text" class="form-control" value="<?php echo $cont_row['fullname']; ?>" />
+                                    <div class="form-group">
+                                        <label class="form-label">Contestant Fullname</label>
+                                        <input name="fullname" type="text" class="form-control" value="<?php echo $cont_row['fullname']; ?>" />
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <label>Upload Photo</label>
-                                    <input type="file" name="picture" class="form-control" value="<?php echo $cont_row['Picture']; ?>">
+                                    <div class="form-group">
+                                        <label class="form-label">Upload Photo</label>
+                                        <input type="file" name="picture" class="form-control" value="<?php echo $cont_row['Picture']; ?>">
+                                    </div>
                                 </td>
                                 <td>
-                                    <label>Year/Course & Section</label>
-                                    <input name="addon" type="text" class="form-control" value="<?php echo $cont_row['AddOn']; ?>" />
+                                    <div class="form-group">
+                                        <label class="form-label">Year/Course & Section</label>
+                                        <input name="addon" type="text" class="form-control" value="<?php echo $cont_row['AddOn']; ?>" />
+                                    </div>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -336,6 +352,7 @@ $contestant_id = $_GET['contestant_id'];
                 </div>
             </form>
         </div>
+    </div>
 
     <?php
 if (isset($_POST['edit_contestant'])) {
@@ -375,7 +392,6 @@ if (isset($_POST['edit_contestant'])) {
 ?>
 
 
-  </div>
 
   <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
