@@ -301,15 +301,15 @@
       </nav>
 
       <!-- banner section start --> 
-<div class="banner_section layout_padding">
+<div class="banner_section layout_padding" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 500px; position: relative;">
    <div class="container">
       <div id="banner_slider" class="carousel slide" data-ride="carousel">
          <div class="carousel-inner">
             <div class="carousel-item active">
                <div class="row">
-                  <div class="col-md-12" style="z-index:-1000;">
+                  <div class="col-md-12">
                      <div class="banner_taital_main">
-                        <h1 class="banner_taital">MCC <br>EVENTS</h1>
+                        <h1 class="banner_taital" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">MCC <br>EVENTS</h1>
                         <div class="btn_main">
                            <div class="about_bt active"><a href="#"></a></div>
                            <div class="callnow_bt"><a href="#"></a></div>
@@ -321,8 +321,8 @@
             <div class="carousel-item">
                <div class="row">
                   <div class="col-md-12">
-                     <div class="banner_taital_main" style="z-index:-1000;">
-                        <h1 class="banner_taital">MCC <br>EVENTS</h1>
+                     <div class="banner_taital_main">
+                        <h1 class="banner_taital" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">MCC <br>EVENTS</h1>
                         <div class="btn_main">
                            <div class="about_bt active"><a href="#"></a></div>
                            <div class="callnow_bt"><a href="#"></a></div>
@@ -332,14 +332,10 @@
                </div>
             </div>
          </div>
-        
       </div>
    </div>
 </div>
-
-         <!-- banner section end -->
-         </div>
-<!-- header section end -->
+<!-- banner section end -->
 <!-- ongoing section start -->
 <?php
 $host = '127.0.0.1';
@@ -370,9 +366,6 @@ $conn->close();
 <div class="coffee_section layout_padding">
     <div class="container">
         <div class="row">
-        <div class="col-md-12 text-center mb-5">
-                <img src="img/Community-College-Madridejos.jpeg" alt="Madridejos Community College" class="img-fluid" style="max-width: 800px; width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            </div>
             <div class="col-md-12" style="z-index:-1000;">
                 <h1 class="coffee_taital">ONGOING EVENTS</h1>
             </div>
