@@ -111,14 +111,19 @@ $se_name=$_GET['se_name'];
             border-bottom: 1px solid #ddd;
         }
 
-        /* New styles for responsive form */
+        /* Updated form container styles */
         .form-container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 600px;
+            margin: 0;  /* Remove auto margin */
             padding: 20px;
             background: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            padding: 20px;
+            max-width: none;
         }
 
         .breadcrumb {
@@ -129,6 +134,7 @@ $se_name=$_GET['se_name'];
             list-style: none;
             background-color: #e9ecef;
             border-radius: 0.25rem;
+            width: fit-content;
         }
 
         .breadcrumb li {
@@ -169,9 +175,10 @@ $se_name=$_GET['se_name'];
             padding: 20px;
         }
 
+        /* Updated form grid for left alignment */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(2, minmax(200px, 300px)); /* Two columns with max width */
             gap: 20px;
             margin-bottom: 20px;
         }
@@ -224,6 +231,7 @@ $se_name=$_GET['se_name'];
             opacity: 0.9;
         }
 
+        /* Updated media queries */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -238,7 +246,11 @@ $se_name=$_GET['se_name'];
             }
 
             .form-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Single column on mobile */
+            }
+
+            .form-container {
+                padding: 10px;
             }
         }
 
