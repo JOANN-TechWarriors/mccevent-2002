@@ -77,7 +77,7 @@
             <div class="row g-0">
                 <div class="col-md-6 logo-side">
                     <img src="../img/logo.png" alt="MCC Logo" class="img-fluid">
-                    <h1 class="mb-4">WELCOME TO:</h1>
+                    <h4 class="mb-4">WELCOME TO:</h4>
                     <h3 class="mb-5"><strong >MCC Event Judging System</strong></h3>
                 </div>
                 <div class="col-md-6 login-side">
