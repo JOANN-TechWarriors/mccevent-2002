@@ -289,7 +289,6 @@
     <select class="form-control" name="jtype">
     <option><?php echo $judge_row['jtype']; ?></option>
     <option>Chairman</option>
-    <option></option>
     </select>
    
    
