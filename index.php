@@ -273,7 +273,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    min-height: 600px;
+    min-height: 650px;
     width: 100%;
     display: flex;
     align-items: center;
