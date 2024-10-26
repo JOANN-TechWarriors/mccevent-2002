@@ -310,14 +310,6 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         right: 10px;
     }
 
-    .dropbtn {
-        background-color: transparent;
-        color: black;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-    }
-
     .dropdown-content {
         display: none;
         position: absolute;
@@ -371,7 +363,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     background: transparent;
     border: none;
     font-size: 20px;
-    color: #666;
+    color: #000;
     cursor: pointer;
     padding: 5px 10px;
     border-radius: 4px;
@@ -386,7 +378,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     display: none;
     position: absolute;
     right: 0;
-    background-color: white;
+    background-color: transparent;
     min-width: 160px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     border-radius: 6px;
