@@ -76,7 +76,7 @@
 
         .btn-default {
             background-color: #6c757d;
-            border: 1px solid #ddd;
+            color: white;
         }
 
         /* Responsive table container */
