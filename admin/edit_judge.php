@@ -211,6 +211,7 @@
         </div>
     </div>
 
+    <div class="main" id="main-content">
   <div class="container">
     <h1><?php echo $se_name; ?> Settings</h1>
     <p class="lead">Event Judging System</p>
@@ -314,7 +315,7 @@
 </form>
           </div>
           
-          
+          </div>
 <?php 
 
 if(isset($_POST['edit_judge']))
