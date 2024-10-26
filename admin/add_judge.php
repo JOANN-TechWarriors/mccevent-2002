@@ -75,7 +75,7 @@
         }
 
         .btn-default {
-            background-color: #f8f9fa;
+            background-color: #6c757d;
             border: 1px solid #ddd;
         }
 
