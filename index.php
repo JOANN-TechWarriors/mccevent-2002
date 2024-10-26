@@ -322,7 +322,7 @@
     .client_taital_main {
         display: flex;
         align-items: center;
-        gap: 40px; /* Creates consistent gap between image and content */
+        gap: 270px; /* Creates consistent gap between image and content */
         padding: 20px;
     }
     
