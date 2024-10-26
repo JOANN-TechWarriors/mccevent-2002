@@ -935,7 +935,7 @@ body {
             </div>
             <div class="search-box">
                 <label for="searchInput">Search:</label>
-                <input type="text" 
+                <input class="form-control btn-block" style="text-indent: 5px !important; height: 30px !important;" type="text" 
                     id="searchInput" 
                     value="<?php echo htmlspecialchars($search_query); ?>" 
                     onkeyup="searchTable(event)" 
