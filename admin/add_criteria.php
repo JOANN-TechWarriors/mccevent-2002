@@ -1,34 +1,154 @@
- 
-
 <!DOCTYPE html>
 <html lang="en">
-  
-  <?php 
-  include('header.php');
+<head>
+    <?php 
+    include('header.php');
     include('session.php');
     
-    
-                                                                                                              
     $sub_event_id=$_GET['sub_event_id'];
     $se_name=$_GET['se_name'];
-    
-     
-  ?>
-  <head>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- <link rel="shortcut icon" href="../images/logo copy.png"/>
- <style>
-   body {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
-    width: 100vw;      /* Ensures full width */
-    overflow-y: auto;  /* Enables vertical scrolling */
-    overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
-}
+    ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="shortcut icon" href="../images/logo copy.png"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+            width: 100vw;      /* Ensures full width */
+            overflow-y: auto;  /* Enables vertical scrolling */
+            overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
+        
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* Table Styles */
+        .criteria-table {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .criteria-table td {
+            padding: 15px;
+            vertical-align: top;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .panel-heading {
+            background: #007bff;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .panel-title {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .btn-default {
+            background: #6c757d;
+            color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .criteria-table {
+                margin: 10px auto;
+            }
+
+            .criteria-table td {
+                display: block;
+                width: 100%;
+                padding: 10px;
+            }
+
+            .panel {
+                margin: 10px;
+            }
+
+            .form-control {
+                margin: 5px 0;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+
+        /* Breadcrumb Styles */
+        .breadcrumb {
+            list-style: none;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb li {
+            display: inline;
+            margin-right: 5px;
+        }
+
+        .breadcrumb li:after {
+            content: '>';
+            margin-left: 5px;
+            color: #6c757d;
+        }
+
+        .breadcrumb li:last-child:after {
+            content: '';
+        }
+
+        .breadcrumb a {
+            color: #007bff;
+            text-decoration: none;
+        }
 
    .sidebar {
     position: fixed;
@@ -239,202 +359,91 @@
     </div>
  </div>
 
-<div class="main" id="main-content">
-  <div class="container">
-    <h1><?php echo $se_name; ?> Settings</h1>
-  </div>
- 
-
-<div class="container">
-
-<div class="span12">
-
-
-
-                <br />
-                <div class="col-md-10">
-                    <ul class="breadcrumb">
-                    
-                        <li><a href="selection.php">Dashboard</a></li>
-                    
-                        <li><a href="home.php">List of Events</a></li>
-                        
-                        <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
-                        
-                        <li>Add Criteria</li>
-                        
-                    </ul>
-                </div>
-
-
-                
-                
-                
-   <form method="POST">
-    <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
- <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
- 
- 
-  
-<table align="center" style="width: 45% !important;">
- <tr>
- <td>
- 
-
- <div style="width: 100% !important;" class="panel panel-primary">
- 
-            <div class="panel-heading">
-              <h3 class="panel-title">Add Criteria</h3>
-            </div>
- 
-     <div class="panel-body">
-  
-   <table align="center">
-  
-  
-  
-   <tr>
-    
-   <td>
-   <strong>Criteria no. :</strong> <br />
-   <select name="crit_ctr" class="form-control">
-   
-                    <?php 
-                    
-                    $n1=0;
-                    
-                    while($n1<8)
-                    { 
-                        $n1++;
-                     
-                    
-                    $cont_query = $conn->query("SELECT * FROM criteria WHERE criteria_ctr='$n1' AND subevent_id='$sub_event_id'") or die(mysql_error());
-                   
+ <div class="main" id="main-content">
+        <div class="container">
+            <h1><?php echo $se_name; ?> Settings</h1>
             
-                    if($cont_query->rowCount()>0)
-                    {
-                        
-                    }
-                    else
-                    {
-                        echo "<option>".$n1."</option>";
-                    }
-                      
-                    } 
-                    
-                    ?>
-   </select></td>
-   <td>&nbsp;</td>
-   <td>
-    <strong>Criteria:</strong> <br />
-   <input name="criteria" type="text" class="form-control" placeholder="Criteria Description"   /></td>
-   
-   <td>&nbsp;</td>
-   <td>
-    <strong>Percentage:</strong> <br />
-    <select name="percentage" class="form-control"> 
-   
-    <?php
-  $n5=0;
-  while($n5<100)
-  { $n5=$n5+5;
-    
-    ?>
-    <option><?php echo $n5; ?></option>
-  <?php } ?>
-  </select>
-  </td>
-   </tr>
-  
-  
-  <tr>
-  <td colspan="5">&nbsp;</td>
-  </tr>
-  <tr>
-  <td colspan="5" align="right"><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>&nbsp;<button name="add_crit" class="btn btn-success">Save</button></td>
-  </tr>
-  </table>
- </form>
-</div>
- 
-          </div>
- 
- 
- </td>
- </tr>
- </table> 
- 
+            <div class="col-md-10">
+                <ul class="breadcrumb">
+                    <li><a href="selection.php">Dashboard</a></li>
+                    <li><a href="home.php">List of Events</a></li>
+                    <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
+                    <li>Add Criteria</li>
+                </ul>
+            </div>
 
-</div>
-          
-</div>
-          
-          
-<?php 
+            <form method="POST">
+                <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
+                <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
+                
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add Criteria</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="criteria-table">
+                            <tr>
+                                <td>
+                                    <strong>Criteria no. :</strong>
+                                    <select name="crit_ctr" class="form-control">
+                                        <?php 
+                                        $n1=0;
+                                        while($n1<8) { 
+                                            $n1++;
+                                            $cont_query = $conn->query("SELECT * FROM criteria WHERE criteria_ctr='$n1' AND subevent_id='$sub_event_id'") or die(mysql_error());
+                                            if($cont_query->rowCount()>0) {
+                                            } else {
+                                                echo "<option>".$n1."</option>";
+                                            }
+                                        } 
+                                        ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <strong>Criteria:</strong>
+                                    <input name="criteria" type="text" class="form-control" placeholder="Criteria Description" />
+                                </td>
+                                <td>
+                                    <strong>Percentage:</strong>
+                                    <select name="percentage" class="form-control">
+                                        <?php
+                                        $n5=0;
+                                        while($n5<100) {
+                                            $n5=$n5+5;
+                                            echo "<option>$n5</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: right;">
+                                    <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
+                                    <button name="add_crit" class="btn btn-success">Save</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
-if(isset($_POST['add_crit']))
-{
-    
-    $se_name=$_POST['se_name'];
-    $sub_event_id=$_POST['sub_event_id'];
-    
-    $percentage=$_POST['percentage'];
-    $crit_ctr=$_POST['crit_ctr'];
-     $criteria=$_POST['criteria'];
-  
-   /* criteria */
-   
-      $conn->query("insert into criteria(criteria,subevent_id,criteria_ctr,percentage)values('$criteria','$sub_event_id','$crit_ctr','$percentage')");
-  
- ?>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script>
-    Swal.fire({
-        title: 'Success',
-        text: 'Criteria <?php echo $criteria; ?> added successfully!',
-        icon: 'success'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
-        }
-    });
-</script>
+    <?php include('footer.php'); ?>
 
-<?php  
- 
- 
-} ?>
- </div> 
-  <?php include('footer.php'); ?>
-
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<!--     <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
     <script>
-    document.getElementById("toggle-btn").addEventListener("click", function () {
-      var sidebar = document.getElementById("sidebar");
-      var mainContent = document.getElementById("main-content");
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleButtons = document.querySelectorAll(".toggle-btn");
+            const sidebar = document.getElementById("sidebar");
+            const mainContent = document.querySelector(".main");
 
-      sidebar.classList.toggle("collapsed");
-      mainContent.classList.toggle("collapsed");
-    });
-  </script> -->
-    <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const toggleButtons = document.querySelectorAll(".toggle-btn");
-    const sidebar = document.getElementById("sidebar");
-    const mainContent = document.querySelector(".main");
-
-    toggleButtons.forEach(button => {
-        button.addEventListener("click", function() {
-            // Toggle the collapsed class on sidebar
-            sidebar.classList.toggle("collapsed");
-            // Toggle the collapsed class on main content
-            mainContent.classList.toggle("collapsed");
+            toggleButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    sidebar.classList.toggle("collapsed");
+                    mainContent.classList.toggle("collapsed");
+                });
+            });
         });
-    });
-});
-
-</script>
-  </body>
+    </script>
+</body>
 </html>
