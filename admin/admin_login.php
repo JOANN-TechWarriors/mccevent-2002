@@ -159,9 +159,7 @@ if (isset($_POST['admin_login'])) {
                 <div class="col-md-6">
                     <div class="login-section">
                         <div class="login-form">
-                            <div class="login-header">
-                                <h2>ADMIN LOGIN</h2>
-                            </div>
+                                <h2 class="mb-4">ADMIN LOGIN</h2>
                             <?php echo $msg; ?>
                             <form method="POST" id="login-form">
                                 <div class="mb-3">
