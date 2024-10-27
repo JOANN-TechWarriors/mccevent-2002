@@ -71,7 +71,7 @@
         }
 
         .nav .logo img {
-            height: 60px;
+            height: 40px;
             vertical-align: middle;
         }
 
@@ -151,172 +151,46 @@
             transition: 0.3s;
         }
 
-        /* Main Event Carousel Styles */
-        #mainEventCarousel {
-            width: 100%;
-            height: calc(100vh - 65px);
-            margin-top: 65px;
-            position: relative;
-            overflow: hidden;
+        .banner_section {
+            padding-top: 100px; /* Adjusted to account for fixed navbar */
         }
 
-        #mainEventCarousel .carousel-inner {
-            height: 100%;
-        }
-
-        #mainEventCarousel .carousel-item {
-            height: 100%;
-            background-color: #000;
-            position: relative;
-        }
-
-        #mainEventCarousel .carousel-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.9;
-        }
-
-        #mainEventCarousel .carousel-caption {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 800px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 20%;
-            text-align: center;
-            display: block !important;
-        }
-
-        #mainEventCarousel .carousel-caption h5 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            color: white;
-        }
-
-        #mainEventCarousel .carousel-caption p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 0.5rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            color: white;
-        }
-
-        #mainEventCarousel .description {
-            max-height: 150px;
-            overflow-y: auto;
-            margin-bottom: 1rem;
-        }
-
-        #mainEventCarousel .carousel-control-prev,
-        #mainEventCarousel .carousel-control-next {
-            width: 5%;
-            opacity: 0.7;
-            z-index: 100;
-        }
-
-        #mainEventCarousel .carousel-control-prev:hover,
-        #mainEventCarousel .carousel-control-next:hover {
-            opacity: 1;
-        }
-
-        #mainEventCarousel .carousel-control-prev-icon,
-        #mainEventCarousel .carousel-control-next-icon {
-            width: 30px;
-            height: 30px;
-        }
-
-        /* Ongoing Events Section */
-        .coffee_section {
+        .client_section {
             padding: 50px 0;
-            background-color: lightgray;
         }
-
-        .coffee_taital {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .coffee_section_2 .coffee_img img {
-            width: 100%;
-            height: 250px;
+        
+        .client_left img {
+            max-width: 400px;
+            height: auto;
             object-fit: cover;
-            border-radius: 8px;
+            margin-right: 30px;
         }
-
-        .coffee_box {
-            background: white;
+        
+        .client_taital_main {
+            display: flex;
+            align-items: center;
+            gap: 270px;
             padding: 20px;
-            border-radius: 8px;
-            margin-top: -30px;
-            position: relative;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-
-        .types_text {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #333;
+        
+        .client_right {
+            flex: 1;
+            padding: 20px;
         }
-
-        .looking_text {
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        /* Copyright Section */
-        .copyright_section {
-            background-color: #222;
-            color: white;
-            padding: 20px 0;
+        
+        .about_taital {
+            margin-bottom: 30px;
             text-align: center;
         }
-
-        .copyright_text {
-            margin: 0;
-        }
-
-        /* Responsive Design */
-        @media screen and (max-width: 1200px) {
-            #mainEventCarousel .carousel-caption {
-                width: 80%;
-                bottom: 15%;
-            }
-
-            #mainEventCarousel .carousel-caption h5 {
-                font-size: 2rem;
-            }
-        }
-
-        @media screen and (max-width: 992px) {
-            #mainEventCarousel {
-                height: calc(80vh - 65px);
-            }
-
-            #mainEventCarousel .carousel-caption {
-                width: 90%;
-                bottom: 10%;
-                padding: 15px;
-            }
-
-            #mainEventCarousel .carousel-caption h5 {
-                font-size: 1.8rem;
-            }
-
-            #mainEventCarousel .carousel-caption p {
-                font-size: 1rem;
-            }
-
-            #mainEventCarousel .description {
-                max-height: 120px;
-            }
+        
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         @media screen and (max-width: 768px) {
@@ -370,82 +244,215 @@
                 padding-left: 3rem;
             }
 
-            #mainEventCarousel {
-                height: calc(70vh - 65px);
+            .client_taital_main {
+                flex-direction: column;
+                gap: 30px;
             }
 
-            #mainEventCarousel .carousel-caption {
-                width: 95%;
-                bottom: 5%;
-                padding: 12px;
-            }
-
-            #mainEventCarousel .carousel-caption h5 {
-                font-size: 1.5rem;
-                margin-bottom: 0.5rem;
-            }
-
-            #mainEventCarousel .carousel-caption p {
-                font-size: 0.9rem;
-                line-height: 1.4;
-            }
-
-            #mainEventCarousel .description {
-                max-height: 100px;
+            .client_left img {
+                max-width: 100%;
+                margin-right: 0;
             }
         }
 
-        @media screen and (max-width: 576px) {
-            #mainEventCarousel {
-                height: calc(60vh - 65px);
-            }
-
-            #mainEventCarousel .carousel-caption {
-                width: 100%;
-                bottom: 0;
-                padding: 10px;
-                border-radius: 0;
-                background: rgba(0, 0, 0, 0.8);
-            }
-
-            #mainEventCarousel .carousel-caption h5 {
-                font-size: 1.2rem;
-            }
-
-            #mainEventCarousel .carousel-caption p {
-                font-size: 0.85rem;
-                line-height: 1.3;
-            }
-
-            #mainEventCarousel .description {
-                max-height: 80px;
-            }
+        .fa {
+            padding: 10px;
+            font-size: 10px;
+            width: 8px;
+            text-align: center;
+            text-decoration: none;
+            margin: 5px 5px;
+            border-radius: 30%;
         }
 
-        @media screen and (max-width: 380px) {
-            #mainEventCarousel {
-                height: calc(50vh - 65px);
-            }
-
-            #mainEventCarousel .carousel-caption {
-                padding: 8px;
-            }
-
-            #mainEventCarousel .carousel-caption h5 {
-                font-size: 1.1rem;
-                margin-bottom: 0.3rem;
-            }
-
-            #mainEventCarousel .carousel-caption p {
-                font-size: 0.8rem;
-                line-height: 1.2;
-                margin-bottom: 0.3rem;
-            }
-
-            #mainEventCarousel .description {
-                max-height: 60px;
-            }
+        .fa:hover {
+            opacity: 0.5;
         }
+
+        button.btn.btn-primary {
+            z-index: 1000;
+            position: relative;
+        }
+
+        /* Main Event Carousel Styles */
+#mainEventCarousel {
+    width: 100%;
+    height: calc(100vh - 65px);
+    margin-top: 65px;
+    position: relative;
+    overflow: hidden;
+}
+
+#mainEventCarousel .carousel-inner {
+    height: 100%;
+}
+
+#mainEventCarousel .carousel-item {
+    height: 100%;
+    background-color: #000;
+    position: relative;
+}
+
+#mainEventCarousel .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+}
+
+#mainEventCarousel .carousel-caption {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20%;
+    text-align: center;
+    display: block !important; /* Force display */
+}
+
+#mainEventCarousel .carousel-caption h5 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+#mainEventCarousel .carousel-caption p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+#mainEventCarousel .description {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+/* Large devices (desktops, less than 1200px) */
+@media screen and (max-width: 1200px) {
+    #mainEventCarousel .carousel-caption {
+        width: 80%;
+        bottom: 15%;
+    }
+
+    #mainEventCarousel .carousel-caption h5 {
+        font-size: 2rem;
+    }
+}
+
+/* Medium devices (tablets, less than 992px) */
+@media screen and (max-width: 992px) {
+    #mainEventCarousel {
+        height: calc(80vh - 65px);
+    }
+
+    #mainEventCarousel .carousel-caption {
+        width: 90%;
+        bottom: 10%;
+        padding: 15px;
+    }
+
+    #mainEventCarousel .carousel-caption h5 {
+        font-size: 1.8rem;
+    }
+
+    #mainEventCarousel .carousel-caption p {
+        font-size: 1rem;
+    }
+
+    #mainEventCarousel .description {
+        max-height: 120px;
+    }
+}
+
+/* Small devices (landscape phones, less than 768px) */
+@media screen and (max-width: 768px) {
+    #mainEventCarousel {
+        height: calc(70vh - 65px);
+    }
+
+    #mainEventCarousel .carousel-caption {
+        width: 95%;
+        bottom: 5%;
+        padding: 12px;
+    }
+
+    #mainEventCarousel .carousel-caption h5 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    #mainEventCarousel .carousel-caption p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    #mainEventCarousel .description {
+        max-height: 100px;
+    }
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media screen and (max-width: 576px) {
+    #mainEventCarousel {
+        height: calc(60vh - 65px);
+    }
+
+    #mainEventCarousel .carousel-caption {
+        width: 100%;
+        bottom: 0;
+        padding: 10px;
+        border-radius: 0;
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    #mainEventCarousel .carousel-caption h5 {
+        font-size: 1.2rem;
+    }
+
+    #mainEventCarousel .carousel-caption p {
+        font-size: 0.85rem;
+        line-height: 1.3;
+    }
+
+    #mainEventCarousel .description {
+        max-height: 80px;
+    }
+}
+
+/* Very small devices (small phones, less than 380px) */
+@media screen and (max-width: 380px) {
+    #mainEventCarousel {
+        height: calc(50vh - 65px);
+    }
+
+    #mainEventCarousel .carousel-caption {
+        padding: 8px;
+    }
+
+    #mainEventCarousel .carousel-caption h5 {
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    #mainEventCarousel .carousel-caption p {
+        font-size: 0.8rem;
+        line-height: 1.2;
+        margin-bottom: 0.3rem;
+    }
+
+    #mainEventCarousel .description {
+        max-height: 60px;
+    }
+}
     </style>
    <body style="background-color: lightgray;">
       <nav class="nav">
