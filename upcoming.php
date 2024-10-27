@@ -159,7 +159,7 @@
         .client_taital_main {
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 300px;
             padding: 20px;
         }
 
