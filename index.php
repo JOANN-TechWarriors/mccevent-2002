@@ -379,8 +379,8 @@
    <body style="background-color: lightgray;">
       <nav class="nav">
           <div class="logo">
-              <a href="#" style="font-family: impact; color: #1153D0;">
-                  <img src="img/logo.png" style="height: 40px; vertical-align: middle;"> MCC Event
+              <a href="#" style="font-family: impact; color: #1153D0; ">
+                  <img src="img/logo.png" style="height: 60px; vertical-align: middle;"> MCC Event
               </a>
           </div>
           <div class="main_list" id="mainListDiv">
