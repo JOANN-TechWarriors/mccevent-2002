@@ -29,288 +29,266 @@
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
    </head>
-   <style type="text/css">
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: all 0.4s;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-        }
-        .container{
-            margin-left: 5%;
-            margin-right: 5%;
-        }
-        .nav{
-            width: 100%;
-            height: 65px;
-            position: fixed;
-            line-height: 65px;
-            text-align: center;
-            background-color: rgba(6, 6, 7, 0.8);
-            z-index: 1000;
-        }
-        .nav div.logo{
-            width: 180px;
-            height: 10px;
-            position: absolute;
-        }
-        .nav div.logo a{
-            text-decoration: none;
-            color: #fff;
-            font-size: 25px;
-            text-transform: uppercase;
-        }
-        .nav div.logo a:hover {
-            color: #c0c0c0;
-        }
-        .nav div.main_list{
-            width: 600px;
-            height: 65px;
-            float: right;
-        }
-        .nav div.main_list ul{
-            width:100%;
-            height: 65px;
-            display: flex;
-            list-style: none;
-        }
-        .nav div.main_list ul li{
-            width: 120px;
-            height: 65px;
-        }
-        .nav div.main_list ul li a{
-            text-decoration: none;
-            color: #fff;
-            line-height: 65px;
-            text-transform: uppercase;
-        }
-        .nav div.main_list ul li a:hover{
-            color: #c0c0c0;
-        }
-        .nav div.media_button {
-            width: 40px;
-            height: 40px;
-            background-color: transparent;
-            position: absolute;
-            right: 15px;
-            top: 12px;
-            display: none;
-        }
-        .nav div.media_button button.main_media_button {
-            width: 100%;
-            height: 100%;
-            background-color: transparent;;
-            outline: 0;
-            border: none;
-            cursor: pointer;
-        }
-        .nav div.media_button button.main_media_button span{
-            width: 98%;
-            height: 1px;
+   <style>
+    /* Basic Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        transition: all 0.4s;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+        padding-top: 65px; /* Add padding to account for fixed navbar */
+    }
+
+    /* Navigation Bar Base Styles */
+    .nav {
+        width: 100%;
+        height: 65px;
+        position: fixed;
+        line-height: 65px;
+        text-align: center;
+        background-color: rgba(6, 6, 7, 0.8);
+        z-index: 1000;
+        top: 0;
+        left: 0;
+    }
+
+    .container {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+    }
+
+    /* Logo Styles */
+    .nav .logo {
+        height: 65px;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav .logo a {
+        text-decoration: none;
+        color: #fff;
+        font-size: 25px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav .logo img {
+        height: 40px;
+        vertical-align: middle;
+    }
+
+    /* Main Navigation List */
+    .nav .main_list {
+        height: 65px;
+        display: flex;
+        align-items: center;
+    }
+
+    .main_list ul {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        gap: 20px;
+    }
+
+    .main_list ul li {
+        position: relative;
+    }
+
+    .main_list ul li a {
+        text-decoration: none;
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 14px;
+        padding: 0 15px;
+        display: block;
+        transition: color 0.3s ease;
+    }
+
+    .main_list ul li a:hover {
+        color: #1153D0;
+    }
+
+    /* Dropdown Menu */
+    .dropdown {
+        display: none;
+        position: absolute;
+        background-color: rgba(6, 6, 7, 0.9);
+        min-width: 200px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        z-index: 1001;
+        top: 100%;
+        right: 0;
+        border-radius: 4px;
+    }
+
+    .dropdown a {
+        color: #fff;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        line-height: 1.5;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .dropdown a:hover {
+        background-color: rgba(17, 83, 208, 0.2);
+        color: #1153D0;
+    }
+
+    .main_list ul li:hover .dropdown {
+        display: block;
+    }
+
+    /* Mobile Menu Button */
+    .media_button {
+        display: none;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+    }
+
+    .media_button span {
+        display: block;
+        width: 30px;
+        height: 2px;
+        background-color: #fff;
+        margin: 6px 0;
+        transition: 0.3s;
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+        .media_button {
             display: block;
-            background-color: #fff;
-            margin-top: 9px;
-            margin-bottom: 10px;
-        }
-        .nav div.media_button button.main_media_button:hover span:nth-of-type(1){
-            transform: rotateY(180deg);
-            transition: all 0.5s;
-            background-color: #c0c0c0;
-        }
-        .nav div.media_button button.main_media_button:hover span:nth-of-type(2){
-            transform: rotateY(180deg);
-            transition: all 0.4s;
-            background-color: #c0c0c0;
-        }
-        .nav div.media_button button.main_media_button:hover span:nth-of-type(3){
-            transform: rotateY(180deg);
-            transition: all 0.3s;
-            background-color: #c0c0c0;
-        }
-        .nav div.media_button button.active span:nth-of-type(1) {
-            transform: rotate3d(0, 0, 1, 45deg);
             position: absolute;
-            margin: 0;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
         }
-        .nav div.media_button button.active span:nth-of-type(2) {
-            display: none;
-        }
-        .nav div.media_button button.active span:nth-of-type(3) {
-            transform: rotate3d(0, 0, 1, -45deg);
+
+        .nav .main_list {
             position: absolute;
-            margin: 0;
+            top: 65px;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: rgba(6, 6, 7, 0.95);
+            overflow: hidden;
+            transition: height 0.3s ease-in-out;
         }
-        .nav div.media_button button.active:hover span:nth-of-type(1) {
-            transform: rotate3d(0, 0, 1, 20deg);
+
+        .nav .main_list.show_list {
+            height: auto;
         }
-        .nav div.media_button button.active:hover span:nth-of-type(3) {
-            transform: rotate3d(0, 0, 1, -20deg);
-        }
-        .fa {
-            padding: 10px;
-            font-size: 10px;
-            width: 8px;
-            text-align: center;
-            text-decoration: none;
-            margin: 5px 5px;
-            border-radius: 30%;
-        }
-        .fa:hover {
-            opacity: 0.5;
-        }
-        .home{
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-        }
-        @media screen and (min-width: 768px) and (max-width: 1024px) {
-            .container{
-                margin: 0;
-            }
-        }
-        @media screen and (max-width:768px) {
-            .container{
-                margin: 0;
-            }
-            .nav div.logo{
-                margin-left: 15px;
-            }
-            .nav div.main_list{
-                width: 100%;
-                margin-top: 65px;
-                height: 0px;
-                overflow: hidden;
-            }
-            .nav div.show_list{
-                height: 200px;
-            }
-            .nav div.main_list ul{
-                flex-direction: column;
-                width: 100%;
-                height: 200px;
-                top: 80px;
-                right: 0;
-                left: 0;
-            }
-            .nav div.main_list ul li{
-                width: 100%;
-                height: 40px;
-                background-color:rgba(6, 6, 7, 0.8);
-            }
-            .nav div.main_list ul li a{
-                text-align: center;
-                line-height: 40px;
-                width: 100%;
-                height: 40px;
-                display: table;
-            }
-            .nav div.media_button{
-                display: block;
-            }
-        }
+
         .main_list ul {
-            list-style-type: none;
+            flex-direction: column;
+            width: 100%;
+            gap: 0;
             padding: 0;
         }
 
         .main_list ul li {
-            display: inline-block;
-            position: relative;
+            width: 100%;
+            text-align: center;
         }
 
         .main_list ul li a {
-            text-decoration: none;
-            padding: 10px;
-            color: #000;
-        }
-
-        .main_list ul li:hover .dropdown {
-            display: block;
-        }
-        /* Main Event Carousel styles */
-        #mainEventCarousel {
-            width: 100%;
-            height: 100vh; /* 50% of the viewport height */
-            overflow: hidden;
-        }
-
-        #mainEventCarousel .carousel-inner,
-        #mainEventCarousel .carousel-item {
-            height: 100%;
-        }
-
-        #mainEventCarousel .carousel-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* This maintains aspect ratio */
-        }
-
-        #mainEventCarousel .carousel-caption {
-            bottom: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 5px;
+            padding: 15px;
+            line-height: 1;
         }
 
         .dropdown {
-            display: none;
-            position: absolute;
-            background-color: black;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
+            position: static;
+            width: 100%;
+            background-color: rgba(17, 83, 208, 0.1);
+            box-shadow: none;
         }
 
         .dropdown a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
+            padding: 12px 30px;
         }
 
-        .dropdown a:hover {
-            background-color: #333;
-            color:red;
+        /* Hamburger Animation */
+        .media_button.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
         }
+
+        .media_button.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .media_button.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+    }
+
+    /* Additional Utility Classes */
+    .fa {
+        padding: 10px;
+        font-size: 10px;
+        width: 8px;
+        text-align: center;
+        text-decoration: none;
+        margin: 5px 5px;
+        border-radius: 30%;
+    }
+
+    .fa:hover {
+        opacity: 0.5;
+    }
     </style>
-   <body>
-   <nav class="nav">
-    <div class="container">
-        <div class="logo">
-            <a href="#" style="font-family: impact; color: #1153D0;">
-                <img src="img/logo.png" style="height: 40px;  vertical-align: middle;"> MCC Event
-            </a>
-             <span class="text-light"MCC>
-        </div>
-        <div class="main_list" id="mainListDiv">
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="ongoing.php">Ongoing</a></li>
-            <li><a href="upcoming.php">Upcoming</a></li>
-            <li><a href="about.php">About</a></li>
-            <li><a href="admin/stream/index.php">Live</a></li>
-            <li>
-                <a href="#login">Login</a>
-                <div class="dropdown">
-                    <a href="admin/admin_login.php">Admin Login</a>
-                    <a href="admin/index.php">Organizer Login</a>
-                    <a href="tabulator/index.php">Tabulator Login</a>
-                    <a href="judge/index.php">Judge Login</a>
-                    <a href="student/index.php">Student Login</a>
-                    </div>
-            </li>
-        </ul>
-    </div>
-        <div class="media_button">
-            <button class="main_media_button" id="mediaButton">
+</head>
+<body>
+    <nav class="nav">
+        <div class="container">
+            <div class="logo">
+                <a href="#" style="font-family: impact; color: #1153D0;">
+                    <img src="img/logo.png" alt="MCC Event Logo"> MCC Event
+                </a>
+            </div>
+            <div class="main_list" id="mainListDiv">
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="ongoing.php">Ongoing</a></li>
+                    <li><a href="upcoming.php">Upcoming</a></li>
+                    <li><a href="about.php">About</a></li>
+                    <li><a href="admin/stream/index.php">Live</a></li>
+                    <li>
+                        <a href="#login">Login</a>
+                        <div class="dropdown">
+                            <a href="admin/admin_login.php">Admin Login</a>
+                            <a href="admin/index.php">Organizer Login</a>
+                            <a href="tabulator/index.php">Tabulator Login</a>
+                            <a href="judge/index.php">Judge Login</a>
+                            <a href="student/index.php">Student Login</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <button class="media_button" id="mediaButton">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
         </div>
-    </div>
-</nav>
+    </nav>
       <!-- header section end -->
 
       <!-- Mainevent section start  -->
@@ -370,10 +348,6 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php
 $conn = null; // Close the database connection
 ?>
-
-
-
-
 
 <!-- Mainevent section end -->
 
@@ -492,37 +466,51 @@ $conn->close();
       <!-- sidebar -->
       <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
       <script src="js/custom.js"></script>
-      <script>
-        // Disable right-click
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mediaButton = document.querySelector('.media_button');
+        const mainList = document.querySelector('.main_list');
+
+        mediaButton.addEventListener('click', function() {
+            mainList.classList.toggle('show_list');
+            this.classList.toggle('active');
         });
 
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        document.onkeydown = function (e) {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
-                e.preventDefault();
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInside = mainList.contains(event.target) || mediaButton.contains(event.target);
+            
+            if (!isClickInside && mainList.classList.contains('show_list')) {
+                mainList.classList.remove('show_list');
+                mediaButton.classList.remove('active');
             }
-        };
+        });
 
-        // Disable developer tools
-        function disableDevTools() {
-            if (window.devtools.isOpen) {
-                window.location.href = "about:blank";
+        // Close menu when window is resized above mobile breakpoint
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                mainList.classList.remove('show_list');
+                mediaButton.classList.remove('active');
             }
-        }
+        });
+    });
 
-        // Check for developer tools every 100ms
-        setInterval(disableDevTools, 100);
+    // Disable right-click
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
 
-        // Disable selecting text
-        document.onselectstart = function (e) {
+    // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+    document.onkeydown = function (e) {
+        if (
+            e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+            (e.ctrlKey && e.key === 'U')
+        ) {
             e.preventDefault();
-        };
-</script>
+        }
+    };
+    </script>
    </body>
 </html>
