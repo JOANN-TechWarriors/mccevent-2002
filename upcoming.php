@@ -196,7 +196,7 @@
         .copyright_section {
             width: 100%;
             float: left;
-            background-color: #252525;
+            background-color: #f01c1c;
             height: auto;
             padding: 20px 0;
         }
