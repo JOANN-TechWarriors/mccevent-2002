@@ -268,7 +268,7 @@
         body {
             padding-top: 65px;
         }
-        
+
         .home{
             background-size: cover;
             background-position: center;
@@ -386,41 +386,38 @@
     </style>
    <body>
    <nav class="nav">
-    <div class="container">
         <div class="logo">
             <a href="#" style="font-family: impact; color: #1153D0;">
-                <img src="img/logo.png" style="height: 40px;  vertical-align: middle;"> MCC Event
+                <img src="img/logo.png" style="height: 40px; vertical-align: middle;"> MCC Event
             </a>
-             <span class="text-light"MCC>
         </div>
         <div class="main_list" id="mainListDiv">
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="ongoing.php">Ongoing</a></li>
-            <li><a href="upcoming.php">Upcoming</a></li>
-            <li><a href="about.php">About</a></li>
-            <li><a href="admin/stream/index.php">Live</a></li>
-            <li>
-                <a href="#login">Login</a>
-                <div class="dropdown">
-                    <a href="admin/admin_login.php">Admin Login</a>
-                                    <a href="admin/index.php">Organizer Login</a>
-                    <a href="tabulator/index.php">Tabulator Login</a>
-                    <a href="judge/index.php">Judge Login</a>
-                    <a href="student/index2.php">Student Login</a>
+            <ul>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="ongoing.php">Ongoing</a></li>
+                <li><a href="upcoming.php">Upcoming</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="admin/stream/index.php">Live</a></li>
+                <li>
+                    <a href="#" id="loginDropdown">Login</a>
+                    <div class="dropdown">
+                        <a href="admin/admin_login.php">Admin Login</a>
+                        <a href="admin/index.php">Organizer Login</a>
+                        <a href="tabulator/index.php">Tabulator Login</a>
+                        <a href="admin/welcome.php">Judge Login</a>
+                        <a href="student/index.php">Student Login</a>
                     </div>
-            </li>
-        </ul>
-    </div>
-        <div class="media_button">
-            <button class="main_media_button" id="mediaButton">
+                </li>
+            </ul>
+        </div>
+        <div class="media_button" id="mediaButton">
+            <button class="main_media_button">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
         </div>
-    </div>
-</nav>
+    </nav>
       <!-- header section end -->
 
       <!-- Mainevent section start  -->
@@ -602,37 +599,64 @@ $conn->close();
       <!-- sidebar -->
       <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
       <script src="js/custom.js"></script>
-      <script>
-        // Disable right-click
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
+      <!-- Required JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            const mediaButton = document.getElementById('mediaButton');
+            const mainListDiv = document.getElementById('mainListDiv');
+            const mediaButtonSpans = mediaButton.querySelector('button');
+            const loginDropdown = document.getElementById('loginDropdown');
+            const dropdown = document.querySelector('.dropdown');
+            let isDropdownOpen = false;
 
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        document.onkeydown = function (e) {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
+            // Mobile menu toggle
+            mediaButton.addEventListener('click', function() {
+                mainListDiv.classList.toggle('show_list');
+                mediaButtonSpans.classList.toggle('active');
+                
+                // Close dropdown if menu is closing
+                if (!mainListDiv.classList.contains('show_list')) {
+                    dropdown.classList.remove('show-dropdown');
+                    isDropdownOpen = false;
+                }
+            });
+
+            // Login dropdown toggle
+            loginDropdown.addEventListener('click', function(e) {
                 e.preventDefault();
-            }
-        };
+                e.stopPropagation();
+                
+                isDropdownOpen = !isDropdownOpen;
+                dropdown.classList.toggle('show-dropdown');
+            });
 
-        // Disable developer tools
-        function disableDevTools() {
-            if (window.devtools.isOpen) {
-                window.location.href = "about:blank";
-            }
-        }
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!dropdown.contains(e.target) && !loginDropdown.contains(e.target)) {
+                    dropdown.classList.remove('show-dropdown');
+                    isDropdownOpen = false;
+                }
+            });
 
-        // Check for developer tools every 100ms
-        setInterval(disableDevTools, 100);
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    mainListDiv.classList.remove('show_list');
+                    mediaButtonSpans.classList.remove('active');
+                    if (!isDropdownOpen) {
+                        dropdown.classList.remove('show-dropdown');
+                    }
+                }
+            });
 
-        // Disable selecting text
-        document.onselectstart = function (e) {
-            e.preventDefault();
-        };
-</script>
+            // Prevent dropdown from closing when clicking inside it
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
    </body>
 </html>
