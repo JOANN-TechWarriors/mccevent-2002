@@ -5,6 +5,9 @@
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
       <link rel="shortcut icon" href="../img/logo.png"/>
       <title>Event Judging System</title>
@@ -17,122 +20,329 @@
       <link rel="stylesheet" type="text/css" href="css1/style.css">
       <!-- Responsive-->
       <link rel="stylesheet" href="css1/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
       <!-- font css -->
       <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
       <!-- Scrollbar Custom CSS -->
       <link rel="stylesheet" href="css1/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-      
-      <style>
+   </head>
+   <style type="text/css">
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            transition: all 0.4s;
         }
 
         .nav {
             width: 100%;
             height: 65px;
             position: fixed;
+            line-height: 65px;
+            text-align: center;
             background-color: rgba(6, 6, 7, 0.8);
             z-index: 1000;
         }
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 100%;
+        .nav div.logo {
+            float: left;
+            width: auto;
+            padding-left: 1rem;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo a {
+        .nav div.logo a {
             text-decoration: none;
-            color: #1153D0;
-            font-family: impact;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: #fff;
+            font-size: 1.5rem;
+            text-transform: uppercase;
         }
 
-        .logo img {
-            height: 40px;
+        .nav div.logo a:hover {
+            color: #c0c0c0;
         }
 
-        .main_list {
-            display: flex;
-            align-items: center;
+        .nav div.main_list {
+            float: right;
+            padding-right: 1rem;
         }
 
-        .main_list ul {
+        .nav div.main_list ul {
+            width: 100%;
+            height: 65px;
             display: flex;
             list-style: none;
             margin: 0;
             padding: 0;
         }
 
-        .main_list ul li {
+        .nav div.main_list ul li {
+            padding: 0;
+            padding-right: 3rem;
             position: relative;
-            margin-left: 20px;
+        }
+
+        .nav div.main_list ul li a {
+            text-decoration: none;
+            color: #fff;
+            line-height: 65px;
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav div.main_list ul li a:hover {
+            color: #c0c0c0;
+        }
+
+        .nav div.media_button {
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            display: none;
+            cursor: pointer;
+        }
+
+        .nav div.media_button button.main_media_button {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            outline: 0;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav div.media_button button.main_media_button span {
+            width: 98%;
+            height: 2px;
+            display: block;
+            background-color: #fff;
+            margin-top: 9px;
+            margin-bottom: 10px;
+            transition: 0.3s ease;
+        }
+
+        /* Dropdown styling */
+        .dropdown {
+            display: none;
+            position: absolute;
+            background: rgba(6, 6, 7, 0.95);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 0;
+            z-index: 1001;
+        }
+
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent rgba(6, 6, 7, 0.95) transparent;
+        }
+
+        .dropdown a {
+            color: white !important;
+            padding: 12px 20px !important;
+            text-decoration: none;
+            display: block;
+            line-height: 1.5 !important;
+            font-size: 14px !important;
+            text-transform: none !important;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .dropdown a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding-left: 25px !important;
+        }
+
+        /* Active states */
+        .show-dropdown {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Mobile responsive styles */
+        @media screen and (max-width: 768px) {
+            .nav div.logo {
+                margin-left: 15px;
+            }
+
+            .nav div.main_list {
+                width: 100%;
+                height: 0;
+                overflow: hidden;
+                position: absolute;
+                top: 65px;
+                left: 0;
+                background-color: rgba(6, 6, 7, 0.95);
+                transition: height 0.3s ease;
+            }
+
+            .nav div.show_list {
+                height: auto;
+            }
+
+            .nav div.main_list ul {
+                flex-direction: column;
+                width: 100%;
+                height: auto;
+                padding: 20px 0;
+            }
+
+            .nav div.main_list ul li {
+                width: 100%;
+                padding: 0;
+            }
+
+            .nav div.main_list ul li a {
+                line-height: 50px;
+                width: 100%;
+                height: 50px;
+                display: block;
+                padding: 0 20px;
+                text-align: left;
+            }
+
+            .nav div.media_button {
+                display: block;
+            }
+
+            /* Mobile dropdown */
+            .dropdown {
+                position: static;
+                transform: none;
+                left: 0;
+                width: 100%;
+                border-radius: 0;
+                box-shadow: none;
+                background-color: rgba(255, 255, 255, 0.05);
+            }
+
+            .dropdown::before {
+                display: none;
+            }
+
+            .dropdown a {
+                padding: 12px 30px !important;
+            }
+
+            .show-dropdown {
+                animation: none;
+            }
+
+            /* Hamburger animation */
+            .nav div.media_button button.active span:nth-child(1) {
+                transform: rotate(45deg) translate(8px, 8px);
+            }
+
+            .nav div.media_button button.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav div.media_button button.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -7px);
+            }
+        }
+
+        /* Prevent content from going under navbar */
+        body {
+            padding-top: 65px;
+        }
+        
+        .home{
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+        }
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .container{
+                margin: 0;
+            }
+        }
+        @media screen and (max-width:768px) {
+            .container{
+                margin: 0;
+            }
+            .nav div.logo{
+                margin-left: 15px;
+            }
+            .nav div.main_list{
+                width: 100%;
+                margin-top: 65px;
+                height: 0px;
+                overflow: hidden;
+            }
+            .nav div.show_list{
+                height: 200px;
+            }
+            .nav div.main_list ul{
+                flex-direction: column;
+                width: 100%;
+                height: 200px;
+                top: 80px;
+                right: 0;
+                left: 0;
+            }
+            .nav div.main_list ul li{
+                width: 100%;
+                height: 40px;
+                background-color:rgba(6, 6, 7, 0.8);
+            }
+            .nav div.main_list ul li a{
+                text-align: center;
+                line-height: 40px;
+                width: 100%;
+                height: 40px;
+                display: table;
+            }
+            .nav div.media_button{
+                display: block;
+            }
+        }
+        .main_list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .main_list ul li {
+            display: inline-block;
+            position: relative;
         }
 
         .main_list ul li a {
             text-decoration: none;
-            color: #fff;
-            text-transform: uppercase;
-            font-size: 14px;
-            transition: color 0.3s;
-        }
-
-        .main_list ul li a:hover {
-            color: #c0c0c0;
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: rgba(6, 6, 7, 0.9);
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-
-        .dropdown a {
-            padding: 12px 16px;
-            display: block;
-            color: #fff;
-            font-size: 14px;
-        }
-
-        .dropdown a:hover {
-            background-color: rgba(255,255,255,0.1);
+            padding: 10px;
+            color: #000;
         }
 
         .main_list ul li:hover .dropdown {
             display: block;
         }
-
-        .media_button {
-            display: none;
-        }
-
         /* Main Event Carousel styles */
         #mainEventCarousel {
             width: 100%;
-            height: 100vh;
+            height: 100vh; /* 50% of the viewport height */
             overflow: hidden;
-            margin-top: 65px; /* Add margin to account for fixed navbar */
         }
 
         #mainEventCarousel .carousel-inner,
@@ -143,7 +353,7 @@
         #mainEventCarousel .carousel-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* This maintains aspect ratio */
         }
 
         #mainEventCarousel .carousel-caption {
@@ -153,222 +363,167 @@
             border-radius: 5px;
         }
 
-        /* Coffee section styles */
-        .coffee_section {
-            padding: 50px 0;
+        .dropdown {
+            display: none;
+            position: absolute;
+            background-color: black;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
         }
 
-        .coffee_section .coffee_taital {
-            text-align: center;
-            margin-bottom: 40px;
+        .dropdown a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
         }
 
-        .coffee_box {
-            padding: 20px;
-            text-align: center;
+        .dropdown a:hover {
+            background-color: #333;
+            color:red;
         }
-
-        .coffee_img img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
-
-        /* Copyright section */
-        .copyright_section {
-            background-color: #000;
-            color: #fff;
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        @media screen and (max-width: 768px) {
-            .media_button {
-                display: block;
-                position: relative;
-                cursor: pointer;
-                width: 30px;
-                height: 25px;
-                margin-right: 15px;
-            }
-
-            .media_button span {
-                width: 100%;
-                height: 2px;
-                background-color: #fff;
-                display: block;
-                position: absolute;
-                transition: 0.3s;
-            }
-
-            .media_button span:nth-child(1) { top: 0; }
-            .media_button span:nth-child(2) { top: 50%; transform: translateY(-50%); }
-            .media_button span:nth-child(3) { bottom: 0; }
-
-            .media_button.active span:nth-child(1) { 
-                transform: rotate(45deg); 
-                top: 50%;
-            }
-            .media_button.active span:nth-child(2) { 
-                opacity: 0;
-            }
-            .media_button.active span:nth-child(3) { 
-                transform: rotate(-45deg); 
-                bottom: 50%;
-            }
-
-            .main_list {
-                position: absolute;
-                top: 65px;
-                left: 0;
-                width: 100%;
-                background-color: rgba(6, 6, 7, 0.9);
-                display: none;
-                padding: 20px 0;
-            }
-
-            .main_list.show_list {
-                display: block;
-            }
-
-            .main_list ul {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .main_list ul li {
-                margin: 0;
-                width: 100%;
-                text-align: center;
-            }
-
-            .main_list ul li a {
-                padding: 15px 0;
-                display: block;
-            }
-
-            .dropdown {
-                position: static;
-                display: none;
-                width: 100%;
-                background-color: rgba(0,0,0,0.2);
-            }
-
-            .main_list ul li:hover .dropdown {
-                display: none;
-            }
-
-            .main_list ul li.active .dropdown {
-                display: block;
-            }
-
-            /* Adjust carousel height for mobile */
-            #mainEventCarousel {
-                height: 50vh;
-            }
-        }
-      </style>
-   </head>
+    </style>
    <body>
-      <!-- Navigation -->
-      <nav class="nav">
-          <div class="container">
-              <div class="logo">
-                  <a href="#">
-                      <img src="img/logo.png" alt="MCC Logo">
-                      <span>MCC Event</span>
-                  </a>
-              </div>
-              <div class="main_list" id="mainListDiv">
-                  <ul>
-                      <li><a href="index.php">Home</a></li>
-                      <li><a href="ongoing.php">Ongoing</a></li>
-                      <li><a href="upcoming.php">Upcoming</a></li>
-                      <li><a href="about.php">About</a></li>
-                      <li><a href="admin/stream/index.php">Live</a></li>
-                      <li>
-                          <a href="#login">Login</a>
-                          <div class="dropdown">
-                              <a href="admin/admin_login.php">Admin Login</a>
-                              <a href="admin/index.php">Organizer Login</a>
-                              <a href="tabulator/index.php">Tabulator Login</a>
-                              <a href="judge/index.php">Judge Login</a>
-                              <a href="student/index.php">Student Login</a>
-                          </div>
-                      </li>
-                  </ul>
-              </div>
-              <div class="media_button" id="mediaButton">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-              </div>
+   <nav class="nav">
+    <div class="container">
+        <div class="logo">
+            <a href="#" style="font-family: impact; color: #1153D0;">
+                <img src="img/logo.png" style="height: 40px;  vertical-align: middle;"> MCC Event
+            </a>
+             <span class="text-light"MCC>
+        </div>
+        <div class="main_list" id="mainListDiv">
+        <ul>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="ongoing.php">Ongoing</a></li>
+            <li><a href="upcoming.php">Upcoming</a></li>
+            <li><a href="about.php">About</a></li>
+            <li><a href="admin/stream/index.php">Live</a></li>
+            <li>
+                <a href="#login">Login</a>
+                <div class="dropdown">
+                    <a href="admin/admin_login.php">Admin Login</a>
+                                    <a href="admin/index.php">Organizer Login</a>
+                    <a href="tabulator/index.php">Tabulator Login</a>
+                    <a href="judge/index.php">Judge Login</a>
+                    <a href="student/index2.php">Student Login</a>
+                    </div>
+            </li>
+        </ul>
+    </div>
+        <div class="media_button">
+            <button class="main_media_button" id="mediaButton">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</nav>
+      <!-- header section end -->
+
+      <!-- Mainevent section start  -->
+      <?php
+// Database connection using PDO
+$conn = new PDO('mysql:host=127.0.0.1;port=3306;dbname=u510162695_judging', 'u510162695_judging_root', '1Judging_root');
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// Get current date
+$currentDate = date('Y-m-d');
+
+// Query to fetch ongoing and activated events
+$sql = "SELECT mainevent_id, event_name, description, date_start, date_end, place, banner 
+        FROM main_event 
+        WHERE :currentDate BETWEEN date_start AND date_end AND status = 'activated'";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':currentDate', $currentDate);
+$stmt->execute();
+
+// Fetch events
+$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<div id="mainEventCarousel" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <?php if (count($events) > 0) : ?>
+      <?php foreach ($events as $index => $event) : ?>
+        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+          <img class="d-block w-100" src="img/<?= htmlspecialchars($event['banner']) ?>" alt="<?= htmlspecialchars($event['event_name']) ?>">
+          <div class="carousel-caption d-none d-md-block">
+            <h5 style="color:white; font-size: large;"><?= htmlspecialchars($event['event_name']) ?></h5>
+            <p class="description"><?= nl2br(htmlspecialchars($event['description'])) ?></p>
+            <p><?= htmlspecialchars(date("F j, Y", strtotime($event['date_start']))) ?> - <?= htmlspecialchars(date("F j, Y", strtotime($event['date_end']))) ?><br><?= htmlspecialchars($event['place']) ?></p>
           </div>
-      </nav>
-
-      <!-- Main Event Carousel -->
-      <div id="mainEventCarousel" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-              <?php
-              // Database connection using PDO
-              $conn = new PDO('mysql:host=127.0.0.1;port=3306;dbname=u510162695_judging', 'u510162695_judging_root', '1Judging_root');
-              $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-              // Get current date
-              $currentDate = date('Y-m-d');
-
-              // Query to fetch ongoing and activated events
-              $sql = "SELECT mainevent_id, event_name, description, date_start, date_end, place, banner 
-                      FROM main_event 
-                      WHERE :currentDate BETWEEN date_start AND date_end AND status = 'activated'";
-              $stmt = $conn->prepare($sql);
-              $stmt->bindParam(':currentDate', $currentDate);
-              $stmt->execute();
-
-              // Fetch events
-              $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-              if (count($events) > 0) {
-                  foreach ($events as $index => $event) {
-                      echo '<div class="carousel-item ' . ($index === 0 ? 'active' : '') . '">';
-                      echo '<img class="d-block w-100" src="img/' . htmlspecialchars($event['banner']) . '" alt="' . htmlspecialchars($event['event_name']) . '">';
-                      echo '<div class="carousel-caption d-none d-md-block">';
-                      echo '<h5 style="color:white; font-size: large;">' . htmlspecialchars($event['event_name']) . '</h5>';
-                      echo '<p class="description">' . nl2br(htmlspecialchars($event['description'])) . '</p>';
-                      echo '<p>' . htmlspecialchars(date("F j, Y", strtotime($event['date_start']))) . ' - ' . 
-                           htmlspecialchars(date("F j, Y", strtotime($event['date_end']))) . '<br>' . 
-                           htmlspecialchars($event['place']) . '</p>';
-                      echo '</div></div>';
-                  }
-              } else {
-                  echo '<div class="carousel-item active">';
-                  echo '<img class="d-block w-100" src="img/default.jpg" alt="No events">';
-                  echo '<div class="carousel-caption d-none d-md-block">';
-                  echo '<h5>No Events</h5>';
-                  echo '<p>There are no ongoing events at the moment.</p>';
-                  echo '</div></div>';
-              }
-              ?>
-          </div>
-          <a class="carousel-control-prev" href="#mainEventCarousel" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#mainEventCarousel" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-          </a>
+        </div>
+      <?php endforeach; ?>
+    <?php else : ?>
+      <div class="carousel-item active">
+        <img class="d-block w-100" src="img/default.jpg" alt="No events">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>No Events</h5>
+          <p>There are no ongoing events at the moment.</p>
+        </div>
       </div>
+    <?php endif; ?>
+  </div>
+  <a class="carousel-control-prev" href="#mainEventCarousel" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#mainEventCarousel" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 
-      <!-- Ongoing Events Section -->
-      <div class="coffee_section layout_padding">
-          <div class="container">
-              <div class="row">
-                  <div class="col-md-12">
-                      <h1 class="coffee_taital">ONGOING EVENTS</h1>
-                  </div>
-              </div>
-          </div>
+<?php
+$conn = null; // Close the database connection
+?>
+
+
+
+
+
+<!-- Mainevent section end -->
+
+     <!-- ongoing section start -->
+<?php
+// Database connection
+$host = '127.0.0.1';
+	$username = 'u510162695_judging_root';
+	$password = '1Judging_root';  // Replace with the actual password
+	$dbname = 'u510162695_judging';
+	
+
+	$conn = new mysqli($host, $username, $password, $dbname);
+
+	if ($conn->connect_error) {
+	    die("Connection failed: " . $conn->connect_error);
+	}
+
+// Fetch data
+$sql = "SELECT `subevent_id`, `event_name`, `eventdate`, `eventtime`, `place`, `banner`, `view` FROM `sub_event` WHERE 1";
+$result = $conn->query($sql);
+
+$subEvents = []; // Initialize as an empty array
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $subEvents[] = $row;
+    }
+}
+$conn->close();
+?>
+
+
+<div class="coffee_section layout_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="z-index:-1000;">
+                <h1 class="coffee_taital">ONGOING EVENTS</h1>
+            </div>
+        </div>
+    </div>
     <div class="coffee_section_2">
         <div id="main_slider" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
@@ -448,35 +603,36 @@
       <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
       <script src="js/custom.js"></script>
       <script>
-        document.getElementById('mediaButton').addEventListener('click', function() {
-            this.classList.toggle('active');
-            document.getElementById('mainListDiv').classList.toggle('show_list');
+        // Disable right-click
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
         });
 
-        // Handle dropdown on mobile
-        if (window.innerWidth <= 768) {
-            document.querySelectorAll('.main_list ul li').forEach(item => {
-                if (item.querySelector('.dropdown')) {
-                    item.addEventListener('click', function(e) {
-                        if (e.target.tagName === 'A' && e.target.nextElementSibling) {
-                            e.preventDefault();
-                            this.classList.toggle('active');
-                        }
-                    });
-                }
-            });
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        document.onkeydown = function (e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+            }
+        };
+
+        // Disable developer tools
+        function disableDevTools() {
+            if (window.devtools.isOpen) {
+                window.location.href = "about:blank";
+            }
         }
 
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            const menu = document.getElementById('mainListDiv');
-            const button = document.getElementById('mediaButton');
-            if (!menu.contains(e.target) && !button.contains(e.target) && menu.classList.contains('show_list')) {
-                menu.classList.remove('show_list');
-                button.classList.remove('active');
-            }
-        });
-    </script>
-      
+        // Check for developer tools every 100ms
+        setInterval(disableDevTools, 100);
+
+        // Disable selecting text
+        document.onselectstart = function (e) {
+            e.preventDefault();
+        };
+</script>
    </body>
 </html>
