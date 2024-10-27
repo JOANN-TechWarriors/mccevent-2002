@@ -373,7 +373,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Criteria no.</label>
-                                    <select name="crit_ctr" class="form-control btn-block" style="text-indent: 7px !important;">
+                                    <select name="crit_ctr" class="form-control btn-block" style="text-indent: 10px !important;">
                                         <option><?php echo $crit_row['criteria_ctr']; ?></option>
                                         <?php 
                                         $n1=0;
