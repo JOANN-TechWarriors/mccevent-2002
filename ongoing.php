@@ -28,8 +28,8 @@
       <link rel="stylesheet" href="css1/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-   
-   <style>
+   </head>
+   <style type="text/css">
         * {
             margin: 0;
             padding: 0;
@@ -328,97 +328,109 @@
               <span></span>
           </button>
       </nav>
+      <!-- header section end -->
 
-      <!-- Main Event Section -->
+      <!-- Mainevent section start  -->
       <?php
-        // Database connection using PDO
-        $conn = new PDO('mysql:host=127.0.0.1;port=3306;dbname=u510162695_judging', 'u510162695_judging_root', '1Judging_root');
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Database connection using PDO
+$conn = new PDO('mysql:host=127.0.0.1;port=3306;dbname=u510162695_judging', 'u510162695_judging_root', '1Judging_root');
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Get current date
-        $currentDate = date('Y-m-d');
+// Get current date
+$currentDate = date('Y-m-d');
 
-        // Query to fetch ongoing and activated events
-        $sql = "SELECT mainevent_id, event_name, description, date_start, date_end, place, banner 
-                FROM main_event 
-                WHERE :currentDate BETWEEN date_start AND date_end AND status = 'activated'";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':currentDate', $currentDate);
-        $stmt->execute();
+// Query to fetch ongoing and activated events
+$sql = "SELECT mainevent_id, event_name, description, date_start, date_end, place, banner 
+        FROM main_event 
+        WHERE :currentDate BETWEEN date_start AND date_end AND status = 'activated'";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':currentDate', $currentDate);
+$stmt->execute();
 
-        // Fetch events
-        $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      ?>
+// Fetch events
+$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 
-      <div id="mainEventCarousel" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-              <?php if (count($events) > 0) : ?>
-                  <?php foreach ($events as $index => $event) : ?>
-                      <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                          <img class="d-block w-100" src="img/<?= htmlspecialchars($event['banner']) ?>" alt="<?= htmlspecialchars($event['event_name']) ?>">
-                          <div class="carousel-caption d-none d-md-block">
-                              <h5 style="color:white; font-size: large;"><?= htmlspecialchars($event['event_name']) ?></h5>
-                              <p class="description"><?= nl2br(htmlspecialchars($event['description'])) ?></p>
-                              <p><?= htmlspecialchars(date("F j, Y", strtotime($event['date_start']))) ?> - <?= htmlspecialchars(date("F j, Y", strtotime($event['date_end']))) ?><br><?= htmlspecialchars($event['place']) ?></p>
-                          </div>
-                      </div>
-                  <?php endforeach; ?>
-              <?php else : ?>
-                  <div class="carousel-item active">
-                      <img class="d-block w-100" src="img/default.jpg" alt="No events">
-                      <div class="carousel-caption d-none d-md-block">
-                          <h5>No Events</h5>
-                          <p>There are no ongoing events at the moment.</p>
-                      </div>
-                  </div>
-              <?php endif; ?>
+<div id="mainEventCarousel" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <?php if (count($events) > 0) : ?>
+      <?php foreach ($events as $index => $event) : ?>
+        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+          <img class="d-block w-100" src="img/<?= htmlspecialchars($event['banner']) ?>" alt="<?= htmlspecialchars($event['event_name']) ?>">
+          <div class="carousel-caption d-none d-md-block">
+            <h5 style="color:white; font-size: large;"><?= htmlspecialchars($event['event_name']) ?></h5>
+            <p class="description"><?= nl2br(htmlspecialchars($event['description'])) ?></p>
+            <p><?= htmlspecialchars(date("F j, Y", strtotime($event['date_start']))) ?> - <?= htmlspecialchars(date("F j, Y", strtotime($event['date_end']))) ?><br><?= htmlspecialchars($event['place']) ?></p>
           </div>
-          <a class="carousel-control-prev" href="#mainEventCarousel" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#mainEventCarousel" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-          </a>
+        </div>
+      <?php endforeach; ?>
+    <?php else : ?>
+      <div class="carousel-item active">
+        <img class="d-block w-100" src="img/default.jpg" alt="No events">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>No Events</h5>
+          <p>There are no ongoing events at the moment.</p>
+        </div>
       </div>
+    <?php endif; ?>
+  </div>
+  <a class="carousel-control-prev" href="#mainEventCarousel" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#mainEventCarousel" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 
-      <!-- Ongoing Events Section -->
-      <?php
-        // Database connection for sub-events
-        $host = '127.0.0.1';
-        $username = 'u510162695_judging_root';
-        $password = '1Judging_root';
-        $dbname = 'u510162695_judging';
+<?php
+$conn = null; // Close the database connection
+?>
 
-        $conn = new mysqli($host, $username, $password, $dbname);
 
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
 
-        // Fetch sub-events
-        $sql = "SELECT `subevent_id`, `event_name`, `eventdate`, `eventtime`, `place`, `banner`, `view` FROM `sub_event` WHERE 1";
-        $result = $conn->query($sql);
 
-        $subEvents = [];
-        if ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $subEvents[] = $row;
-            }
-        }
-        $conn->close();
-      ?>
 
-      <div class="coffee_section layout_padding">
-          <div class="container">
-              <div class="row">
-                  <div class="col-md-12">
-                      <h1 class="coffee_taital">ONGOING EVENTS</h1>
-                  </div>
-              </div>
-          </div>
+<!-- Mainevent section end -->
 
+     <!-- ongoing section start -->
+<?php
+// Database connection
+$host = '127.0.0.1';
+	$username = 'u510162695_judging_root';
+	$password = '1Judging_root';  // Replace with the actual password
+	$dbname = 'u510162695_judging';
+	
+
+	$conn = new mysqli($host, $username, $password, $dbname);
+
+	if ($conn->connect_error) {
+	    die("Connection failed: " . $conn->connect_error);
+	}
+
+// Fetch data
+$sql = "SELECT `subevent_id`, `event_name`, `eventdate`, `eventtime`, `place`, `banner`, `view` FROM `sub_event` WHERE 1";
+$result = $conn->query($sql);
+
+$subEvents = []; // Initialize as an empty array
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $subEvents[] = $row;
+    }
+}
+$conn->close();
+?>
+
+
+<div class="coffee_section layout_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="z-index:-1000;">
+                <h1 class="coffee_taital">ONGOING EVENTS</h1>
+            </div>
+        </div>
+    </div>
     <div class="coffee_section_2">
         <div id="main_slider" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
@@ -497,14 +509,37 @@
       <!-- sidebar -->
       <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
       <script src="js/custom.js"></script>
-      
-    <script>
-    const mediaButton = document.getElementById('mediaButton');
-    const mainListDiv = document.getElementById('mainListDiv');
+      <script>
+        // Disable right-click
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
 
-    mediaButton.addEventListener('click', () => {
-        mainListDiv.classList.toggle('show_list');
-    });
-    </script>
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        document.onkeydown = function (e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+            }
+        };
+
+        // Disable developer tools
+        function disableDevTools() {
+            if (window.devtools.isOpen) {
+                window.location.href = "about:blank";
+            }
+        }
+
+        // Check for developer tools every 100ms
+        setInterval(disableDevTools, 100);
+
+        // Disable selecting text
+        document.onselectstart = function (e) {
+            e.preventDefault();
+        };
+</script>
    </body>
 </html>
