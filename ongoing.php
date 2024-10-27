@@ -28,16 +28,23 @@
       <link rel="stylesheet" href="css1/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-   </head>
-   <style type="text/css">
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+      </head>
+    
+    <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             transition: all 0.4s;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
+        body {
+            background-color: lightgray;
+        }
+
+        /* Navigation Styles */
         .nav {
             width: 100%;
             height: 65px;
@@ -61,7 +68,8 @@
 
         .nav .logo a {
             text-decoration: none;
-            color: #fff;
+            color: #1153D0;
+            font-family: impact;
             font-size: 25px;
             text-transform: uppercase;
         }
@@ -127,6 +135,113 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        /* Main Event Carousel Styles */
+        #mainEventCarousel {
+            width: 100%;
+            height: calc(100vh - 65px);
+            margin-top: 65px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #mainEventCarousel .carousel-inner,
+        #mainEventCarousel .carousel-item {
+            height: 100%;
+            width: 100%;
+        }
+
+        #mainEventCarousel .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        #mainEventCarousel .carousel-caption {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 0 auto;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20px;
+        }
+
+        #mainEventCarousel .carousel-caption h5 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        #mainEventCarousel .carousel-caption p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Ongoing Events Section */
+        .coffee_section {
+            padding: 50px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .coffee_taital {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .coffee_section_2 {
+            margin-top: 30px;
+        }
+
+        .coffee_img img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .coffee_box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: -30px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .types_text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .looking_text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        /* Control Buttons */
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 10%;
+            opacity: 0.8;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 50%;
+        }
+
+        /* Mobile Menu Button */
         .media_button {
             display: none;
             position: absolute;
@@ -147,63 +262,44 @@
             transition: 0.3s;
         }
 
-        .fa {
-            padding: 10px;
-            font-size: 10px;
-            width: 8px;
+        /* Footer */
+        .copyright_section {
+            background-color: #000000;
+            padding: 20px 0;
+            color: white;
             text-align: center;
-            text-decoration: none;
-            margin: 5px 5px;
-            border-radius: 30%;
         }
 
-        .fa:hover {
-            opacity: 0.5;
+        .copyright_text {
+            margin: 0;
+            color: white;
         }
 
-        button.btn.btn-primary {
-            z-index: 1000;
-            position: relative;
+        /* Responsive Styles */
+        @media screen and (max-width: 1200px) {
+            #mainEventCarousel .carousel-caption {
+                max-width: 80%;
+            }
+            
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 1.5rem;
+            }
         }
 
-        /* Main Event Carousel styles */
-        #mainEventCarousel {
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            margin-top: 65px; /* Add margin to account for fixed navbar */
+        @media screen and (max-width: 992px) {
+            #mainEventCarousel {
+                height: 70vh;
+            }
+            
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 1.3rem;
+            }
+
+            .coffee_taital {
+                font-size: 2rem;
+            }
         }
 
-        #mainEventCarousel .carousel-inner,
-        #mainEventCarousel .carousel-item {
-            height: 100%;
-        }
-
-        #mainEventCarousel .carousel-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        #mainEventCarousel .carousel-caption {
-            bottom: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        /* Coffee section styling */
-        .coffee_section {
-            padding-top: 50px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .coffee_section_2 {
-            margin-top: 30px;
-        }
-
-        /* Responsive styles */
         @media screen and (max-width: 768px) {
             .media_button {
                 display: block;
@@ -256,213 +352,157 @@
             }
 
             #mainEventCarousel {
+                height: 60vh;
+            }
+            
+            #mainEventCarousel .carousel-caption {
+                position: relative;
+                background: rgba(0, 0, 0, 0.8);
+                max-width: 100%;
+                margin: 0;
+                left: 0;
+                transform: none;
+                border-radius: 0;
+            }
+            
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            #mainEventCarousel .carousel-caption p {
+                font-size: 0.9rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .coffee_taital {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            #mainEventCarousel {
                 height: 50vh;
             }
-        }
-   </style>
-   <body style="background-color: lightgray;">
-      <nav class="nav">
-          <div class="logo">
-              <a href="#" style="font-family: impact; color: #1153D0;">
-                  <img src="img/logo.png" style="height: 60px; vertical-align: middle;"> MCC Event
-              </a>
-          </div>
-          <div class="main_list" id="mainListDiv">
-              <ul>
-                  <li><a href="index.php">Home</a></li>
-                  <li><a href="ongoing.php">Ongoing</a></li>
-                  <li><a href="upcoming.php">Upcoming</a></li>
-                  <li><a href="about.php">About</a></li>
-                  <li><a href="admin/stream/index.php">Live</a></li>
-                  <li>
-                      <a href="#login">Login</a>
-                      <div class="dropdown">
-                          <a href="admin/admin_login.php">Admin Login</a>
-                          <a href="admin/index2.php">Organizer Login</a>
-                          <a href="tabulator/index.php">Tabulator Login</a>
-                          <a href="admin/welcome.php">Judge Login</a>
-                          <a href="student/index.php">Student Login</a>
-                      </div>
-                  </li>
-              </ul>
-          </div>
-          <button class="media_button" id="mediaButton">
-              <span></span>
-              <span></span>
-              <span></span>
-          </button>
-      </nav>
-      <!-- header section end -->
-
-      <!-- Mainevent section start  -->
-      <?php
-// Database connection using PDO
-$conn = new PDO('mysql:host=127.0.0.1;port=3306;dbname=u510162695_judging', 'u510162695_judging_root', '1Judging_root');
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-// Get current date
-$currentDate = date('Y-m-d');
-
-// Query to fetch ongoing and activated events
-$sql = "SELECT mainevent_id, event_name, description, date_start, date_end, place, banner 
-        FROM main_event 
-        WHERE :currentDate BETWEEN date_start AND date_end AND status = 'activated'";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(':currentDate', $currentDate);
-$stmt->execute();
-
-// Fetch events
-$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<div id="mainEventCarousel" class="carousel slide" data-ride="carousel">
-  <div class="carousel-inner">
-    <?php if (count($events) > 0) : ?>
-      <?php foreach ($events as $index => $event) : ?>
-        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-          <img class="d-block w-100" src="img/<?= htmlspecialchars($event['banner']) ?>" alt="<?= htmlspecialchars($event['event_name']) ?>">
-          <div class="carousel-caption d-none d-md-block">
-            <h5 style="color:white; font-size: large;"><?= htmlspecialchars($event['event_name']) ?></h5>
-            <p class="description"><?= nl2br(htmlspecialchars($event['description'])) ?></p>
-            <p><?= htmlspecialchars(date("F j, Y", strtotime($event['date_start']))) ?> - <?= htmlspecialchars(date("F j, Y", strtotime($event['date_end']))) ?><br><?= htmlspecialchars($event['place']) ?></p>
-          </div>
-        </div>
-      <?php endforeach; ?>
-    <?php else : ?>
-      <div class="carousel-item active">
-        <img class="d-block w-100" src="img/default.jpg" alt="No events">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>No Events</h5>
-          <p>There are no ongoing events at the moment.</p>
-        </div>
-      </div>
-    <?php endif; ?>
-  </div>
-  <a class="carousel-control-prev" href="#mainEventCarousel" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#mainEventCarousel" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-
-<?php
-$conn = null; // Close the database connection
-?>
-
-
-
-
-
-<!-- Mainevent section end -->
-
-     <!-- ongoing section start -->
-<?php
-// Database connection
-$host = '127.0.0.1';
-	$username = 'u510162695_judging_root';
-	$password = '1Judging_root';  // Replace with the actual password
-	$dbname = 'u510162695_judging';
-	
-
-	$conn = new mysqli($host, $username, $password, $dbname);
-
-	if ($conn->connect_error) {
-	    die("Connection failed: " . $conn->connect_error);
-	}
-
-// Fetch data
-$sql = "SELECT `subevent_id`, `event_name`, `eventdate`, `eventtime`, `place`, `banner`, `view` FROM `sub_event` WHERE 1";
-$result = $conn->query($sql);
-
-$subEvents = []; // Initialize as an empty array
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $subEvents[] = $row;
-    }
-}
-$conn->close();
-?>
-
-
-<div class="coffee_section layout_padding">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12" style="z-index:-1000;">
-                <h1 class="coffee_taital">ONGOING EVENTS</h1>
-            </div>
-        </div>
-    </div>
-    <div class="coffee_section_2">
-        <div id="main_slider" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-            <?php
-        $isActive = true;
-        $totalEvents = count($subEvents);
-        for ($i = 0; $i < $totalEvents; $i += 3) {
-            $activeClass = $isActive ? 'active' : '';
-            $isActive = false;
-            echo '<div class="carousel-item ' . $activeClass . '">';
-            echo '    <div class="container-fluid">';
-            echo '        <div class="row">';
             
-            for ($j = $i; $j < $i + 3 && $j < $totalEvents; $j++) {
-                $event = $subEvents[$j];
-                $isPollActive = $event['view'] == 'active'; // Assuming 'activated' is the value for active status
-                echo '            <div class="col-lg-4 col-md-6 mb-4">';
-                echo '                <div class="coffee_img"><img src="img/' . htmlspecialchars($event['banner']) . '" alt="Event Image"></div>';
-                echo '                <div class="coffee_box">';
-                echo '                    <h3 class="types_text">' . htmlspecialchars($event['event_name']) . '</h3>';
-                echo '                    <p class="looking_text">';
-                echo '                        Start Date: ' . htmlspecialchars(date("F j, Y", strtotime($event['eventdate']))) . '<br>';
-                echo '                        End Date: ' . htmlspecialchars(date("F j, Y", strtotime($event['eventtime']))) . '<br>';
-                echo '                        Location: ' . htmlspecialchars($event['place']) . '</p>';
-                echo '                    <form action="poll/index.php" method="GET" style="display: inline;">';
-                echo '                        <input type="hidden" name="event" value="' . htmlspecialchars($event['subevent_id']) . '">';
-                echo '                        <button type="submit" class="btn btn-primary"' . ($isPollActive ? '' : ' disabled') . '>View</button>';
-                echo '                    </form>';
-                echo '                </div>';
-                echo '            </div>';
+            #mainEventCarousel .carousel-caption {
+                padding: 15px;
             }
             
-            echo '        </div>';
-            echo '    </div>';
-            echo '</div>';
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 1.1rem;
+            }
+            
+            #mainEventCarousel .carousel-caption p {
+                font-size: 0.8rem;
+            }
+
+            .coffee_taital {
+                font-size: 1.5rem;
+            }
+
+            .types_text {
+                font-size: 1.1rem;
+            }
+
+            .looking_text {
+                font-size: 0.8rem;
+            }
         }
-        ?>
-
-
-<style>
-    button.btn.btn-primary {
-    z-index: 1000; /* Adjust if necessary */
-    position: relative;
-}
-
-</style>
-            </div>
-            <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
-                <i class="fa fa-arrow-left"></i>
-            </a>
-            <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
-                <i class="fa fa-arrow-right"></i>
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="logo">
+            <a href="#">
+                <img src="img/logo.png" alt="Logo"> MCC Event
             </a>
         </div>
-    </div>
-</div>
-<!-- ongoing section end -->
-      
-      <!-- copyright section start -->
-      <div class="copyright_section">
-         <div class="container">
-            <div class="row">
-               <div class="col-sm-12">
-                  <p class="copyright_text"><strong> Event Judging  System &COPY; <?= date("Y") ?>  </strong></p>
-               </div>
+        <div class="main_list" id="mainListDiv">
+            <ul>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="ongoing.php">Ongoing</a></li>
+                <li><a href="upcoming.php">Upcoming</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="admin/stream/index.php">Live</a></li>
+                <li>
+                    <a href="#login">Login</a>
+                    <div class="dropdown">
+                        <a href="admin/admin_login.php">Admin Login</a>
+                        <a href="admin/index2.php">Organizer Login</a>
+                        <a href="tabulator/index.php">Tabulator Login</a>
+                        <a href="admin/welcome.php">Judge Login</a>
+                        <a href="student/index.php">Student Login</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <button class="media_button" id="mediaButton">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Main Event Carousel -->
+    <div id="mainEventCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <!-- PHP generated carousel items will go here -->
+            <div class="carousel-item active">
+                <img src="img/default.jpg" class="d-block w-100" alt="Default Event">
+                <div class="carousel-caption d-md-block">
+                    <h5>Welcome to MCC Events</h5>
+                    <p>Discover our upcoming and ongoing events</p>
+                </div>
             </div>
-         </div>
-      </div>
+        </div>
+        <a class="carousel-control-prev" href="#mainEventCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#mainEventCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <!-- Ongoing Events Section -->
+    <div class="coffee_section layout_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="coffee_taital">ONGOING EVENTS</h1>
+                </div>
+            </div>
+        </div>
+        <div class="coffee_section_2">
+            <div id="main_slider" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- PHP generated event items will go here -->
+                </div>
+                <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+                <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+                    <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="copyright_section">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="copyright_text">
+                        <strong>Event Judging System &copy; <?php echo date("Y"); ?></strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
       <!-- copyright section end -->
       <!-- Javascript files-->
       <script src="js/jquery.min.js"></script>
