@@ -29,15 +29,19 @@
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
    </head>
-   <style type="text/css">
+   <style>
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: all 0.4s;
+        }
+
+        body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
+        /* Navbar Styles */
         .nav {
             width: 100%;
             height: 65px;
@@ -71,195 +75,192 @@
             vertical-align: middle;
         }
 
-        .nav .main_list {
-            height: 65px;
-            float: right;
-            margin-right: 1rem;
-        }
-
-        .main_list ul {
-            width: 100%;
-            height: 65px;
-            display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .main_list ul li {
-            position: relative;
-            display: inline-block;
-            height: 65px;
-            padding: 0 1rem;
-        }
-
-        .main_list ul li a {
-            text-decoration: none;
-            color: #fff;
-            line-height: 65px;
-            text-transform: uppercase;
-        }
-
-        .main_list ul li:hover .dropdown {
-            display: block;
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            background-color: rgba(6, 6, 7, 0.9);
-            min-width: 200px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            right: 0;
-        }
-
-        .dropdown a {
-            color: #fff;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            line-height: 1.5;
-            text-align: left;
-        }
-
-        .dropdown a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .media_button {
-            display: none;
-            position: absolute;
-            right: 1rem;
-            top: 12px;
-            padding: 0.5rem;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-        }
-
-        .media_button span {
-            width: 32px;
-            height: 3px;
-            background-color: #fff;
-            display: block;
-            margin: 6px 0;
-            transition: 0.3s;
-        }
-
-        .fa {
-            padding: 10px;
-            font-size: 10px;
-            width: 8px;
-            text-align: center;
-            text-decoration: none;
-            margin: 5px 5px;
-            border-radius: 30%;
-        }
-
-        .fa:hover {
-            opacity: 0.5;
-        }
-
-        button.btn.btn-primary {
-            z-index: 1000;
-            position: relative;
-        }
-
-        /* Main Event Carousel styles */
+        /* Main Event Carousel Styles */
         #mainEventCarousel {
             width: 100%;
-            height: 100vh;
+            height: calc(100vh - 65px);
+            margin-top: 65px;
+            position: relative;
             overflow: hidden;
-            margin-top: 65px; /* Add margin to account for fixed navbar */
         }
 
-        #mainEventCarousel .carousel-inner,
+        #mainEventCarousel .carousel-inner {
+            height: 100%;
+        }
+
         #mainEventCarousel .carousel-item {
             height: 100%;
+            background-color: #000;
         }
 
         #mainEventCarousel .carousel-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 0.9;
         }
 
         #mainEventCarousel .carousel-caption {
-            bottom: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 0 auto;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20%;
+            text-align: center;
         }
 
-        /* Coffee section styling */
-        .coffee_section {
-            padding-top: 50px;
-            position: relative;
-            z-index: 1;
+        #mainEventCarousel .carousel-caption h5 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: white;
         }
 
-        .coffee_section_2 {
-            margin-top: 30px;
+        #mainEventCarousel .carousel-caption p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            color: white;
         }
 
-        /* Responsive styles */
-        @media screen and (max-width: 768px) {
-            .media_button {
-                display: block;
+        #mainEventCarousel .description {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        #mainEventCarousel .carousel-control-prev,
+        #mainEventCarousel .carousel-control-next {
+            width: 5%;
+            opacity: 0.7;
+            z-index: 100;
+        }
+
+        #mainEventCarousel .carousel-control-prev:hover,
+        #mainEventCarousel .carousel-control-next:hover {
+            opacity: 1;
+        }
+
+        #mainEventCarousel .carousel-control-prev-icon,
+        #mainEventCarousel .carousel-control-next-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 1200px) {
+            #mainEventCarousel .carousel-caption {
+                max-width: 80%;
+                bottom: 15%;
             }
 
-            .nav .main_list {
-                width: 100%;
-                height: 0;
-                overflow: hidden;
-                position: absolute;
-                top: 65px;
-                left: 0;
-                margin: 0;
-                background-color: rgba(6, 6, 7, 0.95);
-                transition: height 0.3s ease-in-out;
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 2rem;
             }
+        }
 
-            .nav .main_list.show_list {
-                height: auto;
-            }
-
-            .main_list ul {
-                flex-direction: column;
-                height: auto;
-                padding: 1rem 0;
-            }
-
-            .main_list ul li {
-                width: 100%;
-                height: auto;
-                padding: 0;
-            }
-
-            .main_list ul li a {
-                line-height: 45px;
-                display: block;
-                padding: 0 2rem;
-                text-align: left;
-            }
-
-            .dropdown {
-                position: static;
-                width: 100%;
-                background-color: rgba(255, 255, 255, 0.1);
-                box-shadow: none;
-            }
-
-            .dropdown a {
-                padding-left: 3rem;
-            }
-
+        @media screen and (max-width: 992px) {
             #mainEventCarousel {
-                height: 50vh;
+                height: calc(80vh - 65px);
+            }
+
+            #mainEventCarousel .carousel-caption {
+                bottom: 10%;
+                padding: 15px;
+            }
+
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 1.8rem;
+            }
+
+            #mainEventCarousel .carousel-caption p {
+                font-size: 1rem;
+            }
+
+            #mainEventCarousel .description {
+                max-height: 120px;
             }
         }
-   </style>
+
+        @media screen and (max-width: 768px) {
+            #mainEventCarousel {
+                height: calc(70vh - 65px);
+            }
+
+            #mainEventCarousel .carousel-caption {
+                position: relative;
+                background: rgba(0, 0, 0, 0.8);
+                margin-top: -120px;
+                padding: 15px;
+                width: 90%;
+            }
+
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 1.5rem;
+            }
+
+            #mainEventCarousel .description {
+                max-height: 100px;
+            }
+
+            #mainEventCarousel .carousel-control-prev,
+            #mainEventCarousel .carousel-control-next {
+                width: 10%;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            #mainEventCarousel {
+                height: calc(60vh - 65px);
+            }
+
+            #mainEventCarousel .carousel-caption {
+                margin-top: -100px;
+                padding: 10px;
+            }
+
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            #mainEventCarousel .carousel-caption p {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            #mainEventCarousel .description {
+                max-height: 80px;
+            }
+        }
+
+        @media screen and (max-width: 380px) {
+            #mainEventCarousel {
+                height: calc(50vh - 65px);
+            }
+
+            #mainEventCarousel .carousel-caption {
+                margin-top: -80px;
+            }
+
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 1.1rem;
+            }
+
+            #mainEventCarousel .carousel-caption p {
+                font-size: 0.8rem;
+            }
+
+            #mainEventCarousel .description {
+                max-height: 60px;
+            }
+        }
+    </style>
    <body style="background-color: lightgray;">
       <nav class="nav">
           <div class="logo">
@@ -316,45 +317,45 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div id="mainEventCarousel" class="carousel slide" data-ride="carousel">
-  <div class="carousel-inner">
-    <?php if (count($events) > 0) : ?>
-      <?php foreach ($events as $index => $event) : ?>
-        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-          <img class="d-block w-100" src="img/<?= htmlspecialchars($event['banner']) ?>" alt="<?= htmlspecialchars($event['event_name']) ?>">
-          <div class="carousel-caption d-none d-md-block">
-            <h5 style="color:white; font-size: large;"><?= htmlspecialchars($event['event_name']) ?></h5>
-            <p class="description"><?= nl2br(htmlspecialchars($event['description'])) ?></p>
-            <p><?= htmlspecialchars(date("F j, Y", strtotime($event['date_start']))) ?> - <?= htmlspecialchars(date("F j, Y", strtotime($event['date_end']))) ?><br><?= htmlspecialchars($event['place']) ?></p>
-          </div>
+        <div class="carousel-inner">
+            <?php if (count($events) > 0) : ?>
+                <?php foreach ($events as $index => $event) : ?>
+                    <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                        <img class="d-block w-100" src="img/<?= htmlspecialchars($event['banner']) ?>" alt="<?= htmlspecialchars($event['event_name']) ?>">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5><?= htmlspecialchars($event['event_name']) ?></h5>
+                            <p class="description"><?= nl2br(htmlspecialchars($event['description'])) ?></p>
+                            <p>
+                                <?= htmlspecialchars(date("F j, Y", strtotime($event['date_start']))) ?> - 
+                                <?= htmlspecialchars(date("F j, Y", strtotime($event['date_end']))) ?><br>
+                                <?= htmlspecialchars($event['place']) ?>
+                            </p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="img/default.jpg" alt="No events">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>No Events</h5>
+                        <p>There are no ongoing events at the moment.</p>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
-      <?php endforeach; ?>
-    <?php else : ?>
-      <div class="carousel-item active">
-        <img class="d-block w-100" src="img/default.jpg" alt="No events">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>No Events</h5>
-          <p>There are no ongoing events at the moment.</p>
-        </div>
-      </div>
-    <?php endif; ?>
-  </div>
-  <a class="carousel-control-prev" href="#mainEventCarousel" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#mainEventCarousel" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
+        <a class="carousel-control-prev" href="#mainEventCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#mainEventCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
 
 <?php
 $conn = null; // Close the database connection
 ?>
-
-
-
-
 
 <!-- Mainevent section end -->
 
@@ -473,6 +474,15 @@ $conn->close();
       <!-- sidebar -->
       <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
       <script src="js/custom.js"></script>
+      <script>
+        // Initialize carousel
+        $(document).ready(function() {
+            $('#mainEventCarousel').carousel({
+                interval: 5000, // Change slides every 5 seconds
+                pause: 'hover' // Pause on mouse hover
+            });
+        });
+    </script>
       
     <script>
     document.getElementById('mediaButton').addEventListener('click', function() {
