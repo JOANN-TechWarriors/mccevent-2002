@@ -95,7 +95,7 @@
 
         #mainEventCarousel .carousel-item img {
             width: 100%;
-            height: 100%;
+            height: 19%;
             object-fit: cover;
             opacity: 0.9;
         }
