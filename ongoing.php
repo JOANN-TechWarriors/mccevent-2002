@@ -147,12 +147,6 @@
             transition: 0.3s;
         }
 
-        .home {
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-        }
-
         .fa {
             padding: 10px;
             font-size: 10px;
@@ -177,7 +171,7 @@
             width: 100%;
             height: 100vh;
             overflow: hidden;
-            padding-top: 65px; /* Account for fixed navbar */
+            margin-top: 65px; /* Add margin to account for fixed navbar */
         }
 
         #mainEventCarousel .carousel-inner,
@@ -198,46 +192,18 @@
             border-radius: 5px;
         }
 
-        /* Coffee Section Styles */
+        /* Coffee section styling */
         .coffee_section {
-            padding: 50px 0;
-            margin-top: 65px; /* Account for fixed navbar */
+            padding-top: 50px;
+            position: relative;
+            z-index: 1;
         }
 
-        .coffee_section .coffee_taital {
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 2.5rem;
-            font-weight: bold;
+        .coffee_section_2 {
+            margin-top: 30px;
         }
 
-        .coffee_box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .coffee_img img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .types_text {
-            font-size: 1.5rem;
-            margin: 15px 0;
-            color: #333;
-        }
-
-        .looking_text {
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        /* Responsive Design */
+        /* Responsive styles */
         @media screen and (max-width: 768px) {
             .media_button {
                 display: block;
@@ -289,14 +255,12 @@
                 padding-left: 3rem;
             }
 
-            .coffee_section .coffee_taital {
-                font-size: 2rem;
+            #mainEventCarousel {
+                height: 50vh;
             }
         }
    </style>
-   </head>
-   <body>
-      <!-- Navbar Section -->
+   <body style="background-color: lightgray;">
       <nav class="nav">
           <div class="logo">
               <a href="#" style="font-family: impact; color: #1153D0;">
@@ -541,5 +505,10 @@ $conn->close();
             e.preventDefault();
         };
 </script>
+    <script>
+    document.getElementById('mediaButton').addEventListener('click', function() {
+        document.getElementById('mainListDiv').classList.toggle('show_list');
+    });
+    </script>
    </body>
 </html>
