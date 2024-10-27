@@ -71,8 +71,207 @@
         }
 
         .nav .logo img {
-            height: 60px;
+            height: 40px;
             vertical-align: middle;
+        }
+
+        .nav .main_list {
+            height: 65px;
+            float: right;
+            margin-right: 1rem;
+        }
+
+        .main_list ul {
+            width: 100%;
+            height: 65px;
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main_list ul li {
+            position: relative;
+            display: inline-block;
+            height: 65px;
+            padding: 0 1rem;
+        }
+
+        .main_list ul li a {
+            text-decoration: none;
+            color: #fff;
+            line-height: 65px;
+            text-transform: uppercase;
+        }
+
+        .main_list ul li:hover .dropdown {
+            display: block;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            background-color: rgba(6, 6, 7, 0.9);
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 0;
+        }
+
+        .dropdown a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .dropdown a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .media_button {
+            display: none;
+            position: absolute;
+            right: 1rem;
+            top: 12px;
+            padding: 0.5rem;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+
+        .media_button span {
+            width: 32px;
+            height: 3px;
+            background-color: #fff;
+            display: block;
+            margin: 6px 0;
+            transition: 0.3s;
+        }
+
+        .banner_section {
+            padding-top: 100px; /* Adjusted to account for fixed navbar */
+        }
+
+        .client_section {
+            padding: 50px 0;
+        }
+        
+        .client_left img {
+            max-width: 400px;
+            height: auto;
+            object-fit: cover;
+            margin-right: 30px;
+        }
+        
+        .client_taital_main {
+            display: flex;
+            align-items: center;
+            gap: 270px;
+            padding: 20px;
+        }
+        
+        .client_right {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .about_taital {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @media screen and (max-width: 768px) {
+            .media_button {
+                display: block;
+            }
+
+            .nav .main_list {
+                width: 100%;
+                height: 0;
+                overflow: hidden;
+                position: absolute;
+                top: 65px;
+                left: 0;
+                margin: 0;
+                background-color: rgba(6, 6, 7, 0.95);
+                transition: height 0.3s ease-in-out;
+            }
+
+            .nav .main_list.show_list {
+                height: auto;
+            }
+
+            .main_list ul {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem 0;
+            }
+
+            .main_list ul li {
+                width: 100%;
+                height: auto;
+                padding: 0;
+            }
+
+            .main_list ul li a {
+                line-height: 45px;
+                display: block;
+                padding: 0 2rem;
+                text-align: left;
+            }
+
+            .dropdown {
+                position: static;
+                width: 100%;
+                background-color: rgba(255, 255, 255, 0.1);
+                box-shadow: none;
+            }
+
+            .dropdown a {
+                padding-left: 3rem;
+            }
+
+            .client_taital_main {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .client_left img {
+                max-width: 100%;
+                margin-right: 0;
+            }
+        }
+
+        .fa {
+            padding: 10px;
+            font-size: 10px;
+            width: 8px;
+            text-align: center;
+            text-decoration: none;
+            margin: 5px 5px;
+            border-radius: 30%;
+        }
+
+        .fa:hover {
+            opacity: 0.5;
+        }
+
+        button.btn.btn-primary {
+            z-index: 1000;
+            position: relative;
         }
 
         /* Main Event Carousel Styles */
