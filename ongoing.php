@@ -71,7 +71,7 @@
         }
 
         .nav .logo img {
-            height: 40px;
+            height: 60px;
             vertical-align: middle;
         }
 
@@ -151,46 +151,172 @@
             transition: 0.3s;
         }
 
-        .banner_section {
-            padding-top: 100px; /* Adjusted to account for fixed navbar */
+        /* Main Event Carousel Styles */
+        #mainEventCarousel {
+            width: 100%;
+            height: calc(100vh - 65px);
+            margin-top: 65px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .client_section {
-            padding: 50px 0;
+        #mainEventCarousel .carousel-inner {
+            height: 100%;
         }
-        
-        .client_left img {
-            max-width: 400px;
-            height: auto;
+
+        #mainEventCarousel .carousel-item {
+            height: 100%;
+            background-color: #000;
+            position: relative;
+        }
+
+        #mainEventCarousel .carousel-item img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            margin-right: 30px;
+            opacity: 0.9;
         }
-        
-        .client_taital_main {
-            display: flex;
-            align-items: center;
-            gap: 270px;
+
+        #mainEventCarousel .carousel-caption {
+            background: rgba(0, 0, 0, 0.7);
             padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20%;
+            text-align: center;
+            display: block !important;
         }
-        
-        .client_right {
-            flex: 1;
+
+        #mainEventCarousel .carousel-caption h5 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        #mainEventCarousel .carousel-caption p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        #mainEventCarousel .description {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        #mainEventCarousel .carousel-control-prev,
+        #mainEventCarousel .carousel-control-next {
+            width: 5%;
+            opacity: 0.7;
+            z-index: 100;
+        }
+
+        #mainEventCarousel .carousel-control-prev:hover,
+        #mainEventCarousel .carousel-control-next:hover {
+            opacity: 1;
+        }
+
+        #mainEventCarousel .carousel-control-prev-icon,
+        #mainEventCarousel .carousel-control-next-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Ongoing Events Section */
+        .coffee_section {
+            padding: 50px 0;
+            background-color: lightgray;
+        }
+
+        .coffee_taital {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .coffee_section_2 .coffee_img img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .coffee_box {
+            background: white;
             padding: 20px;
+            border-radius: 8px;
+            margin-top: -30px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        
-        .about_taital {
-            margin-bottom: 30px;
+
+        .types_text {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .looking_text {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Copyright Section */
+        .copyright_section {
+            background-color: #222;
+            color: white;
+            padding: 20px 0;
             text-align: center;
         }
-        
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
+
+        .copyright_text {
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 1200px) {
+            #mainEventCarousel .carousel-caption {
+                width: 80%;
+                bottom: 15%;
+            }
+
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 2rem;
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            #mainEventCarousel {
+                height: calc(80vh - 65px);
+            }
+
+            #mainEventCarousel .carousel-caption {
+                width: 90%;
+                bottom: 10%;
+                padding: 15px;
+            }
+
+            #mainEventCarousel .carousel-caption h5 {
+                font-size: 1.8rem;
+            }
+
+            #mainEventCarousel .carousel-caption p {
+                font-size: 1rem;
+            }
+
+            #mainEventCarousel .description {
+                max-height: 120px;
+            }
         }
 
         @media screen and (max-width: 768px) {
@@ -244,172 +370,28 @@
                 padding-left: 3rem;
             }
 
-            .client_taital_main {
-                flex-direction: column;
-                gap: 30px;
-            }
-
-            .client_left img {
-                max-width: 100%;
-                margin-right: 0;
-            }
-        }
-
-        .fa {
-            padding: 10px;
-            font-size: 10px;
-            width: 8px;
-            text-align: center;
-            text-decoration: none;
-            margin: 5px 5px;
-            border-radius: 30%;
-        }
-
-        .fa:hover {
-            opacity: 0.5;
-        }
-
-        button.btn.btn-primary {
-            z-index: 1000;
-            position: relative;
-        }
-
-        /* Main Event Carousel Styles */
-        #mainEventCarousel {
-            width: 100%;
-            height: calc(100vh - 65px);
-            margin-top: 65px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #mainEventCarousel .carousel-inner {
-            height: 100%;
-        }
-
-        #mainEventCarousel .carousel-item {
-            height: 100%;
-            background-color: #000;
-        }
-
-        #mainEventCarousel .carousel-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.9;
-        }
-
-        #mainEventCarousel .carousel-caption {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 800px;
-            margin: 0 auto;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 20%;
-            text-align: center;
-        }
-
-        #mainEventCarousel .carousel-caption h5 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            color: white;
-        }
-
-        #mainEventCarousel .carousel-caption p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 0.5rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            color: white;
-        }
-
-        #mainEventCarousel .description {
-            max-height: 150px;
-            overflow-y: auto;
-            margin-bottom: 1rem;
-        }
-
-        #mainEventCarousel .carousel-control-prev,
-        #mainEventCarousel .carousel-control-next {
-            width: 5%;
-            opacity: 0.7;
-            z-index: 100;
-        }
-
-        #mainEventCarousel .carousel-control-prev:hover,
-        #mainEventCarousel .carousel-control-next:hover {
-            opacity: 1;
-        }
-
-        #mainEventCarousel .carousel-control-prev-icon,
-        #mainEventCarousel .carousel-control-next-icon {
-            width: 30px;
-            height: 30px;
-        }
-
-        /* Responsive Design */
-        @media screen and (max-width: 1200px) {
-            #mainEventCarousel .carousel-caption {
-                max-width: 80%;
-                bottom: 15%;
-            }
-
-            #mainEventCarousel .carousel-caption h5 {
-                font-size: 2rem;
-            }
-        }
-
-        @media screen and (max-width: 992px) {
-            #mainEventCarousel {
-                height: calc(80vh - 65px);
-            }
-
-            #mainEventCarousel .carousel-caption {
-                bottom: 10%;
-                padding: 15px;
-            }
-
-            #mainEventCarousel .carousel-caption h5 {
-                font-size: 1.8rem;
-            }
-
-            #mainEventCarousel .carousel-caption p {
-                font-size: 1rem;
-            }
-
-            #mainEventCarousel .description {
-                max-height: 120px;
-            }
-        }
-
-        @media screen and (max-width: 768px) {
             #mainEventCarousel {
                 height: calc(70vh - 65px);
             }
 
             #mainEventCarousel .carousel-caption {
-                position: relative;
-                background: rgba(0, 0, 0, 0.8);
-                margin-top: -120px;
-                padding: 15px;
-                width: 90%;
+                width: 95%;
+                bottom: 5%;
+                padding: 12px;
             }
 
             #mainEventCarousel .carousel-caption h5 {
                 font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            #mainEventCarousel .carousel-caption p {
+                font-size: 0.9rem;
+                line-height: 1.4;
             }
 
             #mainEventCarousel .description {
                 max-height: 100px;
-            }
-
-            #mainEventCarousel .carousel-control-prev,
-            #mainEventCarousel .carousel-control-next {
-                width: 10%;
             }
         }
 
@@ -419,18 +401,20 @@
             }
 
             #mainEventCarousel .carousel-caption {
-                margin-top: -100px;
+                width: 100%;
+                bottom: 0;
                 padding: 10px;
+                border-radius: 0;
+                background: rgba(0, 0, 0, 0.8);
             }
 
             #mainEventCarousel .carousel-caption h5 {
                 font-size: 1.2rem;
-                margin-bottom: 0.5rem;
             }
 
             #mainEventCarousel .carousel-caption p {
-                font-size: 0.9rem;
-                line-height: 1.4;
+                font-size: 0.85rem;
+                line-height: 1.3;
             }
 
             #mainEventCarousel .description {
@@ -444,15 +428,18 @@
             }
 
             #mainEventCarousel .carousel-caption {
-                margin-top: -80px;
+                padding: 8px;
             }
 
             #mainEventCarousel .carousel-caption h5 {
                 font-size: 1.1rem;
+                margin-bottom: 0.3rem;
             }
 
             #mainEventCarousel .carousel-caption p {
                 font-size: 0.8rem;
+                line-height: 1.2;
+                margin-bottom: 0.3rem;
             }
 
             #mainEventCarousel .description {
