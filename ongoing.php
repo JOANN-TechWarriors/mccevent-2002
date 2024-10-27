@@ -30,14 +30,18 @@
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
    </head>
    <style type="text/css">
-        * {
+        *{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             transition: all 0.4s;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
-
-        .nav {
+        .container{
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+        .nav{
             width: 100%;
             height: 65px;
             position: fixed;
@@ -46,57 +50,44 @@
             background-color: rgba(6, 6, 7, 0.8);
             z-index: 1000;
         }
-
-        .nav div.logo {
-            float: left;
-            width: auto;
-            padding-left: 1rem;
+        .nav div.logo{
+            width: 180px;
+            height: 10px;
+            position: absolute;
         }
-
-        .nav div.logo a {
+        .nav div.logo a{
             text-decoration: none;
             color: #fff;
-            font-size: 1.5rem;
+            font-size: 25px;
             text-transform: uppercase;
         }
-
         .nav div.logo a:hover {
             color: #c0c0c0;
         }
-
-        .nav div.main_list {
+        .nav div.main_list{
+            width: 600px;
+            height: 65px;
             float: right;
-            padding-right: 1rem;
         }
-
-        .nav div.main_list ul {
-            width: 100%;
+        .nav div.main_list ul{
+            width:100%;
             height: 65px;
             display: flex;
             list-style: none;
-            margin: 0;
-            padding: 0;
         }
-
-        .nav div.main_list ul li {
-            padding: 0;
-            padding-right: 3rem;
-            position: relative;
+        .nav div.main_list ul li{
+            width: 120px;
+            height: 65px;
         }
-
-        .nav div.main_list ul li a {
+        .nav div.main_list ul li a{
             text-decoration: none;
             color: #fff;
             line-height: 65px;
             text-transform: uppercase;
-            font-size: 14px;
-            font-weight: 500;
         }
-
-        .nav div.main_list ul li a:hover {
+        .nav div.main_list ul li a:hover{
             color: #c0c0c0;
         }
-
         .nav div.media_button {
             width: 40px;
             height: 40px;
@@ -105,170 +96,69 @@
             right: 15px;
             top: 12px;
             display: none;
-            cursor: pointer;
         }
-
         .nav div.media_button button.main_media_button {
             width: 100%;
             height: 100%;
-            background-color: transparent;
+            background-color: transparent;;
             outline: 0;
             border: none;
             cursor: pointer;
         }
-
-        .nav div.media_button button.main_media_button span {
+        .nav div.media_button button.main_media_button span{
             width: 98%;
-            height: 2px;
+            height: 1px;
             display: block;
             background-color: #fff;
             margin-top: 9px;
             margin-bottom: 10px;
-            transition: 0.3s ease;
         }
-
-        /* Dropdown styling */
-        .dropdown {
+        .nav div.media_button button.main_media_button:hover span:nth-of-type(1){
+            transform: rotateY(180deg);
+            transition: all 0.5s;
+            background-color: #c0c0c0;
+        }
+        .nav div.media_button button.main_media_button:hover span:nth-of-type(2){
+            transform: rotateY(180deg);
+            transition: all 0.4s;
+            background-color: #c0c0c0;
+        }
+        .nav div.media_button button.main_media_button:hover span:nth-of-type(3){
+            transform: rotateY(180deg);
+            transition: all 0.3s;
+            background-color: #c0c0c0;
+        }
+        .nav div.media_button button.active span:nth-of-type(1) {
+            transform: rotate3d(0, 0, 1, 45deg);
+            position: absolute;
+            margin: 0;
+        }
+        .nav div.media_button button.active span:nth-of-type(2) {
             display: none;
-            position: absolute;
-            background: rgba(6, 6, 7, 0.95);
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            border-radius: 4px;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 8px 0;
-            z-index: 1001;
         }
-
-        .dropdown::before {
-            content: '';
+        .nav div.media_button button.active span:nth-of-type(3) {
+            transform: rotate3d(0, 0, 1, -45deg);
             position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 0 8px 8px 8px;
-            border-style: solid;
-            border-color: transparent transparent rgba(6, 6, 7, 0.95) transparent;
+            margin: 0;
         }
-
-        .dropdown a {
-            color: white !important;
-            padding: 12px 20px !important;
+        .nav div.media_button button.active:hover span:nth-of-type(1) {
+            transform: rotate3d(0, 0, 1, 20deg);
+        }
+        .nav div.media_button button.active:hover span:nth-of-type(3) {
+            transform: rotate3d(0, 0, 1, -20deg);
+        }
+        .fa {
+            padding: 10px;
+            font-size: 10px;
+            width: 8px;
+            text-align: center;
             text-decoration: none;
-            display: block;
-            line-height: 1.5 !important;
-            font-size: 14px !important;
-            text-transform: none !important;
-            transition: all 0.3s ease;
-            text-align: left;
+            margin: 5px 5px;
+            border-radius: 30%;
         }
-
-        .dropdown a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding-left: 25px !important;
+        .fa:hover {
+            opacity: 0.5;
         }
-
-        /* Active states */
-        .show-dropdown {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
-        /* Mobile responsive styles */
-        @media screen and (max-width: 768px) {
-            .nav div.logo {
-                margin-left: 15px;
-            }
-
-            .nav div.main_list {
-                width: 100%;
-                height: 0;
-                overflow: hidden;
-                position: absolute;
-                top: 65px;
-                left: 0;
-                background-color: rgba(6, 6, 7, 0.95);
-                transition: height 0.3s ease;
-            }
-
-            .nav div.show_list {
-                height: auto;
-            }
-
-            .nav div.main_list ul {
-                flex-direction: column;
-                width: 100%;
-                height: auto;
-                padding: 20px 0;
-            }
-
-            .nav div.main_list ul li {
-                width: 100%;
-                padding: 0;
-            }
-
-            .nav div.main_list ul li a {
-                line-height: 50px;
-                width: 100%;
-                height: 50px;
-                display: block;
-                padding: 0 20px;
-                text-align: left;
-            }
-
-            .nav div.media_button {
-                display: block;
-            }
-
-            /* Mobile dropdown */
-            .dropdown {
-                position: static;
-                transform: none;
-                left: 0;
-                width: 100%;
-                border-radius: 0;
-                box-shadow: none;
-                background-color: rgba(255, 255, 255, 0.05);
-            }
-
-            .dropdown::before {
-                display: none;
-            }
-
-            .dropdown a {
-                padding: 12px 30px !important;
-            }
-
-            .show-dropdown {
-                animation: none;
-            }
-
-            /* Hamburger animation */
-            .nav div.media_button button.active span:nth-child(1) {
-                transform: rotate(45deg) translate(8px, 8px);
-            }
-
-            .nav div.media_button button.active span:nth-child(2) {
-                opacity: 0;
-            }
-
-            .nav div.media_button button.active span:nth-child(3) {
-                transform: rotate(-45deg) translate(7px, -7px);
-            }
-        }
-
-        /* Prevent content from going under navbar */
-        body {
-            padding-top: 65px;
-        }
-
         .home{
             background-size: cover;
             background-position: center;
@@ -386,38 +276,41 @@
     </style>
    <body>
    <nav class="nav">
+    <div class="container">
         <div class="logo">
             <a href="#" style="font-family: impact; color: #1153D0;">
-                <img src="img/logo.png" style="height: 40px; vertical-align: middle;"> MCC Event
+                <img src="img/logo.png" style="height: 40px;  vertical-align: middle;"> MCC Event
             </a>
+             <span class="text-light"MCC>
         </div>
         <div class="main_list" id="mainListDiv">
-            <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="ongoing.php">Ongoing</a></li>
-                <li><a href="upcoming.php">Upcoming</a></li>
-                <li><a href="about.php">About</a></li>
-                <li><a href="admin/stream/index.php">Live</a></li>
-                <li>
-                    <a href="#" id="loginDropdown">Login</a>
-                    <div class="dropdown">
-                        <a href="admin/admin_login.php">Admin Login</a>
-                        <a href="admin/index.php">Organizer Login</a>
-                        <a href="tabulator/index.php">Tabulator Login</a>
-                        <a href="admin/welcome.php">Judge Login</a>
-                        <a href="student/index.php">Student Login</a>
+        <ul>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="ongoing.php">Ongoing</a></li>
+            <li><a href="upcoming.php">Upcoming</a></li>
+            <li><a href="about.php">About</a></li>
+            <li><a href="admin/stream/index.php">Live</a></li>
+            <li>
+                <a href="#login">Login</a>
+                <div class="dropdown">
+                    <a href="admin/admin_login.php">Admin Login</a>
+                    <a href="admin/index2.php">Organizer Login</a>
+                    <a href="tabulator/index.php">Tabulator Login</a>
+                    <a href="judge/index.php">Judge Login</a>
+                    <a href="student/index2.php">Student Login</a>
                     </div>
-                </li>
-            </ul>
-        </div>
-        <div class="media_button" id="mediaButton">
-            <button class="main_media_button">
+            </li>
+        </ul>
+    </div>
+        <div class="media_button">
+            <button class="main_media_button" id="mediaButton">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
         </div>
-    </nav>
+    </div>
+</nav>
       <!-- header section end -->
 
       <!-- Mainevent section start  -->
@@ -599,64 +492,37 @@ $conn->close();
       <!-- sidebar -->
       <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
       <script src="js/custom.js"></script>
-      <!-- Required JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get elements
-            const mediaButton = document.getElementById('mediaButton');
-            const mainListDiv = document.getElementById('mainListDiv');
-            const mediaButtonSpans = mediaButton.querySelector('button');
-            const loginDropdown = document.getElementById('loginDropdown');
-            const dropdown = document.querySelector('.dropdown');
-            let isDropdownOpen = false;
-
-            // Mobile menu toggle
-            mediaButton.addEventListener('click', function() {
-                mainListDiv.classList.toggle('show_list');
-                mediaButtonSpans.classList.toggle('active');
-                
-                // Close dropdown if menu is closing
-                if (!mainListDiv.classList.contains('show_list')) {
-                    dropdown.classList.remove('show-dropdown');
-                    isDropdownOpen = false;
-                }
-            });
-
-            // Login dropdown toggle
-            loginDropdown.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                isDropdownOpen = !isDropdownOpen;
-                dropdown.classList.toggle('show-dropdown');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!dropdown.contains(e.target) && !loginDropdown.contains(e.target)) {
-                    dropdown.classList.remove('show-dropdown');
-                    isDropdownOpen = false;
-                }
-            });
-
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    mainListDiv.classList.remove('show_list');
-                    mediaButtonSpans.classList.remove('active');
-                    if (!isDropdownOpen) {
-                        dropdown.classList.remove('show-dropdown');
-                    }
-                }
-            });
-
-            // Prevent dropdown from closing when clicking inside it
-            dropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
+      <script>
+        // Disable right-click
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
         });
-    </script>
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        document.onkeydown = function (e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+            }
+        };
+
+        // Disable developer tools
+        function disableDevTools() {
+            if (window.devtools.isOpen) {
+                window.location.href = "about:blank";
+            }
+        }
+
+        // Check for developer tools every 100ms
+        setInterval(disableDevTools, 100);
+
+        // Disable selecting text
+        document.onselectstart = function (e) {
+            e.preventDefault();
+        };
+</script>
    </body>
 </html>
