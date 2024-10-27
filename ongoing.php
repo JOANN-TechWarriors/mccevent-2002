@@ -89,7 +89,7 @@
         }
 
         #mainEventCarousel .carousel-item {
-            height: 90%;
+            height: 100%;
             background-color: #000;
         }
 
