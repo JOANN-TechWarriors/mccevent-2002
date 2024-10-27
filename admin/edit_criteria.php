@@ -373,7 +373,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Criteria no.</label>
-                                    <select name="crit_ctr" class="form-control">
+                                    <select name="crit_ctr" class="form-control btn-block" style="text-indent: 7px !important;">
                                         <option><?php echo $crit_row['criteria_ctr']; ?></option>
                                         <?php 
                                         $n1=0;
@@ -397,7 +397,7 @@
 
                                 <div class="form-group">
                                     <label>Percentage</label>
-                                    <select name="percentage" class="form-control">
+                                    <select name="percentage" class="form-control btn-block" style="text-indent: 7px !important;">
                                         <option><?php echo $crit_row['percentage']; ?></option>
                                         <?php
                                         $n5=-5;
