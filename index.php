@@ -345,7 +345,7 @@
     }
     
     .banner_taital {
-        font-size: 2rem;
+        font-size: 5rem;
     }
     
     .banner_taital_main {
