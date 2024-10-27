@@ -38,7 +38,6 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* Navigation Styles */
         .nav {
             width: 100%;
             height: 65px;
@@ -128,51 +127,74 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        .media_button {
+            display: none;
+            position: absolute;
+            right: 1rem;
+            top: 12px;
+            padding: 0.5rem;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+
+        .media_button span {
+            width: 32px;
+            height: 3px;
+            background-color: #fff;
+            display: block;
+            margin: 6px 0;
+            transition: 0.3s;
+        }
+
+        .fa {
+            padding: 10px;
+            font-size: 10px;
+            width: 8px;
+            text-align: center;
+            text-decoration: none;
+            margin: 5px 5px;
+            border-radius: 30%;
+        }
+
+        .fa:hover {
+            opacity: 0.5;
+        }
+
+        button.btn.btn-primary {
+            z-index: 1000;
+            position: relative;
+        }
+
         /* Main Event Carousel styles */
         #mainEventCarousel {
             width: 100%;
-            position: relative;
-            margin-top: 65px;
-        }
-
-        #mainEventCarousel .carousel-inner {
-            width: 100%;
-            position: relative;
+            height: 100vh;
             overflow: hidden;
+            margin-top: 65px; /* Add margin to account for fixed navbar */
         }
 
+        #mainEventCarousel .carousel-inner,
         #mainEventCarousel .carousel-item {
-            width: 100%;
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
+            height: 100%;
         }
 
         #mainEventCarousel .carousel-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
         #mainEventCarousel .carousel-caption {
-            position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 800px;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
         }
 
-        /* Ongoing Events Section */
+        /* Coffee section styling */
         .coffee_section {
-            padding: 50px 0;
-            background-color: #f8f9fa;
+            padding-top: 50px;
             position: relative;
             z-index: 1;
         }
@@ -181,197 +203,63 @@
             margin-top: 30px;
         }
 
-        .coffee_box {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 20px;
-        }
-
-        .coffee_img {
-            position: relative;
-            padding-bottom: 75%; /* 4:3 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .coffee_img img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Carousel Navigation */
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.8;
-        }
-
-        .carousel-control-prev:hover,
-        .carousel-control-next:hover {
-            opacity: 1;
-        }
-
-        /* Typography */
-        .coffee_taital {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            text-align: center;
-            color: #333;
-        }
-
-        .types_text {
-            font-size: 1.5rem;
-            margin: 15px 0;
-            color: #333;
-        }
-
-        .looking_text {
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            color: #666;
-        }
-
-        /* Copyright Section */
-        .copyright_section {
-            background-color: #1153D0;
-            padding: 20px 0;
-            color: white;
-            text-align: center;
-        }
-
-        .copyright_text {
-            margin: 0;
-            color: white;
-        }
-
-        /* Media Queries */
+        /* Responsive styles */
         @media screen and (max-width: 768px) {
+            .media_button {
+                display: block;
+            }
+
             .nav .main_list {
-                display: none;
                 width: 100%;
-                height: auto;
+                height: 0;
+                overflow: hidden;
                 position: absolute;
                 top: 65px;
                 left: 0;
+                margin: 0;
                 background-color: rgba(6, 6, 7, 0.95);
+                transition: height 0.3s ease-in-out;
             }
 
             .nav .main_list.show_list {
-                display: block;
+                height: auto;
             }
 
             .main_list ul {
                 flex-direction: column;
                 height: auto;
+                padding: 1rem 0;
             }
 
             .main_list ul li {
                 width: 100%;
                 height: auto;
+                padding: 0;
             }
 
             .main_list ul li a {
                 line-height: 45px;
-                padding: 0 2rem;
                 display: block;
+                padding: 0 2rem;
+                text-align: left;
             }
 
             .dropdown {
                 position: static;
                 width: 100%;
                 background-color: rgba(255, 255, 255, 0.1);
+                box-shadow: none;
             }
 
-            #mainEventCarousel .carousel-item {
-                padding-bottom: 75%;
+            .dropdown a {
+                padding-left: 3rem;
             }
 
-            #mainEventCarousel .carousel-caption {
-                padding: 15px;
-                margin-bottom: 40px;
-            }
-
-            .coffee_taital {
-                font-size: 2rem;
-            }
-
-            .types_text {
-                font-size: 1.25rem;
-            }
-
-            .media_button {
-                display: block;
-                position: absolute;
-                right: 1rem;
-                top: 12px;
-                padding: 0.5rem;
-                cursor: pointer;
-                background: transparent;
-                border: none;
-            }
-
-            .media_button span {
-                width: 32px;
-                height: 3px;
-                background-color: #fff;
-                display: block;
-                margin: 6px 0;
-                transition: 0.3s;
+            #mainEventCarousel {
+                height: 50vh;
             }
         }
-
-        @media screen and (max-width: 576px) {
-            #mainEventCarousel .carousel-caption {
-                margin-bottom: 20px;
-            }
-
-            .coffee_box {
-                margin: 10px;
-            }
-
-            .carousel-control-prev,
-            .carousel-control-next {
-                width: 30px;
-                height: 30px;
-            }
-        }
-
-        /* Button Styles */
-        .btn-primary {
-            background-color: #1153D0;
-            border-color: #1153D0;
-            padding: 8px 20px;
-            border-radius: 5px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #0d47a1;
-            border-color: #0d47a1;
-        }
-
-        .btn-primary:disabled {
-            background-color: #cccccc;
-            border-color: #cccccc;
-        }
-    </style>
+   </style>
    <body style="background-color: lightgray;">
       <nav class="nav">
           <div class="logo">
