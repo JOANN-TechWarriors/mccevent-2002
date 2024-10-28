@@ -358,189 +358,181 @@ $se_row = $se_query->fetch();
             </div>
       </div>
 
-<div class="main" id="main-content">
+      <div class="main" id="main-content">
     <div class="container">
-      <h1>
-        <?php echo $se_name; ?> Settings
-      </h1>
+        <h1><?php echo $se_name; ?> Settings</h1>
     </div>
 
-  <div class="container">
-    <div class="span15">
+    <div class="container">
+        <div class="span15">
+            <br />
+            <div class="col-md-10">
+                <ul class="breadcrumb">
+                    <li><a href="dashboard.php">Dashboard</a> / </li>
+                    <li><a href="home.php">Ongoing Events</a> / </li>
+                    <li><?php echo $se_name; ?> Settings</li>
+                </ul>
+            </div>
 
-      <br />
-      <div class="col-md-10">
-        <ul class="breadcrumb">
-          <li><a href="dashboard.php">Dashboard</a> / </li>
-          <li><a href="home.php">Ongoing Events</a> / </li>
-          <li>
-            <?php echo $se_name; ?> Settings
-          </li>
+            <form method="POST">
+                <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
+                <hr />
+                <div id="myGroup">
+                    <a class="btn btn-info" data-toggle="collapse" data-target="#contestant" data-parent="#myGroup">
+                        <i class="icon-chevron-right"></i> <strong>CONTESTANT</strong>
+                    </a>
+                    <a class="btn btn-info" data-toggle="collapse" data-target="#judges" data-parent="#myGroup">
+                        <i class="icon-chevron-right"></i> <strong>JUDGE</strong>
+                    </a>
+                    <a class="btn btn-info" data-toggle="collapse" data-target="#criteria" data-parent="#myGroup">
+                        <i class="icon-chevron-right"></i> <strong>CRITERIA</strong>
+                    </a>
+                    <a class="btn btn-info" data-toggle="collapse" data-target="#textpoll" data-parent="#myGroup">
+                        <i class="icon-chevron-right"></i> <strong>VOTE POLL</strong>
+                    </a>
 
-        </ul>
-      </div>
-
-      <form method="POST">
-        <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
-
-        <hr />
-        <div id="myGroup">
-
-          <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse"
-            data-target="#contestant" data-parent="#myGroup"><i class="icon-chevron-right"></i>
-            <strong>CONTESTANT</strong></a>
-          <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#judges"
-            data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>JUDGE</strong></a>
-          <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#criteria"
-            data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>CRITERIA</strong></a>
-          <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#textpoll" data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>VOTE POLL</strong></a>  
-
-          <div style="border: 0px;" class="accordion-group">
-
-          <div class="collapse indent" id="contestant" style="width:1000px;">
-                
-                <section id="download-bootstrap" style="width:90%;">
-                    <div class="page-header">
-                    <h1>Contestant's Settings 
-                    &nbsp;<a title="Click to add new Contestant for this Event" href="add_contestant.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-primary"><i class="icon icon-plus"></i></a> 
-                    </h1>
-                    </div>
-                            <table class="table table-bordered" >
-                             
+                    <!-- Contestant Section -->
+                    <div class="collapse indent" id="contestant">
+                        <section id="download-bootstrap">
+                            <div class="page-header">
+                                <h1>Contestant's Settings 
+                                    <a href="add_contestant.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-primary">
+                                        <i class="icon icon-plus"></i>
+                                    </a>
+                                </h1>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
                                     <thead>
-                                    <th>Check to Select</th>
-                                    <th>No.</th>
-                                    <th>Picture</th>
-                                    <th>Name</th>
-                                    <th>Course, Year & Section</th>
-                                    <th>Actions</th>
+                                        <tr>
+                                            <th>Check to Select</th>
+                                            <th>No.</th>
+                                            <th>Picture</th>
+                                            <th>Name</th>
+                                            <th>Course, Year & Section</th>
+                                            <th>Actions</th>
+                                        </tr>
                                     </thead>
-                                    <form method="POST">
                                     <tbody>
-                                       <?php    
-                                       	$cont_query = $conn->query("SELECT * FROM contestants WHERE subevent_id='$sub_event_id' order by contestant_ctr") or die(mysql_error());
-                                        while ($cont_row = $cont_query->fetch()) 
-                                            { 
-                                                $cont_id=$cont_row['contestant_id'];
-                                              
-                                                ?>
-                                    <tr>
-                                      
-                                    <td width="115">
-                                        
-                                    <input name="selector[]" type="checkbox" value="<?php echo $cont_id; ?>" title="Check to select <?php echo $cont_row['fullname']; ?> "/></td>
-                                    
-                                    <td width="10"><?php echo $cont_row['contestant_ctr']; ?></td>
-                                    <td><img width="50" src="../img/<?php echo $cont_row['Picture']; ?>" /></td>
-                                    <td><?php echo $cont_row['fullname']; ?></td>
-                                    <td><?php echo $cont_row['AddOn']; ?></td>
-                                    <td width="10"><a title="Click to edit <?php echo $cont_row['fullname']; ?>  datas" href="edit_contestant.php?contestant_id=<?php echo $cont_row['contestant_id'];?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-success"><i class="icon icon-pencil"></i></a></td>
-                                    </tr>
-                                    <?php } ?>
-                                    <tr>
-                                    <td colspan="4">
-                                    <input required="true" type="password" placeholder="Organizer Password" name="org_pass" />
-                                    <input type="hidden" name="sub_event_id" value="<?php echo $sub_event_id; ?>" />
-                                    <input type="hidden" name="se_name" value="<?php echo $se_name; ?>" />
-                                    <button title="Click to delete selected row(s)" type="submit" class="btn btn-danger" name="delete_cont" ><i class="icon icon-trash"></i></button> 
-                                     
-                                    </td>
-                                    </tr>
+                                        <?php    
+                                        $cont_query = $conn->query("SELECT * FROM contestants WHERE subevent_id='$sub_event_id' order by contestant_ctr") or die(mysql_error());
+                                        while ($cont_row = $cont_query->fetch()) { 
+                                            $cont_id=$cont_row['contestant_id'];
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <input name="selector[]" type="checkbox" value="<?php echo $cont_id; ?>" />
+                                            </td>
+                                            <td><?php echo $cont_row['contestant_ctr']; ?></td>
+                                            <td><img width="50" src="../img/<?php echo $cont_row['Picture']; ?>" /></td>
+                                            <td><?php echo $cont_row['fullname']; ?></td>
+                                            <td><?php echo $cont_row['AddOn']; ?></td>
+                                            <td>
+                                                <a href="edit_contestant.php?contestant_id=<?php echo $cont_row['contestant_id'];?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-success">
+                                                    <i class="icon icon-pencil"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                        <tr>
+                                            <td colspan="6">
+                                                <input required="true" type="password" placeholder="Organizer Password" name="org_pass" />
+                                                <input type="hidden" name="sub_event_id" value="<?php echo $sub_event_id; ?>" />
+                                                <input type="hidden" name="se_name" value="<?php echo $se_name; ?>" />
+                                                <button type="submit" class="btn btn-danger" name="delete_cont">
+                                                    <i class="icon icon-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
-                                    </form>
-                                    
-                            </table>
-                </section>
-                </div>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
 
-            <div class="collapse indent" id="judges" style="width:900px;">
-              <section id="download-bootstrap" >
-                <div class="page-header">
-                  <h1>Judge's Settings
-                    &nbsp;<a title="Click to add new Judge for this Event"
-                      href="add_judge.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
-                      class="btn btn-primary"><i class="icon icon-plus"></i></a>
-                    &nbsp;<a title="Click to print Judge's Code for this Event" target="_blank"
-                      title="Click to print judges code"
-                      href="print_judges.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
-                      class="btn btn-info"><i class="icon icon-print"></i></a></h1>
-                </div>
-                <table class="table table-bordered">
-                  <thead>
-                    <th>Check to Select</th>
-                    <th>No.</th>
-                    <th>Code</th>
-                    <th>Fullname</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </thead>
-                  <form method="POST">
-                    <tbody>
-                      <?php    
-   	$judge_query = $conn->query("SELECT * FROM judges WHERE subevent_id='$sub_event_id' order by judge_ctr") or die(mysql_error());
-    while ($judge_row = $judge_query->fetch()) 
-        { 
-            $jxx_id=$judge_row['judge_id'];
-            ?>
-                      <tr>
-                        <td width="115"><input name="selector[]" type="checkbox" value="<?php echo $jxx_id;  ?>"
-                            title="Check to select <?php echo $judge_row['fullname']; ?>" /></td>
-                        <td width="10">
-                          <?php echo $judge_row['judge_ctr']; ?>
-                        </td>
-                        <td>
-                          <?php echo $judge_row['code']; ?>
-                        </td>
-                        <td>
-                          <?php echo $judge_row['fullname']; ?>
-                        </td>
-                        <td>
-                          <?php echo $judge_row['jtype']; ?>
-                        </td>
-                        <td width="10"><a title="Click to edit <?php echo $judge_row['fullname']; ?> datas"
-                            href="edit_judge.php?judge_id=<?php echo $jxx_id;?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>"
-                            class="btn btn-success"><i class="icon icon-pencil"></i></a>
+                    <!-- Judges Section -->
+                    <div class="collapse indent" id="judges">
+                        <section id="download-bootstrap">
+                            <div class="page-header">
+                                <h1>Judge's Settings
+                                    <a href="add_judge.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-primary">
+                                        <i class="icon icon-plus"></i>
+                                    </a>
+                                    <a target="_blank" href="print_judges.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-info">
+                                        <i class="icon icon-print"></i>
+                                    </a>
+                                </h1>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Check to Select</th>
+                                            <th>No.</th>
+                                            <th>Code</th>
+                                            <th>Fullname</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php    
+                                        $judge_query = $conn->query("SELECT * FROM judges WHERE subevent_id='$sub_event_id' order by judge_ctr") or die(mysql_error());
+                                        while ($judge_row = $judge_query->fetch()) { 
+                                            $jxx_id=$judge_row['judge_id'];
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <input name="selector[]" type="checkbox" value="<?php echo $jxx_id; ?>" />
+                                            </td>
+                                            <td><?php echo $judge_row['judge_ctr']; ?></td>
+                                            <td><?php echo $judge_row['code']; ?></td>
+                                            <td><?php echo $judge_row['fullname']; ?></td>
+                                            <td><?php echo $judge_row['jtype']; ?></td>
+                                            <td>
+                                                <a href="edit_judge.php?judge_id=<?php echo $jxx_id;?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-success">
+                                                    <i class="icon icon-pencil"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                        <tr>
+                                            <td colspan="6">
+                                                <input required="true" type="password" placeholder="Organizer Password" name="org_pass" />
+                                                <input type="hidden" name="sub_event_id" value="<?php echo $sub_event_id; ?>" />
+                                                <input type="hidden" name="se_name" value="<?php echo $se_name; ?>" />
+                                                <button type="submit" class="btn btn-danger" name="delete_judge">
+                                                    <i class="icon icon-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
 
-                        </td>
-                      </tr>
-
-                      <?php } ?>
-                      <tr>
-                        <td colspan="6">
-                          <input required="true" type="password" placeholder="Organizer Password" name="org_pass" />
-                          <input type="hidden" name="sub_event_id" value="<?php echo $sub_event_id; ?>" />
-                          <input type="hidden" name="se_name" value="<?php echo $se_name; ?>" />
-
-                          <button title="Click to delete selected row(s)" type="submit" class="btn btn-danger"
-                            name="delete_judge"><i class="icon icon-trash"></i></button>
-                        </td>
-                      </tr>
-                </table>
-                </td>
-
-                </tr>
-                </tbody>
-      </form>
-      </table>
-
-      </section>
-    </div>
-
-    <div class="collapse indent" id="criteria" style="width:900px;">
-      <section id="download-bootstrap">
-        <div class="page-header">
-          <h1>Criteria's Settings &nbsp;<a title="Click to add new Criteria for this Event"
-              href="add_criteria.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
-              class="btn btn-primary"><i class="icon icon-plus"></i></a></h1>
-        </div>
-        <table class="table table-bordered">
-          <thead>
-            <th>Check to Select</th>
-            <th>No.</th>
-            <th>Criteria</th>
-            <th>Percentage</th>
-            <th>Actions</th>
-          </thead>
+                    <!-- Criteria Section -->
+                    <div class="collapse indent" id="criteria">
+                        <section id="download-bootstrap">
+                            <div class="page-header">
+                                <h1>Criteria's Settings
+                                    <a href="add_criteria.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-primary">
+                                        <i class="icon icon-plus"></i>
+                                    </a>
+                                </h1>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Check to Select</th>
+                                            <th>No.</th>
+                                            <th>Criteria</th>
+                                            <th>Percentage</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
           <form method="POST">
             <tbody>
               <?php    
