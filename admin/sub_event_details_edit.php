@@ -271,11 +271,18 @@ $se_row = $se_query->fetch();
   </div>
 
 <!-- Header -->
-   <div class="header">
-    <div>
-        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
-    </div>
-    </div>
+    <div class="header">
+            <div>
+                <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="profile-dropdown">
+                <div style="font-size:small;"><?php echo $name; ?></div>
+                <div class="dropdown-menu">
+                    <a href="edit_organizer.php">Account Settings</a>
+                    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                </div>
+            </div>
+      </div>
 
 <div class="main" id="main-content">
     <div class="container">
@@ -476,15 +483,8 @@ $se_row = $se_query->fetch();
       </form>
       </table>
 
-
-
-
       </section>
     </div>
-
-
-
-
 
     <div class="collapse indent" id="criteria" style="width:900px;">
       <section id="download-bootstrap">
@@ -817,8 +817,7 @@ if(isset($_POST['save_settings']))
    else
    {
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con9_name','$sub_event_id','9')");
-   }
-   
+   }  
    
    $con10_name=$_POST['con10'];
    if($con10_name=="")
@@ -832,8 +831,7 @@ if(isset($_POST['save_settings']))
    
  /* end contestants */
    
-   
-   
+
    /* judges */
     $j1_name=$_POST['jud1'];
    if($j1_name=="")
