@@ -690,7 +690,7 @@ $conn->close();
               });
           });
       </script>
-    `<script>
+    <script>
             // Disable right-click
             document.addEventListener('contextmenu', function (e) {
                 e.preventDefault();
@@ -721,7 +721,7 @@ $conn->close();
             document.onselectstart = function (e) {
                 e.preventDefault();
             };
-    </script>`
+    </script>
       <!-- Your existing scripts -->
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
