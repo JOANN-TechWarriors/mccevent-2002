@@ -29,8 +29,10 @@ if(isset($_POST['edit_crit'])) {
             echo "<script>
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Criteria number already exists!'
+                    title: 'Error!',
+                    text: 'Criteria number already exists!',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'OK'
                 });
             </script>";
         } else {
@@ -53,12 +55,16 @@ if(isset($_POST['edit_crit'])) {
                 echo "<script>
                     Swal.fire({
                         icon: 'success',
-                        title: 'Success',
-                        text: 'Criteria updated successfully!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'sub_event_details_edit.php?sub_event_id=" . $sub_event_id . "&se_name=" . urlencode($se_name) . "';
+                        title: 'Great!',
+                        text: 'Criteria has been updated successfully!',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading()
                         }
+                    }).then(() => {
+                        window.location.href = 'sub_event_details_edit.php?sub_event_id=" . $sub_event_id . "&se_name=" . urlencode($se_name) . "';
                     });
                 </script>";
             } else {
@@ -66,8 +72,10 @@ if(isset($_POST['edit_crit'])) {
                 echo "<script>
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
-                        text: 'Failed to update criteria. Please try again.'
+                        title: 'Oops...',
+                        text: 'Failed to update criteria. Please try again.',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK'
                     });
                 </script>";
             }
@@ -77,8 +85,10 @@ if(isset($_POST['edit_crit'])) {
         echo "<script>
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Database error occurred. Please try again.'
+                title: 'Database Error',
+                text: 'An error occurred while updating the criteria. Please try again.',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
             });
         </script>";
     }
