@@ -5,10 +5,8 @@
   include('header2.php');
     include('session.php');
     
-    
     $sub_event_id=$_GET['sub_event_id'];
     $se_name=$_GET['se_name'];
-    
     
 $se_query = $conn->query("select * from sub_event where subevent_id = '$sub_event_id'");
 $se_row = $se_query->fetch();
@@ -19,15 +17,15 @@ $se_row = $se_query->fetch();
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
     body {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
-    width: 100vw;      /* Ensures full width */
-    overflow-y: auto;  /* Enables vertical scrolling */
-    overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
-}
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        width: 100vw;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
 
     .sidebar {
         position: fixed;
@@ -40,14 +38,12 @@ $se_row = $se_query->fetch();
         padding-top: 20px;
         transition: all 0.3s;
         overflow: hidden;
-        z-index: 1000; /* Ensure the sidebar is above the main content */
-      }
-    
-
-      .sidebar.collapsed {
-    transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
+        z-index: 1000;
     }
 
+    .sidebar.collapsed {
+        transform: translateX(-100%);
+    }
 
     .sidebar .toggle-btn {
         position: absolute;
@@ -88,170 +84,316 @@ $se_row = $se_query->fetch();
     }
 
     .sidebar ul li a {
-      color: #fff;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
     }
+
     .sidebar ul li a i {
         margin-right: 10px;
-        transition: margin 0.3s;
     }
-
-/*     .sidebar.collapsed ul li a i {
-        margin-right: 0;
-    }
-
-    .sidebar ul li a span {
-        display: inline-block;
-        transition: opacity 0.3s;
-    }
-
-    .sidebar.collapsed ul li a span {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
-    } */
 
     .sidebar ul li a:hover {
         background-color: #1a1a2e;
     }
 
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-        }
-
-        button.accordion {
-            background-color: #eee;
-            color: #444;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-            transition: 0.4s;
-        }
-
-        button.accordion.active,
-        button.accordion:hover {
-            background-color: #ddd;
-        }
-
-        button.accordion:after {
-            content: '\002B';
-            color: #777;
-            font-weight: bold;
-            float: right;
-            margin-left: 5px;
-        }
-
-        button.accordion.active:after {
-            content: "\2212";
-        }
-
-        div.panel {
-            padding: 0 18px;
-            background-color: white;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-        }
-
-        .main {
-        margin-left: 250px; /* Space for the sidebar */
+    .main {
+        margin-left: 250px;
         padding: 20px;
-        transition: margin-left 0.3s ease; /* Smooth transition for main content */
-        }
+        transition: margin-left 0.3s ease;
+    }
 
-        .main.collapsed {
-        margin-left: 0; /* No space for sidebar when collapsed */
-        }
+    .main.collapsed {
+        margin-left: 0;
+    }
 
     .header {
-    background-color: #f8f9fa;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
+        background-color: #f8f9fa;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
     }
 
     .header .profile-dropdown {
-    position: relative;
-    display: inline-block;
+        position: relative;
+        display: inline-block;
     }
+
     .header .profile-dropdown .dropdown-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    z-index: 1000;
-}
-
-.header .profile-dropdown:hover .dropdown-menu {
-    display: block;
-}
-
-.header .profile-dropdown .dropdown-menu a {
-    display: block;
-    padding: 10px;
-    color: #333;
-    text-decoration: none;
-}
-
-.header .profile-dropdown .dropdown-menu a:hover {
-    background-color: #f1f1f1;
-}
-
-
-@media (max-width: 768px) {
-    .sidebar {
+        display: none;
         position: absolute;
-        width: 250px;
-       
-        transform: translateX(-100%); /* Hide sidebar off-screen */
-        display: block; /* Show sidebar when collapsed */
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+        z-index: 1000;
     }
 
-    .main {
-        margin-left: 0; /* No space for sidebar on mobile */
-        transition: margin-left 0.3s ease; /* Smooth transition for main content */
+    .header .profile-dropdown:hover .dropdown-menu {
+        display: block;
     }
 
-    .sidebar.collapsed {
-        transform: translateX(0); /* Show sidebar when expanded */
+    .header .profile-dropdown .dropdown-menu a {
+        display: block;
+        padding: 10px;
+        color: #333;
+        text-decoration: none;
     }
 
-    .sidebar .toggle-btn {
-        display: block; /* Show toggle button on mobile */
-    }
-}
-
-@media (max-width: 576px) {
-    .sidebar-heading {
-        font-size: 14px;
+    .header .profile-dropdown .dropdown-menu a:hover {
+        background-color: #f1f1f1;
     }
 
-    .sidebar ul li a {
-        font-size: 14px;
+    /* Responsive Table Styles */
+    .table-responsive {
+        width: 100%;
+        margin-bottom: 15px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid #ddd;
+        border-radius: 4px;
     }
 
-    .header {
-        padding: 5px 10px;
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+        border-collapse: collapse;
     }
 
-    .header .profile-dropdown img {
-        width: 30px;
-        height: 30px;
+    .table th,
+    .table td {
+        padding: 12px;
+        vertical-align: middle;
+        border-top: 1px solid #dee2e6;
+        white-space: nowrap;
     }
-  }
-  </style>
+
+    .table thead th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #dee2e6;
+        background-color: #f8f9fa;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #dee2e6;
+    }
+
+    /* Collapse Section Styles */
+    .collapse.indent {
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+
+    .page-header {
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .page-header h1 {
+        margin: 0;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Button Styles */
+    .btn {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        transition: all 0.15s ease-in-out;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-success {
+        color: #fff;
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-danger {
+        color: #fff;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-info {
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+
+    /* Form Controls */
+    input[type="password"] {
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        margin-bottom: 10px;
+    }
+
+    /* Breadcrumb Styles */
+    .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        list-style: none;
+        background-color: #e9ecef;
+        border-radius: 0.25rem;
+    }
+
+    .breadcrumb li {
+        display: inline;
+    }
+
+    .breadcrumb li + li:before {
+        content: "/";
+        padding: 0 0.5rem;
+        color: #6c757d;
+    }
+
+    /* Alert Styles */
+    .alert {
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+
+    /* Badge Styles */
+    .badge {
+        display: inline-block;
+        padding: 0.25em 0.4em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: 0.25rem;
+    }
+
+    .badge-info {
+        color: #fff;
+        background-color: #17a2b8;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .main {
+            margin-left: 0;
+            padding: 10px;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(0);
+        }
+
+        .page-header h1 {
+            font-size: 20px;
+            flex-wrap: wrap;
+        }
+
+        .table th,
+        .table td {
+            padding: 8px;
+        }
+
+        .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .header {
+            padding: 5px 10px;
+        }
+
+        .breadcrumb {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .page-header h1 {
+            font-size: 18px;
+        }
+
+        .table-responsive {
+            margin-bottom: 10px;
+        }
+
+        .collapse.indent {
+            padding: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .header .profile-dropdown {
+            position: static;
+        }
+
+        .header .profile-dropdown .dropdown-menu {
+            width: 100%;
+            position: fixed;
+            top: auto;
+            bottom: 0;
+            left: 0;
+            border-radius: 0;
+        }
+    }
+    </style>
 </head>
 
 <body>
@@ -291,21 +433,14 @@ $se_row = $se_query->fetch();
       </h1>
     </div>
 
-
   <div class="container">
-
     <div class="span15">
-
-
 
       <br />
       <div class="col-md-10">
         <ul class="breadcrumb">
-
           <li><a href="dashboard.php">Dashboard</a> / </li>
-
           <li><a href="home.php">Ongoing Events</a> / </li>
-
           <li>
             <?php echo $se_name; ?> Settings
           </li>
@@ -313,35 +448,24 @@ $se_row = $se_query->fetch();
         </ul>
       </div>
 
-  
-
-
       <form method="POST">
         <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
 
-
         <hr />
-
         <div id="myGroup">
-
 
           <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse"
             data-target="#contestant" data-parent="#myGroup"><i class="icon-chevron-right"></i>
             <strong>CONTESTANT</strong></a>
-
           <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#judges"
             data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>JUDGE</strong></a>
-
           <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#criteria"
             data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>CRITERIA</strong></a>
           <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#textpoll" data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>VOTE POLL</strong></a>  
 
-
-
           <div style="border: 0px;" class="accordion-group">
 
           <div class="collapse indent" id="contestant" style="width:1000px;">
-                
                 
                 <section id="download-bootstrap" style="width:90%;">
                     <div class="page-header">
@@ -349,7 +473,6 @@ $se_row = $se_query->fetch();
                     &nbsp;<a title="Click to add new Contestant for this Event" href="add_contestant.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-primary"><i class="icon icon-plus"></i></a> 
                     </h1>
                     </div>
-                    
                             <table class="table table-bordered" >
                              
                                     <thead>
@@ -361,7 +484,6 @@ $se_row = $se_query->fetch();
                                     <th>Actions</th>
                                     </thead>
                                     <form method="POST">
-                                    
                                     <tbody>
                                        <?php    
                                        	$cont_query = $conn->query("SELECT * FROM contestants WHERE subevent_id='$sub_event_id' order by contestant_ctr") or die(mysql_error());
@@ -370,7 +492,6 @@ $se_row = $se_query->fetch();
                                                 $cont_id=$cont_row['contestant_id'];
                                               
                                                 ?>
-                                                
                                     <tr>
                                       
                                     <td width="115">
@@ -385,28 +506,20 @@ $se_row = $se_query->fetch();
                                     </tr>
                                     <?php } ?>
                                     <tr>
-                                       
                                     <td colspan="4">
                                     <input required="true" type="password" placeholder="Organizer Password" name="org_pass" />
                                     <input type="hidden" name="sub_event_id" value="<?php echo $sub_event_id; ?>" />
                                     <input type="hidden" name="se_name" value="<?php echo $se_name; ?>" />
-                                    
                                     <button title="Click to delete selected row(s)" type="submit" class="btn btn-danger" name="delete_cont" ><i class="icon icon-trash"></i></button> 
                                      
                                     </td>
                                     </tr>
-                                    
                                     </tbody>
-                                    
                                     </form>
                                     
                             </table>
-                     
                 </section>
-                
                 </div>
-
-
 
             <div class="collapse indent" id="judges" style="width:900px;">
               <section id="download-bootstrap" >
@@ -456,13 +569,8 @@ $se_row = $se_query->fetch();
                             href="edit_judge.php?judge_id=<?php echo $jxx_id;?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>"
                             class="btn btn-success"><i class="icon icon-pencil"></i></a>
 
-
                         </td>
                       </tr>
-
-
-
-
 
                       <?php } ?>
                       <tr>
@@ -483,15 +591,8 @@ $se_row = $se_query->fetch();
       </form>
       </table>
 
-
-
-
       </section>
     </div>
-
-
-
-
 
     <div class="collapse indent" id="criteria" style="width:900px;">
       <section id="download-bootstrap">
@@ -573,11 +674,9 @@ $se_row = $se_query->fetch();
                       <?php  echo $percnt; ?>%
                     </strong>
                   </div>
-
                 </td>
 
                 <?php } ?>
-
 
                 <?php
       if($percnt==100)
@@ -591,7 +690,6 @@ $se_row = $se_query->fetch();
 
                 <?php } ?>
               </tr>
-
 
               <tr>
                 <td colspan="5">
@@ -629,16 +727,12 @@ $se_row = $se_query->fetch();
   &nbsp;<a class="btn btn-primary" href="updateTxtview.php?sid=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">Live View Result</a>
   &nbsp;<a class="btn btn-primary" href="updateBlankTxtview.php?sid=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">Live View</a>
   &nbsp;<a class="btn btn-primary" href="..//poll/index.php?event=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">View Vote Poll</a>
- </form>
- 
+ </form> 
  </td>
  </tr>
 
   </tbody>
-
-
-    
-       
+  
   <?php }
  else
  { ?>
@@ -653,20 +747,14 @@ $se_row = $se_query->fetch();
          <br />
           <br />
       </form>
-      
-      
+            
  <?php } ?>
  </section> 
                 </div>
 
-
   </div>
 
-
-
   </div>
-
-
 
   </form>
   </div>
@@ -714,9 +802,6 @@ if ($tp_status == "active") {
   <?php
 }}
 ?>
-
-
-
 
   <?php 
 
@@ -771,7 +856,6 @@ if(isset($_POST['save_settings']))
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con4_name','$sub_event_id','4')");
    }
    
-   
    $con5_name=$_POST['con5'];
    if($con5_name=="")
    {
@@ -781,8 +865,7 @@ if(isset($_POST['save_settings']))
    {
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con5_name','$sub_event_id','5')");
    }
-   
-   
+    
    $con6_name=$_POST['con6'];
    if($con6_name=="")
    {
@@ -804,7 +887,6 @@ if(isset($_POST['save_settings']))
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con7_name','$sub_event_id','7')");
    }
    
-   
    $con8_name=$_POST['con8'];
    if($con8_name=="")
    {
@@ -815,7 +897,6 @@ if(isset($_POST['save_settings']))
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con8_name','$sub_event_id','8')");
    }
    
-   
    $con9_name=$_POST['con9'];
    if($con9_name=="")
    {
@@ -824,8 +905,7 @@ if(isset($_POST['save_settings']))
    else
    {
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con9_name','$sub_event_id','9')");
-   }
-   
+   }  
    
    $con10_name=$_POST['con10'];
    if($con10_name=="")
@@ -839,8 +919,7 @@ if(isset($_POST['save_settings']))
    
  /* end contestants */
    
-   
-   
+
    /* judges */
     $j1_name=$_POST['jud1'];
    if($j1_name=="")
@@ -1050,9 +1129,6 @@ if(isset($_POST['save_settings']))
  
 } ?>
 
-
-
-
 <?php
 if (isset($_POST['delete_cont'])) {
 
@@ -1096,8 +1172,6 @@ if (isset($_POST['delete_cont'])) {
 }
 ?>
 
-
-
 <?php
 if (isset($_POST['delete_judge'])) {
 
@@ -1136,7 +1210,6 @@ if (isset($_POST['delete_judge'])) {
     }
 }
 ?>
-
 
 <?php
 if (isset($_POST['delete_crit'])) {
@@ -1211,8 +1284,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </script>
 
-
-
   <!-- Le javascript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -1234,7 +1305,5 @@ document.addEventListener("DOMContentLoaded", function() {
   <script src="..//assets/js/holder/holder.js"></script>
   <script src="..//assets/js/google-code-prettify/prettify.js"></script>
   <script src="..//assets/js/application.js"></script>
-
 </body>
-
 </html>
