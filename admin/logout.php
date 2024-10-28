@@ -6,5 +6,5 @@ session_unset();
 
  ?>
 <script>
-    window.location="index2.php";
+    window.location="../index.php";
 </script>
