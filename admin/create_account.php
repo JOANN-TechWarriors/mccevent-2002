@@ -16,10 +16,10 @@
         .modal-content { background: white; margin: 5% auto; padding: 20px; width: 50%; }
         .close { cursor: pointer; float: right; }
     </style>
-    <br><br>
     <div class="container">
       <div class="col-lg-3"></div>
       <div class="col-lg-6">
+    <br><br><br><br>
         <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Event Organizer Registration Form</h3>
