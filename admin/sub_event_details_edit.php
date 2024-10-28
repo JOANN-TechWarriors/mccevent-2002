@@ -5,8 +5,10 @@
   include('header2.php');
     include('session.php');
     
+    
     $sub_event_id=$_GET['sub_event_id'];
     $se_name=$_GET['se_name'];
+    
     
 $se_query = $conn->query("select * from sub_event where subevent_id = '$sub_event_id'");
 $se_row = $se_query->fetch();
@@ -26,6 +28,7 @@ $se_row = $se_query->fetch();
     overflow-y: auto;  /* Enables vertical scrolling */
     overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
 }
+
     .sidebar {
         position: fixed;
         top: 0;
@@ -40,6 +43,7 @@ $se_row = $se_query->fetch();
         z-index: 1000; /* Ensure the sidebar is above the main content */
       }
     
+
       .sidebar.collapsed {
     transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
     }
@@ -93,6 +97,21 @@ $se_row = $se_query->fetch();
         margin-right: 10px;
         transition: margin 0.3s;
     }
+
+/*     .sidebar.collapsed ul li a i {
+        margin-right: 0;
+    }
+
+    .sidebar ul li a span {
+        display: inline-block;
+        transition: opacity 0.3s;
+    }
+
+    .sidebar.collapsed ul li a span {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+    } */
 
     .sidebar ul li a:hover {
         background-color: #1a1a2e;
@@ -190,6 +209,7 @@ $se_row = $se_query->fetch();
     background-color: #f1f1f1;
 }
 
+
 @media (max-width: 768px) {
     .sidebar {
         position: absolute;
@@ -251,18 +271,11 @@ $se_row = $se_query->fetch();
   </div>
 
 <!-- Header -->
-    <div class="header">
-            <div>
-                <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
-            </div>
-            <div class="profile-dropdown">
-                <div style="font-size:small;"><?php echo $name; ?></div>
-                <div class="dropdown-menu">
-                    <a href="edit_organizer.php">Account Settings</a>
-                    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
-                </div>
-            </div>
-      </div>
+   <div class="header">
+    <div>
+        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+    </div>
+    </div>
 
 <div class="main" id="main-content">
     <div class="container">
@@ -271,14 +284,21 @@ $se_row = $se_query->fetch();
       </h1>
     </div>
 
+
   <div class="container">
+
     <div class="span15">
+
+
 
       <br />
       <div class="col-md-10">
         <ul class="breadcrumb">
+
           <li><a href="dashboard.php">Dashboard</a> / </li>
+
           <li><a href="home.php">Ongoing Events</a> / </li>
+
           <li>
             <?php echo $se_name; ?> Settings
           </li>
@@ -286,24 +306,35 @@ $se_row = $se_query->fetch();
         </ul>
       </div>
 
+  
+
+
       <form method="POST">
         <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
 
+
         <hr />
+
         <div id="myGroup">
+
 
           <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse"
             data-target="#contestant" data-parent="#myGroup"><i class="icon-chevron-right"></i>
             <strong>CONTESTANT</strong></a>
+
           <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#judges"
             data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>JUDGE</strong></a>
+
           <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#criteria"
             data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>CRITERIA</strong></a>
           <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#textpoll" data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>VOTE POLL</strong></a>  
 
+
+
           <div style="border: 0px;" class="accordion-group">
 
           <div class="collapse indent" id="contestant" style="width:1000px;">
+                
                 
                 <section id="download-bootstrap" style="width:90%;">
                     <div class="page-header">
@@ -311,6 +342,7 @@ $se_row = $se_query->fetch();
                     &nbsp;<a title="Click to add new Contestant for this Event" href="add_contestant.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-primary"><i class="icon icon-plus"></i></a> 
                     </h1>
                     </div>
+                    
                             <table class="table table-bordered" >
                              
                                     <thead>
@@ -322,6 +354,7 @@ $se_row = $se_query->fetch();
                                     <th>Actions</th>
                                     </thead>
                                     <form method="POST">
+                                    
                                     <tbody>
                                        <?php    
                                        	$cont_query = $conn->query("SELECT * FROM contestants WHERE subevent_id='$sub_event_id' order by contestant_ctr") or die(mysql_error());
@@ -330,6 +363,7 @@ $se_row = $se_query->fetch();
                                                 $cont_id=$cont_row['contestant_id'];
                                               
                                                 ?>
+                                                
                                     <tr>
                                       
                                     <td width="115">
@@ -344,20 +378,28 @@ $se_row = $se_query->fetch();
                                     </tr>
                                     <?php } ?>
                                     <tr>
+                                       
                                     <td colspan="4">
                                     <input required="true" type="password" placeholder="Organizer Password" name="org_pass" />
                                     <input type="hidden" name="sub_event_id" value="<?php echo $sub_event_id; ?>" />
                                     <input type="hidden" name="se_name" value="<?php echo $se_name; ?>" />
+                                    
                                     <button title="Click to delete selected row(s)" type="submit" class="btn btn-danger" name="delete_cont" ><i class="icon icon-trash"></i></button> 
                                      
                                     </td>
                                     </tr>
+                                    
                                     </tbody>
+                                    
                                     </form>
                                     
                             </table>
+                     
                 </section>
+                
                 </div>
+
+
 
             <div class="collapse indent" id="judges" style="width:900px;">
               <section id="download-bootstrap" >
@@ -407,8 +449,13 @@ $se_row = $se_query->fetch();
                             href="edit_judge.php?judge_id=<?php echo $jxx_id;?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>"
                             class="btn btn-success"><i class="icon icon-pencil"></i></a>
 
+
                         </td>
                       </tr>
+
+
+
+
 
                       <?php } ?>
                       <tr>
@@ -429,8 +476,15 @@ $se_row = $se_query->fetch();
       </form>
       </table>
 
+
+
+
       </section>
     </div>
+
+
+
+
 
     <div class="collapse indent" id="criteria" style="width:900px;">
       <section id="download-bootstrap">
@@ -512,9 +566,11 @@ $se_row = $se_query->fetch();
                       <?php  echo $percnt; ?>%
                     </strong>
                   </div>
+
                 </td>
 
                 <?php } ?>
+
 
                 <?php
       if($percnt==100)
@@ -528,6 +584,7 @@ $se_row = $se_query->fetch();
 
                 <?php } ?>
               </tr>
+
 
               <tr>
                 <td colspan="5">
@@ -565,12 +622,16 @@ $se_row = $se_query->fetch();
   &nbsp;<a class="btn btn-primary" href="updateTxtview.php?sid=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">Live View Result</a>
   &nbsp;<a class="btn btn-primary" href="updateBlankTxtview.php?sid=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">Live View</a>
   &nbsp;<a class="btn btn-primary" href="..//poll/index.php?event=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">View Vote Poll</a>
- </form> 
+ </form>
+ 
  </td>
  </tr>
 
   </tbody>
-  
+
+
+    
+       
   <?php }
  else
  { ?>
@@ -585,14 +646,20 @@ $se_row = $se_query->fetch();
          <br />
           <br />
       </form>
-            
+      
+      
  <?php } ?>
  </section> 
                 </div>
 
-  </div>
 
   </div>
+
+
+
+  </div>
+
+
 
   </form>
   </div>
@@ -640,6 +707,9 @@ if ($tp_status == "active") {
   <?php
 }}
 ?>
+
+
+
 
   <?php 
 
@@ -694,6 +764,7 @@ if(isset($_POST['save_settings']))
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con4_name','$sub_event_id','4')");
    }
    
+   
    $con5_name=$_POST['con5'];
    if($con5_name=="")
    {
@@ -703,7 +774,8 @@ if(isset($_POST['save_settings']))
    {
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con5_name','$sub_event_id','5')");
    }
-    
+   
+   
    $con6_name=$_POST['con6'];
    if($con6_name=="")
    {
@@ -725,6 +797,7 @@ if(isset($_POST['save_settings']))
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con7_name','$sub_event_id','7')");
    }
    
+   
    $con8_name=$_POST['con8'];
    if($con8_name=="")
    {
@@ -735,6 +808,7 @@ if(isset($_POST['save_settings']))
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con8_name','$sub_event_id','8')");
    }
    
+   
    $con9_name=$_POST['con9'];
    if($con9_name=="")
    {
@@ -743,7 +817,8 @@ if(isset($_POST['save_settings']))
    else
    {
     $conn->query("insert into contestants(fullname,subevent_id,contestant_ctr)values('$con9_name','$sub_event_id','9')");
-   }  
+   }
+   
    
    $con10_name=$_POST['con10'];
    if($con10_name=="")
@@ -757,7 +832,8 @@ if(isset($_POST['save_settings']))
    
  /* end contestants */
    
-
+   
+   
    /* judges */
     $j1_name=$_POST['jud1'];
    if($j1_name=="")
@@ -967,6 +1043,9 @@ if(isset($_POST['save_settings']))
  
 } ?>
 
+
+
+
 <?php
 if (isset($_POST['delete_cont'])) {
 
@@ -1010,6 +1089,8 @@ if (isset($_POST['delete_cont'])) {
 }
 ?>
 
+
+
 <?php
 if (isset($_POST['delete_judge'])) {
 
@@ -1048,6 +1129,7 @@ if (isset($_POST['delete_judge'])) {
     }
 }
 ?>
+
 
 <?php
 if (isset($_POST['delete_crit'])) {
@@ -1122,6 +1204,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </script>
 
+
+
   <!-- Le javascript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -1143,5 +1227,7 @@ document.addEventListener("DOMContentLoaded", function() {
   <script src="..//assets/js/holder/holder.js"></script>
   <script src="..//assets/js/google-code-prettify/prettify.js"></script>
   <script src="..//assets/js/application.js"></script>
+
 </body>
+
 </html>
