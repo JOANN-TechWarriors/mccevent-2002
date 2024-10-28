@@ -1,16 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
   
-  <?php 
-  include('header.php');
-    include('session.php');
+<?php 
+include('header.php');
+include('session.php');
     
+$sub_event_id = $_GET['sub_event_id'];
+$se_name = $_GET['se_name'];
+$crit_id = $_GET['crit_id'];
+
+// Handle form submission
+if(isset($_POST['edit_crit'])) {
+    // Get form data
+    $criteria = $_POST['criteria'];
+    $percentage = $_POST['percentage'];
+    $crit_ctr = $_POST['crit_ctr'];
+    $sub_event_id = $_POST['sub_event_id'];
     
-    $sub_event_id=$_GET['sub_event_id'];
-    $se_name=$_GET['se_name'];
-    $crit_id=$_GET['crit_id'];
-     
-  ?>
+    try {
+        // Begin transaction
+        $conn->beginTransaction();
+        
+        // Check if the new counter number already exists for a different criteria
+        $check_query = $conn->prepare("SELECT * FROM criteria WHERE criteria_ctr = ? AND subevent_id = ? AND criteria_id != ?");
+        $check_query->execute([$crit_ctr, $sub_event_id, $crit_id]);
+        
+        if($check_query->rowCount() > 0) {
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Criteria number already exists!'
+                });
+            </script>";
+        } else {
+            // Update the criteria
+            $update_query = $conn->prepare("UPDATE criteria SET 
+                criteria = ?,
+                percentage = ?,
+                criteria_ctr = ?
+                WHERE criteria_id = ?");
+                
+            $result = $update_query->execute([
+                $criteria,
+                $percentage,
+                $crit_ctr,
+                $crit_id
+            ]);
+            
+            if($result) {
+                $conn->commit();
+                echo "<script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Criteria updated successfully!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'sub_event_details_edit.php?sub_event_id=" . $sub_event_id . "&se_name=" . urlencode($se_name) . "';
+                        }
+                    });
+                </script>";
+            } else {
+                $conn->rollBack();
+                echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to update criteria. Please try again.'
+                    });
+                </script>";
+            }
+        }
+    } catch(PDOException $e) {
+        $conn->rollBack();
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Database error occurred. Please try again.'
+            });
+        </script>";
+    }
+}
+?>
 
 <head>
     <meta charset="UTF-8">
@@ -373,8 +446,8 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Criteria no.</label>
-                                    <select name="crit_ctr" class="form-control btn-block" style="text-indent: 10px !important;">
-                                        <option><?php echo $crit_row['criteria_ctr']; ?></option>
+                                    <select name="crit_ctr" class="form-control btn-block" required style="text-indent: 10px !important;">
+                                        <option value="<?php echo $crit_row['criteria_ctr']; ?>"><?php echo $crit_row['criteria_ctr']; ?></option>
                                         <?php 
                                         $n1=0;
                                         while($n1<8) { 
@@ -383,7 +456,7 @@
                                             if($cont_query->rowCount()>0) {
                                                 // Skip if exists
                                             } else {
-                                                echo "<option>".$n1."</option>";
+                                                echo "<option value='".$n1."'>".$n1."</option>";
                                             }
                                         } 
                                         ?>
@@ -392,19 +465,19 @@
 
                                 <div class="form-group">
                                     <label>Criteria</label>
-                                    <input name="criteria" type="text" class="form-control" value="<?php echo $crit_row['criteria']; ?>" />
+                                    <input name="criteria" type="text" class="form-control" value="<?php echo $crit_row['criteria']; ?>" required />
                                 </div>
 
                                 <div class="form-group">
                                     <label>Percentage</label>
-                                    <select name="percentage" class="form-control btn-block" style="text-indent: 7px !important;">
-                                        <option><?php echo $crit_row['percentage']; ?></option>
+                                    <select name="percentage" class="form-control btn-block" required style="text-indent: 7px !important;">
+                                        <option value="<?php echo $crit_row['percentage']; ?>"><?php echo $crit_row['percentage']; ?></option>
                                         <?php
                                         $n5=-5;
                                         while($n5<100) { 
                                             $n5=$n5+5;
                                         ?>
-                                        <option><?php echo $n5; ?></option>
+                                        <option value="<?php echo $n5; ?>"><?php echo $n5; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -413,7 +486,7 @@
 
                             <div class="form-actions">
                                 <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
-                                <button name="edit_crit" class="btn btn-success">Update</button>
+                                <button type="submit" name="edit_crit" class="btn btn-success">Update</button>
                             </div>
                         </div>
                     </div>
@@ -422,6 +495,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const toggleButtons = document.querySelectorAll(".toggle-btn");
