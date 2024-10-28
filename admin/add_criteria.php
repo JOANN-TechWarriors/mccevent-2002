@@ -1,92 +1,13 @@
-<?php
-include('header.php');
-include('session.php');
-    
-$sub_event_id = $_GET['sub_event_id'];
-$se_name = $_GET['se_name'];
-
-// Handle form submission
-if(isset($_POST['add_crit'])) {
-    // Sanitize and validate inputs
-    $criteria_ctr = filter_var($_POST['crit_ctr'], FILTER_SANITIZE_NUMBER_INT);
-    $criteria = filter_var($_POST['criteria'], FILTER_SANITIZE_STRING);
-    $percentage = filter_var($_POST['percentage'], FILTER_SANITIZE_NUMBER_INT);
-    
-    try {
-        // Check if the total percentage including new criteria doesn't exceed 100%
-        $current_total_query = $conn->prepare("SELECT SUM(percentage) as total FROM criteria WHERE subevent_id = ?");
-        $current_total_query->execute([$sub_event_id]);
-        $current_total = $current_total_query->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
-        
-        if(($current_total + $percentage) > 100) {
-            echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Total percentage cannot exceed 100%',
-                    confirmButtonColor: '#3085d6'
-                });
-            </script>";
-        } 
-        // Validate if criteria description is not empty
-        else if(empty($criteria)) {
-            echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Criteria description cannot be empty',
-                    confirmButtonColor: '#3085d6'
-                });
-            </script>";
-        }
-        else {
-            // Insert new criteria
-            $insert_query = $conn->prepare("INSERT INTO criteria (criteria_ctr, criteria, percentage, subevent_id) VALUES (?, ?, ?, ?)");
-            $result = $insert_query->execute([$criteria_ctr, $criteria, $percentage, $sub_event_id]);
-            
-            if($result) {
-                echo "<script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Criteria added successfully',
-                        confirmButtonColor: '#3085d6'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = 'sub_event_details_edit.php?sub_event_id=" . $sub_event_id . "&se_name=" . urlencode($se_name) . "';
-                        }
-                    });
-                </script>";
-            } else {
-                echo "<script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Failed to add criteria',
-                        confirmButtonColor: '#3085d6'
-                    });
-                </script>";
-            }
-        }
-    } catch(PDOException $e) {
-        echo "<script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Database error occurred',
-                confirmButtonColor: '#3085d6'
-            });
-        </script>";
-    }
-}
-
-// Rest of your HTML code remains the same...
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+    <?php 
+    include('header.php');
+    include('session.php');
+    
+    $sub_event_id=$_GET['sub_event_id'];
+    $se_name=$_GET['se_name'];
+    ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="shortcut icon" href="../images/logo copy.png"/>
