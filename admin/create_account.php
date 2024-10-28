@@ -86,7 +86,7 @@
                 </label>
               </div>
               <div class="btn-group pull-right">
-                <a href="index.php" type="button" class="btn btn-default">Cancel</a>
+                <a href="index2.php" type="button" class="btn btn-default">Cancel</a>
                 <button name="register" type="submit" class="btn btn-primary">Register</button>
               </div>
             </form>
