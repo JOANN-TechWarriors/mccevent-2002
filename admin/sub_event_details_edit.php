@@ -231,6 +231,100 @@ $se_row = $se_query->fetch();
         height: 30px;
     }
   }
+    /* General table responsiveness */
+    .table-responsive {
+            width: 100%;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Custom table styles */
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 1rem;
+            border-collapse: collapse;
+        }
+        
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
+        }
+        
+        /* Responsive containers */
+        .container {
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        
+        /* Improved button spacing */
+        .btn {
+            margin: 0.25rem !important;
+        }
+        
+        /* Collapse panel improvements */
+        .collapse.indent {
+            max-width: 100%;
+            padding: 15px;
+        }
+        
+        /* Make images responsive */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Breadcrumb responsiveness */
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            list-style: none;
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+        }
+        
+        /* Form controls responsiveness */
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            max-width: 300px;
+            padding: 0.375rem 0.75rem;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .table-responsive {
+                display: block;
+            }
+            
+            .table th,
+            .table td {
+                white-space: nowrap;
+            }
+            
+            .btn-group {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            
+            .collapse.indent {
+                width: 100% !important;
+            }
+            
+            /* Stack buttons on mobile */
+            .btn {
+                display: inline-block;
+                width: auto;
+            }
+        }
   </style>
 </head>
 
