@@ -258,93 +258,89 @@ $se_row = $se_query->fetch();
           }
         }
 
-  /* Table Container */
-  .table-container {
-                overflow-x: auto;
-                margin: 0 20px;
-                background-color: white;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            }
-
-            .table-responsive {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 0;
-            }
-
-            .table-responsive th,
-            .table-responsive td {
-                padding: 12px;
-                border: 1px solid #ddd;
-            }
-
-            .table-responsive th {
-                background-color: #f8f9fa;
-                font-weight: bold;
-                text-align: left;
-            }
-            /* Responsive adjustments */
-        @media screen and (max-width: 768px) {
-            .table-container {
-                margin: 10px;
-                border-radius: 6px;
-            }
-
-            .btn {
-                padding: 4px 8px;
-                font-size: 12px;
-            }
-
-            .table-responsive th,
-            .table-responsive td {
-                padding: 10px;
-            }
-
-            .table-responsive img {
-                max-width: 80px;
-                height: 48px;
-            }
-        }
+        /* Table Container */
         .table-container {
-            margin: 20px;
-            overflow-x: auto;
-            max-width: 40%;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
+                      overflow-x: auto;
+                      margin: 0 20px;
+                      background-color: white;
+                      border-radius: 8px;
+                      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                  }
 
-        .table-responsive {
-            width: 100%;
-            min-width: 600px;
-            border-collapse: collapse;
-            background-color: white;
-        }
+                  .table-responsive {
+                      width: 100%;
+                      border-collapse: collapse;
+                      margin-bottom: 0;
+                  }
 
-        .table-responsive thead {
-            background-color: #f8f9fa;
-        }
+                  .table-responsive th,
+                  .table-responsive td {
+                      padding: 12px;
+                      border: 1px solid #ddd;
+                  }
 
-        .table-responsive th {
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-            color: #333;
-            border-bottom: 2px solid #dee2e6;
-            white-space: nowrap;
-        }
+                  .table-responsive th {
+                      background-color: #f8f9fa;
+                      font-weight: bold;
+                      text-align: left;
+                  }
+                  /* Responsive adjustments */
+              @media screen and (max-width: 768px) {
+                  .table-container {
+                      margin: 10px;
+                      border-radius: 6px;
+                  }
 
-        .table-responsive td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #dee2e6;
-            font-size: 14px;
-            vertical-align: middle;
-        }
+                  .btn {
+                      padding: 4px 8px;
+                      font-size: 12px;
+                  }
 
-        .table-responsive tbody tr:hover {
-            background-color: #f8f9fa;
-        }
+                  .table-responsive th,
+                  .table-responsive td {
+                      padding: 10px;
+                  }
+
+              }
+              .table-container {
+                  margin: 20px;
+                  overflow-x: auto;
+                  max-width: 100%;
+                  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                  border-radius: 8px;
+              }
+
+              .table-responsive {
+                  width: 100%;
+                  min-width: 600px;
+                  border-collapse: collapse;
+                  background-color: white;
+              }
+
+              .table-responsive thead {
+                  background-color: #f8f9fa;
+              }
+
+              .table-responsive th {
+                  padding: 15px;
+                  text-align: left;
+                  font-weight: 600;
+                  font-size: 14px;
+                  color: #333;
+                  border-bottom: 2px solid #dee2e6;
+                  white-space: nowrap;
+              }
+
+              .table-responsive td {
+                  padding: 12px 15px;
+                  border-bottom: 1px solid #dee2e6;
+                  font-size: 14px;
+                  vertical-align: middle;
+              }
+
+              .table-responsive tbody tr:hover {
+                  background-color: #f8f9fa;
+              }
   </style>
 </head>
 
