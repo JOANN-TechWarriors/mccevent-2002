@@ -64,7 +64,7 @@ if(isset($_POST['edit_crit'])) {
                             Swal.showLoading()
                         }
                     }).then(() => {
-                        window.location.href = 'sub_event_details_edit.php?sub_event_id=" . $sub_event_id . "&se_name=" . urlencode($se_name) . "';
+                         window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
                     });
                 </script>";
             } else {
