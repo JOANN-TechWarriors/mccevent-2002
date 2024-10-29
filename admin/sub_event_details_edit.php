@@ -613,7 +613,7 @@ $se_row = $se_query->fetch();
       </section>
     </div>
 
-    <div class="collapse indent" id="criteria" style="width:900px;">
+    <div class="collapse indent" id="criteria">
       <section id="download-bootstrap">
         <div class="page-header">
           <h1>Criteria's Settings &nbsp;<a title="Click to add new Criteria for this Event"
