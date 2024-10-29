@@ -18,15 +18,21 @@ $se_row = $se_query->fetch();
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
+       /* Modal Background */
+    .modal {
+        display: none;
+        /* Hidden by default */
+
+    }
     body {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
-    width: 100vw;      /* Ensures full width */
-    overflow-y: auto;  /* Enables vertical scrolling */
-    overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+        width: 100vw;      /* Ensures full width */
+        overflow-y: auto;  /* Enables vertical scrolling */
+        overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
 }
 
     .sidebar {
@@ -170,87 +176,87 @@ $se_row = $se_query->fetch();
         margin-left: 0; /* No space for sidebar when collapsed */
         }
 
-    .header {
-    background-color: #f8f9fa;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    }
+        .header {
+        background-color: #f8f9fa;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        }
 
-    .header .profile-dropdown {
-    position: relative;
-    display: inline-block;
-    }
-    .header .profile-dropdown .dropdown-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    z-index: 1000;
-}
-
-.header .profile-dropdown:hover .dropdown-menu {
-    display: block;
-}
-
-.header .profile-dropdown .dropdown-menu a {
-    display: block;
-    padding: 10px;
-    color: #333;
-    text-decoration: none;
-}
-
-.header .profile-dropdown .dropdown-menu a:hover {
-    background-color: #f1f1f1;
-}
-
-
-@media (max-width: 768px) {
-    .sidebar {
+        .header .profile-dropdown {
+        position: relative;
+        display: inline-block;
+        }
+        .header .profile-dropdown .dropdown-menu {
+        display: none;
         position: absolute;
-        width: 250px;
-       
-        transform: translateX(-100%); /* Hide sidebar off-screen */
-        display: block; /* Show sidebar when collapsed */
-    }
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+        z-index: 1000;
+      }
 
-    .main {
-        margin-left: 0; /* No space for sidebar on mobile */
-        transition: margin-left 0.3s ease; /* Smooth transition for main content */
-    }
+      .header .profile-dropdown:hover .dropdown-menu {
+          display: block;
+      }
 
-    .sidebar.collapsed {
-        transform: translateX(0); /* Show sidebar when expanded */
-    }
+      .header .profile-dropdown .dropdown-menu a {
+          display: block;
+          padding: 10px;
+          color: #333;
+          text-decoration: none;
+      }
 
-    .sidebar .toggle-btn {
-        display: block; /* Show toggle button on mobile */
-    }
-}
+      .header .profile-dropdown .dropdown-menu a:hover {
+          background-color: #f1f1f1;
+      }
 
-@media (max-width: 576px) {
-    .sidebar-heading {
-        font-size: 14px;
-    }
 
-    .sidebar ul li a {
-        font-size: 14px;
-    }
+      @media (max-width: 768px) {
+          .sidebar {
+              position: absolute;
+              width: 250px;
+            
+              transform: translateX(-100%); /* Hide sidebar off-screen */
+              display: block; /* Show sidebar when collapsed */
+          }
 
-    .header {
-        padding: 5px 10px;
-    }
+          .main {
+              margin-left: 0; /* No space for sidebar on mobile */
+              transition: margin-left 0.3s ease; /* Smooth transition for main content */
+          }
 
-    .header .profile-dropdown img {
-        width: 30px;
-        height: 30px;
-    }
-  }
+          .sidebar.collapsed {
+              transform: translateX(0); /* Show sidebar when expanded */
+          }
+
+          .sidebar .toggle-btn {
+              display: block; /* Show toggle button on mobile */
+          }
+      }
+
+      @media (max-width: 576px) {
+          .sidebar-heading {
+              font-size: 14px;
+          }
+
+          .sidebar ul li a {
+              font-size: 14px;
+          }
+
+          .header {
+              padding: 5px 10px;
+          }
+
+          .header .profile-dropdown img {
+              width: 30px;
+              height: 30px;
+          }
+        }
 
   /* Table Container */
   .table-container {
@@ -303,7 +309,7 @@ $se_row = $se_query->fetch();
         .table-container {
             margin: 20px;
             overflow-x: auto;
-            max-width: 100%;
+            max-width: 40%;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
