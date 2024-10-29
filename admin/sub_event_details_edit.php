@@ -251,6 +251,55 @@ $se_row = $se_query->fetch();
         height: 30px;
     }
   }
+
+  /* Table Container */
+  .table-container {
+                overflow-x: auto;
+                margin: 0 20px;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
+
+            .table-responsive {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 0;
+            }
+
+            .table-responsive th,
+            .table-responsive td {
+                padding: 12px;
+                border: 1px solid #ddd;
+            }
+
+            .table-responsive th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+                text-align: left;
+            }
+            /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .table-container {
+                margin: 10px;
+                border-radius: 6px;
+            }
+
+            .btn {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+
+            .table-responsive th,
+            .table-responsive td {
+                padding: 10px;
+            }
+
+            .table-responsive img {
+                max-width: 80px;
+                height: 48px;
+            }
+        }
   </style>
 </head>
 
@@ -350,7 +399,8 @@ $se_row = $se_query->fetch();
                     </h1>
                     </div>
                     
-                            <table class="table table-bordered" >
+                    <div class="table-container">
+                    <table class="table-responsive">
                              
                                     <thead>
                                     <th>Check to Select</th>
@@ -401,12 +451,9 @@ $se_row = $se_query->fetch();
                                     </form>
                                     
                             </table>
-                     
-                </section>
-                
+             </div>
+        </section>
                 </div>
-
-
 
             <div class="collapse indent" id="judges" style="width:900px;">
               <section id="download-bootstrap" >
@@ -456,13 +503,8 @@ $se_row = $se_query->fetch();
                             href="edit_judge.php?judge_id=<?php echo $jxx_id;?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>"
                             class="btn btn-success"><i class="icon icon-pencil"></i></a>
 
-
                         </td>
                       </tr>
-
-
-
-
 
                       <?php } ?>
                       <tr>

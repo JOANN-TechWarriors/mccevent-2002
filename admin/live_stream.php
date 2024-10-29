@@ -863,7 +863,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-            <div class="table-container">
+    <div class="table-container">
         <table class="table-responsive">
             <thead>
                 <tr>
