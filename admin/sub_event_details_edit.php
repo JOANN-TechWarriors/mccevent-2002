@@ -474,7 +474,7 @@ $se_row = $se_query->fetch();
 
           <div style="border: 0px;" class="accordion-group">
 
-          <div class="collapse indent" id="contestant" style="width:1000px;">
+          <div class="collapse indent" id="contestant" >
                 
                 
                 <section id="download-bootstrap" style="width:90%;">
@@ -540,7 +540,7 @@ $se_row = $se_query->fetch();
         </section>
                 </div>
 
-            <div class="collapse indent" id="judges" style="width:900px;">
+            <div class="collapse indent" id="judges" >
               <section id="download-bootstrap" >
                 <div class="page-header">
                   <h1>Judge's Settings
