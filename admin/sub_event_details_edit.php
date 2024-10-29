@@ -259,88 +259,132 @@ $se_row = $se_query->fetch();
         }
 
         /* Table Container */
-        .table-container {
-                      overflow-x: auto;
-                      margin: 0 20px;
-                      background-color: white;
-                      border-radius: 8px;
-                      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                  }
+          .table-container {
+              margin: 20px;
+              overflow-x: auto;
+              width: calc(100% - 40px); /* Account for margins */
+              box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+              border-radius: 8px;
+              background-color: white;
+          }
 
-                  .table-responsive {
-                      width: 100%;
-                      border-collapse: collapse;
-                      margin-bottom: 0;
-                  }
+          /* Table Styles */
+          .table-responsive {
+              width: 100%;
+              min-width: 800px; /* Ensure minimum width for content */
+              border-collapse: collapse;
+              background-color: white;
+          }
 
-                  .table-responsive th,
-                  .table-responsive td {
-                      padding: 12px;
-                      border: 1px solid #ddd;
-                  }
+          /* Header Styles */
+          .table-responsive thead {
+              background-color: #f8f9fa;
+              position: sticky;
+              top: 0;
+              z-index: 1;
+          }
 
-                  .table-responsive th {
-                      background-color: #f8f9fa;
-                      font-weight: bold;
-                      text-align: left;
-                  }
-                  /* Responsive adjustments */
-              @media screen and (max-width: 768px) {
-                  .table-container {
-                      margin: 10px;
-                      border-radius: 6px;
-                  }
+          .table-responsive th {
+              padding: 15px;
+              text-align: left;
+              font-weight: 600;
+              font-size: 14px;
+              color: #333;
+              border-bottom: 2px solid #dee2e6;
+              white-space: nowrap;
+              background-color: #f8f9fa; /* Needed for sticky header */
+          }
 
-                  .btn {
-                      padding: 4px 8px;
-                      font-size: 12px;
-                  }
+          /* Cell Styles */
+          .table-responsive td {
+              padding: 12px 15px;
+              border-bottom: 1px solid #dee2e6;
+              font-size: 14px;
+              vertical-align: middle;
+          }
 
-                  .table-responsive th,
-                  .table-responsive td {
-                      padding: 10px;
-                  }
+          /* Column Widths */
+          .table-responsive td:nth-child(1) { /* Check to Select */
+              width: 115px;
+              min-width: 115px;
+          }
 
-              }
+          .table-responsive td:nth-child(2) { /* No. */
+              width: 60px;
+              min-width: 60px;
+          }
+
+          .table-responsive td:nth-child(3) { /* Picture */
+              width: 80px;
+              min-width: 80px;
+          }
+
+          .table-responsive td:nth-child(6) { /* Actions */
+              width: 80px;
+              min-width: 80px;
+          }
+
+          /* Image Styles */
+          .table-responsive td img {
+              max-width: 50px;
+              height: auto;
+              display: block;
+          }
+
+          /* Hover Effects */
+          .table-responsive tbody tr:hover {
+              background-color: #f8f9fa;
+          }
+
+          /* Button Styles */
+          .btn {
+              padding: 6px 12px;
+              border-radius: 4px;
+              font-size: 14px;
+              line-height: 1.5;
+              text-decoration: none;
+              display: inline-block;
+          }
+
+          /* Responsive Adjustments */
+          @media screen and (max-width: 768px) {
               .table-container {
-                  margin: 20px;
-                  overflow-x: auto;
-                  max-width: 100%;
-                  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-                  border-radius: 8px;
+                  margin: 10px;
+                  width: calc(100% - 20px);
+                  border-radius: 6px;
+              }
+
+              .btn {
+                  padding: 4px 8px;
+                  font-size: 12px;
+              }
+
+              /* Password input field */
+              input[type="password"] {
+                  width: 100%;
+                  max-width: 200px;
+                  margin-bottom: 10px;
+                  padding: 6px;
+                  border: 1px solid #dee2e6;
+                  border-radius: 4px;
+              }
+          }
+
+          /* Print Styles */
+          @media print {
+              .table-container {
+                  box-shadow: none;
+                  margin: 0;
               }
 
               .table-responsive {
-                  width: 100%;
-                  min-width: 600px;
-                  border-collapse: collapse;
-                  background-color: white;
+                  min-width: 100%;
               }
 
-              .table-responsive thead {
-                  background-color: #f8f9fa;
+              .btn {
+                  display: none;
               }
-
-              .table-responsive th {
-                  padding: 15px;
-                  text-align: left;
-                  font-weight: 600;
-                  font-size: 14px;
-                  color: #333;
-                  border-bottom: 2px solid #dee2e6;
-                  white-space: nowrap;
-              }
-
-              .table-responsive td {
-                  padding: 12px 15px;
-                  border-bottom: 1px solid #dee2e6;
-                  font-size: 14px;
-                  vertical-align: middle;
-              }
-
-              .table-responsive tbody tr:hover {
-                  background-color: #f8f9fa;
-              }
+          }
   </style>
 </head>
 
