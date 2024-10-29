@@ -300,6 +300,45 @@ $se_row = $se_query->fetch();
                 height: 48px;
             }
         }
+        .table-container {
+            margin: 20px;
+            overflow-x: auto;
+            max-width: 100%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        .table-responsive thead {
+            background-color: #f8f9fa;
+        }
+
+        .table-responsive th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+            border-bottom: 2px solid #dee2e6;
+            white-space: nowrap;
+        }
+
+        .table-responsive td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .table-responsive tbody tr:hover {
+            background-color: #f8f9fa;
+        }
   </style>
 </head>
 
