@@ -166,8 +166,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -207,14 +205,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         padding-top: 20px;
         transition: all 0.3s;
         overflow: hidden;
+        z-index: 1000; /* Ensure the sidebar is above the main content */
     }
 
     .sidebar.collapsed {
-        width: 80px;
+        transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
     }
 
     .sidebar .toggle-btn {
-        position: absolute;
+        position:absolute;
         top: 10px;
         right: 18px;
         background-color: transparent;
@@ -244,7 +243,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         list-style-type: none;
         padding: 0;
         margin: 0;
-        font-size: 14px;
     }
 
     .sidebar ul li {
@@ -257,33 +255,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         text-decoration: none;
         display: flex;
         align-items: center;
-        font-size: 16px;
     }
 
     .sidebar ul li a i {
         margin-right: 10px;
-        transition: margin 0.3s;
-        font-size: 14px;
-    }
-
-    .sidebar.collapsed ul li a i {
-        margin-right: 0;
-    }
-
-    .sidebar ul li a span {
-        display: inline-block;
-        transition: opacity 0.3s;
-    }
-
-    .sidebar.collapsed ul li a span {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
     }
 
     .sidebar ul li a:hover {
         background-color: #1a1a2e;
-
     }
 
     .main {
@@ -385,23 +364,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     @media (max-width: 768px) {
         .sidebar {
-            width: 100%;
-            height: auto;
-            position: relative;
-        }
-
-        .sidebar.collapsed {
-            width: 100%;
+            position: absolute;
+            width: 250px;
+           
+            transform: translateX(-100%); /* Hide sidebar off-screen */
+            display: block; /* Show sidebar when collapsed */
         }
 
         .main {
-            margin-left: 0;
+            margin-left: 0; /* No space for sidebar on mobile */
+            transition: margin-left 0.3s ease; /* Smooth transition for main content */
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(0); /* Show sidebar when expanded */
+        }
+
+        .sidebar .toggle-btn {
+            display: block; /* Show toggle button on mobile */
         }
     }
 
     @media (max-width: 576px) {
         .sidebar-heading {
-            font-size: 18px;
+            font-size: 14px;
         }
 
         .sidebar ul li a {
@@ -744,8 +730,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggle-btn">☰</button>
+<div class="sidebar" id="sidebar">
+        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
         <div class="sidebar-heading">
             <img src="../img/logo.png" alt="Logo">
             <div>Event Judging System</div>
@@ -758,16 +744,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         </ul>
     </div>
+  </div>
+
     <!-- Header -->
     <div class="header">
         <div>
-            <!-- Add any left-aligned content here if needed -->
+            <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
         </div>
         <div class="profile-dropdown">
-            <div style="font-size:small;"> <?php echo $name; ?></div>
+           <div style="font-size:small;"> <?php echo $name; ?></div>
             <div class="dropdown-menu">
                 <a href="edit_organizer.php"> Account Settings</a>
-                <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                <a href="logout.php" ><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
         </div>
     </div>
@@ -991,11 +979,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             });
 
-            $('#toggle-btn').on('click', function() {
-                $('#sidebar').toggleClass('collapsed');
-                $('#main-content').toggleClass('collapsed');
-                $(this).toggleClass('collapsed');
-            });
         });
         </script>
         <script>
@@ -1151,6 +1134,22 @@ $(document).ready(function() {
     }
 });
 </script>
-</body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleButtons = document.querySelectorAll(".toggle-btn");
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.querySelector(".main");
 
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Toggle the collapsed class on sidebar
+            sidebar.classList.toggle("collapsed");
+            // Toggle the collapsed class on main content
+            mainContent.classList.toggle("collapsed");
+        });
+    });
+});
+
+</script>
+</body>
 </html>
