@@ -620,7 +620,8 @@ $se_row = $se_query->fetch();
               href="add_criteria.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
               class="btn btn-primary"><i class="icon icon-plus"></i></a></h1>
         </div>
-        <table class="table table-bordered">
+        <div class="table-container">
+        <table class="table-responsive">
           <thead>
             <th>Check to Select</th>
             <th>No.</th>
@@ -725,7 +726,7 @@ $se_row = $se_query->fetch();
             </tbody>
           </form>
         </table>
-
+      </div>
       </section>
     </div>
     <div class="collapse indent" id="textpoll" style="width:900px;">
