@@ -504,7 +504,17 @@ if(isset($_POST['edit_crit'])) {
             </form>
         </div>
     </div>
-
+    <script>
+    Swal.fire({
+      title: 'Updated!',
+      text: ' Updated Successfully!',
+      icon: 'success'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+      }
+    });
+  </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
