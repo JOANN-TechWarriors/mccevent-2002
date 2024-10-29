@@ -477,7 +477,7 @@ $se_row = $se_query->fetch();
           <div class="collapse indent" id="contestant" >
                 
                 
-                <section id="download-bootstrap" style="width:90%;">
+                <section id="download-bootstrap" style="width:100%;">
                     <div class="page-header">
                     <h1>Contestant's Settings 
                     &nbsp;<a title="Click to add new Contestant for this Event" href="add_contestant.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-primary"><i class="icon icon-plus"></i></a> 
