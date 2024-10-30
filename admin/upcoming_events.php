@@ -66,70 +66,74 @@
     }
 
     .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 250px;
-      background-color: #27293d;
-      color: #fff;
-      padding-top: 20px;
-      transition: all 0.3s;
-      overflow: hidden;
-      z-index: 1000;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 250px;
+        background-color: #27293d;
+        color: #fff;
+        padding-top: 20px;
+        transition: all 0.3s;
+        overflow: hidden;
+        z-index: 1000; /* Ensure the sidebar is above the main content */
     }
 
     .sidebar.collapsed {
-      transform: translateX(-100%);
+        transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
     }
 
     .sidebar .toggle-btn {
-      position: absolute;
-      top: 10px;
-      right: 18px;
-      background-color: transparent;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s;
+        position:absolute;
+        top: 10px;
+        right: 18px;
+        background-color: transparent;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .sidebar .toggle-btn i {
+        font-size: 20px;
     }
 
     .sidebar-heading {
-      text-align: center;
-      padding: 10px 0;
-      font-size: 18px;
-      margin-bottom: 10px;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 18px;
+        margin-bottom: 10px;
     }
 
     .sidebar-heading img {
-      max-width: 100px;
-      max-height: 100px;
+        max-width: 100px;
+        max-height: 100px;
     }
 
     .sidebar ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
     }
 
     .sidebar ul li {
-      padding: 15px 20px;
-      transition: all 0.3s;
+        padding: 15px 20px;
+        transition: all 0.3s;
     }
 
     .sidebar ul li a {
-      color: #fff;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
     }
 
     .sidebar ul li a i {
-      margin-right: 10px;
+        margin-right: 10px;
     }
 
     .sidebar ul li a:hover {
-      background-color: #1a1a2e;
+        background-color: #1a1a2e;
     }
 
     .header {
