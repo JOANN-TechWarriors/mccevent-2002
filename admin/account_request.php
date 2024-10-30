@@ -267,7 +267,7 @@ if (isset($_POST['deleteStudent'])) {
         </div>
     <ul>
         <li><a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-        <li><a href="account_request.php"><i class="fas fa-clipboard-list"></i> <span>Account Request</span></a></li>
+        <li><a href="account_request.php"><i class="fas fa-clipboard-list"></i> <span>ACCOUNT REQUEST</span></a></li>
     </ul>
   </div>
 
