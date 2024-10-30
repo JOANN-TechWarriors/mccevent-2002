@@ -262,7 +262,7 @@
             <div class="controls-right">
                 <div class="viewer-count-container">
                     <i class="fas fa-eye"></i>
-                    <span id="viewer-count">0</span>
+                    <!-- <span id="viewer-count">0</span> -->
                 </div>
             </div>
         </div>
