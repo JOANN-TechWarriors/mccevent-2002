@@ -77,6 +77,7 @@
             z-index: 10;
             display: flex;
             align-items: center;
+            justify-content: space-between;
         }
 
         .stream-title h1 {
@@ -85,6 +86,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            flex: 1;
+            padding-right: 10px;
         }
 
         .player-wrapper { 
@@ -144,12 +147,45 @@
             cursor: not-allowed;
         }
 
+        .rotate-button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .rotate-button:hover {
+            transform: scale(1.1);
+        }
+
+        .rotate-button i {
+            font-size: 1.2rem;
+        }
+
+        .controls-left, .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .viewer-count-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         /* Portrait orientation specific styles */
         @media screen and (orientation: portrait) {
             .player-wrapper {
                 /* Adjust aspect ratio for portrait mode */
                 height: 56.25vw; /* 16:9 aspect ratio */
                 margin: var(--header-height) auto 0;
+            }
+
+            .rotate-button .fa-rotate {
+                transform: rotate(90deg);
             }
         }
 
@@ -158,6 +194,10 @@
             .player-wrapper {
                 /* Use maximum available height in landscape */
                 height: calc(100% - var(--header-height) - var(--controls-height));
+            }
+
+            .rotate-button .fa-rotate {
+                transform: rotate(0deg);
             }
         }
 
@@ -187,14 +227,22 @@
     <div class="stream-container">
         <div class="stream-title">
             <h1><?php echo htmlspecialchars($stream['stream_title']); ?></h1>
+            <button id="rotate-screen" class="rotate-button" title="Rotate Screen">
+                <i class="fas fa-rotate"></i>
+            </button>
         </div>
         <div class="player-wrapper">
             <div id="remote-playerlist" class="player"></div>
         </div>
         <div class="controls">
-            <button id="leave" type="button" class="btn btn-live" disabled>Leave Stream</button>
-            <div id="viewer-count-container">
-                <i class="fas fa-eye"></i> <span id="viewer-count">0</span>
+            <div class="controls-left">
+                <button id="leave" type="button" class="btn btn-live" disabled>Leave Stream</button>
+            </div>
+            <div class="controls-right">
+                <div class="viewer-count-container">
+                    <i class="fas fa-eye"></i>
+                    <span id="viewer-count">0</span>
+                </div>
             </div>
         </div>
     </div>
@@ -216,10 +264,40 @@
             role: "audience"
         };
 
+        // Screen orientation handling
+        const rotateButton = document.getElementById('rotate-screen');
+        
+        async function toggleOrientation() {
+            try {
+                const screen = window.screen;
+                if (screen.orientation) {
+                    if (screen.orientation.type.includes('portrait')) {
+                        await screen.orientation.lock('landscape');
+                    } else {
+                        await screen.orientation.lock('portrait');
+                    }
+                } else {
+                    // Fallback for browsers that don't support Screen Orientation API
+                    alert('Screen rotation is not supported in your browser');
+                }
+            } catch (error) {
+                console.error('Error rotating screen:', error);
+                alert('Unable to rotate screen. Please rotate your device manually.');
+            }
+        }
+
+        rotateButton.addEventListener('click', toggleOrientation);
+
         // Handle orientation changes
         window.addEventListener('resize', function() {
             adjustPlayerSize();
         });
+
+        if (screen.orientation) {
+            screen.orientation.addEventListener('change', function() {
+                adjustPlayerSize();
+            });
+        }
 
         function adjustPlayerSize() {
             const playerWrapper = document.querySelector('.player-wrapper');
