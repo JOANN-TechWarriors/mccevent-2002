@@ -174,22 +174,24 @@ if (!isset($_SESSION['admin_id'])) {
 
     @media (max-width: 768px) {
         .sidebar {
-            width: 100%;
-            height: auto;
-            position: relative;
-            overflow: visible;
-        }
-
-        .sidebar.collapsed {
-            width: 100%;
+            position: absolute;
+            width: 250px;
+           
+            transform: translateX(-100%); /* Hide sidebar off-screen */
+            display: block; /* Show sidebar when collapsed */
         }
 
         .main {
-            margin-left: 0;
+            margin-left: 0; /* No space for sidebar on mobile */
+            transition: margin-left 0.3s ease; /* Smooth transition for main content */
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(0); /* Show sidebar when expanded */
         }
 
         .sidebar .toggle-btn {
-            display: block;
+            display: block; /* Show toggle button on mobile */
         }
     }
 
