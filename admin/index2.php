@@ -81,7 +81,7 @@
                     <h3 class="mb-5"><strong >MCC Event Judging System</strong></h3>
                 </div>
                 <div class="col-md-6 login-side">
-                    <h2 class="mb-4">Organizer Login</h2>
+                    <h2 class="mb-4">ORGANIZER LOGIN</h2>
                     <form id="login-form" method="POST" action="login.php" class="login-form">
                         <div class="mb-3">
                             <input type="email" class="form-control" name="username" placeholder="Username" required autofocus>
