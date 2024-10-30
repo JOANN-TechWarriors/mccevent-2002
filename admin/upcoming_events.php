@@ -523,12 +523,6 @@
   $('#eventStart, #eventEnd, #updateeventStart, #updateeventEnd').on('change', function() {
     validateTimeInput(this);
   });
-
-  // $('#toggle-btn').on('click', function() {
-  //   $('#sidebar').toggleClass('collapsed');
-  //   $('#main-content').toggleClass('collapsed');
-  //   $(this).toggleClass('collapsed');
-  // });
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -547,6 +541,5 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 </script>
-
 </body>
 </html>
