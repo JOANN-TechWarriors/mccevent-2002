@@ -120,7 +120,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div>
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     <i class="icon-user"></i> STUDENT ID</label>
-                            <div class="relative">
                                 <input
                                     type="text" 
                                     name="student_id" 
@@ -129,7 +128,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     required 
                                     autofocus
                                 >
-                            </div>
                             </div>
 
                             <div class="flex items-center justify-between">
