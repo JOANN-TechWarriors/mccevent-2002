@@ -347,10 +347,6 @@ body {
         height: 40px;
         cursor: pointer;
     }
-/*     .button {
-  width: 100px; /* Set appropriate width */
-  height: 40px; /* Set appropriate height */
-} */
 
     .header .profile-dropdown .dropdown-menu {
         display: none;
@@ -460,7 +456,7 @@ body {
     }
     }
 
-    /* Table Container */
+/* Table Container */
 .table-responsive-container {
     width: 100%;
     max-width: 1000px;
@@ -477,7 +473,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 0;
-    background: #fff;
+    min-width: 800px; /* Ensures table maintains minimum width */
 }
 
 .table-custom thead th {
@@ -488,6 +484,10 @@ body {
     text-align: left;
     border-bottom: 2px solid #dee2e6;
     white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f8f9fa;
 }
 
 .table-custom tbody td {
@@ -530,12 +530,12 @@ body {
     display: flex;
     gap: 5px;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .btn-group-custom .btn {
     padding: 6px 12px;
-    margin: 2px;
+    white-space: nowrap;
 }
 
 /* Status Badge */
@@ -545,6 +545,7 @@ body {
     border-radius: 4px;
     font-size: 0.875rem;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .status-badge.active {
@@ -559,17 +560,31 @@ body {
 
 /* Responsive Design */
 @media screen and (max-width: 992px) {
-    .table-custom {
-        display: block;
-    }
-    
-    .btn-group-custom {
-        flex-direction: row;
+    .table-responsive-container {
+        margin: 10px 0;
+        padding: 10px;
     }
     
     .btn-group-custom .btn {
         padding: 4px 8px;
         font-size: 0.875rem;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .table-responsive-container {
+        padding: 5px;
+    }
+    
+    .table-custom thead th,
+    .table-custom tbody td {
+        padding: 8px 10px;
+        font-size: 0.875rem;
+    }
+    
+    .btn-group-custom .btn {
+        padding: 3px 6px;
+        font-size: 0.75rem;
     }
 }
 
@@ -666,7 +681,9 @@ body {
 
 .showing-entries {
     color: #666;
-}/* Table Header and Controls */
+}
+
+/* Table Header and Footer Styles */
 .table-header {
     display: flex;
     flex-wrap: wrap;
@@ -677,38 +694,13 @@ body {
     padding: 10px;
 }
 
-.entries-selector {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    white-space: nowrap;
-}
-
-.entries-selector select {
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: white;
-}
-
+.entries-selector,
 .search-box {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex: 1;
-    max-width: 300px;
-    margin-left: auto;
 }
 
-.search-box input {
-    flex: 1;
-    padding: 6px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 100%;
-}
-
-/* Table Footer and Pagination */
 .table-footer {
     display: flex;
     flex-wrap: wrap;
@@ -718,6 +710,8 @@ body {
     margin-top: 20px;
     padding: 10px;
 }
+
+/* Table Footer and Pagination */
 
 .showing-entries {
     color: #666;
@@ -776,17 +770,14 @@ body {
     .table-header {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
     }
     
     .search-box {
-        max-width: 100%;
-        margin-left: 0;
+        width: 100%;
     }
     
     .table-footer {
         flex-direction: column;
-        align-items: center;
         text-align: center;
     }
     
