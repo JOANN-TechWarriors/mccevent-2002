@@ -225,11 +225,11 @@ if (!isset($_SESSION['admin_id'])) {
 </head>
 <body>
 <div class="sidebar" id="sidebar">
-  <button class="toggle-btn" id="toggle-btn">☰</button>
-    <div class="sidebar-heading">
-      <img src="../img/logo.png" alt="Logo">
-      <div>Event Judging System</div>
-    </div>
+        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
+        <div class="sidebar-heading">
+            <img src="../img/logo.png" alt="Logo">
+            <div>Event Judging System</div>
+        </div>
     <ul>
         <li><a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
         <li><a href="account_request.php"><i class="fas fa-clipboard-list"></i> <span>Account Request</span></a></li>
