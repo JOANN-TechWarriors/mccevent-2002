@@ -23,188 +23,260 @@
       background-color: #fff;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
     }
 
-    .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 250px;
-    background-color: #27293d;
-    color: #fff;
-    padding-top: 20px;
-    transition: all 0.3s;
-    overflow: hidden;
-    z-index: 1000; /* Ensure the sidebar is above the main content */
+    /* Calendar Specific Responsive Styles */
+    .fc {
+      max-width: 100%;
+      height: auto !important;
     }
 
-    .sidebar.collapsed {
-    transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
-    }
-    .sidebar .toggle-btn {
-    position: absolute;
-    top: 10px;
-    right: 18px;
-    background-color: transparent;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.sidebar .toggle-btn i {
-    font-size: 20px;
-}
-
-.sidebar-heading {
-    text-align: center;
-    padding: 10px 0;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.sidebar-heading img {
-    max-width: 100px;
-    max-height: 100px;
-}
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
-    padding: 15px 20px;
-    transition: all 0.3s;
-}
-
-.sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar ul li a i {
-    margin-right: 10px;
-}
-/*     .sidebar.collapsed ul li a i {
-        margin-right: 0;
+    .fc .fc-toolbar {
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
-    .sidebar ul li a span {
-        display: inline-block;
-        transition: opacity 0.3s;
+    .fc .fc-toolbar-title {
+      font-size: 1.2em;
     }
 
-    .sidebar.collapsed ul li a span {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
-    } */
-
-    .sidebar ul li a:hover {
-        background-color: #1a1a2e;
-    }
-    
-    .header{
-        background-color: #f8f9fa;
-        padding: 10px 20px;
+    @media (max-width: 768px) {
+      .fc .fc-toolbar {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #ddd;
-    }
-    .header .profile-dropdown {
-        position: relative;
-        display: inline-block;
-    }
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
 
-    .header .profile-dropdown img {
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
-    }
+      .fc .fc-toolbar-title {
+        font-size: 1em;
+        text-align: center;
+      }
 
-    .header .profile-dropdown .dropdown-menu {
-        display: none;
-        position: absolute;
-        right: 0;
-        background-color: #fff;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        overflow: hidden;
-        z-index: 1000;
-    }
+      .fc .fc-button {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.9em;
+      }
 
-    .header .profile-dropdown:hover .dropdown-menu {
-        display: block;
-    }
-
-    .header .profile-dropdown .dropdown-menu a {
-        display: block;
-        padding: 10px;
-        color: #333;
-        text-decoration: none;
-    }
-
-    .header .profile-dropdown .dropdown-menu a:hover {
-        background-color: #f1f1f1;
-    }
-
-    .main {
-    margin-left: 250px; /* Space for the sidebar */
-    padding: 20px;
-    transition: margin-left 0.3s ease; /* Smooth transition for main content */
-}
-
-.main.collapsed {
-    margin-left: 0; /* No space for sidebar when collapsed */
-}
-   @media (max-width: 768px) {
-    .sidebar {
-        position: absolute;
-        width: 250px;
-       
-        transform: translateX(-100%); /* Hide sidebar off-screen */
-        display: block; /* Show sidebar when collapsed */
-    }
-
-    .main {
-        margin-left: 0; /* No space for sidebar on mobile */
-        transition: margin-left 0.3s ease; /* Smooth transition for main content */
-    }
-
-    .sidebar.collapsed {
-        transform: translateX(0); /* Show sidebar when expanded */
-    }
-
-    .sidebar .toggle-btn {
-        display: block; /* Show toggle button on mobile */
-    }
-}eft: 0;
+      .fc .fc-view-harness {
+        height: auto !important;
+        min-height: 400px;
       }
     }
-  @media (max-width: 576px) {
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      background-color: #27293d;
+      color: #fff;
+      padding-top: 20px;
+      transition: all 0.3s;
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar .toggle-btn {
+      position: absolute;
+      top: 10px;
+      right: 18px;
+      background-color: transparent;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
     .sidebar-heading {
-        font-size: 14px;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar-heading img {
+      max-width: 100px;
+      max-height: 100px;
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar ul li {
+      padding: 15px 20px;
+      transition: all 0.3s;
     }
 
     .sidebar ul li a {
-        font-size: 14px;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .sidebar ul li a i {
+      margin-right: 10px;
+    }
+
+    .sidebar ul li a:hover {
+      background-color: #1a1a2e;
     }
 
     .header {
-        padding: 5px 10px;
+      background-color: #f8f9fa;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .header .profile-dropdown {
+      position: relative;
+      display: inline-block;
     }
 
     .header .profile-dropdown img {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+
+    .header .profile-dropdown .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    .header .profile-dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    .main {
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main.collapsed {
+      margin-left: 0;
+    }
+
+    /* Modal Responsive Styles */
+    .modal-dialog {
+      max-width: 95%;
+      margin: 1.75rem auto;
+    }
+
+    @media (min-width: 576px) {
+      .modal-dialog {
+        max-width: 500px;
+      }
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 1024px) {
+      .fc .fc-toolbar-title {
+        font-size: 1.1em;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.collapsed {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 10px;
+      }
+
+      .header {
+        padding: 5px 10px;
+      }
+
+      .fc .fc-toolbar-title {
+        font-size: 1em;
+      }
+
+      .fc .fc-button {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.8em;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .sidebar-heading {
+        font-size: 14px;
+      }
+
+      .sidebar ul li a {
+        font-size: 14px;
+      }
+
+      .header .profile-dropdown img {
         width: 30px;
         height: 30px;
+      }
+
+      .fc .fc-toolbar-title {
+        font-size: 0.9em;
+      }
+
+      .fc .fc-button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.2rem;
+      }
+
+      .fc .fc-button {
+        padding: 0.15rem 0.3rem;
+        font-size: 0.75em;
+      }
     }
+
+    /* Calendar Container */
+    #calendar {
+      margin-top: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    /* Add Event Button */
+    #addEvent {
+      margin-bottom: 15px;
+      width: auto;
+    }
+
+    @media (max-width: 480px) {
+      #addEvent {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -324,15 +396,23 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-
-    calendar = new FullCalendar.Calendar(calendarEl, {
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: window.innerWidth < 768 ? 'listMonth' : 'dayGridMonth',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
             right: 'dayGridMonth,listMonth'
         },
+        windowResize: function(view) {
+            if (window.innerWidth < 768) {
+                calendar.changeView('listMonth');
+            } else {
+                calendar.changeView('dayGridMonth');
+            }
+            calendar.updateSize();
+        },
         initialDate: '<?php echo date('Y-m-d') ?>',
-        weekNumbers: true,
+        weekNumbers: window.innerWidth >= 768,
         navLinks: true,
         editable: true,
         selectable: true,
@@ -343,6 +423,10 @@
         nowIndicator: true,
         dayMaxEvents: true,
         events: 'get-events.php',
+        height: 'auto',
+        contentHeight: 'auto',
+        aspectRatio: 1.8,
+        handleWindowResize: true,
         select: function(info) {
             var start = roundToNearestHalfHour(info.start);
             var end = moment(start).add(30, 'minutes');
@@ -523,6 +607,11 @@
   $('#eventStart, #eventEnd, #updateeventStart, #updateeventEnd').on('change', function() {
     validateTimeInput(this);
   });
+  
+   // Handle window resize
+   window.addEventListener('resize', function() {
+        calendar.updateSize();
+    });
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
