@@ -39,6 +39,10 @@ if (!isset($_SESSION['admin_id'])) {
         background-color: #fff;
         margin: 0;
         padding: 0;
+        min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+        width: 100vw;      /* Ensures full width */
+        overflow-y: auto;  /* Enables vertical scrolling */
+        overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
     }
     .sidebar {
         position: fixed;
@@ -51,14 +55,15 @@ if (!isset($_SESSION['admin_id'])) {
         padding-top: 20px;
         transition: all 0.3s;
         overflow: hidden;
+        z-index: 1000; /* Ensure the sidebar is above the main content */
     }
 
     .sidebar.collapsed {
-        width: 80px;
+        transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
     }
 
     .sidebar .toggle-btn {
-        position: absolute;
+        position:absolute;
         top: 10px;
         right: 18px;
         background-color: transparent;
@@ -104,22 +109,6 @@ if (!isset($_SESSION['admin_id'])) {
 
     .sidebar ul li a i {
         margin-right: 10px;
-        transition: margin 0.3s;
-    }
-
-    .sidebar.collapsed ul li a i {
-        margin-right: 0;
-    }
-
-    .sidebar ul li a span {
-        display: inline-block;
-        transition: opacity 0.3s;
-    }
-
-    .sidebar.collapsed ul li a span {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
     }
 
     .sidebar ul li a:hover {
@@ -250,7 +239,7 @@ if (!isset($_SESSION['admin_id'])) {
     <!-- Header -->
     <div class="header">
         <div>
-            <!-- Add any left-aligned content here if needed -->
+        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
         </div>
         <div class="profile-dropdown">
            <div style="font-size:small;"> Administrator</div>
@@ -419,6 +408,23 @@ if (!isset($_SESSION['admin_id'])) {
             maintainAspectRatio: false
         }
     });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleButtons = document.querySelectorAll(".toggle-btn");
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.querySelector(".main");
+
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Toggle the collapsed class on sidebar
+            sidebar.classList.toggle("collapsed");
+            // Toggle the collapsed class on main content
+            mainContent.classList.toggle("collapsed");
+        });
+    });
+});
+
 </script>
 <!-- Optional JavaScript -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
