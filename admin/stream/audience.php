@@ -45,10 +45,10 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            background-color: #000;
         }
 
         body { 
-            background-color: #000; 
             display: flex;
             flex-direction: column;
             position: fixed;
@@ -63,12 +63,13 @@
             width: 100%;
             height: 100%;
             position: relative;
+            transition: transform 0.3s ease-in-out;
         }
 
         .stream-title { 
             background-color: rgba(47, 63, 176, 0.9);
             color: white; 
-            padding: 10px;
+            padding: 10px 15px;
             height: var(--header-height);
             position: absolute;
             top: 0;
@@ -96,6 +97,7 @@
             width: 100%;
             height: calc(100% - var(--header-height) - var(--controls-height));
             margin-top: var(--header-height);
+            background-color: #000;
         }
 
         #remote-playerlist {
@@ -153,7 +155,11 @@
             color: white;
             padding: 5px 10px;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
         }
 
         .rotate-button:hover {
@@ -162,6 +168,7 @@
 
         .rotate-button i {
             font-size: 1.2rem;
+            transition: transform 0.3s ease;
         }
 
         .controls-left, .controls-right {
@@ -174,31 +181,41 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            color: #2F3FB0;
+            font-weight: 500;
         }
 
-        /* Portrait orientation specific styles */
-        @media screen and (orientation: portrait) {
-            .player-wrapper {
-                /* Adjust aspect ratio for portrait mode */
-                height: 56.25vw; /* 16:9 aspect ratio */
-                margin: var(--header-height) auto 0;
-            }
-
-            .rotate-button .fa-rotate {
-                transform: rotate(90deg);
-            }
+        /* Rotation styles */
+        .stream-container.landscape {
+            transform: rotate(90deg);
+            transform-origin: center center;
+            width: 100vh;
+            height: 100vw;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(90deg);
         }
 
-        /* Landscape orientation specific styles */
-        @media screen and (orientation: landscape) {
-            .player-wrapper {
-                /* Use maximum available height in landscape */
-                height: calc(100% - var(--header-height) - var(--controls-height));
-            }
+        .stream-container.portrait {
+            transform: rotate(0deg);
+            transform-origin: center center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            top: 0;
+            left: 0;
+        }
 
-            .rotate-button .fa-rotate {
-                transform: rotate(0deg);
-            }
+        /* Fullscreen styles */
+        .fullscreen {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
         }
 
         /* Small screen adjustments */
@@ -220,14 +237,18 @@
                 padding: 4px 12px;
                 font-size: 0.875rem;
             }
+
+            .rotate-button i {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="stream-container">
+    <div class="stream-container portrait">
         <div class="stream-title">
             <h1><?php echo htmlspecialchars($stream['stream_title']); ?></h1>
-            <button id="rotate-screen" class="rotate-button" title="Rotate Screen">
+            <button id="rotate-screen" class="rotate-button" aria-label="Rotate Screen">
                 <i class="fas fa-rotate"></i>
             </button>
         </div>
@@ -251,7 +272,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
     <script>
-        // Create Agora client
+        // Agora client setup
         var client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
         var remoteUsers = {};
 
@@ -264,70 +285,108 @@
             role: "audience"
         };
 
-        // Screen orientation handling
+        // Stream container and rotation elements
+        const streamContainer = document.querySelector('.stream-container');
         const rotateButton = document.getElementById('rotate-screen');
-        
-        async function toggleOrientation() {
+        const rotateIcon = rotateButton.querySelector('i');
+        let isLandscape = false;
+        let isFullscreen = false;
+
+        // Fullscreen handling
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log('Error attempting to enable fullscreen:', err);
+                });
+                isFullscreen = true;
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+                isFullscreen = false;
+            }
+        }
+
+        // Screen rotation
+        async function toggleRotation() {
+            isLandscape = !isLandscape;
+            
+            streamContainer.classList.toggle('landscape');
+            streamContainer.classList.toggle('portrait');
+            
+            rotateIcon.style.transform = isLandscape ? 'rotate(90deg)' : 'rotate(0deg)';
+            
+            if (isLandscape && !isFullscreen) {
+                await toggleFullscreen();
+            }
+            
+            adjustPlayerSize();
+            
+            // Force video resize after rotation
+            setTimeout(adjustPlayerSize, 300);
+        }
+
+        // Screen rotation handler
+        async function handleRotation() {
             try {
-                const screen = window.screen;
-                if (screen.orientation) {
-                    if (screen.orientation.type.includes('portrait')) {
+                if (screen.orientation && screen.orientation.lock) {
+                    const currentOrientation = screen.orientation.type;
+                    if (currentOrientation.includes('portrait')) {
                         await screen.orientation.lock('landscape');
                     } else {
                         await screen.orientation.lock('portrait');
                     }
                 } else {
-                    // Fallback for browsers that don't support Screen Orientation API
-                    alert('Screen rotation is not supported in your browser');
+                    await toggleRotation();
                 }
             } catch (error) {
-                console.error('Error rotating screen:', error);
-                alert('Unable to rotate screen. Please rotate your device manually.');
+                console.log('Using CSS rotation fallback');
+                await toggleRotation();
             }
         }
 
-        rotateButton.addEventListener('click', toggleOrientation);
+        // Event listeners
+        rotateButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await handleRotation();
+        });
 
-        // Handle orientation changes
-        window.addEventListener('resize', function() {
+        document.addEventListener('fullscreenchange', () => {
+            isFullscreen = !!document.fullscreenElement;
             adjustPlayerSize();
         });
 
-        if (screen.orientation) {
-            screen.orientation.addEventListener('change', function() {
-                adjustPlayerSize();
+        window.addEventListener('resize', () => {
+            adjustPlayerSize();
+        });
+
+        // Player size adjustment
+        function adjustPlayerSize() {
+            const playerWrapper = document.querySelector('.player-wrapper');
+            
+            if (isLandscape) {
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight;
+                
+                playerWrapper.style.width = `${screenHeight}px`;
+                playerWrapper.style.height = `${screenWidth}px`;
+            } else {
+                const containerWidth = streamContainer.clientWidth;
+                playerWrapper.style.width = '100%';
+                playerWrapper.style.height = `${containerWidth * 9 / 16}px`;
+            }
+
+            // Update video elements
+            const videos = document.querySelectorAll('.player');
+            videos.forEach(video => {
+                if (video.style) {
+                    video.style.width = '100%';
+                    video.style.height = '100%';
+                }
             });
         }
 
-        function adjustPlayerSize() {
-            const playerWrapper = document.querySelector('.player-wrapper');
-            const container = document.querySelector('.stream-container');
-            const isPortrait = window.innerHeight > window.innerWidth;
-
-            if (isPortrait) {
-                // In portrait mode, maintain 16:9 aspect ratio
-                const width = container.clientWidth;
-                playerWrapper.style.height = (width * 9 / 16) + 'px';
-            } else {
-                // In landscape mode, use available height
-                playerWrapper.style.height = 'calc(100% - var(--header-height) - var(--controls-height))';
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", async function() {
-            try {
-                adjustPlayerSize();
-                await join();
-                $("#leave").attr("disabled", false);
-            } catch (error) {
-                console.error(error);
-            }
-        });
-
-        $("#leave").click(function (e) {
-            leave();
-        });
-
+        // Agora client functions
         async function join() {
             client.setClientRole(options.role);
 
@@ -381,7 +440,7 @@
         }
 
         function handleUserLeft(user) {
-            console.log("User", user.uid, "left");
+            console.log("User", user.left, "left");
             updateViewerCount();
         }
 
@@ -389,6 +448,31 @@
             const count = Object.keys(remoteUsers).length;
             $("#viewer-count").text(count);
         }
+
+        // Initialize
+        document.addEventListener("DOMContentLoaded", async function() {
+            try {
+                adjustPlayerSize();
+                await join();
+                $("#leave").attr("disabled", false);
+            } catch (error) {
+                console.error("Error during initialization:", error);
+            }
+        });
+
+        // Handle visibility change
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                // Page is hidden
+                if (isLandscape) {
+                    streamContainer.classList.remove('landscape');
+                    streamContainer.classList.add('portrait');
+                    isLandscape = false;
+                    rotateIcon.style.transform = 'rotate(0deg)';
+                }
+            }
+            adjustPlayerSize();
+        });
     </script>
 </body>
 </html>
