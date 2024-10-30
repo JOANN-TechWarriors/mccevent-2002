@@ -244,7 +244,7 @@ if (!isset($_SESSION['admin_id'])) {
         <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
         </div>
         <div class="profile-dropdown">
-           <div style="font-size:small;"> Joann R. Bilbao</div>
+           <div style="font-size:small;"> Joann R. Rebamonte</div>
             <div class="dropdown-menu">
                 <a href="admin_logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
