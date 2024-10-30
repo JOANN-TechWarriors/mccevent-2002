@@ -121,10 +121,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     <i class="icon-user"></i> STUDENT ID
                                 </label>
-                                <input class="form-control btn-block" style="text-indent: 7px !important;"
+                                <input
                                     type="text" 
                                     name="student_id" 
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Enter Student ID #" 
                                     required 
                                     autofocus
