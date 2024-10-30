@@ -247,7 +247,7 @@
 <body>
     <div class="stream-container portrait">
         <div class="stream-title">
-            <h1><?php echo htmlspecialchars($stream['stream_title']); ?></h1>
+            <h2><?php echo htmlspecialchars($stream['stream_title']); ?></h2>
             <button id="rotate-screen" class="rotate-button" aria-label="Rotate Screen">
                 <i class="fas fa-rotate"></i>
             </button>
