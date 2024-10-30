@@ -318,13 +318,6 @@ if (!isset($_SESSION['admin_id'])) {
 <!-- Chart.js JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
- 
-    document.getElementById('toggle-btn').addEventListener('click', function() {
-        var sidebar = document.getElementById('sidebar');
-        var main = document.getElementById('main');
-        sidebar.classList.toggle('collapsed');
-        main.classList.toggle('collapsed');
-    });
     // Pie Chart
     var ctxPie = document.getElementById('eventsPieChart').getContext('2d');
     var eventsPieChart = new Chart(ctxPie, {
