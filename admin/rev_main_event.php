@@ -342,7 +342,6 @@
         });
     });
 
-
     // Print result button handler with direct print
     document.querySelectorAll('.print-result').forEach(button => {
         button.addEventListener('click', function(e) {
@@ -370,7 +369,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
-
 </script>
 </body>
 </html>
