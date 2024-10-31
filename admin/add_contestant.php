@@ -434,7 +434,6 @@ $se_name=$_GET['se_name'];
     } 
     ?>
 
-    <?php include('footer.php'); ?>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
