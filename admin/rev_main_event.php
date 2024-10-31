@@ -165,14 +165,14 @@ include('header2.php');
             background-color: rgba(0, 0, 0, 0.05);
         }
 
-        /* Print Styles */
         @media print {
-            /* Hide non-printable elements */
-            .sidebar, .header, .breadcrumb, .btn, 
-            .panel-heading, input[type="radio"], 
-            .no-print, .toggle-btn, #toggle-btn-mobile {
-                display: none !important;
-            }
+      .sidebar, .header, .no-print {
+        display: none !important;
+      }
+      .main {
+        margin-left: 0 !important;
+        padding: 0 !important;
+      }
 
             /* Reset layout for printing */
             body {

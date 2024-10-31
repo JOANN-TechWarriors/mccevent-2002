@@ -368,13 +368,7 @@
       });
     });
 
-    // Sidebar toggle
-    // document.getElementById("toggle-btn").addEventListener("click", function() {
-    //   var sidebar = document.getElementById("sidebar");
-    //   var mainContent = document.getElementById("main-content");
-    //   sidebar.classList.toggle("collapsed");
-    //   mainContent.classList.toggle("collapsed");
-    // });
+
   </script>
   <script>
 document.addEventListener("DOMContentLoaded", function() {
