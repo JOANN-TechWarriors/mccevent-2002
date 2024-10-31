@@ -305,7 +305,7 @@
     <div class="col-lg-3"></div>
   </div>
  
-  <?php include("footer.php") ?>
+  <center><?php include("footer.php") ?></center>
     
   <script src="..//assets/js/jquery.js"></script>
   <script src="..//assets/js/bootstrap-transition.js"></script>
