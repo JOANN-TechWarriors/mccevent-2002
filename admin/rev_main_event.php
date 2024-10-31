@@ -436,7 +436,7 @@ include('header2.php');
             const printWindow = window.open(
                 `print_all_results.php?main_event_id=${eventId}`,
                 '_blank',
-                'width=1000,height=800'
+                'width=2000,height=800'
             );
 
             printWindow.onload = function() {
