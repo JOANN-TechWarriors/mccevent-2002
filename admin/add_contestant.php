@@ -410,7 +410,6 @@ $se_name=$_GET['se_name'];
             </div>
         </div>
     </div>
-    <center><?php include("footer.php") ?></center>
 
     <?php 
     if(isset($_POST['add_contestant'])) {
@@ -434,6 +433,7 @@ $se_name=$_GET['se_name'];
     } 
     ?>
 
+<center><?php include("footer.php") ?></center>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
