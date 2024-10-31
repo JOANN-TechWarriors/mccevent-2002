@@ -90,8 +90,8 @@
                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
                             <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
                         </div>
                         <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
                     </form>
