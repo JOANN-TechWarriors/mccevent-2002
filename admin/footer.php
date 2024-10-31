@@ -4,7 +4,7 @@
     <footer >
       <div class="container">
       
-        <font size="2" class="pull-left"><strong> Event Judging  System &COPY; <?= date("Y") ?>  </strong></font> <br />
+        <center><font size="2" class="pull-left"><strong> Event Judging  System &COPY; <?= date("Y") ?>  </strong></font> <br /></center>
         
       </div>
     </footer>
