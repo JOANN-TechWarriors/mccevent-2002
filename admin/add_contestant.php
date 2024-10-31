@@ -410,6 +410,7 @@ $se_name=$_GET['se_name'];
             </div>
         </div>
     </div>
+    <center><?php include("footer.php") ?></center>
 
     <?php 
     if(isset($_POST['add_contestant'])) {

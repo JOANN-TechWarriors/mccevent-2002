@@ -426,7 +426,7 @@
         </div>
     </div>
 
-    <?php include('footer.php'); ?>
+    <center><?php include("footer.php") ?></center>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

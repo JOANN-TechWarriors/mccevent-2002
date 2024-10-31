@@ -215,20 +215,7 @@
 .sidebar ul li a i {
     margin-right: 10px;
 }
-/*     .sidebar.collapsed ul li a i {
-        margin-right: 0;
-    }
 
-    .sidebar ul li a span {
-        display: inline-block;
-        transition: opacity 0.3s;
-    }
-
-    .sidebar.collapsed ul li a span {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
-    } */
 
     .sidebar ul li a:hover {
     background-color: #1a1a2e;
@@ -436,7 +423,7 @@
         </div>
     </div>
 
-    <?php include('footer.php'); ?>
+    <center><?php include("footer.php") ?></center>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
