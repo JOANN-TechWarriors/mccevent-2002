@@ -1052,6 +1052,8 @@ function showActivationModal(subEventId, subEventName, status) {
     </section>
     </div>
 
+    <?php include('..//admin/footer.php') ?>
+    
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap-transition.js"></script>
     <script src="../assets/js/bootstrap-alert.js"></script>
