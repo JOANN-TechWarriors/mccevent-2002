@@ -355,18 +355,6 @@
             }
         });
     });
-      
-    // // Sidebar toggle
-    // document.getElementById("toggle-btn").addEventListener("click", function () {
-    //   var sidebar = document.getElementById("sidebar");
-    //   var mainContent = document.getElementById("main-content");
-
-    //   sidebar.classList.toggle("collapsed");
-    //   mainContent.classList.toggle("collapsed");
-
-    //   var isCollapsed = sidebar.classList.contains("collapsed");
-    //   this.innerHTML = isCollapsed ? "<i class='fas fa-bars'></i>" : "<i class='fas fa-bars'></i>";
-    // });
 
 
     // Print result button handler with direct print
