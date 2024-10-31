@@ -310,7 +310,7 @@ if (!isset($_SESSION['admin_id'])) {
     </div>
 </div>
 </div>
-<?php include('..//admin/footer.php') ?>
+<center><?php include('..//admin/footer.php') ?></center>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
