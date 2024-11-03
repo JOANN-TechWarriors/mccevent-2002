@@ -38,6 +38,15 @@ date_default_timezone_set('Asia/Manila');
         .fade-in {
             animation: fadeIn 0.5s ease-out;
         }
+
+        /* Updated color scheme */
+        .bg-mcc-red {
+            background-color: #DC3545;
+        }
+
+        .text-white {
+            color: white;
+        }
     </style>
 </head>
 
