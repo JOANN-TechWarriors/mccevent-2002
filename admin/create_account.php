@@ -3,7 +3,6 @@
     <?php 
     include('header.php');
     include('dbcon.php');
-    require 'vendor/autoload.php'; // For PHPMailer
     
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
