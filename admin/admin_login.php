@@ -110,18 +110,40 @@ if (isset($_POST['admin_login'])) {
         }
 
         .form-control {
-            height: 45px;
-            font-size: 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
         }
 
-        .btn-login {
-            width: 100%;
-            height: 45px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
+        .form-control:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            padding: 10px 30px;
+        }
+
+        .btn-primary:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        a {
+            color: #dc3545;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #c82333;
+            text-decoration: underline;
+        }
+
+        h2, h4 {
+            margin-bottom: 20px;
         }
 
         .alert {
