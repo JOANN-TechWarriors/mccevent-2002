@@ -1,100 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
-
     <?php 
     include('header.php');
-    // Include your database connection
-    include('dbcon.php'); // Make sure this file contains the $conn variable and the connection logic.
+    include('dbcon.php');
+    
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+
+    session_start();
+
+    function generateOTP() {
+        return rand(100000, 999999);
+    }
+
+    function sendOTP($email, $otp) {
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'your-email@gmail.com'; // Replace with your Gmail
+            $mail->Password = 'your-app-password'; // Replace with your Gmail app password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            $mail->setFrom('your-email@gmail.com', 'MCC Event Judging');
+            $mail->addAddress($email);
+            $mail->isHTML(true);
+            $mail->Subject = 'Email Verification OTP';
+            $mail->Body = "Your OTP for email verification is: <b>$otp</b>";
+
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
     ?>
     <head>    
-      <link rel="shortcut icon" href="../images/logo copy.png"/>
+        <link rel="shortcut icon" href="../images/logo copy.png"/>
+        <style>
+            body { font-family: Arial, sans-serif; }
+            .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+            .modal-content { background: white; margin: 5% auto; padding: 20px; width: 50%; }
+            .close { cursor: pointer; float: right; }
+            .hidden { display: none; }
+        </style>
     </head>
-  <body>
-  <style>
-        body { font-family: Arial, sans-serif; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
-        .modal-content { background: white; margin: 5% auto; padding: 20px; width: 50%; }
-        .close { cursor: pointer; float: right; }
-    </style>
-    <div class="container">
-      <div class="col-lg-3"></div>
-      <div class="col-lg-6">
-    <br><br><br><br>
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Event Organizer Registration Form</h3>
-          </div>
-          <div class="panel-body">
-            <form method="POST">
-              <table align="center">
-                <tr><td colspan="5"><strong>Basic Information</strong><hr /></td></tr>
-                <tr>
-                  <td>
-                    Firstname:
-                    <input type="text" name="fname" class="form-control" placeholder="Firstname" aria-describedby="basic-addon1" required autofocus>
-                  </td>
-                  <td>&nbsp;</td>
-                  <td>
-                    Middlename:
-                    <input type="text" name="mname" class="form-control" placeholder="Middlename" aria-describedby="basic-addon1" required>
-                  </td>
-                  <td>&nbsp;</td>
-                  <td>
-                    Lastname:
-                    <input type="text" name="lname" class="form-control" placeholder="Lastname" aria-describedby="basic-addon1" required>
-                  </td>
-                </tr>
-                
-                <!-- <tr><td colspan="5">&nbsp;</td></tr>
-                <tr><td colspan="5"><strong>Notification Information</strong><hr /></td></tr>
-                <tr>
-                  <td>
-                    Email:
-                    <input type="email" name="email" class="form-control" placeholder="Email" aria-describedby="basic-addon1" required>
-                  </td>
-                </tr> -->
-                
-                <tr><td colspan="5">&nbsp;</td></tr>
-                <tr><td colspan="5"><strong>Account Security</strong><hr /></td></tr>
-                <tr>
-                  <td>
-                    Username:
-                    <input type="text" name="username" class="form-control" placeholder="Username" aria-describedby="basic-addon1" required>
-                  </td>
-                  <td>&nbsp;</td>
-                  <td>
-                    Password:
-                    <input id="password" type="password" name="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1" required>
-                  </td>
-                  <td>&nbsp;</td>
-                  <td>
-                    Re-type Password:
-                    <input id="confirm_password" type="password" name="password2" class="form-control" placeholder="Re-type Password" aria-describedby="basic-addon1" required>
-                  </td>
-                </tr>
-                
-                <tr>
-                  <td colspan="4">&nbsp;</td>
-                  <td><span id='message'></span></td>
-                </tr>
-              </table>
-              <br />
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
-                <label class="form-check-label" for="flexCheckDefault">
-                  <a href="#" id="openModal">Terms and condition</a>
-                </label>
-              </div>
-              <div class="btn-group pull-right">
-                <a href="index2.php" type="button" class="btn btn-default">Cancel</a>
-                <button name="register" type="submit" class="btn btn-primary">Register</button>
-              </div>
-            </form>
-          </div>
+    <body>
+        <div class="container">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <br><br><br><br>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Event Organizer Registration Form</h3>
+                    </div>
+                    <div class="panel-body">
+                        <!-- Email Verification Form -->
+                        <div id="email-verification-form">
+                            <form method="POST" id="verify-email-form">
+                                <table align="center">
+                                    <tr>
+                                        <td colspan="5"><strong>Email Verification</strong><hr /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            Email:
+                                            <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <div class="btn-group pull-right">
+                                    <button name="send_otp" type="submit" class="btn btn-primary">Send OTP</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- OTP Verification Form -->
+                        <div id="otp-verification-form" class="hidden">
+                            <form method="POST" id="verify-otp-form">
+                                <table align="center">
+                                    <tr>
+                                        <td colspan="5"><strong>OTP Verification</strong><hr /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            Enter OTP:
+                                            <input type="text" name="otp" class="form-control" placeholder="Enter 6-digit OTP" required>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <div class="btn-group pull-right">
+                                    <button name="verify_otp" type="submit" class="btn btn-primary">Verify OTP</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Main Registration Form -->
+                        <div id="registration-form" class="hidden">
+                            <form method="POST">
+                                <table align="center">
+                                    <tr><td colspan="5"><strong>Basic Information</strong><hr /></td></tr>
+                                    <tr>
+                                        <td>
+                                            Firstname:
+                                            <input type="text" name="fname" class="form-control" placeholder="Firstname" required>
+                                        </td>
+                                        <td>&nbsp;</td>
+                                        <td>
+                                            Middlename:
+                                            <input type="text" name="mname" class="form-control" placeholder="Middlename" required>
+                                        </td>
+                                        <td>&nbsp;</td>
+                                        <td>
+                                            Lastname:
+                                            <input type="text" name="lname" class="form-control" placeholder="Lastname" required>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr><td colspan="5">&nbsp;</td></tr>
+                                    <tr><td colspan="5"><strong>Account Security</strong><hr /></td></tr>
+                                    <tr>
+                                        <td>
+                                            Username:
+                                            <input type="text" name="username" class="form-control" placeholder="Username" required>
+                                        </td>
+                                        <td>&nbsp;</td>
+                                        <td>
+                                            Password:
+                                            <input id="password" type="password" name="password" class="form-control" placeholder="Password" required>
+                                        </td>
+                                        <td>&nbsp;</td>
+                                        <td>
+                                            Re-type Password:
+                                            <input id="confirm_password" type="password" name="password2" class="form-control" placeholder="Re-type Password" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">&nbsp;</td>
+                                        <td><span id='message'></span></td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        <a href="#" id="openModal">Terms and condition</a>
+                                    </label>
+                                </div>
+                                <div class="btn-group pull-right">
+                                    <a href="index2.php" type="button" class="btn btn-default">Cancel</a>
+                                    <button name="register" type="submit" class="btn btn-primary">Register</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3"></div>
         </div>
-      </div>
-      <div class="col-lg-3"></div>
-    </div>
           
     <div id="myModal" class="modal">
       <div class="modal-content">
@@ -160,37 +227,104 @@
 
 
 
-<?php 
-if (isset($_POST['register'])) {
-   $fname = htmlspecialchars($_POST['fname']);
-   $mname = htmlspecialchars($_POST['mname']);  
-   $lname = htmlspecialchars($_POST['lname']);  
-   //  $email = $_POST['email']; 
-   $username = htmlspecialchars($_POST['username']);  
-   $password = htmlspecialchars($_POST['password']);  
-   $password2 = htmlspecialchars($_POST['password2']);  
-  
-  
-   if ($password == $password2) {
-     $stmt =  $conn->query("insert into organizer(fname,mname,lname,username,password,access,status)values('$fname','$mname','$lname','$username','$password','Organizer','offline')");
-     $stmt->bind_param("ssssss", $fname, $mname, $lname, $username, $password, $email);
-     $stmt->execute();
-     $stmt->close();
-     ?>
-     <script>
-       window.location = 'index.php';
-       alert('Organizer <?php echo $fname . " " . $mname . " " . $lname; ?> registered successfully!');
-     </script>
-     <?php
-   } else {
-     ?>
-     <script>
-       alert('Organizer <?php echo $fname . " " . $mname . " " . $lname; ?> registration cannot be done. Password and Re-typed password did not match.');
-     </script>
-     <?php
-   }
-}
-?>
+<?php
+        // Handle Send OTP
+        if (isset($_POST['send_otp'])) {
+            $email = htmlspecialchars($_POST['email']);
+            $otp = generateOTP();
+            $_SESSION['verification_otp'] = $otp;
+            $_SESSION['email'] = $email;
+            
+            if (sendOTP($email, $otp)) {
+                ?>
+                <script>
+                    document.getElementById('email-verification-form').classList.add('hidden');
+                    document.getElementById('otp-verification-form').classList.remove('hidden');
+                    alert('OTP has been sent to your email.');
+                </script>
+                <?php
+            } else {
+                ?>
+                <script>
+                    alert('Failed to send OTP. Please try again.');
+                </script>
+                <?php
+            }
+        }
+
+        // Handle OTP Verification
+        if (isset($_POST['verify_otp'])) {
+            $entered_otp = htmlspecialchars($_POST['otp']);
+            if (isset($_SESSION['verification_otp']) && $entered_otp == $_SESSION['verification_otp']) {
+                ?>
+                <script>
+                    document.getElementById('otp-verification-form').classList.add('hidden');
+                    document.getElementById('registration-form').classList.remove('hidden');
+                    alert('Email verified successfully! Please complete your registration.');
+                </script>
+                <?php
+            } else {
+                ?>
+                <script>
+                    alert('Invalid OTP. Please try again.');
+                </script>
+                <?php
+            }
+        }
+
+        // Handle Registration
+        if (isset($_POST['register'])) {
+            if (!isset($_SESSION['email']) || !isset($_SESSION['verification_otp'])) {
+                ?>
+                <script>
+                    alert('Please verify your email first.');
+                    window.location = 'register.php';
+                </script>
+                <?php
+                exit();
+            }
+
+            $fname = htmlspecialchars($_POST['fname']);
+            $mname = htmlspecialchars($_POST['mname']);
+            $lname = htmlspecialchars($_POST['lname']);
+            $email = $_SESSION['email'];
+            $username = htmlspecialchars($_POST['username']);
+            $password = htmlspecialchars($_POST['password']);
+            $password2 = htmlspecialchars($_POST['password2']);
+
+            if ($password == $password2) {
+                // Use prepared statement to prevent SQL injection
+                $stmt = $conn->prepare("INSERT INTO organizer (fname, mname, lname, email, username, password, access, status) VALUES (?, ?, ?, ?, ?, ?, 'Organizer', 'offline')");
+                $stmt->bind_param("ssssss", $fname, $mname, $lname, $email, $username, $password);
+                
+                if ($stmt->execute()) {
+                    // Clear session variables
+                    unset($_SESSION['verification_otp']);
+                    unset($_SESSION['email']);
+                    
+                    ?>
+                    <script>
+                        alert('Organizer <?php echo $fname . " " . $mname . " " . $lname; ?> registered successfully!');
+                        window.location = 'index.php';
+                    </script>
+                    <?php
+                } else {
+                    ?>
+                    <script>
+                        alert('Registration failed. Please try again.');
+                    </script>
+                    <?php
+                }
+                $stmt->close();
+            } else {
+                ?>
+                <script>
+                    alert('Password and Re-typed password did not match.');
+                </script>
+                <?php
+            }
+        }
+        ?>
 
 </body>
 </html>
