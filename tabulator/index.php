@@ -69,6 +69,7 @@ date_default_timezone_set('Asia/Manila');
                                 autofocus
                                 class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
                                 placeholder="Enter your username"
+                                required
                             >
                         </div>
 
@@ -80,6 +81,7 @@ date_default_timezone_set('Asia/Manila');
                                 required
                                 class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
                                 placeholder="Enter your password"
+                                required
                             >
                         </div>
 
