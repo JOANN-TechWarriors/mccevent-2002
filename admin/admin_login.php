@@ -47,8 +47,7 @@ if (isset($_POST['admin_login'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: url(../img/Community-College-Madridejos.jpeg) no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(135deg, #ffffff 60%, #ff0000 40%);
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
@@ -63,36 +62,11 @@ if (isset($_POST['admin_login'])) {
             min-height: 400px;
         }
 
-        .logo-section {
-            padding: 40px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
-
-        .logo-img {
-            max-width: 250px;
-            margin-bottom: 30px;
-        }
-
-        .system-title {
-            margin-top: 20px;
-        }
-
-        .system-title h1 {
-            font-size: 2.5em;
-            color: #333;
-            font-weight: bold;
-        }
-
         .login-section {
-            background-color: #f8f9fa;
+            background-color: #ffffff;
             padding: 40px;
-            border-radius: 0 15px 15px 0;
-            height: 100%;
+            border-radius: 15px;
+            border: 2px solid #dc3545;
         }
 
         .login-form {
@@ -101,12 +75,13 @@ if (isset($_POST['admin_login'])) {
             padding: 20px;
         }
 
-        .login-header {
+        .login-form h4 {
+            color: #dc3545;
             text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            border-bottom: 2px solid #dc3545;
             margin-bottom: 30px;
-            padding: 15px;
-            background-color: aquamarine;
-            border-radius: 8px;
         }
 
         .form-control {
@@ -114,6 +89,12 @@ if (isset($_POST['admin_login'])) {
             font-size: 16px;
             border-radius: 8px;
             margin-bottom: 20px;
+            border: 1px solid #dc3545;
+        }
+
+        .form-control:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
         }
 
         .btn-login {
@@ -122,20 +103,30 @@ if (isset($_POST['admin_login'])) {
             font-size: 16px;
             font-weight: bold;
             border-radius: 8px;
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
         }
 
-        .alert {
-            margin-bottom: 20px;
-            text-align: center;
+        .btn-login:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .form-label {
+            color: #dc3545;
+            font-weight: 500;
+        }
+
+        .bi {
+            margin-right: 8px;
+            color: #dc3545;
         }
 
         @media (max-width: 768px) {
             .main-container {
                 margin: 20px;
-            }
-            
-            .login-section {
-                border-radius: 15px;
             }
         }
     </style>
