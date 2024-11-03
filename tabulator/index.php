@@ -16,88 +16,149 @@ date_default_timezone_set('Asia/Manila');
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <style>
-        /* Custom styles */
-        .bg-custom {
-            background: url(../img/Community-College-Madridejos.jpeg) center/cover no-repeat;
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url(../img/Community-College-Madridejos.jpeg) center/cover no-repeat;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
-        
-        /* Disable text selection */
-        .no-select {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+
+        .main-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            display: flex;
         }
-        
-        /* Custom animation for fade-in */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .left-side {
+            background-color: #dc3545;
+            color: white;
+            padding: 2rem;
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
+
+        .right-side {
+            background-color: white;
+            padding: 2rem;
+            width: 50%;
+        }
+
+        .logo {
+            width: 200px;
+            height: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-text {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .system-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .login-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #c82333;
+        }
+
+        .forgot-password {
+            color: #dc3545;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: block;
+            text-align: right;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .register-link a {
+            color: #dc3545;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                margin: 1rem;
+            }
+
+            .left-side, .right-side {
+                width: 100%;
+            }
         }
     </style>
 </head>
-
-<body class="bg-custom no-select">
-    <div class="min-h-screen flex items-center justify-center p-6 bg-black/50">
-        <div class="w-full max-w-6xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row fade-in">
-            <!-- Left Side - Logo and Title -->
-            <div class="w-full md:w-1/2 p-8 bg-gradient-to-br from-teal-50 to-white flex flex-col items-center justify-center">
-                <img src="../img/logo.png" alt="MCC Logo" class="w-64 h-auto mb-8">
-                <div class="text-center space-y-2">
-                    <h3 class="text-xl text-gray-600">WELCOME TO:</h3>
-                    <h2 class="text-3xl font-bold text-gray-800">MCC Event Judging System</h2>
-                </div>
+<body>
+    <div class="min-h-screen flex items-center justify-center p-6">
+        <div class="main-container">
+            <!-- Left Side -->
+            <div class="left-side">
+                <img src="/api/placeholder/200/200" alt="MCC Logo" class="logo">
+                <div class="welcome-text">WELCOME TO:</div>
+                <div class="system-title">MCC Event Judging System</div>
             </div>
 
-            <!-- Right Side - Login Form -->
-            <div class="w-full md:w-1/2 p-8 bg-white">
-                <div class="w-full max-w-md mx-auto">
-                    <div class="bg-aquamarine rounded-lg p-4 mb-6">
-                        <h4 class="text-xl font-bold text-gray-800">TABULATOR LOGIN</h4>
+            <!-- Right Side -->
+            <div class="right-side">
+                <h2 class="login-title">TABULATOR LOGIN</h2>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Username" required>
                     </div>
-
-                    <form id="login-form" method="POST" action="login.php" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="icon-user"></i> USERNAME
-                            </label>
-                            <input 
-                                type="text" 
-                                name="username" 
-                                required 
-                                autofocus
-                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-lg"
-                                placeholder="Enter your username"
-                            >
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="icon-lock"></i> PASSWORD
-                            </label>
-                            <input 
-                                type="password" 
-                                name="password" 
-                                required
-                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-lg"
-                                placeholder="Enter your password"
-                            >
-                        </div>
-
-                        <button 
-                            type="button" 
-                            id="login-button"
-                            class="w-full bg-teal-500 text-white py-3 px-6 rounded-lg hover:bg-teal-600 transition-all font-semibold text-lg flex items-center justify-center gap-2"
-                        >
-                            <i class="icon-ok"></i>
-                            <span>LOGIN</span>
-                        </button>
-                    </form>
-                </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-login">Sign in</button>
+                </form>
             </div>
         </div>
     </div>
