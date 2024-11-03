@@ -21,7 +21,7 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             margin: 2rem auto;
-            max-width: 600px;
+            max-width: 700px;
         }
 
         .logo-side {
