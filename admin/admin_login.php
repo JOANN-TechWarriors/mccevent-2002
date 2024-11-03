@@ -59,11 +59,13 @@ if (isset($_POST['admin_login'])) {
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             margin: 50px auto;
-            max-width: 700px;
-            min-height: 400px;
+            max-width: 800px;
+            min-height: 500px;
+            overflow: hidden;
         }
 
         .logo-section {
+            background-color: #DC3545;
             padding: 40px;
             text-align: center;
             display: flex;
@@ -71,10 +73,12 @@ if (isset($_POST['admin_login'])) {
             justify-content: center;
             align-items: center;
             height: 100%;
+            border-radius: 15px 0 0 15px;
+            color: white;
         }
 
         .logo-img {
-            max-width: 250px;
+            max-width: 200px;
             margin-bottom: 30px;
         }
 
@@ -82,14 +86,21 @@ if (isset($_POST['admin_login'])) {
             margin-top: 20px;
         }
 
-        .system-title h1 {
-            font-size: 2.5em;
-            color: #333;
+        .welcome-text {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .system-name {
+            color: white;
+            font-size: 24px;
             font-weight: bold;
+            margin: 0;
         }
 
         .login-section {
-            background-color: #f8f9fa;
+            background-color: white;
             padding: 40px;
             border-radius: 0 15px 15px 0;
             height: 100%;
@@ -104,9 +115,12 @@ if (isset($_POST['admin_login'])) {
         .login-header {
             text-align: center;
             margin-bottom: 30px;
-            padding: 15px;
-            background-color: aquamarine;
-            border-radius: 8px;
+            color: #333;
+        }
+
+        .form-label {
+            color: #333;
+            font-weight: 500;
         }
 
         .form-control {
@@ -114,36 +128,42 @@ if (isset($_POST['admin_login'])) {
             padding: 12px;
             margin-bottom: 15px;
             border-radius: 5px;
+            height: auto;
         }
 
         .form-control:focus {
-            border-color: #dc3545;
+            border-color: #DC3545;
             box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
         }
 
-        .btn-primary {
-            background-color: #dc3545;
-            border-color: #dc3545;
-            padding: 10px 30px;
+        .btn-login {
+            background-color: #DC3545;
+            border-color: #DC3545;
+            padding: 12px;
+            width: 100%;
+            font-weight: 500;
+            margin-top: 20px;
+            text-transform: uppercase;
         }
 
-        .btn-primary:hover {
+        .btn-login:hover {
             background-color: #c82333;
             border-color: #bd2130;
         }
 
-        a {
-            color: #dc3545;
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #DC3545;
             text-decoration: none;
         }
 
-        a:hover {
+        .register-link a:hover {
             color: #c82333;
             text-decoration: underline;
-        }
-
-        h2, h4 {
-            margin-bottom: 20px;
         }
 
         .alert {
@@ -156,8 +176,21 @@ if (isset($_POST['admin_login'])) {
                 margin: 20px;
             }
             
+            .logo-section {
+                border-radius: 15px 15px 0 0;
+                padding: 20px;
+            }
+            
             .login-section {
-                border-radius: 15px;
+                border-radius: 0 0 15px 15px;
+            }
+            
+            .logo-img {
+                max-width: 150px;
+            }
+            
+            .system-name {
+                font-size: 20px;
             }
         }
     </style>
