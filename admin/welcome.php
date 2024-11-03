@@ -43,6 +43,7 @@
                                         id="myInputJC"
                                         class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                         placeholder="Enter Judge's Code"
+                                        required
                                     >
                                 </div>
                             </div>
@@ -67,15 +68,6 @@
                             >
                                 Sign in
                             </button>
-
-                            <!-- Additional Links -->
-                            <div class="flex justify-between text-sm mt-4">
-                                <a href="#" class="text-red-600 hover:text-red-700">Forgot password?</a>
-                                <div class="text-gray-600">
-                                    Don't have an account? 
-                                    <a href="#" class="text-red-600 hover:text-red-700">Register</a>
-                                </div>
-                            </div>
                         </div>
                     </form>
                 </div>
