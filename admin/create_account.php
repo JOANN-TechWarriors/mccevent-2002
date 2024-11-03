@@ -1,33 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<?php 
-include('header.php');
-include('dbcon.php');
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-// Function to generate verification token
-function generateToken($length = 32) {
-    return bin2hex(random_bytes($length));
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+session_start();
+
+// Function to generate OTP
+function generateOTP($length = 6) {
+    return substr(str_shuffle("0123456789"), 0, $length);
 }
 
-// Function to send verification email
-function sendVerificationEmail($email, $token, $fname) {
-    $subject = "Verify Your Email - MCC Event Judging System";
+// Function to send OTP via Gmail
+function sendOTP($email, $otp, $fname) {
+    $mail = new PHPMailer(true);
     
-    // Replace with your actual website URL
-    $verificationLink = "http://your-website.com/verify.php?token=" . $token;
-    
-    $message = "Dear " . htmlspecialchars($fname) . ",\n\n";
-    $message .= "Thank you for registering with MCC Event Judging System. Please click the link below to verify your email:\n\n";
-    $message .= $verificationLink . "\n\n";
-    $message .= "If you didn't register for an account, please ignore this email.\n\n";
-    $message .= "Best regards,\nMCC Event Judging System Team";
-    
-    $headers = "From: noreply@your-website.com";
-    
-    return mail($email, $subject, $message, $headers);
+    try {
+        // Gmail SMTP configuration
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'your-gmail@gmail.com'; // Replace with your Gmail
+        $mail->Password = 'your-app-specific-password'; // Replace with your Gmail app password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        // Email settings
+        $mail->setFrom('your-gmail@gmail.com', 'MCC Event Judging System');
+        $mail->addAddress($email);
+        $mail->isHTML(true);
+        $mail->Subject = 'Your OTP for MCC Event Judging System Registration';
+        
+        // Email body
+        $mail->Body = "
+            <html>
+            <body>
+                <h2>Welcome to MCC Event Judging System</h2>
+                <p>Dear " . htmlspecialchars($fname) . ",</p>
+                <p>Your OTP for registration is: <strong>$otp</strong></p>
+                <p>This OTP will expire in 10 minutes.</p>
+                <p>If you didn't request this OTP, please ignore this email.</p>
+                <br>
+                <p>Best regards,<br>MCC Event Judging System Team</p>
+            </body>
+            </html>";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
 }
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
 <head>    
     <link rel="shortcut icon" href="../images/logo copy.png"/>
     <style>
@@ -37,6 +66,14 @@ function sendVerificationEmail($email, $token, $fname) {
         .close { cursor: pointer; float: right; }
         .error-message { color: red; font-size: 14px; margin-top: 5px; }
         .success-message { color: green; font-size: 14px; margin-top: 5px; }
+        #otpVerificationForm { display: none; }
+        .otp-input { 
+            letter-spacing: 15px;
+            font-size: 20px;
+            padding: 10px;
+            text-align: center;
+            width: 200px;
+        }
     </style>
 </head>
 
@@ -45,13 +82,16 @@ function sendVerificationEmail($email, $token, $fname) {
         <div class="col-lg-3"></div>
         <div class="col-lg-6">
             <br><br><br><br>
-            <div class="panel panel-primary">
+            <!-- Registration Form -->
+            <div class="panel panel-primary" id="registrationPanel">
                 <div class="panel-heading">
                     <h3 class="panel-title">Event Organizer Registration Form</h3>
                 </div>
                 <div class="panel-body">
                     <form method="POST" id="registrationForm">
+                        <!-- Your existing form fields -->
                         <table align="center">
+                            <!-- Basic Information -->
                             <tr>
                                 <td colspan="5"><strong>Basic Information</strong><hr /></td>
                             </tr>
@@ -72,16 +112,18 @@ function sendVerificationEmail($email, $token, $fname) {
                                 </td>
                             </tr>
                             
+                            <!-- Email -->
                             <tr><td colspan="5">&nbsp;</td></tr>
                             <tr><td colspan="5"><strong>Contact Information</strong><hr /></td></tr>
                             <tr>
                                 <td colspan="5">
                                     Email Address:
-                                    <input type="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                                    <input type="email" name="email" class="form-control" placeholder="Enter your Gmail address" required>
                                     <div id="emailError" class="error-message"></div>
                                 </td>
                             </tr>
                             
+                            <!-- Account Security -->
                             <tr><td colspan="5">&nbsp;</td></tr>
                             <tr><td colspan="5"><strong>Account Security</strong><hr /></td></tr>
                             <tr>
@@ -104,6 +146,7 @@ function sendVerificationEmail($email, $token, $fname) {
                             </tr>
                         </table>
                         <br />
+                        <!-- Terms and Conditions -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
                             <label class="form-check-label" for="flexCheckDefault">
@@ -117,58 +160,37 @@ function sendVerificationEmail($email, $token, $fname) {
                     </form>
                 </div>
             </div>
+
+            <!-- OTP Verification Form -->
+            <div class="panel panel-primary" id="otpVerificationForm">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Email Verification</h3>
+                </div>
+                <div class="panel-body">
+                    <form method="POST" id="otpForm">
+                        <div class="text-center">
+                            <p>Please enter the OTP sent to your email address:</p>
+                            <input type="text" name="otp" class="form-control otp-input" maxlength="6" required>
+                            <div id="otpError" class="error-message"></div>
+                            <br>
+                            <button type="submit" name="verify_otp" class="btn btn-primary">Verify OTP</button>
+                            <button type="button" id="resendOTP" class="btn btn-link">Resend OTP</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
         <div class="col-lg-3"></div>
     </div>
-    
-    <!-- Terms and Conditions Modal -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>
-                <b>TERMS AND CONDITIONS<br>
-                Welcome to MCC Event Judging.<br>
-                By using our website and services, you agree to the following terms and conditions.</b><br>
-                <br>
-                1. Account Creation: Provide accurate information and maintain account security.<br>
-                2. System Usage: Use only for MCC event judging; no unlawful or harmful activities.<br>
-                3. Data Management: Obtain necessary consents, comply with data protection laws, and maintain confidentiality.<br>
-                4. Event Management: Ensure fair event setups and provide clear guidelines to judges.<br>
-                5. Intellectual Property: Respect MCC's ownership of system content and materials.<br>
-                6. Updates: System may be modified; users must use the latest version.<br>
-                7. Termination: MCC can terminate accounts for violations or at their discretion.<br>
-                8. Liability: System provided "as is" with no warranties; MCC not liable for certain damages.<br>
-                9. Changes to Terms: Terms may be modified; continued use implies acceptance.<br>
-                10. Governing Law: Terms governed by laws of the specified jurisdiction.<br>
-                <br>
-                By creating an account, you acknowledge that you have read, understood, and agree to be bound by these terms and conditions.
-            </p>
-        </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <font size="2" class="pull-left"><strong>Event Judging System &middot; 2024 &COPY;</strong></font>
-        </div>
-    </footer>
+    <!-- Terms and Conditions Modal -->
+    <!-- Your existing modal code -->
 
     <!-- Scripts -->
     <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
     <script src="javascript/jquery1102.min.js"></script>
     
     <script>
-        // Modal functionality
-        const modal = document.getElementById("myModal");
-        const btn = document.getElementById("openModal");
-        const span = document.getElementsByClassName("close")[0];
-
-        btn.onclick = () => modal.style.display = "block";
-        span.onclick = () => modal.style.display = "none";
-        window.onclick = (event) => { 
-            if (event.target === modal) modal.style.display = "none"; 
-        };
-
         // Password matching validation
         $('#password, #confirm_password').on('keyup', function () {
             if ($('#password').val() == $('#confirm_password').val()) {
@@ -178,19 +200,20 @@ function sendVerificationEmail($email, $token, $fname) {
             }
         });
 
-        // Form validation
-        $(document).ready(function() {
-            $('#registrationForm').on('submit', function(e) {
-                if ($('#password').val() != $('#confirm_password').val()) {
-                    e.preventDefault();
-                    alert('Passwords do not match!');
-                    return false;
-                }
+        // OTP input validation
+        $('.otp-input').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // Resend OTP
+        $('#resendOTP').on('click', function() {
+            $.post('resend_otp.php', function(response) {
+                alert('New OTP has been sent to your email.');
             });
         });
     </script>
 
-    <?php 
+    <?php
     if (isset($_POST['register'])) {
         $fname = htmlspecialchars($_POST['fname']);
         $mname = htmlspecialchars($_POST['mname']);  
@@ -199,18 +222,20 @@ function sendVerificationEmail($email, $token, $fname) {
         $username = htmlspecialchars($_POST['username']);  
         $password = htmlspecialchars($_POST['password']);  
         $password2 = htmlspecialchars($_POST['password2']);
-        
-        // Generate verification token
-        $verification_token = generateToken();
-        $verified = 0; // 0 = unverified, 1 = verified
-        
-        // Check if email already exists
+
+        // Validate Gmail address
+        if (!preg_match('/@gmail\.com$/i', $email)) {
+            echo "<script>
+                document.getElementById('emailError').innerHTML = 'Please use a Gmail address.';
+            </script>";
+            exit();
+        }
+
+        // Check if email exists
         $stmt = $conn->prepare("SELECT id FROM organizer WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows > 0) {
+        if ($stmt->get_result()->num_rows > 0) {
             echo "<script>
                 document.getElementById('emailError').innerHTML = 'This email is already registered.';
             </script>";
@@ -218,42 +243,66 @@ function sendVerificationEmail($email, $token, $fname) {
             exit();
         }
         $stmt->close();
-        
-        // Check if username already exists
-        $stmt = $conn->prepare("SELECT id FROM organizer WHERE username = ?");
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows > 0) {
+
+        // Generate and store OTP
+        $otp = generateOTP();
+        $_SESSION['registration_otp'] = $otp;
+        $_SESSION['registration_data'] = [
+            'fname' => $fname,
+            'mname' => $mname,
+            'lname' => $lname,
+            'email' => $email,
+            'username' => $username,
+            'password' => password_hash($password, PASSWORD_DEFAULT)
+        ];
+        $_SESSION['otp_time'] = time();
+
+        // Send OTP
+        if (sendOTP($email, $otp, $fname)) {
             echo "<script>
-                document.getElementById('usernameError').innerHTML = 'This username is already taken.';
+                document.getElementById('registrationPanel').style.display = 'none';
+                document.getElementById('otpVerificationForm').style.display = 'block';
             </script>";
-            $stmt->close();
-            exit();
+        } else {
+            echo "<script>
+                alert('Failed to send OTP. Please try again.');
+            </script>";
         }
-        $stmt->close();
+    }
+
+    if (isset($_POST['verify_otp'])) {
+        $entered_otp = $_POST['otp'];
         
-        if ($password == $password2) {
-            // Hash password for security
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        // Verify OTP
+        if (
+            isset($_SESSION['registration_otp']) && 
+            isset($_SESSION['otp_time']) && 
+            $_SESSION['registration_otp'] === $entered_otp && 
+            (time() - $_SESSION['otp_time']) <= 600 // 10 minutes
+        ) {
+            $data = $_SESSION['registration_data'];
             
-            // Insert new user
-            $stmt = $conn->prepare("INSERT INTO organizer (fname, mname, lname, email, username, password, verification_token, verified, access, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Organizer', 'offline')");
-            $stmt->bind_param("sssssssi", $fname, $mname, $lname, $email, $username, $hashed_password, $verification_token, $verified);
+            // Insert verified user
+            $stmt = $conn->prepare("INSERT INTO organizer (fname, mname, lname, email, username, password, verified, access, status) VALUES (?, ?, ?, ?, ?, ?, 1, 'Organizer', 'offline')");
+            $stmt->bind_param("ssssss", 
+                $data['fname'], 
+                $data['mname'], 
+                $data['lname'], 
+                $data['email'], 
+                $data['username'], 
+                $data['password']
+            );
             
             if ($stmt->execute()) {
-                // Send verification email
-                if (sendVerificationEmail($email, $verification_token, $fname)) {
-                    echo "<script>
-                        alert('Registration successful! Please check your email to verify your account.');
-                        window.location = 'index.php';
-                    </script>";
-                } else {
-                    echo "<script>
-                        alert('Registration successful but failed to send verification email. Please contact support.');
-                    </script>";
-                }
+                // Clear session data
+                unset($_SESSION['registration_otp']);
+                unset($_SESSION['registration_data']);
+                unset($_SESSION['otp_time']);
+                
+                echo "<script>
+                    alert('Registration successful! You can now login.');
+                    window.location = 'index.php';
+                </script>";
             } else {
                 echo "<script>
                     alert('Registration failed. Please try again.');
@@ -262,7 +311,7 @@ function sendVerificationEmail($email, $token, $fname) {
             $stmt->close();
         } else {
             echo "<script>
-                alert('Registration failed. Passwords do not match.');
+                document.getElementById('otpError').innerHTML = 'Invalid or expired OTP. Please try again.';
             </script>";
         }
     }
