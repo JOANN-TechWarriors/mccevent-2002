@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <?php unset($_SESSION['login_error']); ?>
     <?php endif; ?>
-
+<br>
     <div class="min-h-screen flex items-center justify-center p-4 relative">
         <div class="w-full max-w-3xl bg-white rounded-lg shadow-2xl overflow-hidden">
             <div class="grid grid-cols-1 md:grid-cols-2">
