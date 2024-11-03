@@ -33,12 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Login - MCC Event Judging System</title>
+    <title>Organizer Login - MCC Event Judging System</title>
     
     <?php include_once('../admin/header2.php'); ?>
     
@@ -71,6 +72,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background: url(../img/Community-College-Madridejos.jpeg);
             background-size: cover;
             background-position: center;
+            position: relative;
+        }
+
+        .bg-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
         }
 
         .bg-mcc-red {
@@ -87,25 +99,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php unset($_SESSION['login_error']); ?>
     <?php endif; ?>
 
-    <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="w-full max-w-6xl bg-white rounded-xl shadow-2xl overflow-hidden">
-            <div class="flex flex-col md:flex-row">
+    <div class="min-h-screen flex items-center justify-center p-4 relative">
+        <div class="w-full max-w-3xl bg-white rounded-lg shadow-2xl overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2">
                 <!-- Left Side - Logo and Title -->
-                <div class="w-full md:w-1/2 p-8 flex flex-col items-center justify-center bg-mcc-red text-white">
-                    <img src="../img/logo.png" alt="MCC Logo" class="w-64 h-auto mb-8">
-                    <div class="text-center space-y-2">
-                        <h3 class="text-xl">WELCOME TO:</h3>
-                        <h2 class="text-3xl font-bold">MCC Event Judging Systems</h2>
+                <div class="bg-mcc-red p-8 flex flex-col items-center justify-center text-white">
+                    <img src="../img/logo.png" alt="MCC Logo" class="w-32 h-auto mb-6">
+                    <div class="text-center">
+                        <h3 class="text-xl mb-2">WELCOME TO:</h3>
+                        <h2 class="text-2xl font-bold">MCC Event Judging System</h2>
                     </div>
                 </div>
 
                 <!-- Right Side - Login Form -->
-                <div class="w-full md:w-1/2 p-8 bg-white">
-                    <div class="max-w-md mx-auto">
-                        <div>
-                            <h2 style="font: size 16px;" class="text-2xl font-bold">STUDENT LOGIN</h2>
-                        </div>
-                        <br><br><br>
+                <div class="bg-white p-8">
+                    <div class="max-w-sm mx-auto">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-8">STUDENT LOGIN</h2>
                         <form method="POST" action="" class="space-y-6">
                             <div>
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -114,21 +123,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input
                                     type="text" 
                                     name="student_id" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                     placeholder="Enter Student ID #" 
                                     required 
                                     autofocus
                                 >
                             </div>
 
-                            <div class="flex items-center justify-between">
-                                <button 
-                                    type="submit" 
-                                    class="w-full bg-mcc-red hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
-                                >
-                                    <i class="icon-ok"></i> LOGIN
-                                </button>
-                            </div>
+                            <button 
+                                type="submit" 
+                                class="w-full bg-mcc-red hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200"
+                            >
+                                <i class="icon-ok"></i> LOGIN
+                            </button>
 
                             <div class="text-center mt-4">
                                 <p class="text-gray-600">
