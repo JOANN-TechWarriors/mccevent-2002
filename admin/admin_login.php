@@ -47,7 +47,8 @@ if (isset($_POST['admin_login'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #ffffff 60%, #ff0000 40%);
+            background: url(../img/Community-College-Madridejos.jpeg) no-repeat center center fixed;
+            background-size: cover;
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
@@ -132,26 +133,13 @@ if (isset($_POST['admin_login'])) {
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="container">
         <div class="main-container">
-            <div class="row g-0">
-                <!-- Logo and Title Section -->
-                <div class="col-md-6">
-                    <div class="logo-section">
-                        <img src="../img/logo.png" alt="MCC Logo" class="logo-img">
-                        <div class="system-title">
-                            <h4 style="font-size: 18px;">WELCOME TO:</h4>
-                            <h3 style="font-size: 20px;"><strong>MCC Event Judging System</strong></h3>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Login Form Section -->
-                <div class="col-md-6">
+            <div class="row">
+                <div class="col-12">
                     <div class="login-section">
                         <div class="login-form">
-                                <h4 class="mb-4">ADMIN LOGIN</h4>
-                            <?php echo $msg; ?>
+                            <h4 class="mb-4">ADMIN LOGIN</h4>
                             <form method="POST" id="login-form">
                                 <div class="mb-3">
                                     <label for="username" class="form-label">
@@ -169,7 +157,7 @@ if (isset($_POST['admin_login'])) {
                                            placeholder="Enter your password" required>
                                 </div>
                                 
-                                <button type="submit" name="admin_login" class="btn btn-primary btn-login">
+                                <button type="submit" name="admin_login" class="btn btn-login">
                                     <i class="bi bi-box-arrow-in-right"></i> LOGIN
                                 </button>
                             </form>
