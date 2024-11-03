@@ -59,7 +59,7 @@
         }
 
         .login-form button {
-            height: 40px;
+            height: 45px;
             font-size: 1.1rem;
             border-radius: 8px;
         }
