@@ -41,7 +41,7 @@
         }
 
         .login-form input {
-            height: 50px;
+            height: 40px;
             font-size: 1rem;
             padding-left: 1rem;
             margin-bottom: 1.5rem;
