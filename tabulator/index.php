@@ -142,7 +142,7 @@ date_default_timezone_set('Asia/Manila');
         <div class="main-container">
             <!-- Left Side -->
             <div class="left-side">
-                <img src="/api/placeholder/200/200" alt="MCC Logo" class="logo">
+                <img src="../img/logo.png" alt="MCC Logo" class="logo">
                 <div class="welcome-text">WELCOME TO:</div>
                 <div class="system-title">MCC Event Judging System</div>
             </div>
