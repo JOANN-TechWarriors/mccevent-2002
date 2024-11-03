@@ -59,7 +59,7 @@ if (isset($_POST['admin_login'])) {
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             margin: 50px auto;
-            max-width: 700px;
+            max-width: 500px;
             min-height: 400px;
         }
 
