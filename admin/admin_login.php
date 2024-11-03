@@ -59,15 +59,40 @@ if (isset($_POST['admin_login'])) {
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             margin: 50px auto;
-            max-width: 500px;
+            max-width: 700px;
             min-height: 400px;
         }
 
-        .login-section {
-            background-color: #ffffff;
+        .logo-section {
             padding: 40px;
-            border-radius: 15px;
-            border: 2px solid #dc3545;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .logo-img {
+            max-width: 250px;
+            margin-bottom: 30px;
+        }
+
+        .system-title {
+            margin-top: 20px;
+        }
+
+        .system-title h1 {
+            font-size: 2.5em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .login-section {
+            background-color: #f8f9fa;
+            padding: 40px;
+            border-radius: 0 15px 15px 0;
+            height: 100%;
         }
 
         .login-form {
@@ -76,13 +101,12 @@ if (isset($_POST['admin_login'])) {
             padding: 20px;
         }
 
-        .login-form h4 {
-            color: #dc3545;
+        .login-header {
             text-align: center;
-            font-weight: bold;
-            padding: 10px;
-            border-bottom: 2px solid #dc3545;
             margin-bottom: 30px;
+            padding: 15px;
+            background-color: aquamarine;
+            border-radius: 8px;
         }
 
         .form-control {
@@ -90,12 +114,6 @@ if (isset($_POST['admin_login'])) {
             font-size: 16px;
             border-radius: 8px;
             margin-bottom: 20px;
-            border: 1px solid #dc3545;
-        }
-
-        .form-control:focus {
-            border-color: #dc3545;
-            box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
         }
 
         .btn-login {
@@ -104,43 +122,45 @@ if (isset($_POST['admin_login'])) {
             font-size: 16px;
             font-weight: bold;
             border-radius: 8px;
-            background-color: #dc3545;
-            border: none;
-            color: white;
-            transition: all 0.3s ease;
         }
 
-        .btn-login:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
-        }
-
-        .form-label {
-            color: #dc3545;
-            font-weight: 500;
-        }
-
-        .bi {
-            margin-right: 8px;
-            color: #dc3545;
+        .alert {
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
             .main-container {
                 margin: 20px;
             }
+            
+            .login-section {
+                border-radius: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <br><br>
-<div class="container">
+    <div class="container">
         <div class="main-container">
-            <div class="row">
-                <div class="col-12">
+            <div class="row g-0">
+                <!-- Logo and Title Section -->
+                <div class="col-md-6">
+                    <div class="logo-section">
+                        <img src="../img/logo.png" alt="MCC Logo" class="logo-img">
+                        <div class="system-title">
+                            <h4 style="font-size: 18px;">WELCOME TO:</h4>
+                            <h3 style="font-size: 20px;"><strong>MCC Event Judging System</strong></h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Login Form Section -->
+                <div class="col-md-6">
                     <div class="login-section">
                         <div class="login-form">
-                            <h4 class="mb-4">ADMIN LOGIN</h4>
+                                <h4 class="mb-4">ADMIN LOGIN</h4>
+                            <?php echo $msg; ?>
                             <form method="POST" id="login-form">
                                 <div class="mb-3">
                                     <label for="username" class="form-label">
@@ -158,7 +178,7 @@ if (isset($_POST['admin_login'])) {
                                            placeholder="Enter your password" required>
                                 </div>
                                 
-                                <button type="submit" name="admin_login" class="btn btn-login">
+                                <button type="submit" name="admin_login" class="btn btn-primary btn-login">
                                     <i class="bi bi-box-arrow-in-right"></i> LOGIN
                                 </button>
                             </form>
