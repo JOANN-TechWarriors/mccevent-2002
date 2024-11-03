@@ -160,7 +160,7 @@ if (isset($_POST['admin_login'])) {
                 <div class="col-md-6">
                     <div class="login-section">
                         <div class="login-form">
-                                <h4 class="mb-4">ADMIN LOGIN</h4>
+                                <h4 style="font-size: 16px;" class="mb-4">ADMIN LOGIN</h4>
                             <?php echo $msg; ?>
                             <form method="POST" id="login-form">
                                 <div class="mb-3">
