@@ -16,28 +16,37 @@
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            background-color: #ffffff;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
             overflow: hidden;
-            margin: 2rem auto;
             max-width: 700px;
+            margin: 40px auto;
         }
 
         .logo-side {
-            padding: 3rem;
+            background-color: #dc3545;  /* Bootstrap's red color */
+            color: white;
+            padding: 40px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.9);
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .logo-side img {
             max-width: 200px;
-            margin-bottom: 2rem;
+            margin-bottom: 20px;
         }
 
         .login-side {
-            padding: 3rem;
-            background: white;
+            background-color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .login-form input {
@@ -68,6 +77,44 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+        }
+        
+
+        .form-control {
+            border: 1px solid #ced4da;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .form-control:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            padding: 10px 30px;
+        }
+
+        .btn-primary:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        a {
+            color: #dc3545;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #c82333;
+            text-decoration: underline;
+        }
+
+        h2, h4 {
+            margin-bottom: 20px;
         }
     </style>
 </head>
