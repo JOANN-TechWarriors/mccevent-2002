@@ -90,7 +90,7 @@ date_default_timezone_set('Asia/Manila');
                         >
                             Sign in
                         </button>
-
+                        </div>
                     </form>
                 </div>
             </div>
@@ -98,6 +98,19 @@ date_default_timezone_set('Asia/Manila');
     </div>
 
     <script>
+        document.getElementById("login-button").addEventListener("click", function() {
+            Swal.fire({
+                title: "Success!",
+                text: "You are successfully logged in!",
+                icon: "success",
+                confirmButtonText: "Ok",
+                confirmButtonColor: '#DC3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("login-form").submit();
+                }
+            });
+        });
 
         window.onload = function() {
             <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
