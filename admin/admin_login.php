@@ -26,7 +26,7 @@ if (isset($_POST['admin_login'])) {
     if (mysqli_num_rows($result) > 0 ) {
         $hashed_pass = $row['password'];
         if (!password_verify($pass, $hashed_pass)) {
-            $msg = "<div class='alert alert-danger'>Incorrect Password!</div>";
+            $msg = "<div class='alert alert-danger'>Incorrect Username or Password!</div>";
         } else {         
             $_SESSION['admin_login'] = true;
             $_SESSION['admin_id'] = $row['id'];
