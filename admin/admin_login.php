@@ -262,30 +262,7 @@ if (isset($_POST['admin_login'])) {
         <?php unset($_SESSION['login_success']); ?>
         <?php endif; ?>
 
-        // Security measures
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        document.onkeydown = function(e) {
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || 
-                (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-            }
-        };
-
-        document.onselectstart = function(e) {
-            e.preventDefault();
-        };
-
-        // Hide alert after 3 seconds
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                alert.style.display = 'none';
-            });
-        }, 3000);
+        
     </script>
 </body>
 </html>
