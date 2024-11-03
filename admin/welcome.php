@@ -10,24 +10,27 @@
         .bg-custom {
             background: url(../img/Community-College-Madridejos.jpeg) center/cover no-repeat;
         }
+        .bg-mcc-red {
+            background-color: #DC3545;
+        }
     </style>
 </head>
 <body class="bg-custom">
-    <div class="min-h-screen flex items-center justify-center bg-black bg-opacity-50"> <!-- Added overlay -->
-        <div class="bg-white rounded-xl shadow-lg flex flex-col md:flex-row w-full max-w-4xl m-4">
+    <div class="min-h-screen flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg flex flex-col md:flex-row w-full max-w-4xl m-4">
             <!-- Left Side - Logo and Title -->
-            <div class="w-full md:w-1/2 p-8 bg-gradient-to-br from-teal-50 to-white flex flex-col items-center justify-center rounded-l-xl">
-                <img src="../img/logo.png" alt="MCC Logo" class="w-64 h-auto mb-8">
-                <div class="text-center space-y-2">
-                    <h3 class="text-xl text-gray-600">WELCOME TO:</h3>
-                    <h2 class="text-3xl font-bold text-gray-800">MCC Event Judging System</h2>
+            <div class="w-full md:w-1/2 p-8 bg-mcc-red flex flex-col items-center justify-center rounded-l-lg text-white">
+                <img src="../img/logo.png" alt="MCC Logo" class="w-48 h-auto mb-6">
+                <div class="text-center space-y-3">
+                    <h3 class="text-xl">WELCOME TO:</h3>
+                    <h2 class="text-2xl font-bold">MCC Event Judging System</h2>
                 </div>
             </div>
 
             <!-- Right Side - Login Form -->
-            <div class="w-full md:w-1/2 p-8 bg-white rounded-r-xl">
+            <div class="w-full md:w-1/2 p-8 bg-white rounded-r-lg">
                 <div class="max-w-md mx-auto">
-                    <h2 class="text-2xl font-bold mb-8 text-gray-800">JUDGE LOGIN</h2>
+                    <h2 class="text-xl font-bold mb-8 text-gray-800">JUDGE LOGIN</h2>
                     <form method="POST" action="judge_profile.php">
                         <div class="space-y-6">
                             <!-- Judge Code Input -->
@@ -38,7 +41,7 @@
                                         type="password" 
                                         name="judge_code" 
                                         id="myInputJC"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                         placeholder="Enter Judge's Code"
                                     >
                                 </div>
@@ -50,7 +53,7 @@
                                     type="checkbox" 
                                     id="showPassword" 
                                     onclick="myFunctionJC()"
-                                    class="h-4 w-4 text-blue-600 rounded border-gray-300"
+                                    class="h-4 w-4 text-red-600 rounded border-gray-300"
                                 >
                                 <label for="showPassword" class="ml-2 text-sm text-gray-600">
                                     Show Code
@@ -60,10 +63,19 @@
                             <!-- Login Button -->
                             <button 
                                 type="submit" 
-                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition duration-200"
+                                class="w-full bg-mcc-red hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
                             >
-                                LOGIN
+                                Sign in
                             </button>
+
+                            <!-- Additional Links -->
+                            <div class="flex justify-between text-sm mt-4">
+                                <a href="#" class="text-red-600 hover:text-red-700">Forgot password?</a>
+                                <div class="text-gray-600">
+                                    Don't have an account? 
+                                    <a href="#" class="text-red-600 hover:text-red-700">Register</a>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
