@@ -72,14 +72,7 @@
                     <input id="confirm_password" type="password" name="password2" class="form-control" placeholder="Re-type Password" aria-describedby="basic-addon1" required>
                   </td>
                 </tr>
-                <tr><td colspan="5">&nbsp;</td></tr>
-                  <tr><td colspan="5"><strong>Contact Information</strong><hr /></td></tr>
-                  <tr>
-                      <td colspan="5">
-                          Email Address:
-                          <input type="email" name="email" class="form-control" placeholder="Enter your email address" aria-describedby="basic-addon1" required>
-                      </td>
-                  </tr>
+                
                 <tr>
                   <td colspan="4">&nbsp;</td>
                   <td><span id='message'></span></td>
