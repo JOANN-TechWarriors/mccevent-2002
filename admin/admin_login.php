@@ -59,7 +59,7 @@ if (isset($_POST['admin_login'])) {
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             margin: 50px auto;
-            max-width: 1000px;
+            max-width: 700px;
             min-height: 400px;
         }
 
@@ -149,8 +149,8 @@ if (isset($_POST['admin_login'])) {
                     <div class="logo-section">
                         <img src="../img/logo.png" alt="MCC Logo" class="logo-img">
                         <div class="system-title">
-                            <h4>WELCOME TO:</h4>
-                            <h3><strong>MCC Event Judging System</strong></h3>
+                            <h4 style="font-size: 18px;">WELCOME TO:</h4>
+                            <h3 style="font-size: 20px;"><strong>MCC Event Judging System</strong></h3>
                         </div>
                     </div>
                 </div>
