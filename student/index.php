@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="w-full md:w-1/2 p-8 bg-white">
                     <div class="max-w-md mx-auto">
                         <div>
-                            <h2 class="text-2xl font-bold">STUDENT LOGIN</h2>
+                            <h2 style="font: size 16px;" class="text-2xl font-bold">STUDENT LOGIN</h2>
                         </div>
                         <br><br><br>
                         <form method="POST" action="" class="space-y-6">
