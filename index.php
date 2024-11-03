@@ -230,6 +230,7 @@
             .dropdown {
                 position: static;
                 width: 100%;
+                background-color: rgba(255, 255, 255, 0.1);
                 box-shadow: none;
             }
 
