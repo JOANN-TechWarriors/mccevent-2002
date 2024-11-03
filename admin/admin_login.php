@@ -60,7 +60,7 @@ if (isset($_POST['admin_login'])) {
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             margin: 50px auto;
             max-width: 800px;
-            min-height: 500px;
+            min-height: 400px;
             overflow: hidden;
         }
 
@@ -100,7 +100,6 @@ if (isset($_POST['admin_login'])) {
         }
 
         .login-section {
-            background-color: white;
             padding: 40px;
             border-radius: 0 15px 15px 0;
             height: 100%;
