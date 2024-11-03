@@ -40,18 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Login - MCC Event Judging System</title>
     
-    <!-- Include your existing header -->
     <?php include_once('../admin/header2.php'); ?>
     
-    <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-    
-    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        /* Custom styles */
         .alert {
             position: fixed;
             top: 20px;
@@ -61,15 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         
         @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-            }
-            to {
-                transform: translateX(0);
-            }
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
         }
         
-        /* Prevent text selection */
         .no-select {
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -77,17 +67,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             user-select: none;
         }
         
-        /* Background image overlay */
         .bg-overlay {
             background: url(../img/Community-College-Madridejos.jpeg);
             background-size: cover;
             background-position: center;
         }
+
+        .bg-mcc-red {
+            background-color: #DC3545;
+        }
     </style>
 </head>
 
 <body class="bg-overlay no-select">
-    <!-- Alert Messages -->
     <?php if (isset($_SESSION['login_error'])): ?>
         <div class="alert bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
             <p><?php echo $_SESSION['login_error']; ?></p>
@@ -95,35 +87,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php unset($_SESSION['login_error']); ?>
     <?php endif; ?>
 
-    <!-- Main Container -->
     <div class="min-h-screen flex items-center justify-center p-4">
-        <!-- Login Card -->
         <div class="w-full max-w-6xl bg-white rounded-xl shadow-2xl overflow-hidden">
             <div class="flex flex-col md:flex-row">
                 <!-- Left Side - Logo and Title -->
-                <div class="w-full md:w-1/2 p-8 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-white">
+                <div class="w-full md:w-1/2 p-8 flex flex-col items-center justify-center bg-mcc-red text-white">
                     <img src="../img/logo.png" alt="MCC Logo" class="w-64 h-auto mb-8">
                     <div class="text-center space-y-2">
-                        <h3 class="text-xl text-gray-600">WELCOME TO:</h3>
-                        <h2 class="text-3xl font-bold text-gray-800">MCC Event Judging Systems</h2>
+                        <h3 class="text-xl">WELCOME TO:</h3>
+                        <h2 class="text-3xl font-bold">MCC Event Judging Systems</h2>
                     </div>
                 </div>
 
                 <!-- Right Side - Login Form -->
                 <div class="w-full md:w-1/2 p-8 bg-white">
                     <div class="max-w-md mx-auto">
-                        <div class="bg-aquamarine p-4 rounded-lg mb-6">
-                            <h2 class="text-2xl font-bold text-gray-800">STUDENT LOGIN</h2>
+                        <div class="bg-mcc-red text-white p-4 rounded-lg mb-6">
+                            <h2 class="text-2xl font-bold">STUDENT LOGIN</h2>
                         </div>
                         
                         <form method="POST" action="" class="space-y-6">
                             <div>
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
-                                    <i class="icon-user"></i> STUDENT ID</label>
+                                    <i class="icon-user"></i> STUDENT ID
+                                </label>
                                 <input
                                     type="text" 
                                     name="student_id" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                     placeholder="Enter Student ID #" 
                                     required 
                                     autofocus
@@ -133,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="flex items-center justify-between">
                                 <button 
                                     type="submit" 
-                                    class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
+                                    class="w-full bg-mcc-red hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
                                 >
                                     <i class="icon-ok"></i> LOGIN
                                 </button>
@@ -142,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="text-center mt-4">
                                 <p class="text-gray-600">
                                     Don't have an account? 
-                                    <a href="student_register.php" class="text-blue-500 hover:text-blue-600 font-medium">
+                                    <a href="student_register.php" class="text-red-500 hover:text-red-600 font-medium">
                                         Sign Up
                                     </a>
                                 </p>
@@ -154,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <!-- Your existing scripts -->
+    <!-- Scripts section remains the same -->
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap-transition.js"></script>
     <script src="../assets/js/bootstrap-alert.js"></script>
@@ -173,15 +164,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="../assets/js/google-code-prettify/prettify.js"></script>
     <script src="../assets/js/application.js"></script>
 
-    
-    <!-- Security Scripts -->
-     <script>
-    // Disable right-click
+    <script>
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
         document.onkeydown = function (e) {
             if (
                 e.key === 'F12' ||
@@ -192,7 +179,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         };
 
-        // Hide the alert after 3 seconds
         setTimeout(function(){
             var alert = document.querySelector('.alert');
             if (alert) {
@@ -201,7 +187,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }, 3000);
     </script>
 
-    <!-- Success Alert Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['login_success']) && $_SESSION['login_success'] === true): ?>
