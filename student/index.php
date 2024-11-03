@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <!-- Right Side - Login Form -->
                 <div class="w-full md:w-1/2 p-8 bg-white">
                     <div class="max-w-md mx-auto">
-                        <div class="bg-mcc-red text-white p-4 rounded-lg mb-6">
+                        <div>
                             <h2 class="text-2xl font-bold">STUDENT LOGIN</h2>
                         </div>
                         
