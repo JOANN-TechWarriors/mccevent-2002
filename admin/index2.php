@@ -124,8 +124,8 @@
             <div class="row g-0">
                 <div class="col-md-6 logo-side">
                     <img src="../img/logo.png" alt="MCC Logo" class="img-fluid">
-                    <h4 style="font-size: 16px;" class="mb-4">WELCOME TO:</h4>
-                    <h4 style="font-size: 16px;" class="mb-5"><strong >MCC Event Judging System</strong></h4>
+                    <h4 style="font-size: 18px;" class="mb-4">WELCOME TO:</h4>
+                    <h4 style="font-size: 20px;" class="mb-5"><strong >MCC Event Judging System</strong></h4>
                 </div>
                 <div class="col-md-6 login-side">
                     <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
