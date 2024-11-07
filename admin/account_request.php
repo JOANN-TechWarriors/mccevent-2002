@@ -293,7 +293,7 @@ if (isset($_POST['deleteStudent'])) {
             <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
         </div>
         <div class="profile-dropdown">
-            <div style="font-size:small;"> Joann R. Rebamonte</div>
+            <div style="font-size:small;"> Ayres Santillan Ilustrisimo</div>
             <div class="dropdown-menu">
                 <a href="admin_logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
