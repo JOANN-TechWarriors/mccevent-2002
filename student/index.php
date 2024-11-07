@@ -6,6 +6,7 @@ date_default_timezone_set('Asia/Manila');
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $student_id = $_POST['student_id'];
+    $password = $_POST['password'];
 
     try {
         // Prepare and execute the query
@@ -16,14 +17,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if ($stmt->rowCount() > 0) {
             if ($row['request_status'] == '') {
-                $_SESSION['login_error'] = "Sorry, Your account is not yet approve by the admin";
-            } elseif($row['request_status'] == 'Approved'){
-                 // Student exists, start session
-                $_SESSION['student_id'] = $student_id;
-                $_SESSION['login_success'] = true;
-                // Redirect to the login page to trigger JavaScript
-                header("Location: index.php");
-                exit();
+                $_SESSION['login_error'] = "Sorry, Your account is not yet approved by the admin";
+            } elseif ($row['request_status'] == 'Approved') {
+                // Verify the password
+                if (password_verify($password, $row['password'])) {
+                    // Password is correct, start session
+                    $_SESSION['student_id'] = $student_id;
+                    $_SESSION['login_success'] = true;
+                    // Redirect to the login page to trigger JavaScript
+                    header("Location: index.php");
+                    exit();
+                } else {
+                    $_SESSION['login_error'] = "Invalid password";
+                }
+            } else {
+                $_SESSION['login_error'] = "Your acount is yet approve or created";
             }
         } else {
             $_SESSION['login_error'] = "Invalid Student ID";
@@ -36,17 +44,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organizer Login - MCC Event Judging System</title>
-    
+
     <?php include_once('../admin/header2.php'); ?>
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <style>
         .alert {
             position: fixed;
@@ -55,19 +64,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             z-index: 1000;
             animation: slideIn 0.5s ease-out;
         }
-        
+
         @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
         }
-        
+
         .no-select {
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
         }
-        
+
         .bg-overlay {
             background: url(../img/Community-College-Madridejos.jpeg);
             background-size: cover;
@@ -98,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <?php unset($_SESSION['login_error']); ?>
     <?php endif; ?>
-<br>
+    <br>
     <div class="min-h-screen flex items-center justify-center p-4 relative">
         <div class="w-full max-w-3xl bg-white rounded-lg shadow-2xl overflow-hidden">
             <div class="grid grid-cols-1 md:grid-cols-2">
@@ -120,26 +134,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     <i class="icon-user"></i> STUDENT ID
                                 </label>
-                                <input
-                                    type="text" 
-                                    name="student_id" 
+                                <input type="text" name="student_id"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                    placeholder="Enter Student ID #" 
-                                    required 
-                                    autofocus
-                                >
+                                    placeholder="Enter Student ID #" required autofocus>
                             </div>
-
-                            <button 
-                                type="submit" 
-                                class="w-full bg-mcc-red hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200"
-                            >
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">
+                                    <i class="icon-lock"></i> PASSWORD
+                                </label>
+                                <input type="password" name="password"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                    placeholder="Enter Password" required>
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-mcc-red hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
                                 <i class="icon-ok"></i> LOGIN
                             </button>
-
                             <div class="text-center mt-4">
                                 <p class="text-gray-600">
-                                    Don't have an account? 
+                                    Don't have an account?
                                     <a href="student_register.php" class="text-red-500 hover:text-red-600 font-medium">
                                         Sign Up
                                     </a>
@@ -186,7 +199,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         };
 
-        setTimeout(function(){
+        setTimeout(function () {
             var alert = document.querySelector('.alert');
             if (alert) {
                 alert.style.display = 'none';
@@ -195,7 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             <?php if (isset($_SESSION['login_success']) && $_SESSION['login_success'] === true): ?>
                 Swal.fire({
                     title: "Success!",
@@ -210,4 +223,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         });
     </script>
 </body>
+
 </html>
