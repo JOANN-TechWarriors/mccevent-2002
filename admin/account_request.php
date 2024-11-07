@@ -48,7 +48,6 @@ if (isset($_POST['deleteStudent'])) {
     mysqli_query($conn, $del);
     header('location: account_request.php?filter_user_type=Student');
 }
-
 ?>
 
 <head>
