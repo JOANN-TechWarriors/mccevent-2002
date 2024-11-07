@@ -11,9 +11,9 @@ if (!isset($_SESSION['admin_id'])) {
 
 // Connect to database
 $host = '127.0.0.1';
-$username = 'root';
-$password = '';  // Replace with the actual password
-$dbname = 'judging';
+$username = 'u510162695_judging_root';
+$password = '1Judging_root';  // Replace with the actual password
+$dbname = 'u510162695_judging';
 
 
 $conn = new mysqli($host, $username, $password, $dbname);
