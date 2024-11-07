@@ -302,7 +302,7 @@ if (isset($_POST['deleteStudent'])) {
 
     <!-- Main content -->
     <div class="main" id="main">
-        <h1>Account Record</h1>
+        <h1>Record</h1>
         <div class="row">
             <div class="d-flex justify-content-end mb-2">
                 <div class="dropdown">
