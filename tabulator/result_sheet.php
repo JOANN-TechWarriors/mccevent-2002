@@ -478,6 +478,7 @@
         <?php } } ?>
     </div>
 
+    
     <!-- JavaScript -->
     <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     <script src="..//assets/js/jquery.js"></script>
