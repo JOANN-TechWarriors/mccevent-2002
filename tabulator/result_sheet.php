@@ -346,7 +346,18 @@
                             $same_place_count = 0;
                         }
                         
-                        $placing = ordinal($place);
+                        // Direct ordinal calculation
+                        $number = $place;
+                        if (($number % 100) >= 11 && ($number % 100) <= 13) {
+                            $placing = $number . 'th';
+                        } else {
+                            switch ($number % 10) {
+                                case 1: $placing = $number . 'st'; break;
+                                case 2: $placing = $number . 'nd'; break;
+                                case 3: $placing = $number . 'rd'; break;
+                                default: $placing = $number . 'th';
+                            }
+                        }
                         
                         // Update previous values for next iteration
                         $prev_rank = $current_rank;
