@@ -4,7 +4,7 @@
 <?php
    include('header2.php');
    include('..//admin/session.php');
-   $active_sub_event = $_GET['event_id'];
+   $active_sub_event=$_GET['event_id'];
 ?>
 <head>
     <meta charset="UTF-8">
@@ -186,6 +186,23 @@
             width: 100%;
         }
 
+        /* Print button styles */
+        .btn-print {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            margin-top: 20px;
+        }
+
+        .btn-print:hover {
+            background-color: #0056b3;
+        }
+
+        /* Print styles */
         @media print {
             body {
                 background: none;
@@ -238,8 +255,13 @@
             .signature-title {
                 font-size: 11px;
             }
+
+            .btn-print {
+                display: none;
+            }
         }
 
+        /* Responsive styles */
         @media screen and (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -277,7 +299,7 @@
         <?php   
         $s_event_query = $conn->query("select * from sub_event where subevent_id='$active_sub_event'") or die(mysql_error());
         while ($s_event_row = $s_event_query->fetch()) {
-            $MEidxx = $s_event_row['mainevent_id'];
+            $MEidxx=$s_event_row['mainevent_id'];
             $event_query = $conn->query("select * from main_event where mainevent_id='$MEidxx'") or die(mysql_error());
             while ($event_row = $event_query->fetch()) {
         ?>
@@ -288,12 +310,12 @@
             <table>
                 <tr>
                     <td>
-                        <h3><?php echo htmlspecialchars($event_row['event_name']); ?></h3>
+                        <h3><?php echo $event_row['event_name']; ?></h3>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <h4><?php echo htmlspecialchars($s_event_row['event_name']); ?></h4>
+                        <h4><?php echo $s_event_row['event_name']; ?></h4>
                     </td>
                 </tr>
                 <tr>
@@ -317,7 +339,7 @@
                     <?php
                     $o_result_query = $conn->query("select distinct contestant_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by place_title ASC") or die(mysql_error());
                     while ($o_result_row = $o_result_query->fetch()) {
-                        $contestant_id = $o_result_row['contestant_id'];
+                        $contestant_id=$o_result_row['contestant_id'];
                     ?>
                     <tr>
                         <td>
@@ -325,7 +347,7 @@
                             <?php
                             $cname_query = $conn->query("select * from contestants where contestant_id='$contestant_id'") or die(mysql_error());
                             while ($cname_row = $cname_query->fetch()) {
-                                echo htmlspecialchars($cname_row['contestant_ctr'].". ".$cname_row['fullname']); 
+                                echo $cname_row['contestant_ctr'].".".$cname_row['fullname']; 
                             }
                             ?>
                             </div>
@@ -335,9 +357,9 @@
                             <?php 
                             $placingzz_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
                             while ($placingzz_row = $placingzz_query->fetch()) {
-                                $place_title = $placingzz_row['place_title'];
+                                $place_title=$placingzz_row['place_title'];
                             }
-                            echo htmlspecialchars($place_title); 
+                            echo $place_title; 
                             ?>
                             </div>
                         </td>
@@ -348,35 +370,27 @@
                                     <th>Sum of Rank in all judges</th>
                                 </tr>
                                 <?php
-                                // Initialize variables
-                                $divz = 0;
-                                $c_ctr = 0;
-                                $totx_score = 0.0;  // Initialize as float
-                                $rank_score = 0;    // Initialize as integer
-                                $totx_deduct = 0.0; // Initialize as float
-
-                                // Count total judges
+                                $divz=0;
+                                $c_ctr=0;
+                                $totx_score=0;
+                                $rank_score=0;
                                 $tot_score_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
                                 while ($tot_score_row = $tot_score_query->fetch()) {
-                                    $divz++;  
-                                    $c_ctr++;
-                                    $place_title = $tot_score_row['place_title'];
+                                    $divz=$divz+1;  
+                                    $c_ctr=$c_ctr+1;
+                                    $place_title=$tot_score_row['place_title'];
                                 }
 
-                                // Calculate scores
-                                $tot_score_query = $conn->query("select judge_id, total_score, deduction, rank from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
+                                $tot_score_query = $conn->query("select judge_id,total_score, deduction, rank from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
                                 while ($tot_score_row = $tot_score_query->fetch()) {
-                                    $totx_score += floatval($tot_score_row['total_score']);
-                                    $rank_score += intval($tot_score_row['rank']);
-                                    $totx_deduct = floatval($tot_score_row['deduction']);
+                                    $totx_score=$totx_score+$tot_score_row['total_score'];
+                                    $rank_score=$rank_score+$tot_score_row['rank'];
+                                    $totx_deduct=$tot_score_row['deduction'];
                                 }
-
-                                // Calculate final average
-                                $final_average = ($divz > 0) ? round(($totx_score - $totx_deduct) / $divz, 1) : 0;
                                 ?>
                                 <tr>
                                     <td class="result-average">
-                                        Ave: <?php echo $final_average; ?>
+                                        Ave: <?php echo round(($totx_score-$totx_deduct)/$divz,1) ?>
                                     </td>
                                     <td class="result-sum">
                                         Sum: <?php echo $rank_score; ?>
@@ -390,20 +404,21 @@
             </table>
         </div>
 
+        <!-- Improved signature section -->
         <div class="signature-section">
             <!-- Judges Row -->
             <div class="judges-row">
                 <?php
                 $jjn_result_query = $conn->query("select distinct judge_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by judge_id ASC") or die(mysql_error());
                 while ($jjn_result_row = $jjn_result_query->fetch()) {
-                    $jx_id = $jjn_result_row['judge_id'];
+                    $jx_id=$jjn_result_row['judge_id'];
                     $jname_query = $conn->query("select * from judges where judge_id='$jx_id'") or die(mysql_error());
                     $jname_row = $jname_query->fetch();
                 ?>
                 <div class="signature-group">
                     <div class="signature-box"></div>
-                    <div class="signature-name"><?php echo htmlspecialchars($jname_row['fullname']); ?></div>
-                    <div class="signature-title"><?php echo ($jname_row['jtype'] == "Chairman") ? "Chairman Judge" : "Judge"; ?></div>
+                    <div class="signature-name"><?php echo $jname_row['fullname'];?></div>
+                    <div class="signature-title"><?php echo ($jname_row['jtype']=="Chairman") ? "Chairman Judge" : "Judge"; ?></div>
                 </div>
                 <?php } ?>
             </div>
@@ -417,9 +432,7 @@
                     while ($jjn_result_row = $jjn_result_query->fetch()) {
                     ?>
                     <div class="signature-box"></div>
-                    <div class="signature-name">
-                        <?php echo htmlspecialchars($jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname']); ?>
-                    </div>
+                    <div class="signature-name"><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></div>
                     <div class="signature-title">Tabulator</div>
                     <?php } ?>
                 </div>
@@ -431,9 +444,7 @@
                     while ($jjn_result_row = $jjn_result_query->fetch()) {
                     ?>
                     <div class="signature-box"></div>
-                    <div class="signature-name">
-                        <?php echo htmlspecialchars($jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname']); ?>
-                    </div>
+                    <div class="signature-name"><?php echo $jjn_result_row['fname']." ".$jjn_result_row['mname']." ".$jjn_result_row['lname'];?></div>
                     <div class="signature-title">Organizer</div>
                     <?php } ?>
                 </div>
@@ -442,5 +453,25 @@
 
         <?php } } ?>
     </div>
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script src="..//assets/js/jquery.js"></script>
+    <script src="..//assets/js/bootstrap-transition.js"></script>
+    <script src="..//assets/js/bootstrap-alert.js"></script>
+    <script src="..//assets/js/bootstrap-modal.js"></script>
+    <script src="..//assets/js/bootstrap-dropdown.js"></script>
+    <script src="..//assets/js/bootstrap-scrollspy.js"></script>
+    <script src="..//assets/js/bootstrap-tab.js"></script>
+    <script src="..//assets/js/bootstrap-tooltip.js"></script>
+    <script src="..//assets/js/bootstrap-popover.js"></script>
+    <script src="..//assets/js/bootstrap-button.js"></script>
+    <script src="..//assets/js/bootstrap-collapse.js"></script>
+    <script src="..//assets/js/bootstrap-carousel.js"></script>
+    <script src="..//assets/js/bootstrap-typeahead.js"></script>
+    <script src="..//assets/js/bootstrap-affix.js"></script>
+    <script src="..//assets/js/holder/holder.js"></script>
+    <script src="..//assets/js/google-code-prettify/prettify.js"></script>
+    <script src="..//assets/js/application.js"></script>
 </body>
 </html>
