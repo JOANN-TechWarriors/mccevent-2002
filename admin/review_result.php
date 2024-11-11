@@ -44,48 +44,60 @@ $subevent_id = $_GET['sub_event_id'];
                 </thead>
                 <tbody>
                 <?php
-                // First, calculate average scores and ranks for all contestants
+                // First, get all contestants and their average scores
                 $rankings = array();
                 
-                $contestants_query = $conn->query("select distinct contestant_id from sub_results where mainevent_id='$mainevent_id' and subevent_id='$subevent_id'") or die(mysql_error());
-                while ($contestant = $contestants_query->fetch()) {
-                    $contestant_id = $contestant['contestant_id'];
-                    
-                    // Calculate total scores and counts
-                    $score_query = $conn->query("select sum(total_score) as total, count(*) as count from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
-                    $score_data = $score_query->fetch();
-                    
-                    $average_score = $score_data['total'] / $score_data['count'];
-                    
-                    // Store in rankings array
-                    $rankings[$contestant_id] = array(
-                        'average_score' => $average_score,
-                        'contestant_id' => $contestant_id
-                    );
-                }
-
-                // Sort by average score in descending order
-                uasort($rankings, function($a, $b) {
-                    return $b['average_score'] <=> $a['average_score'];
-                });
-
-                // Add ranking positions
-                $position = 1;
-                $last_score = null;
-                $last_position = 1;
-
-                foreach ($rankings as &$ranking) {
-                    if ($last_score !== null && $ranking['average_score'] < $last_score) {
-                        $last_position = $position;
+                $contestants_query = $conn->query("
+                    SELECT 
+                        r.contestant_id,
+                        AVG(r.total_score) as average_score,
+                        SUM(r.rank) as total_rank
+                    FROM sub_results r 
+                    WHERE r.mainevent_id='$mainevent_id' 
+                    AND r.subevent_id='$subevent_id'
+                    GROUP BY r.contestant_id
+                    ORDER BY average_score DESC, total_rank ASC
+                ") or die(mysql_error());
+                
+                $rank = 1;
+                $prev_score = null;
+                $prev_rank = null;
+                $skip_rank = 0;
+                
+                // Store rankings with proper handling of ties
+                while ($row = $contestants_query->fetch()) {
+                    if ($prev_score === null) {
+                        // First contestant
+                        $rankings[$row['contestant_id']] = array(
+                            'rank' => 1,
+                            'average_score' => $row['average_score'],
+                            'total_rank' => $row['total_rank']
+                        );
+                    } else if ($row['average_score'] == $prev_score && $row['total_rank'] == $prev_rank) {
+                        // Tie - same score and rank
+                        $rankings[$row['contestant_id']] = array(
+                            'rank' => $rank,
+                            'average_score' => $row['average_score'],
+                            'total_rank' => $row['total_rank']
+                        );
+                        $skip_rank++;
+                    } else {
+                        // Different score - new rank
+                        $rank = $rank + $skip_rank + 1;
+                        $rankings[$row['contestant_id']] = array(
+                            'rank' => $rank,
+                            'average_score' => $row['average_score'],
+                            'total_rank' => $row['total_rank']
+                        );
+                        $skip_rank = 0;
                     }
-                    $ranking['position'] = $last_position;
-                    $last_score = $ranking['average_score'];
-                    $position++;
+                    $prev_score = $row['average_score'];
+                    $prev_rank = $row['total_rank'];
                 }
 
                 // Display contestants in ranked order
-                foreach ($rankings as $contestant_id => $ranking) {
-                    ?>
+                foreach ($rankings as $contestant_id => $ranking_data) {
+                ?>
                     <tr>
                         <td><?php
                             $cname_query = $conn->query("select * from contestants where contestant_id='$contestant_id'") or die(mysql_error());
@@ -131,15 +143,14 @@ $subevent_id = $_GET['sub_event_id'];
                         <td>
                             <strong style="font-size:25px;">
                             <?php
-                            // Convert numerical position to ordinal
-                            $position = $ranking['position'];
-                            $suffix = match(($position % 100) > 10 && ($position % 100) < 14 ? 0 : $position % 10) {
+                            $rank = $ranking_data['rank'];
+                            $suffix = match(($rank % 100) > 10 && ($rank % 100) < 14 ? 0 : $rank % 10) {
                                 1 => 'st',
                                 2 => 'nd',
                                 3 => 'rd',
                                 default => 'th'
                             };
-                            echo $position . $suffix . " Place";
+                            echo $rank . $suffix . " Place";
                             ?>
                             </strong>
                         </td>
