@@ -315,9 +315,52 @@
                 </thead>
                 <tbody>
                     <?php
-                    $o_result_query = $conn->query("select distinct contestant_id from sub_results where mainevent_id='$MEidxx' and subevent_id='$active_sub_event' order by place_title ASC") or die(mysql_error());
+                    // Modified query to order by rank score and average score
+                    $o_result_query = $conn->query("
+                        SELECT 
+                            contestant_id,
+                            SUM(rank) as total_rank,
+                            AVG(total_score - deduction) as avg_score
+                        FROM sub_results 
+                        WHERE mainevent_id='$MEidxx' 
+                        AND subevent_id='$active_sub_event'
+                        GROUP BY contestant_id
+                        ORDER BY total_rank ASC, avg_score DESC
+                    ") or die(mysql_error());
+                    
+                    $place = 1;
+                    $prev_rank = -1;
+                    $prev_score = -1;
+                    $same_place_count = 0;
+                    
                     while ($o_result_row = $o_result_query->fetch()) {
                         $contestant_id = $o_result_row['contestant_id'];
+                        $current_rank = $o_result_row['total_rank'];
+                        $current_score = $o_result_row['avg_score'];
+                        
+                        // Determine if there's a tie
+                        if ($prev_rank == $current_rank && $prev_score == $current_score) {
+                            $same_place_count++;
+                        } else {
+                            $place = $place + $same_place_count;
+                            $same_place_count = 0;
+                        }
+                        
+                        // Function to convert number to ordinal
+                        function ordinal($number) {
+                            $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+                            if ((($number % 100) >= 11) && (($number % 100) <= 13)) {
+                                return $number. 'th';
+                            } else {
+                                return $number. $ends[$number % 10];
+                            }
+                        }
+                        
+                        $placing = ordinal($place);
+                        
+                        // Update previous values for next iteration
+                        $prev_rank = $current_rank;
+                        $prev_score = $current_score;
                     ?>
                     <tr>
                         <td>
@@ -332,13 +375,7 @@
                         </td>
                         <td class="text-center">
                             <div class="participant-name">
-                            <?php 
-                            $placingzz_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
-                            while ($placingzz_row = $placingzz_query->fetch()) {
-                                $place_title = $placingzz_row['place_title'];
-                            }
-                            echo htmlspecialchars($place_title); 
-                            ?>
+                                <?php echo $placing; ?>
                             </div>
                         </td>
                         <td>
@@ -351,24 +388,18 @@
                                 // Initialize variables
                                 $divz = 0;
                                 $c_ctr = 0;
-                                $totx_score = 0.0;  // Initialize as float
-                                $rank_score = 0;    // Initialize as integer
-                                $totx_deduct = 0.0; // Initialize as float
+                                $totx_score = 0.0;
+                                $rank_score = 0;
+                                $totx_deduct = 0.0;
 
-                                // Count total judges
-                                $tot_score_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
-                                while ($tot_score_row = $tot_score_query->fetch()) {
-                                    $divz++;  
-                                    $c_ctr++;
-                                    $place_title = $tot_score_row['place_title'];
-                                }
-
-                                // Calculate scores
+                                // Count total judges and calculate scores
                                 $tot_score_query = $conn->query("select judge_id, total_score, deduction, rank from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
                                 while ($tot_score_row = $tot_score_query->fetch()) {
+                                    $divz++;
+                                    $c_ctr++;
                                     $totx_score += floatval($tot_score_row['total_score']);
                                     $rank_score += intval($tot_score_row['rank']);
-                                    $totx_deduct = floatval($tot_score_row['deduction']);
+                                    $totx_deduct += floatval($tot_score_row['deduction']);
                                 }
 
                                 // Calculate final average
@@ -385,7 +416,10 @@
                             </table>
                         </td>
                     </tr>
-                    <?php } ?>
+                    <?php 
+                        $place++;
+                    } 
+                    ?>
                 </tbody>
             </table>
         </div>
