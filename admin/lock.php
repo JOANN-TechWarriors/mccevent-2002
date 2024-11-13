@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         body {
             background-color: #f0f2f5;
@@ -98,49 +99,10 @@
             color: #333;
         }
         
-        .captcha-container {
+        .recaptcha-container {
             margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            padding: 1rem;
-            border-radius: 4px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #f9f9f9;
-        }
-        
-        .captcha-container.verified {
-            background-color: #e8f5e9;
-            border-color: #a5d6a7;
-        }
-        
-        .captcha-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .checkmark {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ddd;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .checkmark.checked {
-            background-color: #4CAF50;
-            border-color: #4CAF50;
-        }
-        
-        .checkmark.checked::after {
-            content: "✓";
-            color: white;
-            font-size: 14px;
         }
         
         .verification-number-container {
@@ -187,14 +149,6 @@
         
         .verify-button:hover {
             background-color: #45a049;
-        }
-        
-        .recaptcha-logo {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: #555;
-            font-size: 0.8rem;
         }
         
         .footer {
@@ -253,7 +207,7 @@
         <h1 class="title">Admin Verification</h1>
         
         <div class="profile-section">
-            <img src="/api/placeholder/80/80" alt="Admin Profile" class="profile-img">
+            <br>
             <div class="admin-name">Ayres Santillan Ilustrisimo</div>
             <div class="email-container">
                 <input type="email" placeholder="Enter your email" class="email-input" required>
@@ -264,17 +218,11 @@
             </div>
         </div>
         
-        <div class="captcha-container" id="captchaContainer">
-            <div class="captcha-left">
-                <div class="checkmark" id="captchaCheckmark"></div>
-                <span>I'm not a robot</span>
-            </div>
-            <div class="recaptcha-logo">
-                <img src="/api/placeholder/20/20" alt="reCAPTCHA logo">
-            </div>
+        <div class="recaptcha-container">
+            <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY" data-callback="onRecaptchaVerified"></div>
         </div>
         
-        <div class="verification-failed" id="verificationMessage">CAPTCHA verification failed.</div>
+        <div class="verification-failed" id="verificationMessage">Verification failed. Please try again.</div>
 
         <div class="verification-number-container" id="verificationNumberContainer">
             <p>Please enter the 6-digit verification number sent to your email</p>
@@ -287,8 +235,8 @@
                 <input type="text" maxlength="1" class="number-input" />
             </div>
             <div class="timer" id="timer">Resend number in: 02:00</div>
-            <a class="resend-number" id="resendNumber" style="display: none;">Resend Number</a>
-            <button class="verify-button">Verify Number</button>
+            <a class="resend-number" id="resendNumber" style="display: none;">Resend</a>
+            <button class="verify-button">Verify</button>
         </div>
         
         <div class="footer">
@@ -300,14 +248,14 @@
     <script>
         const emailInput = document.querySelector('.email-input');
         const emailError = document.querySelector('.email-error');
-        const captchaCheckmark = document.getElementById('captchaCheckmark');
-        const captchaContainer = document.getElementById('captchaContainer');
         const sendButton = document.getElementById('sendButton');
         const verificationMessage = document.getElementById('verificationMessage');
         const verificationNumberContainer = document.getElementById('verificationNumberContainer');
         const numberInputs = document.querySelectorAll('.number-input');
         const timerElement = document.getElementById('timer');
         const resendNumberButton = document.getElementById('resendNumber');
+        
+        let isRecaptchaVerified = false;
         
         // Email validation function
         function validateEmail(email) {
@@ -320,26 +268,35 @@
             const isValidEmail = validateEmail(this.value);
             this.classList.toggle('error', !isValidEmail && this.value !== '');
             emailError.classList.toggle('show', !isValidEmail && this.value !== '');
-            sendButton.classList.toggle('active', isValidEmail && captchaCheckmark.classList.contains('checked'));
+            updateSendButtonState();
         });
         
-        // Handle CAPTCHA verification
-        captchaCheckmark.addEventListener('click', function() {
-            setTimeout(() => {
-                this.classList.add('checked');
-                captchaContainer.classList.add('verified');
-                if (validateEmail(emailInput.value)) {
-                    sendButton.classList.add('active');
-                }
+        // Callback for reCAPTCHA verification
+        function onRecaptchaVerified(response) {
+            if (response) {
+                isRecaptchaVerified = true;
                 verificationMessage.classList.remove('show');
-            }, 1000);
-        });
+                updateSendButtonState();
+            }
+        }
+        
+        // Update send button state based on email and reCAPTCHA
+        function updateSendButtonState() {
+            const isValidEmail = validateEmail(emailInput.value);
+            sendButton.classList.toggle('active', isValidEmail && isRecaptchaVerified);
+        }
         
         // Handle send verification number
         sendButton.addEventListener('click', function() {
-            if (this.classList.contains('active') && validateEmail(emailInput.value)) {
-                verificationNumberContainer.classList.add('show');
-                startTimer();
+            if (this.classList.contains('active')) {
+                // Verify reCAPTCHA response with your backend
+                const recaptchaResponse = grecaptcha.getResponse();
+                if (recaptchaResponse) {
+                    verificationNumberContainer.classList.add('show');
+                    startTimer();
+                } else {
+                    verificationMessage.classList.add('show');
+                }
             } else if (!validateEmail(emailInput.value)) {
                 emailError.classList.add('show');
                 emailInput.classList.add('error');
@@ -382,12 +339,22 @@
         // Handle resend number
         resendNumberButton.addEventListener('click', function() {
             if (validateEmail(emailInput.value)) {
-                this.style.display = 'none';
-                timerElement.style.display = 'block';
-                startTimer();
-                // Reset inputs
-                numberInputs.forEach(input => input.value = '');
-                numberInputs[0].focus();
+                // Verify reCAPTCHA again before resending
+                const recaptchaResponse = grecaptcha.getResponse();
+                if (recaptchaResponse) {
+                    this.style.display = 'none';
+                    timerElement.style.display = 'block';
+                    startTimer();
+                    // Reset inputs
+                    numberInputs.forEach(input => input.value = '');
+                    numberInputs[0].focus();
+                    // Reset reCAPTCHA
+                    grecaptcha.reset();
+                    isRecaptchaVerified = false;
+                    updateSendButtonState();
+                } else {
+                    verificationMessage.classList.add('show');
+                }
             } else {
                 emailError.classList.add('show');
                 emailInput.classList.add('error');
@@ -396,3 +363,4 @@
     </script>
 </body>
 </html>
+</a
