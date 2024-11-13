@@ -116,6 +116,11 @@
         h2, h4 {
             margin-bottom: 20px;
         }
+        .login-error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -138,7 +143,7 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
+                            <span id="login-error-message" class="login-error-message"></span>
                         </div>
                         <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
                     </form>
@@ -171,9 +176,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        let loginAttempts = 0;
+        let disableLoginButton = false;
+        let loginButtonTimer = null;
+
         // Get the login form and button
         const loginForm = document.getElementById('login-form');
         const loginButton = document.getElementById('login-button');
+        const loginErrorMessage = document.getElementById('login-error-message');
 
         // Add an event listener to the login button
         loginButton.addEventListener('click', function() {
@@ -190,8 +200,24 @@
                     confirmButtonText: 'OK'
                 });
             } else {
-                // Submit the login form
-                loginForm.submit();
+                // Increment the login attempts
+                loginAttempts++;
+
+                // If the login attempts exceed 3, disable the login button
+                if (loginAttempts > 3) {
+                    disableLoginButton = true;
+                    loginButton.disabled = true;
+                    loginErrorMessage.textContent = 'Too many failed attempts. Please try again in 2 minutes.';
+                    loginButtonTimer = setTimeout(function() {
+                        disableLoginButton = false;
+                        loginButton.disabled = false;
+                        loginErrorMessage.textContent = '';
+                        loginAttempts = 0;
+                    }, 120000); // 2 minutes
+                } else {
+                    // Submit the login form
+                    loginForm.submit();
+                }
             }
         });
 
