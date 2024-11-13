@@ -247,10 +247,7 @@
         </div>
     </div>
 
-    // First, rename your existing HTML file to index.html
-// Create a new file called verify_gmail.php with the previous PHP code
-// Then replace the existing JavaScript in your HTML with this updated version:
-
+ 
 <script>
     const emailInput = document.querySelector('.email-input');
     const emailError = document.querySelector('.email-error');
