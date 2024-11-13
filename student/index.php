@@ -185,6 +185,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             >
                                 <i class="icon-ok"></i> LOGIN
                             </button>
+                            <?php if (isset($_SESSION['login_attempts'])): ?>
+                                <div class="text-center text-gray-600 mt-2">
+                                    Login attempts: <?php echo $_SESSION['login_attempts']; ?>
+                                </div>
+                            <?php endif; ?>
                             <div class="text-center mt-4">
                                 <p class="text-gray-600">
                                     Don't have an account?
