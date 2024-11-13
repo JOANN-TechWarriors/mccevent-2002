@@ -1,5 +1,4 @@
 <?php
-// Include required PHPMailer files and database connection
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -7,10 +6,8 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php';
 require 'dbcon.php';
 
-// Handle POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        // Get email from POST data
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         
         // Verify if email exists in admin table
@@ -22,10 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $verification_code = sprintf("%06d", mt_rand(0, 999999));
             
             // Update admin table with new verification code
-            $update_stmt = $conn->prepare("UPDATE admin SET code = ? WHERE email = ?");
+            $update_stmt = $conn->prepare("UPDATE admin SET verification_code = ?, code_timestamp = NOW() WHERE email = ?");
             
             if ($update_stmt->execute([$verification_code, $email])) {
-                // Initialize PHPMailer
                 $mail = new PHPMailer(true);
                 
                 try {
@@ -33,13 +29,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail->isSMTP();
                     $mail->Host = 'smtp.gmail.com';
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'joannrebamonte80@gmail.com'; // Your Gmail address
-                    $mail->Password = 'dkyd tsnv hzyh amjy'; // Your Gmail App Password
+                    $mail->Username = 'your-email@gmail.com'; // Your Gmail
+                    $mail->Password = 'your-app-password'; // Your Gmail App Password
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port = 587;
                     
                     // Recipients
-                    $mail->setFrom('your_email@gmail.com', 'Event Judging System');
+                    $mail->setFrom('your-email@gmail.com', 'Event Judging System');
                     $mail->addAddress($email);
                     
                     // Content
@@ -67,7 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo json_encode(['success' => false, 'message' => "Mail could not be sent. Mailer Error: {$mail->ErrorInfo}"]);
                 }
             } else {
-                echo json_encode(['success' => false, 'message' => 'Failed to update verification code']);
+              // Continuation of verify_gmail.php
+              echo json_encode(['success' => false, 'message' => 'Failed to update verification code']);
             }
         } else {
             echo json_encode(['success' => false, 'message' => 'Email not found in admin records']);
@@ -77,4 +74,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
 }
-?>
