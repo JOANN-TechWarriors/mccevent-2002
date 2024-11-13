@@ -58,6 +58,22 @@
             box-sizing: border-box;
         }
         
+        .email-input.error {
+            border-color: #dc3545;
+        }
+        
+        .email-error {
+            color: #dc3545;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+            text-align: left;
+        }
+        
+        .email-error.show {
+            display: block;
+        }
+        
         .send-button {
             position: absolute;
             right: 8px;
@@ -244,6 +260,7 @@
                 <button class="send-button" title="Send verification" id="sendButton">
                     <i class="arrow"></i>
                 </button>
+                <div class="email-error">Please enter a valid email address.</div>
             </div>
         </div>
         
@@ -281,6 +298,8 @@
     </div>
 
     <script>
+        const emailInput = document.querySelector('.email-input');
+        const emailError = document.querySelector('.email-error');
         const captchaCheckmark = document.getElementById('captchaCheckmark');
         const captchaContainer = document.getElementById('captchaContainer');
         const sendButton = document.getElementById('sendButton');
@@ -290,21 +309,40 @@
         const timerElement = document.getElementById('timer');
         const resendNumberButton = document.getElementById('resendNumber');
         
+        // Email validation function
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // Handle email input validation
+        emailInput.addEventListener('input', function() {
+            const isValidEmail = validateEmail(this.value);
+            this.classList.toggle('error', !isValidEmail && this.value !== '');
+            emailError.classList.toggle('show', !isValidEmail && this.value !== '');
+            sendButton.classList.toggle('active', isValidEmail && captchaCheckmark.classList.contains('checked'));
+        });
+        
         // Handle CAPTCHA verification
         captchaCheckmark.addEventListener('click', function() {
             setTimeout(() => {
                 this.classList.add('checked');
                 captchaContainer.classList.add('verified');
-                sendButton.classList.add('active');
+                if (validateEmail(emailInput.value)) {
+                    sendButton.classList.add('active');
+                }
                 verificationMessage.classList.remove('show');
             }, 1000);
         });
         
         // Handle send verification number
         sendButton.addEventListener('click', function() {
-            if (this.classList.contains('active')) {
+            if (this.classList.contains('active') && validateEmail(emailInput.value)) {
                 verificationNumberContainer.classList.add('show');
                 startTimer();
+            } else if (!validateEmail(emailInput.value)) {
+                emailError.classList.add('show');
+                emailInput.classList.add('error');
             }
         });
         
@@ -343,12 +381,17 @@
         
         // Handle resend number
         resendNumberButton.addEventListener('click', function() {
-            this.style.display = 'none';
-            timerElement.style.display = 'block';
-            startTimer();
-            // Reset inputs
-            numberInputs.forEach(input => input.value = '');
-            numberInputs[0].focus();
+            if (validateEmail(emailInput.value)) {
+                this.style.display = 'none';
+                timerElement.style.display = 'block';
+                startTimer();
+                // Reset inputs
+                numberInputs.forEach(input => input.value = '');
+                numberInputs[0].focus();
+            } else {
+                emailError.classList.add('show');
+                emailInput.classList.add('error');
+            }
         });
     </script>
 </body>
