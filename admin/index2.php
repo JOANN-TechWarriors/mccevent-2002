@@ -190,18 +190,6 @@
             document.getElementById("forgot-password-form").reset();
         }
 
-        document.getElementById("login-button").addEventListener("click", function() {
-            Swal.fire({
-                title: "Success!",
-                text: "You are successfully logged in!",
-                icon: "success",
-                confirmButtonText: "Ok",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById("login-form").submit();
-                }
-            });
-        });
 // Security measures
     // Disable right-click
     document.addEventListener('contextmenu', function (e) {
