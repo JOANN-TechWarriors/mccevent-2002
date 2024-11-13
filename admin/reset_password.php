@@ -22,7 +22,7 @@
     /* Navbar Styles */
     .navbar {
       background-color: #333;
-      color: #fff;
+      color: blue;
       padding: 10px;
     }
 
@@ -109,7 +109,6 @@
   <header class="jumbotron subhead" id="overview">
     <div class="container">
       <h1>Account Reset Password</h1>
-      <p class="lead">Event Judging System</p>
     </div>
   </header>
 
@@ -127,7 +126,7 @@
           <input id="confirm_password" type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
         </div>
         <div class="btn-group">
-          <a href="index.php" type="button" class="btn btn-default">Cancel</a>
+          <a href="index2.php" type="button" class="btn btn-default">Cancel</a>
           <button name="register" type="submit" class="btn btn-primary">Reset</button>
         </div>
       </form>
