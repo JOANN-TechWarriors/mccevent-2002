@@ -108,13 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <div class="container">
-            <h1>Event Judging System</h1>
-        </div>
-    </div>
-
     <!-- Header -->
     <header class="jumbotron subhead" id="overview">
         <div class="container">
