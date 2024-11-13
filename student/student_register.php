@@ -1,6 +1,6 @@
 <?php
 // register_account.php
-session_start();
+
 include('../admin/dbcon.php'); // Assuming this has your database connection
 
 // reCAPTCHA configuration
