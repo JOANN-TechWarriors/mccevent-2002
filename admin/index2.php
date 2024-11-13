@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,16 +135,16 @@
                 </div>
                 <div class="col-md-6 login-side">
                     <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
-                    <form id="login-form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="login-form">
+                    <form id="login-form" method="POST" action="login.php" class="login-form">
                         <div class="mb-3">
-                            <input type="text" class="form-control" name="username" placeholder="Username" required autofocus>
+                            <input type="email" class="form-control" name="username" placeholder="Username" required autofocus>
                         </div>
                         <div class="mb-3">
                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
-                                <button type="submit" class="btn btn-primary px-4">Sign in</button>
+                                <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
                                 <span id="countdown" class="countdown"></span>
                             </div>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
@@ -183,6 +182,52 @@
     <script>
         // Get the login form and button
         const loginForm = document.getElementById('login-form');
+        const loginButton = document.getElementById('login-button');
+        const countdownElement = document.getElementById('countdown');
+
+        // Set the initial login attempts count
+        let loginAttempts = 0;
+
+        // Add an event listener to the login button
+        loginButton.addEventListener('click', function() {
+            // Get the username and password values
+            const username = loginForm.elements.username.value;
+            const password = loginForm.elements.password.value;
+
+            // Check if the username and password are empty
+            if (username.trim() === '' || password.trim() === '') {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please enter your username and password.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                // Increment the login attempts count
+                loginAttempts++;
+
+                // If the login attempts count is 3 or more, disable the login button and start the countdown
+                if (loginAttempts >= 3) {
+                    loginButton.disabled = true;
+                    let countdown = 120; // 2 minutes
+                    const countdownInterval = setInterval(function() {
+                        countdownElement.textContent = `Disabled for ${countdown} seconds`;
+                        countdown--;
+
+                        // When the countdown reaches 0, enable the login button and reset the login attempts count
+                        if (countdown < 0) {
+                            clearInterval(countdownInterval);
+                            loginButton.disabled = false;
+                            countdownElement.textContent = '';
+                            loginAttempts = 0;
+                        }
+                    }, 1000);
+                } else {
+                    // Submit the login form
+                    loginForm.submit();
+                }
+            }
+        });
 
         // Handle the login success case
         window.onload = function() {
