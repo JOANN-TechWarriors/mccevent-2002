@@ -127,23 +127,23 @@
             font-size: 14px;
         }
         
-        .verification-code-container {
+        .verification-number-container {
             display: none;
             margin-top: 1rem;
         }
         
-        .verification-code-container.show {
+        .verification-number-container.show {
             display: block;
         }
         
-        .code-inputs {
+        .number-inputs {
             display: flex;
             gap: 8px;
             justify-content: center;
             margin: 1rem 0;
         }
         
-        .code-input {
+        .number-input {
             width: 40px;
             height: 40px;
             border: 1px solid #ddd;
@@ -153,7 +153,7 @@
             font-weight: bold;
         }
         
-        .code-input:focus {
+        .number-input:focus {
             border-color: #4CAF50;
             outline: none;
         }
@@ -212,7 +212,7 @@
             border-color: #333;
         }
 
-        .resend-code {
+        .resend-number {
             color: #4CAF50;
             font-size: 0.9rem;
             text-decoration: none;
@@ -221,7 +221,7 @@
             display: inline-block;
         }
 
-        .resend-code:hover {
+        .resend-number:hover {
             text-decoration: underline;
         }
 
@@ -234,7 +234,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Admin Verification </h1>
+        <h1 class="title">Admin Verification</h1>
         
         <div class="profile-section">
             <img src="/api/placeholder/80/80" alt="Admin Profile" class="profile-img">
@@ -259,19 +259,19 @@
         
         <div class="verification-failed" id="verificationMessage">CAPTCHA verification failed.</div>
 
-        <div class="verification-code-container" id="verificationCodeContainer">
-            <p>Please enter the verification code sent to your email</p>
-            <div class="code-inputs">
-                <input type="text" maxlength="1" class="code-input" />
-                <input type="text" maxlength="1" class="code-input" />
-                <input type="text" maxlength="1" class="code-input" />
-                <input type="text" maxlength="1" class="code-input" />
-                <input type="text" maxlength="1" class="code-input" />
-                <input type="text" maxlength="1" class="code-input" />
+        <div class="verification-number-container" id="verificationNumberContainer">
+            <p>Please enter the 6-digit verification number sent to your email</p>
+            <div class="number-inputs">
+                <input type="text" maxlength="1" class="number-input" />
+                <input type="text" maxlength="1" class="number-input" />
+                <input type="text" maxlength="1" class="number-input" />
+                <input type="text" maxlength="1" class="number-input" />
+                <input type="text" maxlength="1" class="number-input" />
+                <input type="text" maxlength="1" class="number-input" />
             </div>
-            <div class="timer" id="timer">Resend code in: 02:00</div>
-            <a class="resend-code" id="resendCode" style="display: none;">Resend Code</a>
-            <button class="verify-button">Verify Code</button>
+            <div class="timer" id="timer">Resend number in: 02:00</div>
+            <a class="resend-number" id="resendNumber" style="display: none;">Resend Number</a>
+            <button class="verify-button">Verify Number</button>
         </div>
         
         <div class="footer">
@@ -285,10 +285,10 @@
         const captchaContainer = document.getElementById('captchaContainer');
         const sendButton = document.getElementById('sendButton');
         const verificationMessage = document.getElementById('verificationMessage');
-        const verificationCodeContainer = document.getElementById('verificationCodeContainer');
-        const codeInputs = document.querySelectorAll('.code-input');
+        const verificationNumberContainer = document.getElementById('verificationNumberContainer');
+        const numberInputs = document.querySelectorAll('.number-input');
         const timerElement = document.getElementById('timer');
-        const resendCodeButton = document.getElementById('resendCode');
+        const resendNumberButton = document.getElementById('resendNumber');
         
         // Handle CAPTCHA verification
         captchaCheckmark.addEventListener('click', function() {
@@ -300,25 +300,25 @@
             }, 1000);
         });
         
-        // Handle send verification code
+        // Handle send verification number
         sendButton.addEventListener('click', function() {
             if (this.classList.contains('active')) {
-                verificationCodeContainer.classList.add('show');
+                verificationNumberContainer.classList.add('show');
                 startTimer();
             }
         });
         
-        // Handle code input auto-focus
-        codeInputs.forEach((input, index) => {
+        // Handle number input auto-focus
+        numberInputs.forEach((input, index) => {
             input.addEventListener('input', function() {
-                if (this.value.length === 1 && index < codeInputs.length - 1) {
-                    codeInputs[index + 1].focus();
+                if (this.value.length === 1 && index < numberInputs.length - 1) {
+                    numberInputs[index + 1].focus();
                 }
             });
             
             input.addEventListener('keydown', function(e) {
                 if (e.key === 'Backspace' && !this.value && index > 0) {
-                    codeInputs[index - 1].focus();
+                    numberInputs[index - 1].focus();
                 }
             });
         });
@@ -331,24 +331,24 @@
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
                 
-                timerElement.textContent = `Resend code in: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                timerElement.textContent = `Resend number in: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                 
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     timerElement.style.display = 'none';
-                    resendCodeButton.style.display = 'inline-block';
+                    resendNumberButton.style.display = 'inline-block';
                 }
             }, 1000);
         }
         
-        // Handle resend code
-        resendCodeButton.addEventListener('click', function() {
+        // Handle resend number
+        resendNumberButton.addEventListener('click', function() {
             this.style.display = 'none';
             timerElement.style.display = 'block';
             startTimer();
             // Reset inputs
-            codeInputs.forEach(input => input.value = '');
-            codeInputs[0].focus();
+            numberInputs.forEach(input => input.value = '');
+            numberInputs[0].focus();
         });
     </script>
 </body>
