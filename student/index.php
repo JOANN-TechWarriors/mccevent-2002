@@ -8,6 +8,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $student_id = $_POST['student_id'];
     $password = $_POST['password'];
 
+    // Check if the user has exceeded the login attempt limit
+    if (isset($_SESSION['login_attempts']) && $_SESSION['login_attempts'] >= 3) {
+        if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()) {
+            $_SESSION['login_error'] = "You have exceeded the login attempt limit. Please try again in " . floor(($_SESSION['login_disabled_until'] - time()) / 60) . " minutes.";
+            echo $_SESSION['login_error'];
+            exit;
+        } else {
+            // Reset the login attempts counter
+            unset($_SESSION['login_attempts']);
+            unset($_SESSION['login_disabled_until']);
+        }
+    }
+
     try {
         // Prepare and execute the query
         $stmt = $conn->prepare("SELECT * FROM student WHERE student_id = :student_id");
@@ -28,6 +41,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: index.php");
                     exit();
                 } else {
+                    // Increment the login attempt counter
+                    if (!isset($_SESSION['login_attempts'])) {
+                        $_SESSION['login_attempts'] = 1;
+                    } else {
+                        $_SESSION['login_attempts']++;
+                    }
+
+                    if ($_SESSION['login_attempts'] >= 3) {
+                        // Disable the login for 2 minutes
+                        $_SESSION['login_disabled_until'] = time() + 120;
+                    }
+
                     $_SESSION['login_error'] = "Invalid password";
                 }
             } else {
@@ -40,6 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['login_error'] = "Database error: " . $e->getMessage();
     }
 }
+
+// The rest of the code remains the same
+
 ?>
 
 <!DOCTYPE html>
@@ -147,7 +175,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     placeholder="Enter Password" required>
                             </div>
                             <button type="submit"
-                                class="w-full bg-mcc-red hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
+                                class="w-full bg-mcc-red hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                id="login-btn"
+                                <?php
+                                    if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()) {
+                                        echo 'disabled';
+                                    }
+                                ?>
+                            >
                                 <i class="icon-ok"></i> LOGIN
                             </button>
                             <div class="text-center mt-4">
