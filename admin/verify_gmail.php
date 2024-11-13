@@ -29,13 +29,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail->isSMTP();
                     $mail->Host = 'smtp.gmail.com';
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'your-email@gmail.com'; // Your Gmail
-                    $mail->Password = 'your-app-password'; // Your Gmail App Password
+                    $mail->Username = 'joannrebamonte80@gmail.com'; // Your Gmail
+                    $mail->Password = 'dkyd tsnv hzyh amjy'; // Your Gmail App Password
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port = 587;
                     
                     // Recipients
-                    $mail->setFrom('your-email@gmail.com', 'Event Judging System');
+                    $mail->setFrom('joannrebamonte80@gmail.com', 'Event Judging System');
                     $mail->addAddress($email);
                     
                     // Content
