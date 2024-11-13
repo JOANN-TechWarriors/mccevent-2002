@@ -247,123 +247,209 @@
         </div>
     </div>
 
-    <script>
-        const emailInput = document.querySelector('.email-input');
-        const emailError = document.querySelector('.email-error');
-        const sendButton = document.getElementById('sendButton');
-        const verificationMessage = document.getElementById('verificationMessage');
-        const verificationNumberContainer = document.getElementById('verificationNumberContainer');
-        const numberInputs = document.querySelectorAll('.number-input');
-        const timerElement = document.getElementById('timer');
-        const resendNumberButton = document.getElementById('resendNumber');
-        
-        let isRecaptchaVerified = false;
-        
-        // Email validation function
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-        
-        // Handle email input validation
-        emailInput.addEventListener('input', function() {
-            const isValidEmail = validateEmail(this.value);
-            this.classList.toggle('error', !isValidEmail && this.value !== '');
-            emailError.classList.toggle('show', !isValidEmail && this.value !== '');
+    // First, rename your existing HTML file to index.html
+// Create a new file called verify_gmail.php with the previous PHP code
+// Then replace the existing JavaScript in your HTML with this updated version:
+
+<script>
+    const emailInput = document.querySelector('.email-input');
+    const emailError = document.querySelector('.email-error');
+    const sendButton = document.getElementById('sendButton');
+    const verificationMessage = document.getElementById('verificationMessage');
+    const verificationNumberContainer = document.getElementById('verificationNumberContainer');
+    const numberInputs = document.querySelectorAll('.number-input');
+    const timerElement = document.getElementById('timer');
+    const resendNumberButton = document.getElementById('resendNumber');
+    const verifyButton = document.querySelector('.verify-button');
+    
+    let isRecaptchaVerified = false;
+    
+    // Email validation function
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+    
+    // Handle email input validation
+    emailInput.addEventListener('input', function() {
+        const isValidEmail = validateEmail(this.value);
+        this.classList.toggle('error', !isValidEmail && this.value !== '');
+        emailError.classList.toggle('show', !isValidEmail && this.value !== '');
+        updateSendButtonState();
+    });
+    
+    // Callback for reCAPTCHA verification
+    function onRecaptchaVerified(response) {
+        if (response) {
+            isRecaptchaVerified = true;
+            verificationMessage.classList.remove('show');
             updateSendButtonState();
-        });
-        
-        // Callback for reCAPTCHA verification
-        function onRecaptchaVerified(response) {
-            if (response) {
-                isRecaptchaVerified = true;
-                verificationMessage.classList.remove('show');
-                updateSendButtonState();
-            }
         }
+    }
+    
+    // Update send button state based on email and reCAPTCHA
+    function updateSendButtonState() {
+        const isValidEmail = validateEmail(emailInput.value);
+        sendButton.classList.toggle('active', isValidEmail && isRecaptchaVerified);
+    }
+    
+    // Handle send verification number
+    sendButton.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent form submission
         
-        // Update send button state based on email and reCAPTCHA
-        function updateSendButtonState() {
-            const isValidEmail = validateEmail(emailInput.value);
-            sendButton.classList.toggle('active', isValidEmail && isRecaptchaVerified);
-        }
-        
-        // Handle send verification number
-        sendButton.addEventListener('click', function() {
-            if (this.classList.contains('active')) {
-                // Verify reCAPTCHA response with your backend
-                const recaptchaResponse = grecaptcha.getResponse();
-                if (recaptchaResponse) {
-                    verificationNumberContainer.classList.add('show');
-                    startTimer();
-                } else {
-                    verificationMessage.classList.add('show');
-                }
-            } else if (!validateEmail(emailInput.value)) {
-                emailError.classList.add('show');
-                emailInput.classList.add('error');
-            }
-        });
-        
-        // Handle number input auto-focus
-        numberInputs.forEach((input, index) => {
-            input.addEventListener('input', function() {
-                if (this.value.length === 1 && index < numberInputs.length - 1) {
-                    numberInputs[index + 1].focus();
-                }
-            });
-            
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace' && !this.value && index > 0) {
-                    numberInputs[index - 1].focus();
-                }
-            });
-        });
-        
-        // Timer functionality
-        function startTimer() {
-            let timeLeft = 120; // 2 minutes in seconds
-            const timer = setInterval(() => {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
+        if (this.classList.contains('active')) {
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (recaptchaResponse) {
+                // Send AJAX request to verify_gmail.php
+                const formData = new FormData();
+                formData.append('email', emailInput.value);
+                formData.append('g-recaptcha-response', recaptchaResponse);
                 
-                timerElement.textContent = `Resend number in: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    timerElement.style.display = 'none';
-                    resendNumberButton.style.display = 'inline-block';
-                }
-            }, 1000);
-        }
-        
-        // Handle resend number
-        resendNumberButton.addEventListener('click', function() {
-            if (validateEmail(emailInput.value)) {
-                // Verify reCAPTCHA again before resending
-                const recaptchaResponse = grecaptcha.getResponse();
-                if (recaptchaResponse) {
-                    this.style.display = 'none';
-                    timerElement.style.display = 'block';
-                    startTimer();
-                    // Reset inputs
-                    numberInputs.forEach(input => input.value = '');
-                    numberInputs[0].focus();
-                    // Reset reCAPTCHA
-                    grecaptcha.reset();
-                    isRecaptchaVerified = false;
-                    updateSendButtonState();
-                } else {
+                fetch('verify_gmail.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        verificationNumberContainer.classList.add('show');
+                        startTimer();
+                        verificationMessage.classList.remove('show');
+                    } else {
+                        verificationMessage.textContent = data.message;
+                        verificationMessage.classList.add('show');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    verificationMessage.textContent = 'An error occurred. Please try again.';
                     verificationMessage.classList.add('show');
-                }
+                });
             } else {
-                emailError.classList.add('show');
-                emailInput.classList.add('error');
+                verificationMessage.classList.add('show');
+            }
+        } else if (!validateEmail(emailInput.value)) {
+            emailError.classList.add('show');
+            emailInput.classList.add('error');
+        }
+    });
+    
+    // Handle number input auto-focus
+    numberInputs.forEach((input, index) => {
+        input.addEventListener('input', function() {
+            if (this.value.length === 1 && index < numberInputs.length - 1) {
+                numberInputs[index + 1].focus();
             }
         });
         
-    </script>
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Backspace' && !this.value && index > 0) {
+                numberInputs[index - 1].focus();
+            }
+        });
+    });
+    
+    // Timer functionality
+    function startTimer() {
+        let timeLeft = 120; // 2 minutes in seconds
+        timerElement.style.display = 'block';
+        resendNumberButton.style.display = 'none';
+        
+        const timer = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            
+            timerElement.textContent = `Resend number in: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                timerElement.style.display = 'none';
+                resendNumberButton.style.display = 'inline-block';
+            }
+        }, 1000);
+    }
+    
+    // Handle resend number
+    resendNumberButton.addEventListener('click', function() {
+        if (validateEmail(emailInput.value)) {
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (recaptchaResponse) {
+                // Resend verification code
+                const formData = new FormData();
+                formData.append('email', emailInput.value);
+                formData.append('g-recaptcha-response', recaptchaResponse);
+                
+                fetch('verify_gmail.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        this.style.display = 'none';
+                        startTimer();
+                        // Reset inputs
+                        numberInputs.forEach(input => input.value = '');
+                        numberInputs[0].focus();
+                        verificationMessage.classList.remove('show');
+                    } else {
+                        verificationMessage.textContent = data.message;
+                        verificationMessage.classList.add('show');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    verificationMessage.textContent = 'An error occurred. Please try again.';
+                    verificationMessage.classList.add('show');
+                });
+            } else {
+                verificationMessage.classList.add('show');
+            }
+            // Reset reCAPTCHA
+            grecaptcha.reset();
+            isRecaptchaVerified = false;
+            updateSendButtonState();
+        } else {
+            emailError.classList.add('show');
+            emailInput.classList.add('error');
+        }
+    });
+    
+    // Handle verify button click
+    verifyButton.addEventListener('click', function() {
+        const code = Array.from(numberInputs).map(input => input.value).join('');
+        if (code.length === 6) {
+            const formData = new FormData();
+            formData.append('verify_code', '1');
+            formData.append('email', emailInput.value);
+            formData.append('code', code);
+            
+            fetch('verify_gmail.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Redirect to dashboard or show success message
+                    window.location.href = 'dashboard.php';
+                } else {
+                    verificationMessage.textContent = data.message;
+                    verificationMessage.classList.add('show');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                verificationMessage.textContent = 'An error occurred. Please try again.';
+                verificationMessage.classList.add('show');
+            });
+        } else {
+            verificationMessage.textContent = 'Please enter the complete 6-digit code.';
+            verificationMessage.classList.add('show');
+        }
+    });
+</script>
 </body>
 </html>
 </a
