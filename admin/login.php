@@ -37,7 +37,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location = 'index.php';
+                            window.location = 'index2.php';
                         }
                     });
             </script>
@@ -61,7 +61,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location = 'index.php';
+                    window.location = 'index2.php';
                 }
             });
         </script>
@@ -77,7 +77,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             confirmButtonText: 'OK'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location = 'index.php';
+                window.location = 'index2.php';
             }
         });
     </script>
