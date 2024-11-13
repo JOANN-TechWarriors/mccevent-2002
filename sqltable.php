@@ -12,21 +12,62 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Update email and phone for admin
-$email = "joannrebamonte80@gmail.com";
-$phone = "09959631846";
+// Select all data from admin table
+$sql = "SELECT * FROM admin";
+$result = $conn->query($sql);
 
-// Using prepared statement to prevent SQL injection
-$sql = "UPDATE admin SET email = ?, phone = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $email, $phone);
-
-if ($stmt->execute()) {
-    echo "Email and phone number updated successfully.";
+if ($result->num_rows > 0) {
+    // Start the table
+    echo "<table border='1' cellpadding='10' cellspacing='0'>";
+    
+    // Get field information for headers
+    $fields = $result->fetch_fields();
+    echo "<tr>";
+    foreach ($fields as $field) {
+        echo "<th style='background-color: #f2f2f2;'>" . $field->name . "</th>";
+    }
+    echo "</tr>";
+    
+    // Output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        foreach ($row as $value) {
+            echo "<td>" . ($value ?? "NULL") . "</td>";
+        }
+        echo "</tr>";
+    }
+    echo "</table>";
 } else {
-    echo "Error updating record: " . $stmt->error;
+    echo "0 results found in admin table";
 }
 
-$stmt->close();
 $conn->close();
 ?>
+
+<style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+</style>
