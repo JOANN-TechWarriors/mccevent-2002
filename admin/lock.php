@@ -240,7 +240,7 @@
             <img src="/api/placeholder/80/80" alt="Admin Profile" class="profile-img">
             <div class="admin-name">Ayres Santillan Ilustrisimo</div>
             <div class="email-container">
-                <input type="email" placeholder="Enter your email" class="email-input">
+                <input type="email" placeholder="Enter your email" class="email-input" required>
                 <button class="send-button" title="Send verification" id="sendButton">
                     <i class="arrow"></i>
                 </button>
