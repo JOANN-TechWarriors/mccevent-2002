@@ -240,6 +240,11 @@
         </div>
         
         <div class="footer">
+        <div class="container">
+      
+      <font size="2" class="pull-left"> <strong> Event Judging  System &COPY; <?= date("Y") ?></strong></font> <br />
+       
+        </div>
             <p>Copyright © 2024 Admin Portal</p>
             <p>All rights reserved</p>
         </div>
