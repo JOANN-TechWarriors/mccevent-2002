@@ -22,7 +22,7 @@
     /* Navbar Styles */
     .navbar {
       background-color: #333;
-      color: blue;
+      color: #fff;
       padding: 10px;
     }
 
@@ -119,11 +119,11 @@
       <form action="<?php echo $_SERVER['PHP_SELF'] . '?email=' . $email . '&token=' . $token; ?>" method="POST">
         <div class="form-group">
           <label for="password">New Password:</label>
-          <input id="password" type="password" name="password" lass="form-control btn-block" style="text-indent: 5px !important; height: 30px !important;" placeholder="New Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
+          <input id="password" type="password" name="password" class="form-control" placeholder="New Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
         </div>
         <div class="form-group">
           <label for="confirm_password">Confirm Password:</label>
-          <input id="confirm_password" type="password" name="confirm_password" lass="form-control btn-block" style="text-indent: 5px !important; height: 30px !important;" placeholder="Confirm Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
+          <input id="confirm_password" type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
         </div>
         <div class="btn-group">
           <a href="index2.php" type="button" class="btn btn-default">Cancel</a>
