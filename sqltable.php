@@ -12,13 +12,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Add password column
-$sql = "ALTER TABLE student ADD COLUMN password VARCHAR(100)";
+// Add email column to admin table
+$sql = "ALTER TABLE admin ADD COLUMN email VARCHAR(100)";
 
 if ($conn->query($sql) === TRUE) {
-    echo "Password column added successfully.";
+    echo "Email column added successfully to admin table.";
 } else {
-    echo "Error adding password column: " . $conn->error;
+    echo "Error adding email column: " . $conn->error;
 }
 
 $conn->close();
