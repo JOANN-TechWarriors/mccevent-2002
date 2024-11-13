@@ -125,7 +125,7 @@
                 <div class="col-md-6 logo-side">
                     <img src="../img/logo.png" alt="MCC Logo" class="img-fluid">
                     <h4 style="font-size: 18px;" class="mb-4">WELCOME TO:</h4>
-                    <h4 style="font-size: 20px;" class="mb-5"><strong >MCC Event Judging System</strong></h4>
+                    <h4 style="font-size: 20px;" class="mb-5"><strong>MCC Event Judging System</strong></h4>
                 </div>
                 <div class="col-md-6 login-side">
                     <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
@@ -171,43 +171,56 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Get the login form and button
+        const loginForm = document.getElementById('login-form');
+        const loginButton = document.getElementById('login-button');
+
+        // Add an event listener to the login button
+        loginButton.addEventListener('click', function() {
+            // Get the username and password values
+            const username = loginForm.elements.username.value;
+            const password = loginForm.elements.password.value;
+
+            // Check if the username and password are empty
+            if (username.trim() === '' || password.trim() === '') {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please enter your username and password.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                // Submit the login form
+                loginForm.submit();
+            }
+        });
+
+        // Handle the login success case
         window.onload = function() {
-            <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
+            if (typeof <?php echo isset($_SESSION['login_success']) && $_SESSION['login_success'] == true ? 'true' : 'false'; ?> !== 'undefined' && <?php echo isset($_SESSION['login_success']) && $_SESSION['login_success'] == true ? 'true' : 'false'; ?>) {
                 Swal.fire({
                     title: "Success!",
                     text: "You are Successfully logged in!",
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        window.location.href = "dashboard.php";
                     }
                 });
                 <?php unset($_SESSION['login_success']); ?>
-            <?php endif; ?>
+            }
         };
 
+        // Clear the email input in the forgot password modal
         function clearEmail() {
             document.getElementById("forgot-password-form").reset();
         }
 
-        document.getElementById("login-button").addEventListener("click", function() {
-            Swal.fire({
-                title: "Success!",
-                text: "You are successfully logged in!",
-                icon: "success",
-                confirmButtonText: "Ok",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "dashboard.php";
-                }
-            });
-        });
-// Security measures
-    // Disable right-click
-    document.addEventListener('contextmenu', function (e) {
+        // Disable right-click, F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
         document.onkeydown = function (e) {
             if (
                 e.key === 'F12' ||
@@ -225,7 +238,6 @@
                 alert.style.display = 'none';
             }
         }, 3000);
-    
     </script>
 </body>
 </html>
