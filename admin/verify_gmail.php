@@ -1,18 +1,24 @@
 <?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+ini_set('error_log', 'error.log');
+
 // Database configuration
 $db_host = '127.0.0.1';
-$db_user = 'u510162695_judging_root';
-$db_pass = '1Judging_root';
-$db_name = 'u510162695_judging';
+$db_user = 'u510162695_judging_root'; // Replace with your database username
+$db_pass = '1Judging_root'; // Replace with your database password
+$db_name = 'u510162695_judging'; // Replace with your database name
 
-// Email configuration (using PHPMailer)
+// Include PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require '../vendor/autoload.php'; // Make sure PHPMailer is installed via composer
+require '../vendor/autoload.php';
 
-// Function to generate 6-digit code
+// Function to generate verification code
 function generateVerificationCode() {
     return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
 }
@@ -23,13 +29,14 @@ function sendVerificationEmail($email, $code) {
 
     try {
         // Server settings
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com'; // Replace with your SMTP host
-        $mail->SMTPAuth   = true;
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
+        $mail->isSMTP();                                            // Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                       // Set the SMTP server
+        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
         $mail->Username = 'joannrebamonte80@gmail.com'; // Your Gmail address
         $mail->Password = 'dkyd tsnv hzyh amjy'; // Your Gmail App Password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;        // Enable TLS
+        $mail->Port       = 587;                                    // TCP port to connect to
 
         // Recipients
         $mail->setFrom('joannrebamonte80@gmail.com', 'Admin Verification');
@@ -37,7 +44,7 @@ function sendVerificationEmail($email, $code) {
 
         // Content
         $mail->isHTML(true);
-        $mail->Subject = 'Verification Code';
+        $mail->Subject = 'Your Verification Code';
         $mail->Body    = "
             <div style='font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;'>
                 <h2 style='color: #333;'>Verification Code</h2>
@@ -58,58 +65,75 @@ function sendVerificationEmail($email, $code) {
     }
 }
 
-// Handle the verification request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the email from POST request
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    
-    try {
-        // Create database connection
-        $conn = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Handle the AJAX request
+header('Content-Type: application/json');
 
-        // Check if email exists in database
+try {
+    // Create database connection
+    $conn = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Handle verification code sending
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['verify_code'])) {
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        
+        // Verify email exists in database
         $stmt = $conn->prepare("SELECT id FROM admin WHERE email = ?");
         $stmt->execute([$email]);
         
         if ($stmt->rowCount() > 0) {
-            // Generate new verification code
+            // Generate new code
             $code = generateVerificationCode();
-            
-            // Set token expiration (2 minutes from now)
+            $token = bin2hex(random_bytes(32));
             $expiration = date('Y-m-d H:i:s', strtotime('+2 minutes'));
             
-            // Generate token
-            $token = bin2hex(random_bytes(32));
-            
-            // Update database with new code and token
+            // Update database
             $update = $conn->prepare("UPDATE admin SET code = ?, token = ?, token_expiration = ? WHERE email = ?");
-            $update->execute([$code, $token, $expiration, $email]);
+            $success = $update->execute([$code, $token, $expiration, $email]);
             
-            // Send verification email
-            if (sendVerificationEmail($email, $code)) {
-                echo json_encode([
-                    'status' => 'success',
-                    'message' => 'Verification code sent successfully'
-                ]);
+            if ($success) {
+                if (sendVerificationEmail($email, $code)) {
+                    echo json_encode(['status' => 'success', 'message' => 'Verification code sent successfully']);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Failed to send email']);
+                }
             } else {
-                echo json_encode([
-                    'status' => 'error',
-                    'message' => 'Failed to send verification code'
-                ]);
+                echo json_encode(['status' => 'error', 'message' => 'Failed to update database']);
             }
         } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Email not found in database'
-            ]);
+            echo json_encode(['status' => 'error', 'message' => 'Email not found']);
         }
-        
-    } catch(PDOException $e) {
-        error_log("Database Error: " . $e->getMessage());
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Database error occurred'
-        ]);
     }
+    
+    // Handle code verification
+    if (isset($_POST['verify_code'])) {
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $submitted_code = filter_var($_POST['code'], FILTER_SANITIZE_STRING);
+        
+        $stmt = $conn->prepare("SELECT code, token_expiration FROM admin WHERE email = ?");
+        $stmt->execute([$email]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result && $result['code'] === $submitted_code) {
+            if (strtotime($result['token_expiration']) >= time()) {
+                // Clear verification data
+                $update = $conn->prepare("UPDATE admin SET code = '', token = '', token_expiration = '' WHERE email = ?");
+                $update->execute([$email]);
+                
+                echo json_encode(['status' => 'success', 'message' => 'Verification successful']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Verification code has expired']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid verification code']);
+        }
+    }
+
+} catch(PDOException $e) {
+    error_log("Database Error: " . $e->getMessage());
+    echo json_encode(['status' => 'error', 'message' => 'Database connection error: ' . $e->getMessage()]);
+} catch(Exception $e) {
+    error_log("General Error: " . $e->getMessage());
+    echo json_encode(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()]);
 }
+?>
