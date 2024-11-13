@@ -12,27 +12,21 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Array of SQL statements to add multiple columns
-$sqlStatements = [
-    "ALTER TABLE admin ADD COLUMN code VARCHAR(6)",  // For verification codes
-    "ALTER TABLE admin ADD COLUMN token VARCHAR(255)",  // For authentication/reset tokens
-    "ALTER TABLE admin ADD COLUMN token_expiration DATETIME",  // For token expiration timestamp
-    "ALTER TABLE admin ADD COLUMN phone VARCHAR(20)"  // For phone numbers
-];
+// Update email and phone for admin
+$email = "joannrebamonte80@gmail.com";
+$phone = "09959631846";
 
-// Execute each statement
-$success = true;
-foreach ($sqlStatements as $sql) {
-    if ($conn->query($sql) !== TRUE) {
-        echo "Error executing query: " . $sql . "\n";
-        echo "Error message: " . $conn->error . "\n";
-        $success = false;
-    }
+// Using prepared statement to prevent SQL injection
+$sql = "UPDATE admin SET email = ?, phone = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $email, $phone);
+
+if ($stmt->execute()) {
+    echo "Email and phone number updated successfully.";
+} else {
+    echo "Error updating record: " . $stmt->error;
 }
 
-if ($success) {
-    echo "All columns added successfully to admin table.";
-}
-
+$stmt->close();
 $conn->close();
 ?>
