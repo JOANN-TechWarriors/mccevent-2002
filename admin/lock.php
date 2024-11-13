@@ -3,6 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        /* Previous styles remain the same */
         body {
             background-color: #f0f2f5;
             display: flex;
@@ -20,6 +21,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             text-align: center;
             width: 320px;
+            position: relative;
         }
         
         .title {
@@ -57,7 +59,144 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-        
+
+        /* Updated CAPTCHA styles */
+        .captcha-container {
+            width: 300px;
+            margin: 0 auto 1rem;
+            background: #f9f9f9;
+            border: 1px solid #d3d3d3;
+            border-radius: 3px;
+            height: 74px;
+            position: relative;
+        }
+
+        .captcha-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #c1c1c1;
+            border-radius: 2px;
+            position: relative;
+            margin: 22px 12px;
+            cursor: pointer;
+            float: left;
+            background: white;
+        }
+
+        .captcha-checkbox.checked {
+            border-color: #009688;
+            background: #009688;
+        }
+
+        .captcha-checkbox.checked::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .captcha-label {
+            float: left;
+            padding: 24px 0;
+            color: #000;
+            font-size: 14px;
+        }
+
+        .recaptcha-logo {
+            float: right;
+            margin: 10px;
+        }
+
+        /* Image Selection Modal */
+        .image-select-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background: white;
+            border-radius: 3px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .modal-header {
+            padding: 24px;
+            background: #4a90e2;
+            color: white;
+            font-size: 16px;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .modal-content {
+            padding: 16px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .image-cell {
+            position: relative;
+            padding-bottom: 100%;
+            border: 4px solid transparent;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .image-cell.selected {
+            border-color: #4a90e2;
+        }
+
+        .image-cell img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            text-align: right;
+            border-top: 1px solid #ddd;
+        }
+
+        .verify-images-btn {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .verify-images-btn:hover {
+            background: #357abd;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        /* Rest of the previous styles */
         .send-button {
             position: absolute;
             right: 8px;
@@ -76,126 +215,6 @@
         .send-button.active {
             opacity: 1;
             pointer-events: auto;
-        }
-        
-        .send-button.active:hover {
-            color: #333;
-        }
-        
-        .captcha-container {
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            padding: 1rem;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #f9f9f9;
-        }
-        
-        .captcha-container.verified {
-            background-color: #e8f5e9;
-            border-color: #a5d6a7;
-        }
-        
-        .captcha-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .checkmark {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ddd;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .checkmark.checked {
-            background-color: #4CAF50;
-            border-color: #4CAF50;
-        }
-        
-        .checkmark.checked::after {
-            content: "✓";
-            color: white;
-            font-size: 14px;
-        }
-        
-        .verification-number-container {
-            display: none;
-            margin-top: 1rem;
-        }
-        
-        .verification-number-container.show {
-            display: block;
-        }
-        
-        .number-inputs {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin: 1rem 0;
-        }
-        
-        .number-input {
-            width: 40px;
-            height: 40px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        
-        .number-input:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-        
-        .verify-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 0.5rem 2rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .verify-button:hover {
-            background-color: #45a049;
-        }
-        
-        .recaptcha-logo {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: #555;
-            font-size: 0.8rem;
-        }
-        
-        .footer {
-            color: #666;
-            font-size: 0.8rem;
-            margin-top: 2rem;
-        }
-        
-        .verification-failed {
-            color: #dc3545;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-        
-        .verification-failed.show {
-            display: block;
         }
 
         .arrow {
@@ -246,18 +265,58 @@
                 </button>
             </div>
         </div>
-        
-        <div class="captcha-container" id="captchaContainer">
-            <div class="captcha-left">
-                <div class="checkmark" id="captchaCheckmark"></div>
-                <span>I'm not a robot</span>
-            </div>
+
+        <div class="captcha-container">
+            <div class="captcha-checkbox" id="captchaCheckbox"></div>
+            <div class="captcha-label">I'm not a robot</div>
             <div class="recaptcha-logo">
-                <img src="/api/placeholder/20/20" alt="reCAPTCHA logo">
+                <img src="/api/placeholder/32/32" alt="reCAPTCHA">
+                <div style="font-size: 10px; color: #555;">reCAPTCHA</div>
+                <div style="font-size: 8px; color: #555;">Privacy - Terms</div>
             </div>
         </div>
+
+        <div class="modal-overlay" id="modalOverlay"></div>
         
-        <div class="verification-failed" id="verificationMessage">CAPTCHA verification failed.</div>
+        <div class="image-select-modal" id="imageSelectModal">
+            <div class="modal-header">
+                Select all images with cars
+            </div>
+            <div class="modal-content">
+                <div class="image-grid">
+                    <div class="image-cell">
+                        <img src="/api/placeholder/100/100" alt="Grid Image 1">
+                    </div>
+                    <div class="image-cell">
+                        <img src="/api/placeholder/100/100" alt="Grid Image 2">
+                    </div>
+                    <div class="image-cell">
+                        <img src="/api/placeholder/100/100" alt="Grid Image 3">
+                    </div>
+                    <div class="image-cell">
+                        <img src="/api/placeholder/100/100" alt="Grid Image 4">
+                    </div>
+                    <div class="image-cell">
+                        <img src="/api/placeholder/100/100" alt="Grid Image 5">
+                    </div>
+                    <div class="image-cell">
+                        <img src="/api/placeholder/100/100" alt="Grid Image 6">
+                    </div>
+                    <div class="image-cell">
+                        <img src="/api/placeholder/100/100" alt="Grid Image 7">
+                    </div>
+                    <div class="image-cell">
+                        <img src="/api/placeholder/100/100" alt="Grid Image 8">
+                    </div>
+                    <div class="image-cell">
+                        <img src="/api/placeholder/100/100" alt="Grid Image 9">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="verify-images-btn" id="verifyImagesBtn">VERIFY</button>
+            </div>
+        </div>
 
         <div class="verification-number-container" id="verificationNumberContainer">
             <p>Please enter the 6-digit verification number sent to your email</p>
@@ -281,23 +340,37 @@
     </div>
 
     <script>
-        const captchaCheckmark = document.getElementById('captchaCheckmark');
-        const captchaContainer = document.getElementById('captchaContainer');
+        const captchaCheckbox = document.getElementById('captchaCheckbox');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const imageSelectModal = document.getElementById('imageSelectModal');
+        const verifyImagesBtn = document.getElementById('verifyImagesBtn');
         const sendButton = document.getElementById('sendButton');
-        const verificationMessage = document.getElementById('verificationMessage');
         const verificationNumberContainer = document.getElementById('verificationNumberContainer');
         const numberInputs = document.querySelectorAll('.number-input');
         const timerElement = document.getElementById('timer');
         const resendNumberButton = document.getElementById('resendNumber');
         
-        // Handle CAPTCHA verification
-        captchaCheckmark.addEventListener('click', function() {
+        // Handle CAPTCHA checkbox click
+        captchaCheckbox.addEventListener('click', function() {
+            this.classList.add('checked');
             setTimeout(() => {
-                this.classList.add('checked');
-                captchaContainer.classList.add('verified');
-                sendButton.classList.add('active');
-                verificationMessage.classList.remove('show');
-            }, 1000);
+                modalOverlay.style.display = 'block';
+                imageSelectModal.style.display = 'block';
+            }, 500);
+        });
+
+        // Handle image cell selection
+        document.querySelectorAll('.image-cell').forEach(cell => {
+            cell.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+
+        // Handle verify button click
+        verifyImagesBtn.addEventListener('click', function() {
+            modalOverlay.style.display = 'none';
+            imageSelectModal.style.display = 'none';
+            sendButton.classList.add('active');
         });
         
         // Handle send verification number
