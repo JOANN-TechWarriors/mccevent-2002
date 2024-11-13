@@ -12,7 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()) {
         $remainingTime = $_SESSION['login_disabled_until'] - time();
         $_SESSION['login_error'] = "You have exceeded the login attempt limit. Please try again in " . floor($remainingTime / 60) . " minutes.";
-        echo $_SESSION['login_error'];
+        echo "<script>
+            Swal.fire({
+                title: 'Error',
+                text: '{$_SESSION['login_error']}',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        </script>";
         exit;
     } else {
         // Reset the login disabled time
@@ -28,7 +35,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if ($stmt->rowCount() > 0) {
             if ($row['request_status'] == '') {
-                $_SESSION['login_error'] = "Sorry, Your account is not yet approved by the admin";
+                echo "<script>
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Sorry, Your account is not yet approved by the admin',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                </script>";
             } elseif ($row['request_status'] == 'Approved') {
                 // Verify the password
                 if (password_verify($password, $row['password'])) {
@@ -41,16 +55,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } else {
                     // Disable the login for 2 minutes
                     $_SESSION['login_disabled_until'] = time() + 120;
-                    $_SESSION['login_error'] = "Invalid password";
+                    echo "<script>
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Invalid password',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    </script>";
                 }
             } else {
-                $_SESSION['login_error'] = "Your acount is yet approve or created";
+                echo "<script>
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Your account is yet to be approved or created',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                </script>";
             }
         } else {
-            $_SESSION['login_error'] = "Invalid Student ID";
+            echo "<script>
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Invalid Student ID',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            </script>";
         }
     } catch(PDOException $e) {
-        $_SESSION['login_error'] = "Database error: " . $e->getMessage();
+        echo "<script>
+            Swal.fire({
+                title: 'Error',
+                text: 'Database error: {$e->getMessage()}',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        </script>";
     }
 }
 
