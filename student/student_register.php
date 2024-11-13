@@ -195,7 +195,7 @@ include('../admin/header.php');
                                 </tr>
                                 <tr>
                                     <td colspan="5">
-                                        <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+                                        <div class="g-recaptcha" data-sitekey="6LcsOX0qAAAAAMHHt5C_j6v9iH2hM6RUduOCmxqe"></div>
                                     </td>
                                 </tr>
                             </table>
