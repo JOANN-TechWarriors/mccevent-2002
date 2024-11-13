@@ -219,7 +219,7 @@
         </div>
         
         <div class="recaptcha-container">
-            <div class="g-recaptcha" data-sitekey="6LcsOX0qAAAAAN5WeH70ZBF3BM5Fd1_zeuOOA-aL" data-callback="onRecaptchaVerified"></div>
+            <div class="g-recaptcha" data-sitekey="6LcsOX0qAAAAAMHHt5C_j6v9iH2hM6RUduOCmxqe" data-callback="onRecaptchaVerified"></div>
         </div>
         
         <div class="verification-failed" id="verificationMessage">Verification failed. Please try again.</div>
