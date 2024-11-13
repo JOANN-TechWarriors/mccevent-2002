@@ -12,8 +12,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Select all data from admin table
-$sql = "SELECT * FROM admin";
+// Select all data from organizer table
+$sql = "SELECT * FROM organizer";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -38,7 +38,7 @@ if ($result->num_rows > 0) {
     }
     echo "</table>";
 } else {
-    echo "0 results found in admin table";
+    echo "0 results found in organizer table";
 }
 
 $conn->close();
