@@ -126,18 +126,58 @@
             font-size: 14px;
         }
         
+        .verification-code-container {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .verification-code-container.show {
+            display: block;
+        }
+        
+        .code-inputs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+        
+        .code-input {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .code-input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
+        .verify-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .verify-button:hover {
+            background-color: #45a049;
+        }
+        
         .recaptcha-logo {
             display: flex;
             align-items: center;
             gap: 4px;
             color: #555;
             font-size: 0.8rem;
-        }
-        
-        .error-message {
-            color: #dc3545;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
         }
         
         .footer {
@@ -170,11 +210,30 @@
         .send-button.active:hover .arrow {
             border-color: #333;
         }
+
+        .resend-code {
+            color: #4CAF50;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .resend-code:hover {
+            text-decoration: underline;
+        }
+
+        .timer {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Admin verification</h1>
+        <h1 class="title">Admin Verification </h1>
         
         <div class="profile-section">
             <img src="/api/placeholder/80/80" alt="Admin Profile" class="profile-img">
@@ -198,9 +257,24 @@
         </div>
         
         <div class="verification-failed" id="verificationMessage">CAPTCHA verification failed.</div>
+
+        <div class="verification-code-container" id="verificationCodeContainer">
+            <p>Please enter the verification code sent to your email</p>
+            <div class="code-inputs">
+                <input type="text" maxlength="1" class="code-input" />
+                <input type="text" maxlength="1" class="code-input" />
+                <input type="text" maxlength="1" class="code-input" />
+                <input type="text" maxlength="1" class="code-input" />
+                <input type="text" maxlength="1" class="code-input" />
+                <input type="text" maxlength="1" class="code-input" />
+            </div>
+            <div class="timer" id="timer">Resend code in: 02:00</div>
+            <a class="resend-code" id="resendCode" style="display: none;">Resend Code</a>
+            <button class="verify-button">Verify Code</button>
+        </div>
         
         <div class="footer">
-            <p>Copyright © 2024</p>
+            <p>Copyright © 2024 Admin Portal</p>
             <p>All rights reserved</p>
         </div>
     </div>
@@ -210,9 +284,13 @@
         const captchaContainer = document.getElementById('captchaContainer');
         const sendButton = document.getElementById('sendButton');
         const verificationMessage = document.getElementById('verificationMessage');
+        const verificationCodeContainer = document.getElementById('verificationCodeContainer');
+        const codeInputs = document.querySelectorAll('.code-input');
+        const timerElement = document.getElementById('timer');
+        const resendCodeButton = document.getElementById('resendCode');
         
+        // Handle CAPTCHA verification
         captchaCheckmark.addEventListener('click', function() {
-            // Simulate CAPTCHA verification
             setTimeout(() => {
                 this.classList.add('checked');
                 captchaContainer.classList.add('verified');
@@ -221,11 +299,55 @@
             }, 1000);
         });
         
+        // Handle send verification code
         sendButton.addEventListener('click', function() {
             if (this.classList.contains('active')) {
-                // Handle email verification code sending
-                console.log('Sending verification code...');
+                verificationCodeContainer.classList.add('show');
+                startTimer();
             }
+        });
+        
+        // Handle code input auto-focus
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+                if (this.value.length === 1 && index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+            });
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !this.value && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+            });
+        });
+        
+        // Timer functionality
+        function startTimer() {
+            let timeLeft = 120; // 2 minutes in seconds
+            const timer = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `Resend code in: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerElement.style.display = 'none';
+                    resendCodeButton.style.display = 'inline-block';
+                }
+            }, 1000);
+        }
+        
+        // Handle resend code
+        resendCodeButton.addEventListener('click', function() {
+            this.style.display = 'none';
+            timerElement.style.display = 'block';
+            startTimer();
+            // Reset inputs
+            codeInputs.forEach(input => input.value = '');
+            codeInputs[0].focus();
         });
     </script>
 </body>
