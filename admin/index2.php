@@ -1,3 +1,49 @@
+<?php
+session_start();
+
+// Database connection
+$servername = "127.0.0.1";
+$username = "u510162695_judging_root";
+$password = "1Judging_root";
+$dbname = "u510162695_judging";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Function to verify password
+function verify_password($password, $hashed_password) {
+    return password_verify($password, $hashed_password);
+}
+
+// Handle login form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Retrieve the hashed password from the database for the given username
+    $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $hashed_password = $row['password'];
+
+    if (verify_password($password, $hashed_password)) {
+        // Login successful
+        $_SESSION['login_success'] = true;
+        header('Location: dashboard.php');
+        exit();
+    } else {
+        // Login failed
+        echo "Invalid username or password.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,16 +181,16 @@
                 </div>
                 <div class="col-md-6 login-side">
                     <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
-                    <form id="login-form" method="POST" action="login.php" class="login-form">
+                    <form id="login-form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="login-form">
                         <div class="mb-3">
-                            <input type="email" class="form-control" name="username" placeholder="Username" required autofocus>
+                            <input type="text" class="form-control" name="username" placeholder="Username" required autofocus>
                         </div>
                         <div class="mb-3">
                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
-                                <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
+                                <button type="submit" class="btn btn-primary px-4">Sign in</button>
                                 <span id="countdown" class="countdown"></span>
                             </div>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
@@ -182,52 +228,6 @@
     <script>
         // Get the login form and button
         const loginForm = document.getElementById('login-form');
-        const loginButton = document.getElementById('login-button');
-        const countdownElement = document.getElementById('countdown');
-
-        // Set the initial login attempts count
-        let loginAttempts = 0;
-
-        // Add an event listener to the login button
-        loginButton.addEventListener('click', function() {
-            // Get the username and password values
-            const username = loginForm.elements.username.value;
-            const password = loginForm.elements.password.value;
-
-            // Check if the username and password are empty
-            if (username.trim() === '' || password.trim() === '') {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Please enter your username and password.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            } else {
-                // Increment the login attempts count
-                loginAttempts++;
-
-                // If the login attempts count is 3 or more, disable the login button and start the countdown
-                if (loginAttempts >= 3) {
-                    loginButton.disabled = true;
-                    let countdown = 120; // 2 minutes
-                    const countdownInterval = setInterval(function() {
-                        countdownElement.textContent = `Disabled for ${countdown} seconds`;
-                        countdown--;
-
-                        // When the countdown reaches 0, enable the login button and reset the login attempts count
-                        if (countdown < 0) {
-                            clearInterval(countdownInterval);
-                            loginButton.disabled = false;
-                            countdownElement.textContent = '';
-                            loginAttempts = 0;
-                        }
-                    }, 1000);
-                } else {
-                    // Submit the login form
-                    loginForm.submit();
-                }
-            }
-        });
 
         // Handle the login success case
         window.onload = function() {
