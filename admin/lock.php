@@ -174,11 +174,11 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Admin Lock Screen</h1>
+        <h1 class="title">Admin verification</h1>
         
         <div class="profile-section">
             <img src="/api/placeholder/80/80" alt="Admin Profile" class="profile-img">
-            <div class="admin-name">HITSUGAYA TOSHI</div>
+            <div class="admin-name">Ayres Santillan Ilustrisimo</div>
             <div class="email-container">
                 <input type="email" placeholder="Enter your email" class="email-input">
                 <button class="send-button" title="Send verification" id="sendButton">
@@ -201,7 +201,7 @@
         <div class="verification-failed" id="verificationMessage">CAPTCHA verification failed.</div>
         
         <div class="footer">
-            <p>Copyright © 2024 Admin Portal</p>
+            <p>Copyright © 2024</p>
             <p>All rights reserved</p>
         </div>
     </div>
