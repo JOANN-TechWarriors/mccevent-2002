@@ -237,7 +237,7 @@
         <h1 class="title">Admin Verification</h1>
         
         <div class="profile-section">
-            <img src="/api/placeholder/80/80" alt="Admin Profile" class="profile-img">
+            <br>
             <div class="admin-name">Ayres Santillan Ilustrisimo</div>
             <div class="email-container">
                 <input type="email" placeholder="Enter your email" class="email-input">
