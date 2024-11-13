@@ -68,9 +68,16 @@
             color: #666;
             padding: 5px;
             font-size: 1.2rem;
+            opacity: 0.5;
+            pointer-events: none;
         }
         
-        .send-button:hover {
+        .send-button.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .send-button.active:hover {
             color: #333;
         }
         
@@ -79,6 +86,52 @@
             border: 1px solid #ddd;
             padding: 1rem;
             border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f9f9f9;
+        }
+        
+        .captcha-container.verified {
+            background-color: #e8f5e9;
+            border-color: #a5d6a7;
+        }
+        
+        .captcha-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ddd;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .checkmark.checked {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+        
+        .checkmark.checked::after {
+            content: "✓";
+            color: white;
+            font-size: 14px;
+        }
+        
+        .recaptcha-logo {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #555;
+            font-size: 0.8rem;
         }
         
         .error-message {
@@ -97,9 +150,13 @@
             color: #dc3545;
             font-size: 0.8rem;
             margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .verification-failed.show {
+            display: block;
         }
 
-        /* Arrow styling */
         .arrow {
             border: solid #666;
             border-width: 0 2px 2px 0;
@@ -110,7 +167,7 @@
             margin-top: -2px;
         }
 
-        .send-button:hover .arrow {
+        .send-button.active:hover .arrow {
             border-color: #333;
         }
     </style>
@@ -124,24 +181,53 @@
             <div class="admin-name">HITSUGAYA TOSHI</div>
             <div class="email-container">
                 <input type="email" placeholder="Enter your email" class="email-input">
-                <button class="send-button" title="Send verification">
+                <button class="send-button" title="Send verification" id="sendButton">
                     <i class="arrow"></i>
                 </button>
             </div>
         </div>
         
-        <div class="captcha-container">
-            <label>
-                <input type="checkbox"> I'm not a robot
-            </label>
+        <div class="captcha-container" id="captchaContainer">
+            <div class="captcha-left">
+                <div class="checkmark" id="captchaCheckmark"></div>
+                <span>I'm not a robot</span>
+            </div>
+            <div class="recaptcha-logo">
+                reCAPTCHA
+                <img src="/api/placeholder/20/20" alt="reCAPTCHA logo">
+            </div>
         </div>
         
-        <div class="verification-failed">CAPTCHA verification failed.</div>
+        <div class="verification-failed" id="verificationMessage">CAPTCHA verification failed.</div>
         
         <div class="footer">
             <p>Copyright © 2024 Admin Portal</p>
             <p>All rights reserved</p>
         </div>
     </div>
+
+    <script>
+        const captchaCheckmark = document.getElementById('captchaCheckmark');
+        const captchaContainer = document.getElementById('captchaContainer');
+        const sendButton = document.getElementById('sendButton');
+        const verificationMessage = document.getElementById('verificationMessage');
+        
+        captchaCheckmark.addEventListener('click', function() {
+            // Simulate CAPTCHA verification
+            setTimeout(() => {
+                this.classList.add('checked');
+                captchaContainer.classList.add('verified');
+                sendButton.classList.add('active');
+                verificationMessage.classList.remove('show');
+            }, 1000);
+        });
+        
+        sendButton.addEventListener('click', function() {
+            if (this.classList.contains('active')) {
+                // Handle email verification code sending
+                console.log('Sending verification code...');
+            }
+        });
+    </script>
 </body>
 </html>
