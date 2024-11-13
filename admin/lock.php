@@ -51,7 +51,7 @@
         }
         
         .email-input {
-            width: 100%;
+            width: 95%;
             padding: 0.5rem;
             padding-right: 40px;
             border: 1px solid #ddd;

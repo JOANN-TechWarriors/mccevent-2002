@@ -4,6 +4,9 @@
 <?php
 include('../admin/header.php');
 ?>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <style>
    body {
       font-family: Arial, sans-serif;
@@ -32,7 +35,13 @@ include('../admin/header.php');
       cursor: pointer;
       float: right;
    }
+   .recaptcha-container {
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+        }
 </style>
+</head>
 <div class="container">
    <div class="col-lg-3"> </div>
    <div class="col-lg-6">
@@ -151,7 +160,11 @@ include('../admin/header.php');
       </p>
    </div>
 </div>
-
+<div class="recaptcha-container">
+            <div class="g-recaptcha" data-sitekey="6LcsOX0qAAAAAMHHt5C_j6v9iH2hM6RUduOCmxqe" data-callback="onRecaptchaVerified"></div>
+        </div>
+        
+        <div class="verification-failed" id="verificationMessage">Verification failed. Please try again.</div>
 
 
 <script>
