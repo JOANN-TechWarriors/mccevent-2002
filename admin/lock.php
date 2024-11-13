@@ -249,203 +249,255 @@
 
  
 <script>
-    const emailInput = document.querySelector('.email-input');
-    const emailError = document.querySelector('.email-error');
-    const sendButton = document.getElementById('sendButton');
-    const verificationMessage = document.getElementById('verificationMessage');
-    const verificationNumberContainer = document.getElementById('verificationNumberContainer');
-    const numberInputs = document.querySelectorAll('.number-input');
-    const timerElement = document.getElementById('timer');
-    const resendNumberButton = document.getElementById('resendNumber');
-    const verifyButton = document.querySelector('.verify-button');
-    
-    let isRecaptchaVerified = false;
-    
-    // Email validation function
-    function validateEmail(email) {
+// Constants for configuration
+const CONFIG = {
+    TIMER_DURATION: 120, // 2 minutes in seconds
+    CODE_LENGTH: 6,
+    API_ENDPOINTS: {
+        VERIFY_EMAIL: 'verify_gmail.php'
+    }
+};
+
+// DOM Elements
+const elements = {
+    emailInput: document.querySelector('.email-input'),
+    emailError: document.querySelector('.email-error'),
+    sendButton: document.getElementById('sendButton'),
+    verificationMessage: document.getElementById('verificationMessage'),
+    verificationContainer: document.getElementById('verificationNumberContainer'),
+    numberInputs: document.querySelectorAll('.number-input'),
+    timerElement: document.getElementById('timer'),
+    resendButton: document.getElementById('resendNumber'),
+    verifyButton: document.querySelector('.verify-button'),
+    form: document.querySelector('form')
+};
+
+// State management
+const state = {
+    isRecaptchaVerified: false,
+    timerInterval: null,
+    isProcessing: false
+};
+
+// Utility functions
+const utils = {
+    validateEmail: (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+        return re.test(email.toLowerCase());
+    },
+
+    showError: (message) => {
+        elements.verificationMessage.textContent = message;
+        elements.verificationMessage.classList.add('show');
+    },
+
+    hideError: () => {
+        elements.verificationMessage.classList.remove('show');
+    },
+
+    disableForm: () => {
+        elements.sendButton.disabled = true;
+        elements.verifyButton.disabled = true;
+        state.isProcessing = true;
+    },
+
+    enableForm: () => {
+        elements.sendButton.disabled = false;
+        elements.verifyButton.disabled = false;
+        state.isProcessing = false;
+    },
+
+    formatTime: (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     }
-    
-    // Handle email input validation
-    emailInput.addEventListener('input', function() {
-        const isValidEmail = validateEmail(this.value);
-        this.classList.toggle('error', !isValidEmail && this.value !== '');
-        emailError.classList.toggle('show', !isValidEmail && this.value !== '');
-        updateSendButtonState();
-    });
-    
-    // Callback for reCAPTCHA verification
-    function onRecaptchaVerified(response) {
-        if (response) {
-            isRecaptchaVerified = true;
-            verificationMessage.classList.remove('show');
-            updateSendButtonState();
+};
+
+// Core functionality
+const core = {
+    updateSendButtonState: () => {
+        const isValidEmail = utils.validateEmail(elements.emailInput.value);
+        elements.sendButton.classList.toggle('active', isValidEmail && state.isRecaptchaVerified);
+    },
+
+    startTimer: () => {
+        let timeLeft = CONFIG.TIMER_DURATION;
+        elements.timerElement.style.display = 'block';
+        elements.resendButton.style.display = 'none';
+
+        // Clear existing timer if any
+        if (state.timerInterval) {
+            clearInterval(state.timerInterval);
         }
-    }
-    
-    // Update send button state based on email and reCAPTCHA
-    function updateSendButtonState() {
-        const isValidEmail = validateEmail(emailInput.value);
-        sendButton.classList.toggle('active', isValidEmail && isRecaptchaVerified);
-    }
-    
-    // Handle send verification number
-    sendButton.addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent form submission
-        
-        if (this.classList.contains('active')) {
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (recaptchaResponse) {
-                // Send AJAX request to verify_gmail.php
-                const formData = new FormData();
-                formData.append('email', emailInput.value);
-                formData.append('g-recaptcha-response', recaptchaResponse);
-                
-                fetch('verify_gmail.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        verificationNumberContainer.classList.add('show');
-                        startTimer();
-                        verificationMessage.classList.remove('show');
-                    } else {
-                        verificationMessage.textContent = data.message;
-                        verificationMessage.classList.add('show');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    verificationMessage.textContent = 'An error occurred. Please try again.';
-                    verificationMessage.classList.add('show');
-                });
-            } else {
-                verificationMessage.classList.add('show');
-            }
-        } else if (!validateEmail(emailInput.value)) {
-            emailError.classList.add('show');
-            emailInput.classList.add('error');
-        }
-    });
-    
-    // Handle number input auto-focus
-    numberInputs.forEach((input, index) => {
-        input.addEventListener('input', function() {
-            if (this.value.length === 1 && index < numberInputs.length - 1) {
-                numberInputs[index + 1].focus();
-            }
-        });
-        
-        input.addEventListener('keydown', function(e) {
-            if (e.key === 'Backspace' && !this.value && index > 0) {
-                numberInputs[index - 1].focus();
-            }
-        });
-    });
-    
-    // Timer functionality
-    function startTimer() {
-        let timeLeft = 120; // 2 minutes in seconds
-        timerElement.style.display = 'block';
-        resendNumberButton.style.display = 'none';
-        
-        const timer = setInterval(() => {
+
+        state.timerInterval = setInterval(() => {
             timeLeft--;
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            
-            timerElement.textContent = `Resend number in: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            
+            elements.timerElement.textContent = `Resend number in: ${utils.formatTime(timeLeft)}`;
+
             if (timeLeft <= 0) {
-                clearInterval(timer);
-                timerElement.style.display = 'none';
-                resendNumberButton.style.display = 'inline-block';
+                clearInterval(state.timerInterval);
+                elements.timerElement.style.display = 'none';
+                elements.resendButton.style.display = 'inline-block';
             }
         }, 1000);
-    }
-    
-    // Handle resend number
-    resendNumberButton.addEventListener('click', function() {
-        if (validateEmail(emailInput.value)) {
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (recaptchaResponse) {
-                // Resend verification code
-                const formData = new FormData();
-                formData.append('email', emailInput.value);
-                formData.append('g-recaptcha-response', recaptchaResponse);
-                
-                fetch('verify_gmail.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        this.style.display = 'none';
-                        startTimer();
-                        // Reset inputs
-                        numberInputs.forEach(input => input.value = '');
-                        numberInputs[0].focus();
-                        verificationMessage.classList.remove('show');
-                    } else {
-                        verificationMessage.textContent = data.message;
-                        verificationMessage.classList.add('show');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    verificationMessage.textContent = 'An error occurred. Please try again.';
-                    verificationMessage.classList.add('show');
-                });
-            } else {
-                verificationMessage.classList.add('show');
-            }
-            // Reset reCAPTCHA
-            grecaptcha.reset();
-            isRecaptchaVerified = false;
-            updateSendButtonState();
-        } else {
-            emailError.classList.add('show');
-            emailInput.classList.add('error');
+    },
+
+    resetVerificationInputs: () => {
+        elements.numberInputs.forEach(input => {
+            input.value = '';
+            input.disabled = false;
+        });
+        elements.numberInputs[0].focus();
+    },
+
+    handleApiResponse: async (response) => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    });
-    
-    // Handle verify button click
-    verifyButton.addEventListener('click', function() {
-        const code = Array.from(numberInputs).map(input => input.value).join('');
-        if (code.length === 6) {
-            const formData = new FormData();
-            formData.append('verify_code', '1');
-            formData.append('email', emailInput.value);
-            formData.append('code', code);
-            
-            fetch('verify_gmail.php', {
+        const data = await response.json();
+        if (data.status !== 'success') {
+            throw new Error(data.message || 'Server error occurred');
+        }
+        return data;
+    },
+
+    sendVerificationRequest: async (formData) => {
+        try {
+            utils.disableForm();
+            const response = await fetch(CONFIG.API_ENDPOINTS.VERIFY_EMAIL, {
                 method: 'POST',
                 body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // Redirect to dashboard or show success message
-                    window.location.href = 'dashboard.php';
-                } else {
-                    verificationMessage.textContent = data.message;
-                    verificationMessage.classList.add('show');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                verificationMessage.textContent = 'An error occurred. Please try again.';
-                verificationMessage.classList.add('show');
             });
-        } else {
-            verificationMessage.textContent = 'Please enter the complete 6-digit code.';
-            verificationMessage.classList.add('show');
+            const data = await core.handleApiResponse(response);
+            elements.verificationContainer.classList.add('show');
+            core.startTimer();
+            utils.hideError();
+            core.resetVerificationInputs();
+            return true;
+        } catch (error) {
+            console.error('Verification request error:', error);
+            utils.showError(error.message || 'An error occurred. Please try again.');
+            return false;
+        } finally {
+            utils.enableForm();
         }
+    },
+
+    verifyCode: async () => {
+        const code = Array.from(elements.numberInputs).map(input => input.value).join('');
+        if (code.length !== CONFIG.CODE_LENGTH) {
+            utils.showError('Please enter the complete 6-digit code.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('verify_code', '1');
+        formData.append('email', elements.emailInput.value);
+        formData.append('code', code);
+
+        try {
+            utils.disableForm();
+            const response = await fetch(CONFIG.API_ENDPOINTS.VERIFY_EMAIL, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await core.handleApiResponse(response);
+            window.location.href = 'dashboard.php';
+        } catch (error) {
+            console.error('Code verification error:', error);
+            utils.showError(error.message || 'An error occurred. Please try again.');
+            core.resetVerificationInputs();
+        } finally {
+            utils.enableForm();
+        }
+    }
+};
+
+// Event Handlers
+const handlers = {
+    onEmailInput: (e) => {
+        const isValidEmail = utils.validateEmail(e.target.value);
+        e.target.classList.toggle('error', !isValidEmail && e.target.value !== '');
+        elements.emailError.classList.toggle('show', !isValidEmail && e.target.value !== '');
+        core.updateSendButtonState();
+    },
+
+    onNumberInput: (e, index) => {
+        const input = e.target;
+        
+        // Allow only numbers
+        input.value = input.value.replace(/[^0-9]/g, '');
+
+        if (input.value.length === 1 && index < elements.numberInputs.length - 1) {
+            elements.numberInputs[index + 1].focus();
+        }
+    },
+
+    onNumberKeydown: (e, index) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+            elements.numberInputs[index - 1].focus();
+        }
+    },
+
+    onSendButtonClick: async (e) => {
+        e.preventDefault();
+        
+        if (!elements.sendButton.classList.contains('active')) {
+            if (!utils.validateEmail(elements.emailInput.value)) {
+                elements.emailError.classList.add('show');
+                elements.emailInput.classList.add('error');
+            }
+            return;
+        }
+
+        const recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse) {
+            utils.showError('Please complete the reCAPTCHA verification.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('email', elements.emailInput.value);
+        formData.append('g-recaptcha-response', recaptchaResponse);
+        
+        await core.sendVerificationRequest(formData);
+    }
+};
+
+// Initialize event listeners
+function initializeEventListeners() {
+    elements.emailInput.addEventListener('input', handlers.onEmailInput);
+    elements.sendButton.addEventListener('click', handlers.onSendButtonClick);
+    elements.verifyButton.addEventListener('click', core.verifyCode);
+    elements.resendButton.addEventListener('click', handlers.onSendButtonClick);
+
+    elements.numberInputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => handlers.onNumberInput(e, index));
+        input.addEventListener('keydown', (e) => handlers.onNumberKeydown(e, index));
     });
+
+    // Prevent form submission
+    elements.form.addEventListener('submit', (e) => e.preventDefault());
+}
+
+// reCAPTCHA callback
+function onRecaptchaVerified(response) {
+    if (response) {
+        state.isRecaptchaVerified = true;
+        utils.hideError();
+        core.updateSendButtonState();
+    }
+}
+
+// Initialize the application
+function initialize() {
+    initializeEventListeners();
+    core.updateSendButtonState();
+}
+
+// Start the application
+initialize();
 </script>
 </body>
 </html>
