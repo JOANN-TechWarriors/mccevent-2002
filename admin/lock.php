@@ -210,7 +210,7 @@
             <br>
             <div class="admin-name">Ayres Santillan Ilustrisimo</div>
             <div class="email-container">
-                <form action="verify_gmail.php">
+            <form action="verify_gmail.php" method="post">
                 <input  type="email" placeholder="Enter your email" class="email-input" required>
                 <button class="send-button" title="Send verification" id="sendButton">
                     <i class="arrow"></i>
