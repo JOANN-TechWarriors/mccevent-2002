@@ -270,8 +270,8 @@
                 <input type="text" maxlength="1" class="number-input" />
             </div>
             <div class="timer" id="timer">Resend number in: 02:00</div>
-            <a class="resend-number" id="resendNumber" style="display: none;">Resend Number</a>
-            <button class="verify-button">Verify Number</button>
+            <a class="resend-number" id="resendNumber" style="display: none;">Resend</a>
+            <button class="verify-button">Verify</button>
         </div>
         
         <div class="footer">
