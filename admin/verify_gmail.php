@@ -20,7 +20,7 @@ require '../vendor/autoload.php';
 
 // Function to verify reCAPTCHA
 function verifyRecaptcha($recaptchaResponse) {
-    $secretKey = "YOUR_RECAPTCHA_SECRET_KEY"; // Replace with your secret key
+    $secretKey = "6LcsOX0qAAAAAN5WeH70ZBF3BM5Fd1_zeuOOA-aL"; // Replace with your secret key
     $url = "https://www.google.com/recaptcha/api/siteverify";
     $data = [
         'secret' => $secretKey,
