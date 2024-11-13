@@ -7,9 +7,9 @@ ini_set('error_log', 'error.log');
 
 // Database configuration
 $db_host = '127.0.0.1';
-$db_user = 'u510162695_judging_root'; // Replace with your database username
-$db_pass = '1Judging_root'; // Replace with your database password
-$db_name = 'u510162695_judging'; // Replace with your database name
+$db_user = 'u510162695_judging_root';
+$db_pass = '1Judging_root';
+$db_name = 'u510162695_judging';
 
 // Include PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
@@ -17,6 +17,28 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require '../vendor/autoload.php';
+
+// Function to verify reCAPTCHA
+function verifyRecaptcha($recaptchaResponse) {
+    $secretKey = "YOUR_RECAPTCHA_SECRET_KEY"; // Replace with your secret key
+    $url = "https://www.google.com/recaptcha/api/siteverify";
+    $data = [
+        'secret' => $secretKey,
+        'response' => $recaptchaResponse
+    ];
+    
+    $options = [
+        'http' => [
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($data)
+        ]
+    ];
+    
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    return json_decode($result)->success;
+}
 
 // Function to generate verification code
 function generateVerificationCode() {
@@ -29,14 +51,14 @@ function sendVerificationEmail($email, $code) {
 
     try {
         // Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
-        $mail->isSMTP();                                            // Send using SMTP
-        $mail->Host       = 'smtp.gmail.com';                       // Set the SMTP server
-        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        $mail->Username = 'joannrebamonte80@gmail.com'; // Your Gmail address
-        $mail->Password = 'dkyd tsnv hzyh amjy'; // Your Gmail App Password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;        // Enable TLS
-        $mail->Port       = 587;                                    // TCP port to connect to
+        $mail->SMTPDebug = 0;  // Changed from SMTP::DEBUG_SERVER to 0 to prevent debug output
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'joannrebamonte80@gmail.com';
+        $mail->Password   = 'dkyd tsnv hzyh amjy';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
 
         // Recipients
         $mail->setFrom('joannrebamonte80@gmail.com', 'Admin Verification');
@@ -76,6 +98,12 @@ try {
     // Handle verification code sending
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['verify_code'])) {
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        
+        // Verify reCAPTCHA first
+        if (!isset($_POST['g-recaptcha-response']) || !verifyRecaptcha($_POST['g-recaptcha-response'])) {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid reCAPTCHA']);
+            exit;
+        }
         
         // Verify email exists in database
         $stmt = $conn->prepare("SELECT id FROM admin WHERE email = ?");
@@ -117,7 +145,7 @@ try {
         if ($result && $result['code'] === $submitted_code) {
             if (strtotime($result['token_expiration']) >= time()) {
                 // Clear verification data
-                $update = $conn->prepare("UPDATE admin SET code = '', token = '', token_expiration = '' WHERE email = ?");
+                $update = $conn->prepare("UPDATE admin SET code = NULL, token = NULL, token_expiration = NULL WHERE email = ?");
                 $update->execute([$email]);
                 
                 echo json_encode(['status' => 'success', 'message' => 'Verification successful']);
@@ -131,9 +159,9 @@ try {
 
 } catch(PDOException $e) {
     error_log("Database Error: " . $e->getMessage());
-    echo json_encode(['status' => 'error', 'message' => 'Database connection error: ' . $e->getMessage()]);
+    echo json_encode(['status' => 'error', 'message' => 'Database connection error']);
 } catch(Exception $e) {
     error_log("General Error: " . $e->getMessage());
-    echo json_encode(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()]);
+    echo json_encode(['status' => 'error', 'message' => 'An error occurred']);
 }
 ?>
