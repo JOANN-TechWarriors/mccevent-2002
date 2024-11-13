@@ -1,9 +1,8 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Verification</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
         body {
             background-color: #f0f2f5;
@@ -31,6 +30,13 @@
         
         .profile-section {
             margin-bottom: 2rem;
+        }
+        
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
         }
         
         .admin-name {
@@ -65,10 +71,8 @@
             text-align: left;
         }
         
-        .loading {
-            display: none;
-            margin: 10px 0;
-            color: #666;
+        .email-error.show {
+            display: block;
         }
         
         .send-button {
@@ -89,6 +93,16 @@
         .send-button.active {
             opacity: 1;
             pointer-events: auto;
+        }
+        
+        .send-button.active:hover {
+            color: #333;
+        }
+        
+        .recaptcha-container {
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
         }
         
         .verification-number-container {
@@ -117,6 +131,11 @@
             font-weight: bold;
         }
         
+        .number-input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
         .verify-button {
             background-color: #4CAF50;
             color: white;
@@ -128,21 +147,57 @@
             margin-top: 1rem;
         }
         
-        .timer {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
+        .verify-button:hover {
+            background-color: #45a049;
         }
         
-        .resend-number {
-            color: #4CAF50;
-            cursor: pointer;
-            display: none;
+        .footer {
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 2rem;
         }
         
         .verification-failed {
             color: #dc3545;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
             display: none;
+        }
+        
+        .verification-failed.show {
+            display: block;
+        }
+
+        .arrow {
+            border: solid #666;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+            margin-top: -2px;
+        }
+
+        .send-button.active:hover .arrow {
+            border-color: #333;
+        }
+
+        .resend-number {
+            color: #4CAF50;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .resend-number:hover {
+            text-decoration: underline;
+        }
+
+        .timer {
+            color: #666;
+            font-size: 0.9rem;
             margin-top: 0.5rem;
         }
     </style>
@@ -152,17 +207,17 @@
         <h1 class="title">Admin Verification</h1>
         
         <div class="profile-section">
+            <br>
             <div class="admin-name">Ayres Santillan Ilustrisimo</div>
             <div class="email-container">
-                <form id="verificationForm" onsubmit="return false;">
-                    <input type="email" placeholder="Enter your email" class="email-input" name="email" required>
-                    <button class="send-button" title="Send verification" id="sendButton">
-                        <i class="arrow">➤</i>
-                    </button>
-                    <div class="email-error">Please enter a valid email address.</div>
-                    <div class="loading">Sending verification code...</div>
-                </form>
+                <form action="verify_gmail.php">
+                <input  type="email" placeholder="Enter your email" class="email-input" required>
+                <button class="send-button" title="Send verification" id="sendButton">
+                    <i class="arrow"></i>
+                </button>
+                <div class="email-error">Please enter a valid email address.</div>
             </div>
+            </form>
         </div>
         
         <div class="recaptcha-container">
@@ -170,9 +225,9 @@
         </div>
         
         <div class="verification-failed" id="verificationMessage">Verification failed. Please try again.</div>
-        
+
         <div class="verification-number-container" id="verificationNumberContainer">
-            <p>Please enter the 6-digit verification code sent to your email</p>
+            <p>Please enter the 6-digit verification number sent to your email</p>
             <div class="number-inputs">
                 <input type="text" maxlength="1" class="number-input" />
                 <input type="text" maxlength="1" class="number-input" />
@@ -181,148 +236,134 @@
                 <input type="text" maxlength="1" class="number-input" />
                 <input type="text" maxlength="1" class="number-input" />
             </div>
-            <div class="timer" id="timer">Resend code in: 02:00</div>
-            <a class="resend-number" id="resendNumber">Resend code</a>
-            <button class="verify-button" id="verifyButton">Verify</button>
+            <div class="timer" id="timer">Resend number in: 02:00</div>
+            <a class="resend-number" id="resendNumber" style="display: none;">Resend</a>
+            <button class="verify-button">Verify</button>
+        </div>
+        
+        <div class="footer">
+        <strong> Event Judging  System &COPY; <?= date("Y") ?></strong>
+                    <p>All rights reserved</p>
         </div>
     </div>
 
     <script>
-        $(document).ready(function() {
-            const emailInput = document.querySelector('.email-input');
-            const emailError = document.querySelector('.email-error');
-            const sendButton = document.getElementById('sendButton');
-            const verificationMessage = document.getElementById('verificationMessage');
-            const verificationNumberContainer = document.getElementById('verificationNumberContainer');
-            const numberInputs = document.querySelectorAll('.number-input');
-            const timerElement = document.getElementById('timer');
-            const resendNumberButton = document.getElementById('resendNumber');
-            const loadingDiv = document.querySelector('.loading');
-            const verifyButton = document.getElementById('verifyButton');
-            
-            let isRecaptchaVerified = false;
-            
-            function validateEmail(email) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-            }
-            
-            function updateSendButtonState() {
-                const isValidEmail = validateEmail(emailInput.value);
-                sendButton.classList.toggle('active', isValidEmail && isRecaptchaVerified);
-            }
-            
-            emailInput.addEventListener('input', function() {
-                const isValidEmail = validateEmail(this.value);
-                this.classList.toggle('error', !isValidEmail && this.value !== '');
-                emailError.classList.toggle('show', !isValidEmail && this.value !== '');
-                updateSendButtonState();
-            });
-            
-            function onRecaptchaVerified(response) {
+        const emailInput = document.querySelector('.email-input');
+        const emailError = document.querySelector('.email-error');
+        const sendButton = document.getElementById('sendButton');
+        const verificationMessage = document.getElementById('verificationMessage');
+        const verificationNumberContainer = document.getElementById('verificationNumberContainer');
+        const numberInputs = document.querySelectorAll('.number-input');
+        const timerElement = document.getElementById('timer');
+        const resendNumberButton = document.getElementById('resendNumber');
+        
+        let isRecaptchaVerified = false;
+        
+        // Email validation function
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // Handle email input validation
+        emailInput.addEventListener('input', function() {
+            const isValidEmail = validateEmail(this.value);
+            this.classList.toggle('error', !isValidEmail && this.value !== '');
+            emailError.classList.toggle('show', !isValidEmail && this.value !== '');
+            updateSendButtonState();
+        });
+        
+        // Callback for reCAPTCHA verification
+        function onRecaptchaVerified(response) {
+            if (response) {
                 isRecaptchaVerified = true;
+                verificationMessage.classList.remove('show');
                 updateSendButtonState();
             }
-            
-            window.onRecaptchaVerified = onRecaptchaVerified;
-            
-            sendButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                if (this.classList.contains('active')) {
-                    const recaptchaResponse = grecaptcha.getResponse();
-                    if (recaptchaResponse) {
-                        loadingDiv.style.display = 'block';
-                        
-                        $.ajax({
-                            url: 'verify_gmail.php',
-                            method: 'POST',
-                            data: {
-                                email: emailInput.value,
-                                recaptcha: recaptchaResponse
-                            },
-                            dataType: 'json',
-                            success: function(response) {
-                                loadingDiv.style.display = 'none';
-                                
-                                if (response.success) {
-                                    verificationNumberContainer.classList.add('show');
-                                    startTimer();
-                                    verificationMessage.classList.remove('show');
-                                } else {
-                                    verificationMessage.textContent = response.message;
-                                    verificationMessage.classList.add('show');
-                                }
-                            },
-                            error: function() {
-                                loadingDiv.style.display = 'none';
-                                verificationMessage.textContent = 'Server error. Please try again.';
-                                verificationMessage.classList.add('show');
-                            }
-                        });
-                    }
+        }
+        
+        // Update send button state based on email and reCAPTCHA
+        function updateSendButtonState() {
+            const isValidEmail = validateEmail(emailInput.value);
+            sendButton.classList.toggle('active', isValidEmail && isRecaptchaVerified);
+        }
+        
+        // Handle send verification number
+        sendButton.addEventListener('click', function() {
+            if (this.classList.contains('active')) {
+                // Verify reCAPTCHA response with your backend
+                const recaptchaResponse = grecaptcha.getResponse();
+                if (recaptchaResponse) {
+                    verificationNumberContainer.classList.add('show');
+                    startTimer();
+                } else {
+                    verificationMessage.classList.add('show');
                 }
-            });
-            
-            numberInputs.forEach((input, index) => {
-                input.addEventListener('input', function() {
-                    if (this.value.length === 1) {
-                        if (index < numberInputs.length - 1) {
-                            numberInputs[index + 1].focus();
-                        }
-                    }
-                });
-                
-                input.addEventListener('keydown', function(e) {
-                    if (e.key === 'Backspace' && !this.value && index > 0) {
-                        numberInputs[index - 1].focus();
-                    }
-                });
-            });
-            
-            verifyButton.addEventListener('click', function() {
-                const code = Array.from(numberInputs).map(input => input.value).join('');
-                if (code.length === 6) {
-                    $.ajax({
-                        url: 'verify_code.php',
-                        method: 'POST',
-                        data: {
-                            email: emailInput.value,
-                            code: code
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                window.location.href = response.redirect;
-                            } else {
-                                verificationMessage.textContent = response.message;
-                                verificationMessage.classList.add('show');
-                            }
-                        },
-                        error: function() {
-                            verificationMessage.textContent = 'Server error. Please try again.';
-                            verificationMessage.classList.add('show');
-                        }
-                    });
-                }
-            });
-            
-            function startTimer() {
-                let timeLeft = 120;
-                const timer = setInterval(() => {
-                    timeLeft--;
-                    const minutes = Math.floor(timeLeft / 60);
-                    const seconds = timeLeft % 60;
-                    
-                    timerElement.textContent = `Resend code in: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                    
-                    if (timeLeft <= 0) {
-                        clearInterval(timer);
-                        timerElement.style.display = 'none';
-                        resendNumberButton.style.display = 'inline-block';
-                    }
-                }, 1000);
+            } else if (!validateEmail(emailInput.value)) {
+                emailError.classList.add('show');
+                emailInput.classList.add('error');
             }
         });
+        
+        // Handle number input auto-focus
+        numberInputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+                if (this.value.length === 1 && index < numberInputs.length - 1) {
+                    numberInputs[index + 1].focus();
+                }
+            });
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !this.value && index > 0) {
+                    numberInputs[index - 1].focus();
+                }
+            });
+        });
+        
+        // Timer functionality
+        function startTimer() {
+            let timeLeft = 120; // 2 minutes in seconds
+            const timer = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `Resend number in: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerElement.style.display = 'none';
+                    resendNumberButton.style.display = 'inline-block';
+                }
+            }, 1000);
+        }
+        
+        // Handle resend number
+        resendNumberButton.addEventListener('click', function() {
+            if (validateEmail(emailInput.value)) {
+                // Verify reCAPTCHA again before resending
+                const recaptchaResponse = grecaptcha.getResponse();
+                if (recaptchaResponse) {
+                    this.style.display = 'none';
+                    timerElement.style.display = 'block';
+                    startTimer();
+                    // Reset inputs
+                    numberInputs.forEach(input => input.value = '');
+                    numberInputs[0].focus();
+                    // Reset reCAPTCHA
+                    grecaptcha.reset();
+                    isRecaptchaVerified = false;
+                    updateSendButtonState();
+                } else {
+                    verificationMessage.classList.add('show');
+                }
+            } else {
+                emailError.classList.add('show');
+                emailInput.classList.add('error');
+            }
+        });
+        
     </script>
 </body>
 </html>
+</a
