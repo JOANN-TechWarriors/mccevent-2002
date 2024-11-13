@@ -5,21 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Account Reset Password</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-    /* Global Styles */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    /* Navbar Styles */
     .navbar {
       background-color: #333;
       color: #fff;
@@ -32,7 +19,6 @@
       align-items: center;
     }
 
-    /* Form Styles */
     .panel {
       border: 1px solid #ddd;
       border-radius: 5px;
@@ -41,15 +27,6 @@
 
     .panel-title {
       margin-top: 0;
-    }
-
-    .form-control {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
     }
 
     .btn-group {
@@ -75,25 +52,6 @@
       background-color: #007bff;
       color: #fff;
     }
-
-    /* Responsive Styles */
-    @media (max-width: 767px) {
-      .container {
-        padding: 10px;
-      }
-
-      .panel {
-        padding: 10px;
-      }
-
-      .form-control {
-        font-size: 14px;
-      }
-
-      .btn {
-        font-size: 14px;
-      }
-    }
   </style>
 </head>
 
@@ -109,27 +67,32 @@
   <header class="jumbotron subhead" id="overview">
     <div class="container">
       <h1>Account Reset Password</h1>
+      <p class="lead">Event Judging System</p>
     </div>
   </header>
 
   <!-- Content -->
   <div class="container">
-    <div class="panel">
-      <h3 class="panel-title">Reset Password</h3>
-      <form action="<?php echo $_SERVER['PHP_SELF'] . '?email=' . $email . '&token=' . $token; ?>" method="POST">
-        <div class="form-group">
-          <label for="password">New Password:</label>
-          <input id="password" type="password" name="password" class="form-control" placeholder="New Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="panel">
+          <h3 class="panel-title">Reset Password</h3>
+          <form action="<?php echo $_SERVER['PHP_SELF'] . '?email=' . $email . '&token=' . $token; ?>" method="POST">
+            <div class="form-group">
+              <label for="password">New Password:</label>
+              <input id="password" type="password" name="password" class="form-control" placeholder="New Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
+            </div>
+            <div class="form-group">
+              <label for="confirm_password">Confirm Password:</label>
+              <input id="confirm_password" type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
+            </div>
+            <div class="btn-group">
+              <a href="index.php" type="button" class="btn btn-default">Cancel</a>
+              <button name="register" type="submit" class="btn btn-primary">Reset</button>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="confirm_password">Confirm Password:</label>
-          <input id="confirm_password" type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
-        </div>
-        <div class="btn-group">
-          <a href="index2.php" type="button" class="btn btn-default">Cancel</a>
-          <button name="register" type="submit" class="btn btn-primary">Reset</button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 
