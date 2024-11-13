@@ -1,14 +1,9 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../vendor/autoload.php'; // Include Composer's autoloader
-
+// Database connection
 $servername = "127.0.0.1"; // Change if needed
-$username = "u510162695_judging_root"; // Replace with your DB username
-$password = "1Judging_root"; // Replace with your DB password
+$username = "u510162695_judging"; // Replace with your DB username
+$password = ""; // Replace with your DB password
 $dbname = "u510162695_judging"; // Replace with your database name
-
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -41,33 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $updateStmt->bind_param("ss", $verificationCode, $email);
         $updateStmt->execute();
 
-        // Create a new PHPMailer instance
-        $mail = new PHPMailer(true);
+        // Send the code to the user's email
+        $subject = "Your Verification Code";
+        $message = "Your verification code is: " . $verificationCode;
+        $headers = "From: no-reply@example.com"; // Replace with your domain's email
 
-        try {
-            // Server settings
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
-            $mail->SMTPAuth = true;
-            $mail->Username = 'joannrebamonte80@gmail.com'; // Your Gmail address
-            $mail->Password = 'dkyd tsnv hzyh amjy'; // Your Gmail App Password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-            // Recipients
-            $mail->setFrom('joannrebamonte80@gmail.com', 'Judging Code');
-            $mail->addAddress($email); // Add the recipient's email
-
-            // Content
-            $mail->isHTML(true);
-            $mail->Subject = 'Your Verification Code';
-            $mail->Body = 'Your verification code is: <strong>' . $verificationCode . '</strong>';
-            $mail->AltBody = 'Your verification code is: ' . $verificationCode;
-
-            $mail->send();
-            echo 'Verification code sent to your email.';
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        if (mail($email, $subject, $message, $headers)) {
+            echo "Verification code sent to your email.";
+        } else {
+            echo "Failed to send email. Please try again.";
         }
 
         $updateStmt->close();
