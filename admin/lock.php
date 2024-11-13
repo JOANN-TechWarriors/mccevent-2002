@@ -210,7 +210,7 @@
             <br>
             <div class="admin-name">Ayres Santillan Ilustrisimo</div>
             <div class="email-container">
-                <input type="email" placeholder="Enter your email" class="email-input" required>
+                <input class="form-control btn-block" style="text-indent: 5px !important; height: 30px !important;" type="email" placeholder="Enter your email" class="email-input" required>
                 <button class="send-button" title="Send verification" id="sendButton">
                     <i class="arrow"></i>
                 </button>
