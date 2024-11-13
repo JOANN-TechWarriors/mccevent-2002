@@ -32,8 +32,14 @@ function verifyRecaptcha($secret, $response) {
 if(isset($_POST['register'])) {
     // Verify reCAPTCHA first
     if(!verifyRecaptcha($recaptcha_secret, $recaptcha_response)) {
-        $_SESSION['error'] = "Please verify that you are not a robot.";
-        header("Location: registration.php");
+        echo '<script>
+            swal({
+                title: "Error",
+                text: "Please verify that you are not a robot.",
+                icon: "error",
+                button: "OK",
+            });
+        </script>';
         exit();
     }
 
@@ -47,8 +53,14 @@ if(isset($_POST['register'])) {
 
     // Check password requirements
     if (strlen($password) < 8 || strlen($password) > 10 || !preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[^A-Za-z0-9]/', $password)) {
-        $_SESSION['error'] = "Password must be 8-10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
-        header("Location: registration.php");
+        echo '<script>
+            swal({
+                title: "Error",
+                text: "Password must be 8-10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+                icon: "error",
+                button: "OK",
+            });
+        </script>';
         exit();
     }
 
@@ -59,8 +71,14 @@ if(isset($_POST['register'])) {
     $check_result = mysqli_query($connection, $check_query);
     
     if(mysqli_num_rows($check_result) > 0) {
-        $_SESSION['error'] = "Student ID already exists!";
-        header("Location: registration.php");
+        echo '<script>
+            swal({
+                title: "Error",
+                text: "Student ID already exists!",
+                icon: "error",
+                button: "OK",
+            });
+        </script>';
         exit();
     }
     
@@ -69,13 +87,25 @@ if(isset($_POST['register'])) {
               VALUES ('$fname', '$mname', '$lname', '$course', '$student_id', '$password', NOW())";
     
     if(mysqli_query($connection, $query)) {
-        $_SESSION['success'] = "Registration successful! Please login.";
-        header("Location: index.php");
-        exit();
+        echo '<script>
+            swal({
+                title: "Success",
+                text: "Registration successful! Please login.",
+                icon: "success",
+                button: "OK",
+            }).then(function() {
+                window.location.href = "index.php";
+            });
+        </script>';
     } else {
-        $_SESSION['error'] = "Error in registration: " . mysqli_error($connection);
-        header("Location: registration.php");
-        exit();
+        echo '<script>
+            swal({
+                title: "Error",
+                text: "Error in registration: ' . mysqli_error($connection) . '",
+                icon: "error",
+                button: "OK",
+            });
+        </script>';
     }
 }
 ?>
@@ -92,6 +122,7 @@ include('../admin/header.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Registration</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Bootstrap CSS (assuming it's included in header.php) -->
     <style>
         body {
@@ -148,16 +179,6 @@ include('../admin/header.php');
                         <h3 class="panel-title"><strong>STUDENT REGISTRATION FORM</strong></h3>
                     </div>
                     <div class="panel-body">
-                        <?php
-                        if(isset($_SESSION['error'])) {
-                            echo '<div class="error-message">' . $_SESSION['error'] . '</div>';
-                            unset($_SESSION['error']);
-                        }
-                        if(isset($_SESSION['success'])) {
-                            echo '<div class="success-message">' . $_SESSION['success'] . '</div>';
-                            unset($_SESSION['success']);
-                        }
-                        ?>
                         <form method="POST" action="register_account.php" onsubmit="return validateForm()">
                             <table align="center" class="w-100">
                                 <tr>
@@ -298,21 +319,36 @@ include('../admin/header.php');
             // Verify reCAPTCHA
             const response = grecaptcha.getResponse();
             if (response.length === 0) {
-                alert('Please verify that you are not a robot.');
+                swal({
+                    title: "Error",
+                    text: "Please verify that you are not a robot.",
+                    icon: "error",
+                    button: "OK",
+                });
                 return false;
             }
 
             // Terms and conditions checkbox
             const termsCheckbox = document.getElementById('flexCheckDefault');
             if (!termsCheckbox.checked) {
-                alert('Please accept the Terms and Conditions.');
+                swal({
+                    title: "Error",
+                    text: "Please accept the Terms and Conditions.",
+                    icon: "error",
+                    button: "OK",
+                });
                 return false;
             }
 
             // Check password requirements
             const password = document.querySelector('input[name="password"]').value;
             if (password.length < 8 || password.length > 10 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
-                alert('Password must be 8-10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+                swal({
+                    title: "Error",
+                    text: "Password must be 8-10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+                    icon: "error",
+                    button: "OK",
+                });
                 return false;
             }
 
