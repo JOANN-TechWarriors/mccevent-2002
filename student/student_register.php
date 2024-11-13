@@ -1,10 +1,10 @@
 <?php
 // register_account.php
 session_start();
-include('../admin/connection.php'); // Assuming this has your database connection
+include('../admin/dbcon.php'); // Assuming this has your database connection
 
 // reCAPTCHA configuration
-$recaptcha_secret = "YOUR_RECAPTCHA_SECRET_KEY";
+$recaptcha_secret = "6LcsOX0qAAAAAN5WeH70ZBF3BM5Fd1_zeuOOA-aL";
 $recaptcha_response = $_POST['g-recaptcha-response'];
 
 function verifyRecaptcha($secret, $response) {
