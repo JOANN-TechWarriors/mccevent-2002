@@ -5,7 +5,6 @@ include('../admin/dbcon.php'); // Assuming this has your database connection
 
 // reCAPTCHA configuration
 $recaptcha_secret = "6LcsOX0qAAAAAN5WeH70ZBF3BM5Fd1_zeuOOA-aL";
-$recaptcha_response = $_POST['g-recaptcha-response'];
 
 function verifyRecaptcha($secret, $response) {
     $url = 'https://www.google.com/recaptcha/api/siteverify';
