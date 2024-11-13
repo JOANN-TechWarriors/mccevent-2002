@@ -237,7 +237,7 @@
         <h1 class="title">Admin Verification</h1>
         
         <div class="profile-section">
-            <br>
+            <img src="/api/placeholder/80/80" alt="Admin Profile" class="profile-img">
             <div class="admin-name">Ayres Santillan Ilustrisimo</div>
             <div class="email-container">
                 <input type="email" placeholder="Enter your email" class="email-input">
@@ -270,8 +270,8 @@
                 <input type="text" maxlength="1" class="number-input" />
             </div>
             <div class="timer" id="timer">Resend number in: 02:00</div>
-            <a class="resend-number" id="resendNumber" style="display: none;">Resend</a>
-            <button class="verify-button">Verify</button>
+            <a class="resend-number" id="resendNumber" style="display: none;">Resend Number</a>
+            <button class="verify-button">Verify Number</button>
         </div>
         
         <div class="footer">
