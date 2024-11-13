@@ -12,13 +12,26 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Add email column to admin table
-$sql = "ALTER TABLE admin ADD COLUMN email VARCHAR(100)";
+// Array of SQL statements to add multiple columns
+$sqlStatements = [
+    "ALTER TABLE admin ADD COLUMN code VARCHAR(6)",  // For verification codes
+    "ALTER TABLE admin ADD COLUMN token VARCHAR(255)",  // For authentication/reset tokens
+    "ALTER TABLE admin ADD COLUMN token_expiration DATETIME",  // For token expiration timestamp
+    "ALTER TABLE admin ADD COLUMN phone VARCHAR(20)"  // For phone numbers
+];
 
-if ($conn->query($sql) === TRUE) {
-    echo "Email column added successfully to admin table.";
-} else {
-    echo "Error adding email column: " . $conn->error;
+// Execute each statement
+$success = true;
+foreach ($sqlStatements as $sql) {
+    if ($conn->query($sql) !== TRUE) {
+        echo "Error executing query: " . $sql . "\n";
+        echo "Error message: " . $conn->error . "\n";
+        $success = false;
+    }
+}
+
+if ($success) {
+    echo "All columns added successfully to admin table.";
 }
 
 $conn->close();
