@@ -9,16 +9,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Check if the user has exceeded the login attempt limit
-    if (isset($_SESSION['login_attempts']) && $_SESSION['login_attempts'] >= 3) {
-        if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()) {
-            $_SESSION['login_error'] = "You have exceeded the login attempt limit. Please try again in " . floor(($_SESSION['login_disabled_until'] - time()) / 60) . " minutes.";
-            echo $_SESSION['login_error'];
-            exit;
-        } else {
-            // Reset the login attempts counter
-            unset($_SESSION['login_attempts']);
-            unset($_SESSION['login_disabled_until']);
-        }
+    if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()) {
+        $remainingTime = $_SESSION['login_disabled_until'] - time();
+        $_SESSION['login_error'] = "You have exceeded the login attempt limit. Please try again in " . floor($remainingTime / 60) . " minutes.";
+        echo $_SESSION['login_error'];
+        exit;
+    } else {
+        // Reset the login disabled time
+        unset($_SESSION['login_disabled_until']);
     }
 
     try {
@@ -41,18 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: index.php");
                     exit();
                 } else {
-                    // Increment the login attempt counter
-                    if (!isset($_SESSION['login_attempts'])) {
-                        $_SESSION['login_attempts'] = 1;
-                    } else {
-                        $_SESSION['login_attempts']++;
-                    }
-
-                    if ($_SESSION['login_attempts'] >= 3) {
-                        // Disable the login for 2 minutes
-                        $_SESSION['login_disabled_until'] = time() + 120;
-                    }
-
+                    // Disable the login for 2 minutes
+                    $_SESSION['login_disabled_until'] = time() + 120;
                     $_SESSION['login_error'] = "Invalid password";
                 }
             } else {
@@ -185,9 +173,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             >
                                 <i class="icon-ok"></i> LOGIN
                             </button>
-                            <?php if (isset($_SESSION['login_attempts'])): ?>
+                            <?php if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()): ?>
                                 <div class="text-center text-gray-600 mt-2">
-                                    Login attempts: <?php echo $_SESSION['login_attempts']; ?>
+                                    You can try again in <?php echo floor(($_SESSION['login_disabled_until'] - time()) / 60); ?> minutes.
                                 </div>
                             <?php endif; ?>
                             <div class="text-center mt-4">
