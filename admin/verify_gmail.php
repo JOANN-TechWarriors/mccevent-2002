@@ -1,7 +1,7 @@
 <?php
 // Database configuration
 $db_host = '127.0.0.1';
-$db_user = 'u510162695_judging';
+$db_user = 'u510162695_judging_root';
 $db_pass = '1Judging_root';
 $db_name = 'u510162695_judging';
 
