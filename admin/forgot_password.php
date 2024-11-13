@@ -24,7 +24,7 @@ if(isset($_POST["send"])){
 
     if (!$user) {
         echo '<div class="alert alert-danger" role="alert">Email address not found.</div>';
-        include('index.php');
+        include('index2.php');
         exit();
     } else {
         // Generate unique token for password reset link
@@ -56,7 +56,7 @@ if(isset($_POST["send"])){
                 )
             );
     
-            $mail->setFrom('joannbilbao725@gmail.com', 'Event Judging Management System');
+            $mail->setFrom('joannbilbao725@gmail.com', 'Event Judging System');
             $mail->addAddress($_POST['email']);
             $mail->isHTML(true);
             $mail->Subject = 'Password Reset Link';
@@ -66,11 +66,11 @@ if(isset($_POST["send"])){
             $mail->send();
     
             echo '<div class="alert alert-success" role="alert">Password reset email sent to ' . $email . '.</div>';
-            include('index.php');
+            include('index2.php');
             exit();
         } catch (Exception $e) {
             echo '<div class="alert alert-danger" role="alert">Error sending email: ' . $mail->ErrorInfo . '</div>';
-            include('index.php');
+            include('index2.php');
             exit();
         }
     }
