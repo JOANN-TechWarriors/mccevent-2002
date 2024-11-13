@@ -193,7 +193,6 @@
                 <span>I'm not a robot</span>
             </div>
             <div class="recaptcha-logo">
-                reCAPTCHA
                 <img src="/api/placeholder/20/20" alt="reCAPTCHA logo">
             </div>
         </div>
