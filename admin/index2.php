@@ -1,49 +1,4 @@
-<?php
-session_start();
 
-// Database connection
-$servername = "127.0.0.1";
-$username = "u510162695_judging_root";
-$password = "1Judging_root";
-$dbname = "u510162695_judging";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Function to verify password
-function verify_password($password, $hashed_password) {
-    return password_verify($password, $hashed_password);
-}
-
-// Handle login form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    // Retrieve the hashed password from the database for the given username
-    $stmt = $conn->prepare("SELECT password FROM organizer WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    $hashed_password = $row['password'];
-
-    if (verify_password($password, $hashed_password)) {
-        // Login successful
-        $_SESSION['login_success'] = true;
-        header('Location: dashboard.php');
-        exit();
-    } else {
-        // Login failed
-        echo "Invalid username or password.";
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
