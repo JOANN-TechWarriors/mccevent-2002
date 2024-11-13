@@ -171,25 +171,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        window.onload = function() {
-            <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
-                Swal.fire({
-                    title: "Success!",
-                    text: "You are Successfully logged in!",
-                    icon: "success"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "dashboard.php";
-                    }
-                });
-                <?php unset($_SESSION['login_success']); ?>
-            <?php endif; ?>
-        };
 
         function clearEmail() {
             document.getElementById("forgot-password-form").reset();
         }
 
+        document.getElementById("login-button").addEventListener("click", function() {
+            Swal.fire({
+                title: "Success!",
+                text: "You are successfully logged in!",
+                icon: "success",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "dashboard.php";
+                }
+            });
+        });
 // Security measures
     // Disable right-click
     document.addEventListener('contextmenu', function (e) {
