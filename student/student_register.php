@@ -43,7 +43,16 @@ if(isset($_POST['register'])) {
     $lname = mysqli_real_escape_string($connection, $_POST['lname']);
     $course = mysqli_real_escape_string($connection, $_POST['course']);
     $student_id = mysqli_real_escape_string($connection, $_POST['student_id']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $password = $_POST['password'];
+
+    // Check password requirements
+    if (strlen($password) < 8 || strlen($password) > 10 || !preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[^A-Za-z0-9]/', $password)) {
+        $_SESSION['error'] = "Password must be 8-10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+        header("Location: registration.php");
+        exit();
+    }
+
+    $password = password_hash($password, PASSWORD_DEFAULT);
     
     // Check if student ID already exists
     $check_query = "SELECT * FROM students WHERE student_id = '$student_id'";
