@@ -198,7 +198,7 @@ include('../admin/header.php');
                                 <tr>
                                     <td colspan="5">
                                         <strong>Password:</strong><span class="required">*</span>
-                                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                        <input type="password" name="password" class="form-control" placeholder="Password (8-10 characters, 1 uppercase, 1 lowercase, 1 number, 1 symbol)" required>
                                     </td>
                                 </tr>
                                 <tr>
@@ -306,6 +306,13 @@ include('../admin/header.php');
             const termsCheckbox = document.getElementById('flexCheckDefault');
             if (!termsCheckbox.checked) {
                 alert('Please accept the Terms and Conditions.');
+                return false;
+            }
+
+            // Check password requirements
+            const password = document.querySelector('input[name="password"]').value;
+            if (password.length < 8 || password.length > 10 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+                alert('Password must be 8-10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
                 return false;
             }
 
