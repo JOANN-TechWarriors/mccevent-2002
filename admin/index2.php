@@ -264,8 +264,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="waiting-timer" id="waiting-timer">10</div>
                 <p>seconds remaining</p>
             </div>
-        </div>
-
 
             <!-- Login content (initially hidden) -->
             <div id="login-content">
