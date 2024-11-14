@@ -215,54 +215,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #c82333;
             text-decoration: underline;
         }
-         /* Add new styles for waiting message */
-         .waiting-message {
-            display: none;
-            text-align: center;
-            padding: 20px;
-            background-color: white;
-        }
-
-        .waiting-timer {
-            font-size: 24px;
-            color: #dc3545;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #dc3545;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
-<div class="container">
+    <div class="container">
         <div class="login-container">
             <!-- CAPTCHA verification section -->
             <div id="captcha-section" class="captcha-container">
                 <h4 class="mb-4">Verify you're human</h4>
                 <p class="captcha-message">Please complete the CAPTCHA to access the login form</p>
                 <div class="g-recaptcha" data-sitekey="6LcsOX0qAAAAAMHHt5C_j6v9iH2hM6RUduOCmxqe" data-callback="onCaptchaSuccess"></div>
-            </div>
-
-            <!-- Waiting section (initially hidden) -->
-            <div id="waiting-section" class="waiting-message">
-                <h4 class="mb-4">Security Check</h4>
-                <p>Please wait while we verify your request...</p>
-                <div class="loading-spinner"></div>
-                <div class="waiting-timer" id="waiting-timer">10</div>
-                <p>seconds remaining</p>
             </div>
 
             <!-- Login content (initially hidden) -->
@@ -382,26 +344,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (countdown < 0) {
                     clearInterval(countdownInterval);
                     resetLockout();
-                }
-            }, 1000);
-        }
-        // Modified reCAPTCHA callback function
-        function onCaptchaSuccess(token) {
-            document.getElementById('g-recaptcha-response').value = token;
-            document.getElementById('captcha-section').style.display = 'none';
-            document.getElementById('waiting-section').style.display = 'block';
-            
-            let secondsLeft = 10;
-            const timerDisplay = document.getElementById('waiting-timer');
-            
-            const waitInterval = setInterval(() => {
-                secondsLeft--;
-                timerDisplay.textContent = secondsLeft;
-                
-                if (secondsLeft <= 0) {
-                    clearInterval(waitInterval);
-                    document.getElementById('waiting-section').style.display = 'none';
-                    document.getElementById('login-content').style.display = 'block';
                 }
             }, 1000);
         }
