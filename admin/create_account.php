@@ -371,5 +371,5 @@
                     <?php
                 }
                 $stmt->close();
-            } else {
+            } else {}
                 ?>
