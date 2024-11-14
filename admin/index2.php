@@ -1,3 +1,66 @@
+<?php
+session_start();
+require_once 'dbcon.php'; // Database connection file
+
+// Function to verify reCAPTCHA
+function verifyCaptcha($recaptchaResponse) {
+    $secretKey = "6LcsOX0qAAAAAN5WeH70ZBF3BM5Fd1_zeuOOA-aL";
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = array(
+        'secret' => $secretKey,
+        'response' => $recaptchaResponse
+    );
+
+    $options = array(
+        'http' => array(
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($data)
+        )
+    );
+
+    $context = stream_context_create($options);
+    $response = file_get_contents($url, false, $context);
+    $responseKeys = json_decode($response, true);
+
+    return $responseKeys["success"];
+}
+
+// Handle login form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['g-recaptcha-response'])) {
+        $captchaResponse = $_POST['g-recaptcha-response'];
+        
+        if (verifyCaptcha($captchaResponse)) {
+            $username = mysqli_real_escape_string($conn, $_POST['username']);
+            $password = $_POST['password'];
+
+            $sql = "SELECT * FROM users WHERE email = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows == 1) {
+                $user = $result->fetch_assoc();
+                if (password_verify($password, $user['password'])) {
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['login_success'] = true;
+                    echo json_encode(['success' => true]);
+                    exit();
+                }
+            }
+            echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'CAPTCHA verification failed']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Please complete the CAPTCHA']);
+    }
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +69,7 @@
     <title>MCC Event Judging System - Login</title>
     <link rel="shortcut icon" href="../images/logo copy.png"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         body {
             background: url(../img/Community-College-Madridejos.jpeg);
@@ -64,6 +128,40 @@
             border-radius: 8px;
         }
 
+        .captcha-container {
+            text-align: center;
+            padding: 40px;
+            background-color: white;
+        }
+
+        .captcha-message {
+            margin-bottom: 20px;
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        #login-content {
+            display: none;
+        }
+
+        .g-recaptcha {
+            display: inline-block;
+        }
+
+        .countdown {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #dc3545;
+            display: block;
+        }
+
+        .login-status {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Additional styles from original code */
         .social-login {
             margin-top: 2rem;
             text-align: center;
@@ -117,53 +215,47 @@
             color: #c82333;
             text-decoration: underline;
         }
-
-        h2, h4 {
-            margin-bottom: 20px;
-        }
-
-        .countdown {
-            margin-top: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #dc3545;
-            display: block;
-        }
-
-        .login-status {
-            margin-top: 10px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="login-container">
-            <div class="row g-0">
-                <div class="col-md-6 logo-side">
-                    <img src="../img/logo.png" alt="MCC Logo" class="img-fluid">
-                    <h4 style="font-size: 18px;" class="mb-4">WELCOME TO:</h4>
-                    <h4 style="font-size: 20px;" class="mb-5"><strong>MCC Event Judging System</strong></h4>
-                </div>
-                <div class="col-md-6 login-side">
-                    <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
-                    <form id="login-form" method="POST" action="login.php" class="login-form">
-                        <div class="mb-3">
-                            <input type="email" class="form-control" name="username" placeholder="Username" required autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <input type="password" class="form-control" name="password" placeholder="Password" required>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div>
-                                <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
-                                <span id="countdown" class="countdown"></span>
+            <!-- CAPTCHA verification section -->
+            <div id="captcha-section" class="captcha-container">
+                <h4 class="mb-4">Verify you're human</h4>
+                <p class="captcha-message">Please complete the CAPTCHA to access the login form</p>
+                <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY" data-callback="onCaptchaSuccess"></div>
+            </div>
+
+            <!-- Login content (initially hidden) -->
+            <div id="login-content">
+                <div class="row g-0">
+                    <div class="col-md-6 logo-side">
+                        <img src="../img/logo.png" alt="MCC Logo" class="img-fluid">
+                        <h4 style="font-size: 18px;" class="mb-4">WELCOME TO:</h4>
+                        <h4 style="font-size: 20px;" class="mb-5"><strong>MCC Event Judging System</strong></h4>
+                    </div>
+                    <div class="col-md-6 login-side">
+                        <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
+                        <form id="login-form" class="login-form">
+                            <div class="mb-3">
+                                <input type="email" class="form-control" name="username" placeholder="Username" required autofocus>
                             </div>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
-                        </div>
-                        <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
-                        <div id="login-status" class="login-status"></div>
-                    </form>
+                            <div class="mb-3">
+                                <input type="password" class="form-control" name="password" placeholder="Password" required>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
+                                    <span id="countdown" class="countdown"></span>
+                                </div>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
+                            </div>
+                            <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
+                            <div id="login-status" class="login-status"></div>
+                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -193,7 +285,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Get the login form and button
+        // reCAPTCHA callback function
+        function onCaptchaSuccess(token) {
+            document.getElementById('g-recaptcha-response').value = token;
+            document.getElementById('captcha-section').style.display = 'none';
+            document.getElementById('login-content').style.display = 'block';
+        }
+
+        // Login handling
         const loginForm = document.getElementById('login-form');
         const loginButton = document.getElementById('login-button');
         const countdownElement = document.getElementById('countdown');
@@ -204,16 +303,14 @@
         let lockoutEndTime = localStorage.getItem('lockoutEndTime');
         let countdownInterval;
 
-        // Check if there's an existing lockout
+        // Check existing lockout
         function checkExistingLockout() {
             if (lockoutEndTime) {
                 const now = new Date().getTime();
                 if (now < parseInt(lockoutEndTime)) {
-                    // Lock is still active
                     loginButton.disabled = true;
                     startCountdown(Math.ceil((parseInt(lockoutEndTime) - now) / 1000));
                 } else {
-                    // Lock has expired
                     resetLockout();
                 }
             }
@@ -252,11 +349,10 @@
         }
 
         // Handle login attempt
-        function handleLoginAttempt() {
-            const username = loginForm.elements.username.value;
-            const password = loginForm.elements.password.value;
-
-            if (username.trim() === '' || password.trim() === '') {
+        async function handleLoginAttempt() {
+            const formData = new FormData(loginForm);
+            
+            if (!formData.get('username').trim() || !formData.get('password').trim()) {
                 Swal.fire({
                     title: 'Error!',
                     text: 'Please enter your username and password.',
@@ -266,28 +362,55 @@
                 return;
             }
 
-            loginAttempts++;
-            localStorage.setItem('loginAttempts', loginAttempts);
-
-            if (loginAttempts >= 3) {
-                // Lock out for 2 minutes
-                loginButton.disabled = true;
-                const lockoutDuration = 180; // 2 minutes in seconds
-                const lockoutEnd = new Date().getTime() + (lockoutDuration * 1000);
-                localStorage.setItem('lockoutEndTime', lockoutEnd);
-                startCountdown(lockoutDuration);
-                
-                Swal.fire({
-                    title: 'Account Locked!',
-                    text: 'Too many failed attempts. Please try again in 3 minutes.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
+            try {
+                const response = await fetch('login.php', {
+                    method: 'POST',
+                    body: formData
                 });
-            } else {
-                // Submit the form
-                loginForm.submit();
-            }
-        }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resetLockout();
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'You are successfully logged in!',
+                        icon: 'success'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'dashboard.php';
+                        }
+                    });
+                } else {
+                    loginAttempts++;
+                    localStorage.setItem('loginAttempts', loginAttempts);
+
+                    if (loginAttempts >= 3) {
+                        loginButton.disabled = true;
+                        const lockoutDuration = 180;
+                        const lockoutEnd = new Date().getTime() + (lockoutDuration * 1000);
+                        localStorage.setItem('lockoutEndTime', lockoutEnd);
+                        startCountdown(lockoutDuration);
+                        
+                        document.getElementById('login-content').style.display = 'none';
+                        document.getElementById('captcha-section').style.display = 'block';
+                        grecaptcha.reset();
+
+                        Swal.fire({
+                            title: 'Account Locked!',
+                            text: 'Too many failed attempts. Please try again in 3 minutes.',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: data.message || 'Invalid credentials',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
 
         // Add event listeners
         loginButton.addEventListener('click', handleLoginAttempt);
