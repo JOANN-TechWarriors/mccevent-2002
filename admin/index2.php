@@ -241,7 +241,7 @@
             countdownInterval = setInterval(() => {
                 const minutes = Math.floor(countdown / 60);
                 const seconds = countdown % 60;
-                countdownElement.textContent = `Disabled for ${minutes}:${seconds.toString().padStart(3, '0')}`;
+                countdownElement.textContent = `Disabled for ${minutes}:${seconds.toString().padStart(2, '0')}`;
                 countdown--;
 
                 if (countdown < 0) {
@@ -272,7 +272,7 @@
             if (loginAttempts >= 3) {
                 // Lock out for 2 minutes
                 loginButton.disabled = true;
-                const lockoutDuration = 120; // 2 minutes in seconds
+                const lockoutDuration = 180; // 2 minutes in seconds
                 const lockoutEnd = new Date().getTime() + (lockoutDuration * 1000);
                 localStorage.setItem('lockoutEndTime', lockoutEnd);
                 startCountdown(lockoutDuration);
