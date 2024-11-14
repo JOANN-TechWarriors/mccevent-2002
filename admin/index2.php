@@ -412,39 +412,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 }
 
+            } catch (error) {
+                console.error('Login error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred during login. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+
         // Add event listeners
         loginButton.addEventListener('click', handleLoginAttempt);
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleLoginAttempt();
+        });
 
         // Check for existing lockout on page load
-        document.addEventListener('DOMContentLoaded', checkExistingLockout);
-
-        // Clear lockout state when login is successful
-        window.onload = function() {
-            if (typeof <?php echo isset($_SESSION['login_success']) && $_SESSION['login_success'] == true ? 'true' : 'false'; ?> !== 'undefined' && <?php echo isset($_SESSION['login_success']) && $_SESSION['login_success'] == true ? 'true' : 'false'; ?>) {
-                resetLockout();
-                Swal.fire({
-                    title: "Success!",
-                    text: "You are Successfully logged in!",
-                    icon: "success"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "dashboard.php";
-                    }
-                });
-                <?php unset($_SESSION['login_success']); ?>
+        document.addEventListener('DOMContentLoaded', () => {
+            checkExistingLockout();
+            
+            // If there's no lockout, check if we should show login form
+            if (!lockoutEndTime || new Date().getTime() >= parseInt(lockoutEndTime)) {
+                const captchaResponse = document.getElementById('g-recaptcha-response').value;
+                if (captchaResponse) {
+                    document.getElementById('captcha-section').style.display = 'none';
+                    document.getElementById('login-content').style.display = 'block';
+                }
             }
-        };
+        });
 
-        // Clear the email input in the forgot password modal
+        // Clear email in forgot password modal
         function clearEmail() {
             document.getElementById("forgot-password-form").reset();
         }
 
-        // Disable right-click, F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        // Security measures
+        // Disable right-click
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
+        // Disable developer tools shortcuts
         document.onkeydown = function (e) {
             if (
                 e.key === 'F12' ||
@@ -454,6 +465,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 e.preventDefault();
             }
         };
+
+        // Prevent form resubmission on page refresh
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
     </script>
 </body>
 </html>
