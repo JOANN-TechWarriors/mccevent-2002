@@ -367,7 +367,7 @@ if (isset($_POST['register'])) {
                         confirmButtonColor: '#3085d6'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location = 'index.php';
+                            window.location = 'index2.php';
                         }
                     });
                 </script>";
