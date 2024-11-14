@@ -279,7 +279,7 @@
                 
                 Swal.fire({
                     title: 'Account Locked!',
-                    text: 'Too many failed attempts. Please try again in 2 minutes.',
+                    text: 'Too many failed attempts. Please try again in 3 minutes.',
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });
