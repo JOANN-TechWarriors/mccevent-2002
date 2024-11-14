@@ -241,7 +241,7 @@
             countdownInterval = setInterval(() => {
                 const minutes = Math.floor(countdown / 60);
                 const seconds = countdown % 60;
-                countdownElement.textContent = `Disabled for ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                countdownElement.textContent = `Disabled for ${minutes}:${seconds.toString().padStart(3, '0')}`;
                 countdown--;
 
                 if (countdown < 0) {
