@@ -253,7 +253,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div id="captcha-section" class="captcha-container">
                 <h4 class="mb-4">Verify you're human</h4>
                 <p class="captcha-message">Please complete the CAPTCHA to access the login form</p>
-                <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY" data-callback="onCaptchaSuccess"></div>
+                <div class="g-recaptcha" data-sitekey="6LcsOX0qAAAAAMHHt5C_j6v9iH2hM6RUduOCmxqe" data-callback="onCaptchaSuccess"></div>
             </div>
 
             <!-- Waiting section (initially hidden) -->
@@ -263,11 +263,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="loading-spinner"></div>
                 <div class="waiting-timer" id="waiting-timer">10</div>
                 <p>seconds remaining</p>
-            </div>
-
-            <!-- Login content (initially hidden) -->
-            <div id="login-content">
-                <!-- ... (previous login content remains the same) ... -->
             </div>
         </div>
 
