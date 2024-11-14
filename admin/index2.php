@@ -416,7 +416,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 console.error('Login error:', error);
                 Swal.fire({
                     title: 'Error!',
-                    text: 'An error occurred during login. Please try again.',
+                    text: 'Your account is not yet approve by the admin.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
