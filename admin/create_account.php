@@ -202,9 +202,11 @@
     <script src="../assets/js/jquery.min.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Add SweetAlert JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.32/sweetalert2.min.js"></script>
 
     <script>
-        // Modal functionality
+        // Modal functionality remains the same
         const modal = document.getElementById("myModal");
         const btn = document.getElementById("openModal");
         const span = document.getElementsByClassName("close")[0];
@@ -218,7 +220,7 @@
             if (event.target === modal) modal.style.display = "none";
         }
 
-        // Password validation function
+        // Password validation function remains the same
         function validatePassword(password) {
             const requirements = {
                 length: password.length >= 8 && password.length <= 10,
@@ -228,7 +230,6 @@
                 special: /[!@#$%^&*]/.test(password)
             };
 
-            // Update requirement indicators
             Object.keys(requirements).forEach(requirement => {
                 const element = document.getElementById(requirement);
                 if (requirements[requirement]) {
@@ -266,30 +267,44 @@
             }
         });
 
-        // Form submission validation
+        // Updated form submission validation with SweetAlert
         $('#registrationForm').on('submit', function(e) {
+            e.preventDefault();
             const password = $('#password').val();
             const confirmPassword = $('#confirm_password').val();
 
             if (!validatePassword(password)) {
-                e.preventDefault();
-                alert('Please ensure your password meets all requirements.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Password',
+                    text: 'Please ensure your password meets all requirements.',
+                    confirmButtonColor: '#3085d6'
+                });
                 return false;
             }
 
             if (password !== confirmPassword) {
-                e.preventDefault();
-                alert('Passwords do not match.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Mismatch',
+                    text: 'Passwords do not match.',
+                    confirmButtonColor: '#3085d6'
+                });
                 return false;
             }
 
             if (!$('#termsCheck').is(':checked')) {
-                e.preventDefault();
-                alert('Please accept the Terms and Conditions.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Terms & Conditions',
+                    text: 'Please accept the Terms and Conditions.',
+                    confirmButtonColor: '#3085d6'
+                });
                 return false;
             }
 
-            return true;
+            // If all validations pass, submit the form
+            this.submit();
         });
     </script>
 </body>
@@ -309,7 +324,12 @@ if (isset($_POST['register'])) {
 
     if (!preg_match($password_regex, $password)) {
         echo "<script>
-            alert('Password does not meet requirements. Please ensure it contains 8-10 characters, including uppercase, lowercase, numbers, and special characters.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Password',
+                text: 'Password does not meet requirements. Please ensure it contains 8-10 characters, including uppercase, lowercase, numbers, and special characters.',
+                confirmButtonColor: '#3085d6'
+            });
         </script>";
         exit;
     }
@@ -322,7 +342,12 @@ if (isset($_POST['register'])) {
     
     if ($result->num_rows > 0) {
         echo "<script>
-            alert('Username already exists. Please choose a different username.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Username Taken',
+                text: 'Username already exists. Please choose a different username.',
+                confirmButtonColor: '#3085d6'
+            });
         </script>";
         $check_username->close();
         exit;
@@ -339,18 +364,36 @@ if (isset($_POST['register'])) {
         
         if ($stmt->execute()) {
             echo "<script>
-                alert('Organizer " . $fname . " " . $mname . " " . $lname . " registered successfully!');
-                window.location = 'index.php';
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registration Successful',
+                    text: 'Organizer " . $fname . " " . $mname . " " . $lname . " registered successfully!',
+                    confirmButtonColor: '#3085d6'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = 'index.php';
+                    }
+                });
             </script>";
         } else {
             echo "<script>
-                alert('Registration failed. Please try again.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registration Failed',
+                    text: 'Registration failed. Please try again.',
+                    confirmButtonColor: '#3085d6'
+                });
             </script>";
         }
         $stmt->close();
     } else {
         echo "<script>
-            alert('Passwords do not match. Please try again.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Password Mismatch',
+                text: 'Passwords do not match. Please try again.',
+                confirmButtonColor: '#3085d6'
+            });
         </script>";
     }
 }
