@@ -1,29 +1,51 @@
 <?php 
 session_start();
-// Connect to database
+
 $host = '127.0.0.1';
 $username = 'u510162695_judging_root';
-$password = '1Judging_root';
+$password = '1Judging_root';  // Replace with the actual password
 $dbname = 'u510162695_judging';
 
 $conn = new mysqli($host, $username, $password, $dbname);
 
 // Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+
 date_default_timezone_set('Asia/Manila'); 
+
+// Check if token is set and valid
+if (!isset($_GET['token']) || !preg_match('/^[a-zA-Z0-9]{32}$/', $_GET['token'])) {
+    header('Location: lock.php');
+    exit();
+}
+
+$token = $_GET['token'];
+$checkTokenQuery = "SELECT * FROM admin WHERE token = ?";
+$stmt = $conn->prepare($checkTokenQuery);
+$stmt->bind_param('s', $token);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    header('Location: lock.php');
+    exit();
+}
 
 $msg = "";
 if (isset($_POST['admin_login'])) {
     $user = $_POST['username'];
     $pass = $_POST['password'];
 
-    $check = "SELECT * FROM admin WHERE username = '$user'";
-    $result = mysqli_query($conn, $check);
-    $row = mysqli_fetch_assoc($result);
+    $check = "SELECT * FROM admin WHERE username = ?";
+    $stmt = $conn->prepare($check);
+    $stmt->bind_param('s', $user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
 
-    if (mysqli_num_rows($result) > 0 ) {
+    if ($result->num_rows > 0) {
         $hashed_pass = $row['password'];
         if (!password_verify($pass, $hashed_pass)) {
             $msg = "<div class='alert alert-danger'>Incorrect Username or Password!</div>";

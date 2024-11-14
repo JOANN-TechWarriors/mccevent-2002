@@ -1,59 +1,67 @@
 <?php
-// Database connection
-$servername = "127.0.0.1"; // Change if needed
-$username = "u510162695_judging"; // Replace with your DB username
-$password = ""; // Replace with your DB password
-$dbname = "u510162695_judging"; // Replace with your database name
+// admin/verify_gmail.php
+require 'dbcon.php';
+require '../vendor/autoload.php';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Function to generate a 6-digit verification code
 function generateVerificationCode() {
-    return str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+    return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
 }
 
-// Handling the form submission
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+function sendVerificationEmail($email, $code) {
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = 'joannrebamonte80@gmail.com'; // Your Gmail address
+        $mail->Password = 'dkyd tsnv hzyh amjy'; // Your Gmail App Password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
-    // Check if the email is in the database
-    $stmt = $conn->prepare("SELECT id FROM admin WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
+        $mail->setFrom('no-reply@yourdomain.com', 'Your Company');
+        $mail->addAddress($email);
 
-    if ($stmt->num_rows > 0) {
-        // Email exists, generate a verification code
-        $verificationCode = generateVerificationCode();
+        $mail->isHTML(true);
+        $mail->Subject = 'Your Verification Code';
+        $mail->Body    = "Your verification code is: <b>$code</b>";
 
-        // Update the verification code in the database
-        $updateStmt = $conn->prepare("UPDATE admin SET code = ?, token_expiration = DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE email = ?");
-        $updateStmt->bind_param("ss", $verificationCode, $email);
-        $updateStmt->execute();
-
-        // Send the code to the user's email
-        $subject = "Your Verification Code";
-        $message = "Your verification code is: " . $verificationCode;
-        $headers = "From: no-reply@example.com"; // Replace with your domain's email
-
-        if (mail($email, $subject, $message, $headers)) {
-            echo "Verification code sent to your email.";
-        } else {
-            echo "Failed to send email. Please try again.";
-        }
-
-        $updateStmt->close();
-    } else {
-        echo "Email not found.";
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return false;
     }
-
-    $stmt->close();
 }
 
-$conn->close();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+
+    try {
+        $stmt = $conn->prepare("SELECT email FROM admin WHERE email = :email");
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            $verificationCode = generateVerificationCode();
+
+            if (sendVerificationEmail($email, $verificationCode)) {
+                $updateStmt = $conn->prepare("UPDATE admin SET code = :code WHERE email = :email");
+                $updateStmt->bindParam(':code', $verificationCode);
+                $updateStmt->bindParam(':email', $email);
+                $updateStmt->execute();
+
+                echo json_encode(['status' => 'success', 'message' => 'Verification code sent successfully!']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Failed to send verification email.']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Email not found in the database.']);
+        }
+    } catch (PDOException $e) {
+        echo json_encode(['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]);
+    }
+}
 ?>
