@@ -25,7 +25,7 @@
         }
 
         .logo-side {
-            background-color: #dc3545;  /* Bootstrap's red color */
+            background-color: #dc3545;
             color: white;
             padding: 40px;
             text-align: center;
@@ -102,6 +102,12 @@
             border-color: #bd2130;
         }
 
+        .btn-primary:disabled {
+            background-color: #e9a2a9;
+            border-color: #e9a2a9;
+            cursor: not-allowed;
+        }
+
         a {
             color: #dc3545;
             text-decoration: none;
@@ -121,6 +127,12 @@
             font-size: 14px;
             font-weight: bold;
             color: #dc3545;
+            display: block;
+        }
+
+        .login-status {
+            margin-top: 10px;
+            text-align: center;
         }
     </style>
 </head>
@@ -150,6 +162,7 @@
                             <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
                         </div>
                         <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
+                        <div id="login-status" class="login-status"></div>
                     </form>
                 </div>
             </div>
@@ -184,17 +197,65 @@
         const loginForm = document.getElementById('login-form');
         const loginButton = document.getElementById('login-button');
         const countdownElement = document.getElementById('countdown');
+        const loginStatus = document.getElementById('login-status');
 
-        // Set the initial login attempts count
-        let loginAttempts = 0;
+        // Initialize login attempts counter
+        let loginAttempts = parseInt(localStorage.getItem('loginAttempts')) || 0;
+        let lockoutEndTime = localStorage.getItem('lockoutEndTime');
+        let countdownInterval;
 
-        // Add an event listener to the login button
-        loginButton.addEventListener('click', function() {
-            // Get the username and password values
+        // Check if there's an existing lockout
+        function checkExistingLockout() {
+            if (lockoutEndTime) {
+                const now = new Date().getTime();
+                if (now < parseInt(lockoutEndTime)) {
+                    // Lock is still active
+                    loginButton.disabled = true;
+                    startCountdown(Math.ceil((parseInt(lockoutEndTime) - now) / 1000));
+                } else {
+                    // Lock has expired
+                    resetLockout();
+                }
+            }
+        }
+
+        // Reset lockout state
+        function resetLockout() {
+            loginAttempts = 0;
+            localStorage.setItem('loginAttempts', loginAttempts);
+            localStorage.removeItem('lockoutEndTime');
+            loginButton.disabled = false;
+            countdownElement.textContent = '';
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        }
+
+        // Start countdown timer
+        function startCountdown(duration) {
+            let countdown = duration;
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(() => {
+                const minutes = Math.floor(countdown / 60);
+                const seconds = countdown % 60;
+                countdownElement.textContent = `Disabled for ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                countdown--;
+
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    resetLockout();
+                }
+            }, 1000);
+        }
+
+        // Handle login attempt
+        function handleLoginAttempt() {
             const username = loginForm.elements.username.value;
             const password = loginForm.elements.password.value;
 
-            // Check if the username and password are empty
             if (username.trim() === '' || password.trim() === '') {
                 Swal.fire({
                     title: 'Error!',
@@ -202,36 +263,42 @@
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
-            } else {
-                // Increment the login attempts count
-                loginAttempts++;
-
-                // If the login attempts count is 3 or more, disable the login button and start the countdown
-                if (loginAttempts >= 3) {
-                    loginButton.disabled = true;
-                    let countdown = 120; // 2 minutes
-                    const countdownInterval = setInterval(function() {
-                        countdownElement.textContent = `Disabled for ${countdown} seconds`;
-                        countdown--;
-
-                        // When the countdown reaches 0, enable the login button and reset the login attempts count
-                        if (countdown < 0) {
-                            clearInterval(countdownInterval);
-                            loginButton.disabled = false;
-                            countdownElement.textContent = '';
-                            loginAttempts = 0;
-                        }
-                    }, 1000);
-                } else {
-                    // Submit the login form
-                    loginForm.submit();
-                }
+                return;
             }
-        });
 
-        // Handle the login success case
+            loginAttempts++;
+            localStorage.setItem('loginAttempts', loginAttempts);
+
+            if (loginAttempts >= 3) {
+                // Lock out for 2 minutes
+                loginButton.disabled = true;
+                const lockoutDuration = 120; // 2 minutes in seconds
+                const lockoutEnd = new Date().getTime() + (lockoutDuration * 1000);
+                localStorage.setItem('lockoutEndTime', lockoutEnd);
+                startCountdown(lockoutDuration);
+                
+                Swal.fire({
+                    title: 'Account Locked!',
+                    text: 'Too many failed attempts. Please try again in 2 minutes.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                // Submit the form
+                loginForm.submit();
+            }
+        }
+
+        // Add event listeners
+        loginButton.addEventListener('click', handleLoginAttempt);
+
+        // Check for existing lockout on page load
+        document.addEventListener('DOMContentLoaded', checkExistingLockout);
+
+        // Clear lockout state when login is successful
         window.onload = function() {
             if (typeof <?php echo isset($_SESSION['login_success']) && $_SESSION['login_success'] == true ? 'true' : 'false'; ?> !== 'undefined' && <?php echo isset($_SESSION['login_success']) && $_SESSION['login_success'] == true ? 'true' : 'false'; ?>) {
+                resetLockout();
                 Swal.fire({
                     title: "Success!",
                     text: "You are Successfully logged in!",
@@ -264,14 +331,6 @@
                 e.preventDefault();
             }
         };
-
-        // Hide the alert after 3 seconds
-        setTimeout(function(){
-            var alert = document.querySelector('.alert');
-            if (alert) {
-                alert.style.display = 'none';
-            }
-        }, 3000);
     </script>
 </body>
 </html>
