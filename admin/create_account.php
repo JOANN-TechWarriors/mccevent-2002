@@ -133,15 +133,15 @@
                                         <div class="form-group">
                                             <label>Password:</label>
                                             <input id="password" type="password" name="password" class="form-control" placeholder="Password" required>
-                                            <div id="password-requirements" class="password-requirements">
-                                                Password must contain:
-                                                <ul>
-                                                    <li id="length">8-10 characters</li>
-                                                    <li id="uppercase">At least one uppercase letter</li>
-                                                    <li id="lowercase">At least one lowercase letter</li>
-                                                    <li id="number">At least one number</li>
-                                                    <li id="special">At least one special character (!@#$%^&*)</li>
-                                                </ul>
+                                            <!-- <div id="password-requirements" class="password-requirements"> -->
+                                                <!-- Password must contain: -->
+                                                <!-- <ul> -->
+                                                    <!-- <li id="length">8-10 characters</li> -->
+                                                    <!-- <li id="uppercase">At least one uppercase letter</li> -->
+                                                    <!-- <li id="lowercase">At least one lowercase letter</li> -->
+                                                    <!-- <li id="number">At least one number</li> -->
+                                                    <!-- <li id="special">At least one special character (!@#$%^&*)</li> -->
+                                                <!-- </ul> -->
                                             </div>
                                         </div>
                                     </div>
