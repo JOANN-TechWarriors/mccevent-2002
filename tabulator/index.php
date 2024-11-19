@@ -2,6 +2,14 @@
 session_start();
 include('../admin/dbcon.php');
 date_default_timezone_set('Asia/Manila'); 
+
+// Initialize attempts if not set
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+}
+if (!isset($_SESSION['lockout_time'])) {
+    $_SESSION['lockout_time'] = 0;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,6 +65,8 @@ date_default_timezone_set('Asia/Manila');
                 <div class="w-full max-w-md mx-auto">
                     <div class="mb-8">
                         <h4 class="text-xl font-bold text-gray-800">ORGANIZER LOGIN</h4>
+                        <p id="attempts-left" class="text-sm text-gray-600 mt-2">Attempts remaining: 3</p>
+                        <p id="lockout-timer" class="text-sm text-red-600 mt-2 hidden"></p>
                     </div>
 
                     <form id="login-form" method="POST" action="login.php" class="space-y-6">
@@ -89,10 +99,10 @@ date_default_timezone_set('Asia/Manila');
                             type="button" 
                             id="login-button"
                             class="w-full bg-mcc-red text-white py-2 px-4 rounded hover:bg-red-600 transition-all font-semibold"
+                            <?php echo ($_SESSION['login_attempts'] >= 3 && time() < $_SESSION['lockout_time']) ? 'disabled' : ''; ?>
                         >
                             Sign in
                         </button>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -100,7 +110,80 @@ date_default_timezone_set('Asia/Manila');
     </div>
 
     <script>
+        let loginAttempts = <?php echo $_SESSION['login_attempts']; ?>;
+        const maxAttempts = 3;
+        const lockoutDuration = 180; // 3 minutes in seconds
+        let lockoutTime = <?php echo $_SESSION['lockout_time']; ?>;
+        
+        function updateAttemptsDisplay() {
+            const attemptsLeft = maxAttempts - loginAttempts;
+            document.getElementById('attempts-left').textContent = `Attempts remaining: ${attemptsLeft}`;
+        }
+
+        function startLockoutTimer() {
+            const loginButton = document.getElementById('login-button');
+            const timerDisplay = document.getElementById('lockout-timer');
+            loginButton.disabled = true;
+            
+            const interval = setInterval(() => {
+                const now = Math.floor(Date.now() / 1000);
+                const timeLeft = lockoutTime - now;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    loginButton.disabled = false;
+                    timerDisplay.classList.add('hidden');
+                    loginAttempts = 0;
+                    updateAttemptsDisplay();
+                    // Reset PHP session variables
+                    fetch('reset_attempts.php');
+                } else {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    timerDisplay.textContent = `Account locked. Try again in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    timerDisplay.classList.remove('hidden');
+                }
+            }, 1000);
+        }
+
+        // Check if currently in lockout
+        if (lockoutTime > Math.floor(Date.now() / 1000)) {
+            startLockoutTimer();
+        }
+
         document.getElementById("login-button").addEventListener("click", function() {
+            loginAttempts++;
+            
+            if (loginAttempts >= maxAttempts) {
+                lockoutTime = Math.floor(Date.now() / 1000) + lockoutDuration;
+                
+                Swal.fire({
+                    title: "Account Locked!",
+                    text: "Too many failed attempts. Please try again in 3 minutes.",
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#DC3545'
+                });
+                
+                startLockoutTimer();
+                
+                // Update PHP session
+                fetch('update_lockout.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        attempts: loginAttempts,
+                        lockoutTime: lockoutTime
+                    })
+                });
+                
+                return;
+            }
+            
+            updateAttemptsDisplay();
+            
             Swal.fire({
                 title: "Success!",
                 text: "You are successfully logged in!",
@@ -115,6 +198,7 @@ date_default_timezone_set('Asia/Manila');
         });
 
         window.onload = function() {
+            updateAttemptsDisplay();
             <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
                 Swal.fire({
                     title: "Success!",
