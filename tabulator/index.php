@@ -103,7 +103,9 @@ if ($_SESSION['lockout_time'] < time()) {
                                 placeholder="Enter your password"
                             >
                         </div>
-
+                        <p id="attempts-left" class="text-sm text-gray-600 mt-2">Attempts remaining: <?php echo 3 - $_SESSION['login_attempts']; ?></p>
+                        <p id="lockout-timer" class="text-sm text-red-600 mt-2 <?php echo ($_SESSION['lockout_time'] > time()) ? '' : 'hidden'; ?>"></p>
+                        
                         <button 
                             type="button" 
                             id="login-button"
@@ -112,8 +114,7 @@ if ($_SESSION['lockout_time'] < time()) {
                         >
                             Sign in
                         </button>
-                        <p id="attempts-left" class="text-sm text-gray-600 mt-2">Attempts remaining: <?php echo 3 - $_SESSION['login_attempts']; ?></p>
-                        <p id="lockout-timer" class="text-sm text-red-600 mt-2 <?php echo ($_SESSION['lockout_time'] > time()) ? '' : 'hidden'; ?>"></p>
+                        
                     </form>
                 </div>
             </div>
