@@ -203,6 +203,21 @@
             });
         });
 // Security measures
+    // Disable right-click
+    document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        document.onkeydown = function (e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+            }
+        };
 
         // Hide the alert after 3 seconds
         setTimeout(function(){
