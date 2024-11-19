@@ -78,7 +78,6 @@
             align-items: center;
             justify-content: center;
         }
-        
 
         .form-control {
             border: 1px solid #ced4da;
@@ -98,9 +97,16 @@
             padding: 10px 30px;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background-color: #c82333;
             border-color: #bd2130;
+        }
+
+        .btn-primary:disabled {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         a {
@@ -116,6 +122,14 @@
         h2, h4 {
             margin-bottom: 20px;
         }
+
+        /* Added styles for attempt counter */
+        .attempt-counter {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -125,7 +139,7 @@
                 <div class="col-md-6 logo-side">
                     <img src="../img/logo.png" alt="MCC Logo" class="img-fluid">
                     <h4 style="font-size: 18px;" class="mb-4">WELCOME TO:</h4>
-                    <h4 style="font-size: 20px;" class="mb-5"><strong >MCC Event Judging System</strong></h4>
+                    <h4 style="font-size: 20px;" class="mb-5"><strong>MCC Event Judging System</strong></h4>
                 </div>
                 <div class="col-md-6 login-side">
                     <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
@@ -140,6 +154,7 @@
                             <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
                         </div>
+                        <div class="attempt-counter" id="attempt-counter"></div>
                         <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
                     </form>
                 </div>
@@ -171,7 +186,136 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Login attempt tracking variables
+        let loginAttempts = 0;
+        const MAX_ATTEMPTS = 3;
+        const LOCKOUT_DURATION = 180000; // 3 minutes in milliseconds
+        let lockoutTimer = null;
+        let countdownInterval = null;
+
+        // Function to update the attempt counter display
+        function updateAttemptCounter() {
+            const counter = document.getElementById('attempt-counter');
+            const remainingAttempts = MAX_ATTEMPTS - loginAttempts;
+            if (remainingAttempts > 0) {
+                counter.textContent = `Remaining attempts: ${remainingAttempts}`;
+            }
+        }
+
+        // Function to start countdown timer
+        function startCountdown(duration) {
+            const counter = document.getElementById('attempt-counter');
+            let timeLeft = Math.floor(duration / 1000);
+            
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                } else {
+                    counter.textContent = `Login locked. Please wait ${timeLeft} seconds`;
+                }
+            }, 1000);
+        }
+
+        document.getElementById("login-form").addEventListener("submit", function(e) {
+            e.preventDefault(); // Prevent default form submission
+            // Your form validation logic here
+            return false;
+        });
+
+        document.getElementById("login-button").addEventListener("click", function() {
+            const loginButton = document.getElementById("login-button");
+            const form = document.getElementById("login-form");
+            
+            // Check if we're currently locked out
+            if (loginButton.disabled) {
+                return;
+            }
+
+            // Basic form validation
+            const email = form.querySelector('input[type="email"]').value;
+            const password = form.querySelector('input[type="password"]').value;
+
+            if (!email || !password) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please fill in all fields",
+                    icon: "error",
+                    confirmButtonText: "Ok"
+                });
+                return;
+            }
+
+            // Increment attempts
+            loginAttempts++;
+            updateAttemptCounter();
+
+            // Check if we've reached max attempts
+            if (loginAttempts >= MAX_ATTEMPTS) {
+                loginButton.disabled = true;
+                
+                // Show lockout message
+                Swal.fire({
+                    title: "Too Many Attempts",
+                    text: "Please wait 3 minutes before trying again",
+                    icon: "error",
+                    confirmButtonText: "Ok"
+                });
+
+                // Start countdown
+                startCountdown(LOCKOUT_DURATION);
+
+                // Set timer to re-enable button
+                lockoutTimer = setTimeout(() => {
+                    loginButton.disabled = false;
+                    loginAttempts = 0;
+                    updateAttemptCounter();
+                    
+                    // Clear countdown interval
+                    if (countdownInterval) {
+                        clearInterval(countdownInterval);
+                    }
+                    
+                    // Optional: Notify user that they can try again
+                    Swal.fire({
+                        title: "Login Available",
+                        text: "You can now attempt to login again",
+                        icon: "info",
+                        confirmButtonText: "Ok"
+                    });
+                }, LOCKOUT_DURATION);
+
+                return;
+            }
+
+            // Here you would typically make an AJAX call to verify credentials
+            // For demo purposes, we'll just show the success message
+            Swal.fire({
+                title: "Success!",
+                text: "You are successfully logged in!",
+                icon: "success",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+
+        // Reset attempts when the page is refreshed
         window.onload = function() {
+            loginAttempts = 0;
+            updateAttemptCounter();
+            const loginButton = document.getElementById("login-button");
+            loginButton.disabled = false;
+            
+            if (lockoutTimer) {
+                clearTimeout(lockoutTimer);
+            }
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+
             <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
                 Swal.fire({
                     title: "Success!",
@@ -190,25 +334,11 @@
             document.getElementById("forgot-password-form").reset();
         }
 
-        document.getElementById("login-button").addEventListener("click", function() {
-            Swal.fire({
-                title: "Success!",
-                text: "You are successfully logged in!",
-                icon: "success",
-                confirmButtonText: "Ok",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById("login-form").submit();
-                }
-            });
-        });
-// Security measures
-    // Disable right-click
-    document.addEventListener('contextmenu', function (e) {
+        // Security measures
+        document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
         document.onkeydown = function (e) {
             if (
                 e.key === 'F12' ||
@@ -226,7 +356,6 @@
                 alert.style.display = 'none';
             }
         }, 3000);
-    
     </script>
 </body>
 </html>
