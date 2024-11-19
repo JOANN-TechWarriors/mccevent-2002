@@ -134,154 +134,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <script>
-        const MAX_ATTEMPTS = 3;
-        const LOCKOUT_DURATION = 3 * 60 * 1000; // 3 minutes in milliseconds
-        let loginAttempts = parseInt(localStorage.getItem('loginAttempts')) || 0;
-        let lockoutTime = parseInt(localStorage.getItem('lockoutTime')) || 0;
-
-        // Check lockout status on page load
-        window.onload = function() {
-            if (lockoutTime > Date.now()) {
-                updateLoginButton(true, lockoutTime - Date.now());
-                startLockoutTimer();
-            }
-        };
-
-        function updateLoginButton(disabled, remainingTime = 0) {
-            const loginButton = document.getElementById("login-button");
-            loginButton.disabled = disabled;
-            
-            if (disabled && remainingTime > 0) {
-                const minutes = Math.floor(remainingTime / 60000);
-                const seconds = Math.floor((remainingTime % 60000) / 1000);
-                loginButton.textContent = `Try again in ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                loginButton.classList.add('bg-gray-500');
-                loginButton.classList.remove('bg-mcc-red', 'hover:bg-red-600');
-            } else {
-                loginButton.textContent = "Sign in";
-                loginButton.classList.remove('bg-gray-500');
-                loginButton.classList.add('bg-mcc-red', 'hover:bg-red-600');
-            }
-        }
-
-        function startLockoutTimer() {
-            lockoutTime = Date.now() + LOCKOUT_DURATION;
-            localStorage.setItem('lockoutTime', lockoutTime);
-            
-            const timerInterval = setInterval(() => {
-                const remainingTime = lockoutTime - Date.now();
-                
-                if (remainingTime <= 0) {
-                    clearInterval(timerInterval);
-                    loginAttempts = 0;
-                    localStorage.setItem('loginAttempts', loginAttempts);
-                    localStorage.removeItem('lockoutTime');
-                    updateLoginButton(false);
-                } else {
-                    updateLoginButton(true, remainingTime);
-                }
-            }, 1000);
-        }
-
-        function handleLogin() {
-            // Check if locked out
-            if (lockoutTime > Date.now()) {
-                const remainingTime = lockoutTime - Date.now();
-                Swal.fire({
-                    title: "Account Locked!",
-                    text: `Too many failed attempts. Please try again in ${Math.ceil(remainingTime / 60000)} minutes.`,
-                    icon: "error",
-                    confirmButtonText: "Ok",
-                    confirmButtonColor: '#DC3545'
-                });
-                return;
-            }
-
-            const username = document.querySelector('input[name="username"]').value.trim();
-            const password = document.querySelector('input[name="password"]').value.trim();
-            
-            if (!username || !password) {
-                Swal.fire({
-                    title: "Error!",
-                    text: "Please fill in all fields",
-                    icon: "error",
-                    confirmButtonText: "Ok",
-                    confirmButtonColor: '#DC3545'
-                });
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('username', username);
-            formData.append('password', password);
-            
-            const loginButton = document.getElementById("login-button");
-            loginButton.disabled = true;
-            loginButton.textContent = "Signing in...";
-            
-            fetch(window.location.href, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                if (data.includes('success')) {
-                    loginAttempts = 0;
-                    localStorage.setItem('loginAttempts', loginAttempts);
-                    localStorage.removeItem('lockoutTime');
-                    
-                    Swal.fire({
-                        title: "Success!",
-                        text: "You are successfully logged in!",
-                        icon: "success",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: '#DC3545'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "score_sheets.php";
-                        }
-                    });
-                } else {
-                    loginAttempts++;
-                    localStorage.setItem('loginAttempts', loginAttempts);
-                    
-                    if (loginAttempts >= MAX_ATTEMPTS) {
-                        startLockoutTimer();
-                        Swal.fire({
-                            title: "Account Locked!",
-                            text: "Too many failed attempts. Please try again in 3 minutes.",
-                            icon: "error",
-                            confirmButtonText: "Ok",
-                            confirmButtonColor: '#DC3545'
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "Error!",
-                            text: `Invalid username or password. ${MAX_ATTEMPTS - loginAttempts} attempts remaining.`,
-                            icon: "error",
-                            confirmButtonText: "Ok",
-                            confirmButtonColor: '#DC3545'
-                        });
-                    }
-                }
-            })
-            .catch(error => {
-                Swal.fire({
-                    title: "Error!",
-                    text: "An error occurred. Please try again.",
-                    icon: "error",
-                    confirmButtonText: "Ok",
-                    confirmButtonColor: '#DC3545'
-                });
-            })
-            .finally(() => {
-                if (loginAttempts < MAX_ATTEMPTS) {
-                    loginButton.disabled = false;
-                    loginButton.textContent = "Sign in";
-                }
-            });
-        }
-
         // Login button click handler
         document.getElementById("login-button").addEventListener("click", function() {
             handleLogin();
@@ -294,6 +146,78 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 handleLogin();
             }
         });
+
+        function handleLogin() {
+            // Get form inputs
+            const username = document.querySelector('input[name="username"]').value.trim();
+            const password = document.querySelector('input[name="password"]').value.trim();
+            
+            // Validate inputs
+            if (!username || !password) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please fill in all fields",
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#DC3545'
+                });
+                return;
+            }
+            
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
+            
+            // Show loading state
+            const loginButton = document.getElementById("login-button");
+            loginButton.disabled = true;
+            loginButton.textContent = "Signing in...";
+            
+            // Send POST request
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.includes('success')) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "You are successfully logged in!",
+                        icon: "success",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: '#DC3545'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "score_sheets.php";
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Invalid username or password",
+                        icon: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: '#DC3545'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: "Error!",
+                    text: "An error occurred. Please try again.",
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#DC3545'
+                });
+            })
+            .finally(() => {
+                // Reset button state
+                loginButton.disabled = false;
+                loginButton.textContent = "Sign in";
+            });
+        }
 
         // Prevent right-click context menu
         document.addEventListener('contextmenu', function (e) {
