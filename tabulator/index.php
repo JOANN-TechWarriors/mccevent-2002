@@ -128,7 +128,7 @@ if ($_SESSION['lockout_time'] < time()) {
         
         function updateAttemptsDisplay() {
             const attemptsLeft = maxAttempts - loginAttempts;
-            document.getElementById('attempts-left').textContent = `Attempts remaining: ${attemptsLeft}`;
+            document.getElementById('attempts-left').textContent = ``;
         }
 
         function startLockoutTimer() {
