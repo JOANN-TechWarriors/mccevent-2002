@@ -25,7 +25,7 @@
         }
 
         .logo-side {
-            background-color: #dc3545;
+            background-color: #dc3545;  /* Bootstrap's red color */
             color: white;
             padding: 40px;
             text-align: center;
@@ -78,6 +78,7 @@
             align-items: center;
             justify-content: center;
         }
+        
 
         .form-control {
             border: 1px solid #ced4da;
@@ -102,12 +103,6 @@
             border-color: #bd2130;
         }
 
-        .btn-primary:disabled {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            cursor: not-allowed;
-        }
-
         a {
             color: #dc3545;
             text-decoration: none;
@@ -121,14 +116,6 @@
         h2, h4 {
             margin-bottom: 20px;
         }
-
-        #timer {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -138,22 +125,21 @@
                 <div class="col-md-6 logo-side">
                     <img src="../img/logo.png" alt="MCC Logo" class="img-fluid">
                     <h4 style="font-size: 18px;" class="mb-4">WELCOME TO:</h4>
-                    <h4 style="font-size: 20px;" class="mb-5"><strong>MCC Event Judging System</strong></h4>
+                    <h4 style="font-size: 20px;" class="mb-5"><strong >MCC Event Judging System</strong></h4>
                 </div>
                 <div class="col-md-6 login-side">
                     <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
-                    <form id="login-form" class="login-form">
+                    <form id="login-form" method="POST" action="login.php" class="login-form">
                         <div class="mb-3">
-                            <input type="email" class="form-control" name="username" id="username" placeholder="Username" required autofocus>
+                            <input type="email" class="form-control" name="username" placeholder="Username" required autofocus>
                         </div>
                         <div class="mb-3">
-                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                            <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
                         </div>
-                        <div id="timer"></div>
                         <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
                     </form>
                 </div>
@@ -185,148 +171,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        let loginAttempts = 0;
-        const MAX_ATTEMPTS = 3;
-        const LOCKOUT_TIME = 180; // 3 minutes in seconds
-        let isButtonLocked = false;
-        let timerInterval;
-
-        // Function to update the timer display
-        function updateTimer(secondsLeft) {
-            const timerElement = document.getElementById('timer');
-            const minutes = Math.floor(secondsLeft / 60);
-            const seconds = secondsLeft % 60;
-            timerElement.textContent = `Please wait ${minutes}:${seconds.toString().padStart(2, '0')} before trying again`;
-        }
-
-        // Function to start the lockout timer
-        function startLockoutTimer() {
-            let secondsLeft = LOCKOUT_TIME;
-            const timerElement = document.getElementById('timer');
-            timerElement.style.display = 'block';
-            
-            updateTimer(secondsLeft);
-
-            timerInterval = setInterval(() => {
-                secondsLeft--;
-                updateTimer(secondsLeft);
-
-                if (secondsLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timerElement.style.display = 'none';
-                }
-            }, 1000);
-        }
-
-        document.getElementById("login-button").addEventListener("click", function(e) {
-            e.preventDefault();
-            
-            if (isButtonLocked) {
+        window.onload = function() {
+            <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
                 Swal.fire({
-                    title: "Account Locked",
-                    text: "Too many failed attempts. Please wait for the timer to complete.",
-                    icon: "error",
-                    confirmButtonColor: "#dc3545"
+                    title: "Success!",
+                    text: "You are Successfully logged in!",
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "dashboard.php";
+                    }
                 });
-                return;
-            }
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            // Check if fields are empty
-            if (!username || !password) {
-                Swal.fire({
-                    title: "Error!",
-                    text: "Please fill in all fields",
-                    icon: "error",
-                    confirmButtonColor: "#dc3545"
-                });
-                return;
-            }
-
-            // Send login request to server
-            fetch('login.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loginAttempts = 0;
-                    Swal.fire({
-                        title: "Success!",
-                        text: "You are successfully logged in!",
-                        icon: "success",
-                        confirmButtonColor: "#28a745"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "dashboard.php";
-                        }
-                    });
-                } else {
-                    handleFailedAttempt();
-                }
-            })
-            .catch(error => {
-                handleFailedAttempt();
-            });
-        });
-
-        function handleFailedAttempt() {
-            loginAttempts++;
-            const remainingAttempts = MAX_ATTEMPTS - loginAttempts;
-            
-            if (loginAttempts >= MAX_ATTEMPTS) {
-                isButtonLocked = true;
-                const loginButton = document.getElementById("login-button");
-                loginButton.disabled = true;
-                
-                Swal.fire({
-                    title: "Account Locked",
-                    text: "Too many failed attempts. Please wait 3 minutes before trying again.",
-                    icon: "error",
-                    confirmButtonColor: "#dc3545"
-                });
-
-                startLockoutTimer();
-
-                setTimeout(() => {
-                    loginButton.disabled = false;
-                    isButtonLocked = false;
-                    loginAttempts = 0;
-                    clearInterval(timerInterval);
-                    document.getElementById('timer').style.display = 'none';
-                    
-                    Swal.fire({
-                        title: "Account Unlocked",
-                        text: "You can now try logging in again.",
-                        icon: "info",
-                        confirmButtonColor: "#17a2b8"
-                    });
-                }, LOCKOUT_TIME * 1000);
-            } else {
-                Swal.fire({
-                    title: "Error!",
-                    text: `Invalid username or password. ${remainingAttempts} attempts remaining.`,
-                    icon: "error",
-                    confirmButtonColor: "#dc3545"
-                });
-            }
-        }
+                <?php unset($_SESSION['login_success']); ?>
+            <?php endif; ?>
+        };
 
         function clearEmail() {
             document.getElementById("forgot-password-form").reset();
         }
 
-        // Security measures
-        document.addEventListener('contextmenu', function (e) {
+        document.getElementById("login-button").addEventListener("click", function() {
+            Swal.fire({
+                title: "Success!",
+                text: "You are successfully logged in!",
+                icon: "success",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("login-form").submit();
+                }
+            });
+        });
+// Security measures
+    // Disable right-click
+    document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
         document.onkeydown = function (e) {
             if (
                 e.key === 'F12' ||
@@ -336,6 +218,15 @@
                 e.preventDefault();
             }
         };
+
+        // Hide the alert after 3 seconds
+        setTimeout(function(){
+            var alert = document.querySelector('.alert');
+            if (alert) {
+                alert.style.display = 'none';
+            }
+        }, 3000);
+    
     </script>
 </body>
 </html>
