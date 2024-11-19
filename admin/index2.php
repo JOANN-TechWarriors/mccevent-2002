@@ -97,16 +97,14 @@
             padding: 10px 30px;
         }
 
-        .btn-primary:hover:not(:disabled) {
+        .btn-primary:hover {
             background-color: #c82333;
             border-color: #bd2130;
         }
 
-        .btn-primary:disabled {
-            background-color: #dc3545;
-            border-color: #dc3545;
-            opacity: 0.5;
+        .btn:disabled {
             cursor: not-allowed;
+            opacity: 0.5;
         }
 
         a {
@@ -123,12 +121,13 @@
             margin-bottom: 20px;
         }
 
-        /* Added styles for attempt counter */
-        .attempt-counter {
-            font-size: 0.8rem;
-            color: #6c757d;
-            margin-top: 10px;
+        /* Timer styles */
+        #timer {
+            display: none;
             text-align: center;
+            color: #dc3545;
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -154,7 +153,7 @@
                             <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
                         </div>
-                        <div class="attempt-counter" id="attempt-counter"></div>
+                        <div id="timer"></div>
                         <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
                     </form>
                 </div>
@@ -186,136 +185,143 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Login attempt tracking variables
+        // Login attempts tracking
         let loginAttempts = 0;
         const MAX_ATTEMPTS = 3;
-        const LOCKOUT_DURATION = 180000; // 3 minutes in milliseconds
-        let lockoutTimer = null;
-        let countdownInterval = null;
-
-        // Function to update the attempt counter display
-        function updateAttemptCounter() {
-            const counter = document.getElementById('attempt-counter');
-            const remainingAttempts = MAX_ATTEMPTS - loginAttempts;
-            if (remainingAttempts > 0) {
-                counter.textContent = `Remaining attempts: ${remainingAttempts}`;
-            }
-        }
+        const LOCKOUT_TIME = 180; // 3 minutes in seconds
 
         // Function to start countdown timer
-        function startCountdown(duration) {
-            const counter = document.getElementById('attempt-counter');
-            let timeLeft = Math.floor(duration / 1000);
+        function startTimer(duration) {
+            const timerDisplay = document.getElementById('timer');
+            timerDisplay.style.display = 'block';
+            let timer = duration;
             
-            countdownInterval = setInterval(() => {
-                timeLeft--;
-                if (timeLeft <= 0) {
+            const countdownInterval = setInterval(function () {
+                const minutes = parseInt(timer / 60, 10);
+                const seconds = parseInt(timer % 60, 10);
+
+                timerDisplay.textContent = `Please wait: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                if (--timer < 0) {
                     clearInterval(countdownInterval);
-                } else {
-                    counter.textContent = `Login locked. Please wait ${timeLeft} seconds`;
+                    timerDisplay.style.display = 'none';
                 }
             }, 1000);
         }
 
-        document.getElementById("login-form").addEventListener("submit", function(e) {
-            e.preventDefault(); // Prevent default form submission
-            // Your form validation logic here
-            return false;
-        });
+        // Form validation function
+        function validateForm() {
+            const username = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
 
-        document.getElementById("login-button").addEventListener("click", function() {
-            const loginButton = document.getElementById("login-button");
-            const form = document.getElementById("login-form");
-            
-            // Check if we're currently locked out
-            if (loginButton.disabled) {
-                return;
-            }
-
-            // Basic form validation
-            const email = form.querySelector('input[type="email"]').value;
-            const password = form.querySelector('input[type="password"]').value;
-
-            if (!email || !password) {
+            if (!username || !password) {
                 Swal.fire({
                     title: "Error!",
                     text: "Please fill in all fields",
                     icon: "error",
                     confirmButtonText: "Ok"
                 });
-                return;
+                return false;
             }
+            return true;
+        }
 
-            // Increment attempts
-            loginAttempts++;
-            updateAttemptCounter();
-
-            // Check if we've reached max attempts
-            if (loginAttempts >= MAX_ATTEMPTS) {
-                loginButton.disabled = true;
+        // Function to disable login button
+        function disableLoginButton() {
+            const loginButton = document.getElementById("login-button");
+            loginButton.disabled = true;
+            
+            startTimer(LOCKOUT_TIME);
+            
+            setTimeout(() => {
+                loginButton.disabled = false;
+                loginAttempts = 0;
+                document.getElementById('timer').style.display = 'none';
                 
-                // Show lockout message
                 Swal.fire({
-                    title: "Too Many Attempts",
-                    text: "Please wait 3 minutes before trying again",
-                    icon: "error",
+                    title: "Info",
+                    text: "Login button has been re-enabled",
+                    icon: "info",
                     confirmButtonText: "Ok"
                 });
+            }, LOCKOUT_TIME * 1000);
+        }
 
-                // Start countdown
-                startCountdown(LOCKOUT_DURATION);
-
-                // Set timer to re-enable button
-                lockoutTimer = setTimeout(() => {
-                    loginButton.disabled = false;
-                    loginAttempts = 0;
-                    updateAttemptCounter();
-                    
-                    // Clear countdown interval
-                    if (countdownInterval) {
-                        clearInterval(countdownInterval);
-                    }
-                    
-                    // Optional: Notify user that they can try again
-                    Swal.fire({
-                        title: "Login Available",
-                        text: "You can now attempt to login again",
-                        icon: "info",
-                        confirmButtonText: "Ok"
-                    });
-                }, LOCKOUT_DURATION);
-
+        // Function to handle login attempt
+        function handleLoginAttempt() {
+            if (!validateForm()) {
                 return;
             }
 
-            // Here you would typically make an AJAX call to verify credentials
-            // For demo purposes, we'll just show the success message
-            Swal.fire({
-                title: "Success!",
-                text: "You are successfully logged in!",
-                icon: "success",
-                confirmButtonText: "Ok",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
+            const username = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            // This is a mock authentication check - replace with your actual authentication logic
+            if (username === "correct@email.com" && password === "correctpassword") {
+                Swal.fire({
+                    title: "Success!",
+                    text: "You are successfully logged in!",
+                    icon: "success",
+                    confirmButtonText: "Ok"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("login-form").submit();
+                    }
+                });
+            } else {
+                loginAttempts++;
+                const remainingAttempts = MAX_ATTEMPTS - loginAttempts;
+                
+                if (loginAttempts >= MAX_ATTEMPTS) {
+                    Swal.fire({
+                        title: "Account Locked!",
+                        text: "Too many failed attempts. Please try again after 3 minutes.",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    });
+                    disableLoginButton();
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: `Invalid username or password. ${remainingAttempts} attempts remaining.`,
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    });
                 }
-            });
+            }
+        }
+
+        // Event Listeners
+        document.getElementById("login-button").addEventListener("click", handleLoginAttempt);
+
+        document.getElementById("login-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            handleLoginAttempt();
         });
 
-        // Reset attempts when the page is refreshed
-        window.onload = function() {
-            loginAttempts = 0;
-            updateAttemptCounter();
-            const loginButton = document.getElementById("login-button");
-            loginButton.disabled = false;
-            
-            if (lockoutTimer) {
-                clearTimeout(lockoutTimer);
-            }
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
+        function clearEmail() {
+            document.getElementById("forgot-password-form").reset();
+        }
 
+        // Security measures
+        // Disable right-click
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        document.onkeydown = function (e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+            }
+        };
+
+        // PHP Success Message Handler
+        window.onload = function() {
             <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
                 Swal.fire({
                     title: "Success!",
@@ -329,33 +335,6 @@
                 <?php unset($_SESSION['login_success']); ?>
             <?php endif; ?>
         };
-
-        function clearEmail() {
-            document.getElementById("forgot-password-form").reset();
-        }
-
-        // Security measures
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
-
-        document.onkeydown = function (e) {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
-                e.preventDefault();
-            }
-        };
-
-        // Hide the alert after 3 seconds
-        setTimeout(function(){
-            var alert = document.querySelector('.alert');
-            if (alert) {
-                alert.style.display = 'none';
-            }
-        }, 3000);
     </script>
 </body>
 </html>
