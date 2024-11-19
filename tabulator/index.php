@@ -1,8 +1,29 @@
-<?php 
+<?php
 session_start();
 include('../admin/dbcon.php');
-date_default_timezone_set('Asia/Manila'); 
+date_default_timezone_set('Asia/Manila');
+
+// Handle login POST request
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = mysqli_real_escape_string($con, $_POST['username']);
+    $password = mysqli_real_escape_string($con, $_POST['password']);
+    
+    // Add your authentication logic here
+    $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+    $result = mysqli_query($con, $query);
+    
+    if (mysqli_num_rows($result) == 1) {
+        $_SESSION['login_success'] = true;
+        $_SESSION['username'] = $username;
+        echo "success";
+        exit;
+    } else {
+        echo "error";
+        exit;
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,10 +58,26 @@ date_default_timezone_set('Asia/Manila');
         .bg-mcc-red {
             background-color: #DC3545;
         }
+
+        /* Prevent text selection */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Allow text selection in input fields */
+        input {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
     </style>
 </head>
 
-<body class="bg-custom no-select">
+<body class="bg-custom">
     <div class="min-h-screen flex items-center justify-center p-6 bg-black/50">
         <div class="w-full max-w-4xl bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col md:flex-row fade-in">
             <!-- Left Side - Logo and Title -->
@@ -59,7 +96,7 @@ date_default_timezone_set('Asia/Manila');
                         <h4 class="text-xl font-bold text-gray-800">ORGANIZER LOGIN</h4>
                     </div>
 
-                    <form id="login-form" method="POST" action="login.php" class="space-y-6">
+                    <form id="login-form" class="space-y-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
                             <input 
@@ -69,7 +106,6 @@ date_default_timezone_set('Asia/Manila');
                                 autofocus
                                 class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
                                 placeholder="Enter your username"
-                                required
                             >
                         </div>
 
@@ -81,7 +117,6 @@ date_default_timezone_set('Asia/Manila');
                                 required
                                 class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
                                 placeholder="Enter your password"
-                                required
                             >
                         </div>
 
@@ -92,7 +127,6 @@ date_default_timezone_set('Asia/Manila');
                         >
                             Sign in
                         </button>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -100,40 +134,97 @@ date_default_timezone_set('Asia/Manila');
     </div>
 
     <script>
+        // Login button click handler
         document.getElementById("login-button").addEventListener("click", function() {
-            Swal.fire({
-                title: "Success!",
-                text: "You are successfully logged in!",
-                icon: "success",
-                confirmButtonText: "Ok",
-                confirmButtonColor: '#DC3545'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById("login-form").submit();
-                }
-            });
+            handleLogin();
         });
 
-        window.onload = function() {
-            <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
-                Swal.fire({
-                    title: "Success!",
-                    text: "You are Successfully logged in!",
-                    icon: "success",
-                    confirmButtonColor: '#DC3545'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "dashboard.php";
-                    }
-                });
-                <?php unset($_SESSION['login_success']); ?>
-            <?php endif; ?>
-        };
+        // Form submission on Enter key
+        document.getElementById("login-form").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                handleLogin();
+            }
+        });
 
+        function handleLogin() {
+            // Get form inputs
+            const username = document.querySelector('input[name="username"]').value.trim();
+            const password = document.querySelector('input[name="password"]').value.trim();
+            
+            // Validate inputs
+            if (!username || !password) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please fill in all fields",
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#DC3545'
+                });
+                return;
+            }
+            
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
+            
+            // Show loading state
+            const loginButton = document.getElementById("login-button");
+            loginButton.disabled = true;
+            loginButton.textContent = "Signing in...";
+            
+            // Send POST request
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.includes('success')) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "You are successfully logged in!",
+                        icon: "success",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: '#DC3545'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "dashboard.php";
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Invalid username or password",
+                        icon: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: '#DC3545'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: "Error!",
+                    text: "An error occurred. Please try again.",
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#DC3545'
+                });
+            })
+            .finally(() => {
+                // Reset button state
+                loginButton.disabled = false;
+                loginButton.textContent = "Sign in";
+            });
+        }
+
+        // Prevent right-click context menu
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
+        // Prevent developer tools shortcuts
         document.onkeydown = function (e) {
             if (
                 e.key === 'F12' ||
@@ -144,6 +235,7 @@ date_default_timezone_set('Asia/Manila');
             }
         };
 
+        // Clear alerts after 3 seconds
         setTimeout(function(){
             var alert = document.querySelector('.alert');
             if (alert) {
