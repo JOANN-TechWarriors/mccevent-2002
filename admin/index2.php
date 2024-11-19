@@ -203,20 +203,6 @@
             });
         });
 // Security measures
-    // Disable right-click
-    document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
-
-
-        // Hide the alert after 3 seconds
-        setTimeout(function(){
-            var alert = document.querySelector('.alert');
-            if (alert) {
-                alert.style.display = 'none';
-            }
-        }, 3000);
     
-    </script>
 </body>
 </html>
