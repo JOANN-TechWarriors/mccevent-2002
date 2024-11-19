@@ -76,7 +76,7 @@ if ($_SESSION['lockout_time'] < time()) {
                 <div class="w-full max-w-md mx-auto">
                     <div class="mb-8">
                         <h4 class="text-xl font-bold text-gray-800">TABULATOR LOGIN</h4>
-                        <!-- <p id="attempts-left" class="text-sm text-gray-600 mt-2">Attempts remaining: <?php echo 3 - $_SESSION['login_attempts']; ?></p> -->
+                        <p id="attempts-left" class="text-sm text-gray-600 mt-2"><?php echo  $_SESSION['login_attempts']; ?></p>
                         <p id="lockout-timer" class="text-sm text-red-600 mt-2 <?php echo ($_SESSION['lockout_time'] > time()) ? '' : 'hidden'; ?>"></p>
                     </div>
 
