@@ -1,158 +1,4 @@
-<?php 
-session_start();
-include('../admin/dbcon.php');
-date_default_timezone_set('Asia/Manila'); 
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCC Event Judging System - Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="shortcut icon" href="../images/logo copy.png"/>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-    <style>
-        .bg-custom {
-            background: url(../img/Community-College-Madridejos.jpeg) center/cover no-repeat;
-        }
-        
-        .no-select {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .bg-mcc-red {
-            background-color: #DC3545;
-        }
-    </style>
-</head>
-
-<body class="bg-custom no-select">
-    <div class="min-h-screen flex items-center justify-center p-6 bg-black/50">
-        <div class="w-full max-w-4xl bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col md:flex-row fade-in">
-            <!-- Left Side - Logo and Title -->
-            <div class="w-full md:w-1/2 bg-mcc-red p-8 flex flex-col items-center justify-center text-white">
-                <img src="../img/logo.png" alt="MCC Logo" class="w-48 h-auto mb-6">
-                <div class="text-center space-y-3">
-                    <h3 class="text-xl font-light">WELCOME TO:</h3>
-                    <h2 class="text-2xl font-bold">MCC Event Judging System</h2>
-                </div>
-            </div>
-
-            <!-- Right Side - Login Form -->
-            <div class="w-full md:w-1/2 bg-white p-8">
-                <div class="w-full max-w-md mx-auto">
-                    <div class="mb-8">
-                        <h4 class="text-xl font-bold text-gray-800">ORGANIZER LOGIN</h4>
-                    </div>
-
-                    <form id="login-form" method="POST" action="login.php" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                            <input 
-                                type="text" 
-                                name="username" 
-                                required 
-                                autofocus
-                                class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
-                                placeholder="Enter your username"
-                                required
-                            >
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                            <input 
-                                type="password" 
-                                name="password" 
-                                required
-                                class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
-                                placeholder="Enter your password"
-                                required
-                            >
-                        </div>
-
-                        <button 
-                            type="button" 
-                            id="login-button"
-                            class="w-full bg-mcc-red text-white py-2 px-4 rounded hover:bg-red-600 transition-all font-semibold"
-                        >
-                            Sign in
-                        </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById("login-button").addEventListener("click", function() {
-            Swal.fire({
-                title: "Success!",
-                text: "You are successfully logged in!",
-                icon: "success",
-                confirmButtonText: "Ok",
-                confirmButtonColor: '#DC3545'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById("login-form").submit();
-                }
-            });
-        });
-
-        window.onload = function() {
-            <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
-                Swal.fire({
-                    title: "Success!",
-                    text: "You are Successfully logged in!",
-                    icon: "success",
-                    confirmButtonColor: '#DC3545'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "dashboard.php";
-                    }
-                });
-                <?php unset($_SESSION['login_success']); ?>
-            <?php endif; ?>
-        };
-
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
-
-        document.onkeydown = function (e) {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
-                e.preventDefault();
-            }
-        };
-
-        setTimeout(function(){
-            var alert = document.querySelector('.alert');
-            if (alert) {
-                alert.style.display = 'none';
-            }
-        }, 3000);
-    </script>
-</body>
-</html><?php
+<?php
 session_start();
 include('../admin/dbcon.php');
 date_default_timezone_set('Asia/Manila');
@@ -288,25 +134,72 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <script>
-        // Login button click handler
-        document.getElementById("login-button").addEventListener("click", function() {
-            handleLogin();
-        });
+        const MAX_ATTEMPTS = 3;
+        const LOCKOUT_DURATION = 3 * 60 * 1000; // 3 minutes in milliseconds
+        let loginAttempts = parseInt(localStorage.getItem('loginAttempts')) || 0;
+        let lockoutTime = parseInt(localStorage.getItem('lockoutTime')) || 0;
 
-        // Form submission on Enter key
-        document.getElementById("login-form").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                handleLogin();
+        // Check lockout status on page load
+        window.onload = function() {
+            if (lockoutTime > Date.now()) {
+                updateLoginButton(true, lockoutTime - Date.now());
+                startLockoutTimer();
             }
-        });
+        };
+
+        function updateLoginButton(disabled, remainingTime = 0) {
+            const loginButton = document.getElementById("login-button");
+            loginButton.disabled = disabled;
+            
+            if (disabled && remainingTime > 0) {
+                const minutes = Math.floor(remainingTime / 60000);
+                const seconds = Math.floor((remainingTime % 60000) / 1000);
+                loginButton.textContent = `Try again in ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                loginButton.classList.add('bg-gray-500');
+                loginButton.classList.remove('bg-mcc-red', 'hover:bg-red-600');
+            } else {
+                loginButton.textContent = "Sign in";
+                loginButton.classList.remove('bg-gray-500');
+                loginButton.classList.add('bg-mcc-red', 'hover:bg-red-600');
+            }
+        }
+
+        function startLockoutTimer() {
+            lockoutTime = Date.now() + LOCKOUT_DURATION;
+            localStorage.setItem('lockoutTime', lockoutTime);
+            
+            const timerInterval = setInterval(() => {
+                const remainingTime = lockoutTime - Date.now();
+                
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    loginAttempts = 0;
+                    localStorage.setItem('loginAttempts', loginAttempts);
+                    localStorage.removeItem('lockoutTime');
+                    updateLoginButton(false);
+                } else {
+                    updateLoginButton(true, remainingTime);
+                }
+            }, 1000);
+        }
 
         function handleLogin() {
-            // Get form inputs
+            // Check if locked out
+            if (lockoutTime > Date.now()) {
+                const remainingTime = lockoutTime - Date.now();
+                Swal.fire({
+                    title: "Account Locked!",
+                    text: `Too many failed attempts. Please try again in ${Math.ceil(remainingTime / 60000)} minutes.`,
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#DC3545'
+                });
+                return;
+            }
+
             const username = document.querySelector('input[name="username"]').value.trim();
             const password = document.querySelector('input[name="password"]').value.trim();
             
-            // Validate inputs
             if (!username || !password) {
                 Swal.fire({
                     title: "Error!",
@@ -318,17 +211,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return;
             }
             
-            // Create FormData object
             const formData = new FormData();
             formData.append('username', username);
             formData.append('password', password);
             
-            // Show loading state
             const loginButton = document.getElementById("login-button");
             loginButton.disabled = true;
             loginButton.textContent = "Signing in...";
             
-            // Send POST request
             fetch(window.location.href, {
                 method: 'POST',
                 body: formData
@@ -336,6 +226,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             .then(response => response.text())
             .then(data => {
                 if (data.includes('success')) {
+                    loginAttempts = 0;
+                    localStorage.setItem('loginAttempts', loginAttempts);
+                    localStorage.removeItem('lockoutTime');
+                    
                     Swal.fire({
                         title: "Success!",
                         text: "You are successfully logged in!",
@@ -348,13 +242,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         }
                     });
                 } else {
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Invalid username or password",
-                        icon: "error",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: '#DC3545'
-                    });
+                    loginAttempts++;
+                    localStorage.setItem('loginAttempts', loginAttempts);
+                    
+                    if (loginAttempts >= MAX_ATTEMPTS) {
+                        startLockoutTimer();
+                        Swal.fire({
+                            title: "Account Locked!",
+                            text: "Too many failed attempts. Please try again in 3 minutes.",
+                            icon: "error",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: '#DC3545'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `Invalid username or password. ${MAX_ATTEMPTS - loginAttempts} attempts remaining.`,
+                            icon: "error",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: '#DC3545'
+                        });
+                    }
                 }
             })
             .catch(error => {
@@ -367,11 +275,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             })
             .finally(() => {
-                // Reset button state
-                loginButton.disabled = false;
-                loginButton.textContent = "Sign in";
+                if (loginAttempts < MAX_ATTEMPTS) {
+                    loginButton.disabled = false;
+                    loginButton.textContent = "Sign in";
+                }
             });
         }
+
+        // Login button click handler
+        document.getElementById("login-button").addEventListener("click", function() {
+            handleLogin();
+        });
+
+        // Form submission on Enter key
+        document.getElementById("login-form").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                handleLogin();
+            }
+        });
 
         // Prevent right-click context menu
         document.addEventListener('contextmenu', function (e) {
