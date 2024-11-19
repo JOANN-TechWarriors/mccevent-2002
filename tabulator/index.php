@@ -10,6 +10,12 @@ if (!isset($_SESSION['login_attempts'])) {
 if (!isset($_SESSION['lockout_time'])) {
     $_SESSION['lockout_time'] = 0;
 }
+
+// Clear previous login attempts if lockout time has passed
+if ($_SESSION['lockout_time'] < time()) {
+    $_SESSION['login_attempts'] = 0;
+    $_SESSION['lockout_time'] = 0;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,6 +51,11 @@ if (!isset($_SESSION['lockout_time'])) {
         .bg-mcc-red {
             background-color: #DC3545;
         }
+
+        .disabled-button {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -65,21 +76,21 @@ if (!isset($_SESSION['lockout_time'])) {
                 <div class="w-full max-w-md mx-auto">
                     <div class="mb-8">
                         <h4 class="text-xl font-bold text-gray-800">ORGANIZER LOGIN</h4>
-                        <p id="attempts-left" class="text-sm text-gray-600 mt-2">Attempts remaining: 3</p>
-                        <p id="lockout-timer" class="text-sm text-red-600 mt-2 hidden"></p>
+                        <p id="attempts-left" class="text-sm text-gray-600 mt-2">Attempts remaining: <?php echo 3 - $_SESSION['login_attempts']; ?></p>
+                        <p id="lockout-timer" class="text-sm text-red-600 mt-2 <?php echo ($_SESSION['lockout_time'] > time()) ? '' : 'hidden'; ?>"></p>
                     </div>
 
-                    <form id="login-form" method="POST" action="login.php" class="space-y-6">
+                    <form id="login-form" class="space-y-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
                             <input 
                                 type="text" 
                                 name="username" 
+                                id="username"
                                 required 
                                 autofocus
                                 class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
                                 placeholder="Enter your username"
-                                required
                             >
                         </div>
 
@@ -88,10 +99,10 @@ if (!isset($_SESSION['lockout_time'])) {
                             <input 
                                 type="password" 
                                 name="password" 
+                                id="password"
                                 required
                                 class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
                                 placeholder="Enter your password"
-                                required
                             >
                         </div>
 
@@ -99,7 +110,7 @@ if (!isset($_SESSION['lockout_time'])) {
                             type="button" 
                             id="login-button"
                             class="w-full bg-mcc-red text-white py-2 px-4 rounded hover:bg-red-600 transition-all font-semibold"
-                            <?php echo ($_SESSION['login_attempts'] >= 3 && time() < $_SESSION['lockout_time']) ? 'disabled' : ''; ?>
+                            <?php echo ($_SESSION['lockout_time'] > time()) ? 'disabled' : ''; ?>
                         >
                             Sign in
                         </button>
@@ -113,7 +124,7 @@ if (!isset($_SESSION['lockout_time'])) {
         let loginAttempts = <?php echo $_SESSION['login_attempts']; ?>;
         const maxAttempts = 3;
         const lockoutDuration = 180; // 3 minutes in seconds
-        let lockoutTime = <?php echo $_SESSION['lockout_time']; ?>;
+        let lockoutTime = <?php echo ($_SESSION['lockout_time'] > time()) ? $_SESSION['lockout_time'] : 0; ?>;
         
         function updateAttemptsDisplay() {
             const attemptsLeft = maxAttempts - loginAttempts;
@@ -124,6 +135,7 @@ if (!isset($_SESSION['lockout_time'])) {
             const loginButton = document.getElementById('login-button');
             const timerDisplay = document.getElementById('lockout-timer');
             loginButton.disabled = true;
+            loginButton.classList.add('disabled-button');
             
             const interval = setInterval(() => {
                 const now = Math.floor(Date.now() / 1000);
@@ -132,10 +144,10 @@ if (!isset($_SESSION['lockout_time'])) {
                 if (timeLeft <= 0) {
                     clearInterval(interval);
                     loginButton.disabled = false;
+                    loginButton.classList.remove('disabled-button');
                     timerDisplay.classList.add('hidden');
                     loginAttempts = 0;
                     updateAttemptsDisplay();
-                    // Reset PHP session variables
                     fetch('reset_attempts.php');
                 } else {
                     const minutes = Math.floor(timeLeft / 60);
@@ -151,73 +163,111 @@ if (!isset($_SESSION['lockout_time'])) {
             startLockoutTimer();
         }
 
-        document.getElementById("login-button").addEventListener("click", function() {
-            loginAttempts++;
+        document.getElementById("login-button").addEventListener("click", async function(e) {
+            e.preventDefault();
             
             if (loginAttempts >= maxAttempts) {
-                lockoutTime = Math.floor(Date.now() / 1000) + lockoutDuration;
-                
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Basic validation
+            if (!username || !password) {
                 Swal.fire({
-                    title: "Account Locked!",
-                    text: "Too many failed attempts. Please try again in 3 minutes.",
+                    title: "Error!",
+                    text: "Please enter both username and password",
                     icon: "error",
                     confirmButtonText: "Ok",
                     confirmButtonColor: '#DC3545'
                 });
-                
-                startLockoutTimer();
-                
-                // Update PHP session
-                fetch('update_lockout.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        attempts: loginAttempts,
-                        lockoutTime: lockoutTime
-                    })
-                });
-                
                 return;
             }
             
-            updateAttemptsDisplay();
-            
-            Swal.fire({
-                title: "Success!",
-                text: "You are successfully logged in!",
-                icon: "success",
-                confirmButtonText: "Ok",
-                confirmButtonColor: '#DC3545'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById("login-form").submit();
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
+
+            try {
+                const response = await fetch('login.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Reset attempts on successful login
+                    loginAttempts = 0;
+                    updateAttemptsDisplay();
+                    
+                    Swal.fire({
+                        title: "Success!",
+                        text: "You are successfully logged in!",
+                        icon: "success",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: '#DC3545'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = data.redirect;
+                        }
+                    });
+                } else {
+                    loginAttempts++;
+                    updateAttemptsDisplay();
+                    
+                    if (loginAttempts >= maxAttempts) {
+                        lockoutTime = Math.floor(Date.now() / 1000) + lockoutDuration;
+                        
+                        Swal.fire({
+                            title: "Account Locked!",
+                            text: "Too many failed attempts. Please try again in 3 minutes.",
+                            icon: "error",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: '#DC3545'
+                        });
+                        
+                        startLockoutTimer();
+                        
+                        fetch('update_lockout.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                attempts: loginAttempts,
+                                lockoutTime: lockoutTime
+                            })
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Invalid Username or Password",
+                            icon: "error",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: '#DC3545'
+                        });
+                    }
                 }
-            });
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "An error occurred during login",
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#DC3545'
+                });
+            }
         });
 
-        window.onload = function() {
-            updateAttemptsDisplay();
-            <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
-                Swal.fire({
-                    title: "Success!",
-                    text: "You are Successfully logged in!",
-                    icon: "success",
-                    confirmButtonColor: '#DC3545'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "dashboard.php";
-                    }
-                });
-                <?php unset($_SESSION['login_success']); ?>
-            <?php endif; ?>
-        };
-
+        // Prevent right-click
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
+        // Prevent developer tools shortcuts
         document.onkeydown = function (e) {
             if (
                 e.key === 'F12' ||
@@ -228,12 +278,12 @@ if (!isset($_SESSION['lockout_time'])) {
             }
         };
 
-        setTimeout(function(){
-            var alert = document.querySelector('.alert');
-            if (alert) {
-                alert.style.display = 'none';
+        // Allow Enter key to trigger login
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('login-button').click();
             }
-        }, 3000);
+        });
     </script>
 </body>
 </html>
