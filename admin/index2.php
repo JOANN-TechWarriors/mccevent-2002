@@ -25,7 +25,7 @@
         }
 
         .logo-side {
-            background-color: #dc3545;  /* Bootstrap's red color */
+            background-color: #dc3545;
             color: white;
             padding: 40px;
             text-align: center;
@@ -78,7 +78,6 @@
             align-items: center;
             justify-content: center;
         }
-        
 
         .form-control {
             border: 1px solid #ced4da;
@@ -103,6 +102,11 @@
             border-color: #bd2130;
         }
 
+        .btn-primary:disabled {
+            background-color: #e9acb3;
+            border-color: #e9acb3;
+        }
+
         a {
             color: #dc3545;
             text-decoration: none;
@@ -116,6 +120,14 @@
         h2, h4 {
             margin-bottom: 20px;
         }
+
+        #attempts-counter {
+            font-size: 0.9rem;
+            color: #dc3545;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -125,21 +137,22 @@
                 <div class="col-md-6 logo-side">
                     <img src="../img/logo.png" alt="MCC Logo" class="img-fluid">
                     <h4 style="font-size: 18px;" class="mb-4">WELCOME TO:</h4>
-                    <h4 style="font-size: 20px;" class="mb-5"><strong >MCC Event Judging System</strong></h4>
+                    <h4 style="font-size: 20px;" class="mb-5"><strong>MCC Event Judging System</strong></h4>
                 </div>
                 <div class="col-md-6 login-side">
                     <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
                     <form id="login-form" method="POST" action="login.php" class="login-form">
                         <div class="mb-3">
-                            <input type="email" class="form-control" name="username" placeholder="Username" required autofocus>
+                            <input type="email" class="form-control" name="username" id="username" placeholder="Username" required autofocus>
                         </div>
                         <div class="mb-3">
-                            <input type="password" class="form-control" name="password" placeholder="Password" required>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
                         </div>
+                        <div id="attempts-counter"></div>
                         <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
                     </form>
                 </div>
@@ -171,6 +184,182 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Login attempt tracking variables
+        let loginAttempts = 0;
+        const MAX_ATTEMPTS = 3;
+        const LOCKOUT_TIME = 180000; // 3 minutes in milliseconds
+        const loginButton = document.getElementById("login-button");
+        const attemptsCounter = document.getElementById("attempts-counter");
+
+        // Function to validate email format
+        function isValidEmail(email) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailPattern.test(email);
+        }
+
+        // Function to show remaining attempts
+        function updateAttemptsCounter() {
+            if (loginAttempts > 0 && loginAttempts < MAX_ATTEMPTS) {
+                attemptsCounter.style.display = 'block';
+                attemptsCounter.textContent = `${MAX_ATTEMPTS - loginAttempts} attempts remaining`;
+            } else {
+                attemptsCounter.style.display = 'none';
+            }
+        }
+
+        // Function to handle failed login attempts
+        function handleFailedAttempt() {
+            loginAttempts++;
+            updateAttemptsCounter();
+
+            if (loginAttempts >= MAX_ATTEMPTS) {
+                loginButton.disabled = true;
+                attemptsCounter.style.display = 'none';
+
+                Swal.fire({
+                    title: "Account Locked",
+                    text: "Too many failed attempts. Please wait 3 minutes before trying again.",
+                    icon: "warning",
+                    confirmButtonText: "Ok"
+                });
+
+                setTimeout(() => {
+                    loginButton.disabled = false;
+                    loginAttempts = 0;
+                    updateAttemptsCounter();
+                    Swal.fire({
+                        title: "Account Unlocked",
+                        text: "You can now try logging in again.",
+                        icon: "info",
+                        confirmButtonText: "Ok"
+                    });
+                }, LOCKOUT_TIME);
+            } else {
+                const remainingAttempts = MAX_ATTEMPTS - loginAttempts;
+                Swal.fire({
+                    title: "Error!",
+                    text: `Invalid username or password. ${remainingAttempts} attempts remaining.`,
+                    icon: "error",
+                    confirmButtonText: "Ok"
+                });
+            }
+        }
+
+        // Function to validate credentials with the server
+        async function checkCredentials(username, password) {
+            try {
+                const formData = new FormData();
+                formData.append('username', username);
+                formData.append('password', password);
+
+                const response = await fetch('login.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                return data.success; // Assuming your PHP returns a JSON with a success boolean
+            } catch (error) {
+                console.error('Error:', error);
+                return false;
+            }
+        }
+
+        // Login button click handler
+        loginButton.addEventListener("click", async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Validate empty fields
+            if (!username || !password) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please fill in all fields",
+                    icon: "error",
+                    confirmButtonText: "Ok"
+                });
+                return;
+            }
+
+            // Validate email format
+            if (!isValidEmail(username)) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please enter a valid email address",
+                    icon: "error",
+                    confirmButtonText: "Ok"
+                });
+                return;
+            }
+
+            // Check if button is disabled
+            if (this.disabled) {
+                Swal.fire({
+                    title: "Account Locked",
+                    text: "Too many failed attempts. Please wait 3 minutes before trying again.",
+                    icon: "warning",
+                    confirmButtonText: "Ok"
+                });
+                return;
+            }
+
+            try {
+                const isValid = await checkCredentials(username, password);
+                
+                if (isValid) {
+                    loginAttempts = 0;
+                    updateAttemptsCounter();
+                    Swal.fire({
+                        title: "Success!",
+                        text: "You are successfully logged in!",
+                        icon: "success",
+                        confirmButtonText: "Ok"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById("login-form").submit();
+                        }
+                    });
+                } else {
+                    handleFailedAttempt();
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "An error occurred during login. Please try again.",
+                    icon: "error",
+                    confirmButtonText: "Ok"
+                });
+            }
+        });
+
+        // Clear email function for forgot password modal
+        function clearEmail() {
+            document.getElementById("forgot-password-form").reset();
+        }
+
+        // Security measures
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        document.onkeydown = function (e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+            }
+        };
+
+        // PHP Success message handler
         window.onload = function() {
             <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
                 Swal.fire({
@@ -185,48 +374,6 @@
                 <?php unset($_SESSION['login_success']); ?>
             <?php endif; ?>
         };
-
-        function clearEmail() {
-            document.getElementById("forgot-password-form").reset();
-        }
-
-        document.getElementById("login-button").addEventListener("click", function() {
-            Swal.fire({
-                title: "Success!",
-                text: "You are successfully logged in!",
-                icon: "success",
-                confirmButtonText: "Ok",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById("login-form").submit();
-                }
-            });
-        });
-// Security measures
-    // Disable right-click
-    document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
-
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        document.onkeydown = function (e) {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
-                e.preventDefault();
-            }
-        };
-
-        // Hide the alert after 3 seconds
-        setTimeout(function(){
-            var alert = document.querySelector('.alert');
-            if (alert) {
-                alert.style.display = 'none';
-            }
-        }, 3000);
-    
     </script>
 </body>
 </html>
