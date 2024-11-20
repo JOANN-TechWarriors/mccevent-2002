@@ -16,15 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if the user has exceeded the login attempt limit
     if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()) {
         $remainingTime = $_SESSION['login_disabled_until'] - time();
-        $_SESSION['login_error'] = "You have exceeded the login attempt limit. Please try again in " . ceil($remainingTime / 60) . " minutes.";
-        echo "<script>
-            Swal.fire({
-                title: 'Error',
-                text: '{$_SESSION['login_error']}',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        </script>";
+        $_SESSION['error_message'] = "You have exceeded the login attempt limit. Please try again in " . ceil($remainingTime / 60) . " minutes.";
         exit;
     }
 
@@ -37,14 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if ($stmt->rowCount() > 0) {
             if ($row['request_status'] == '') {
-                echo "<script>
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Sorry, Your account is not yet approved by the admin',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                </script>";
+                $_SESSION['error_message'] = 'Sorry, Your account is not yet approved by the admin';
             } elseif ($row['request_status'] == 'Approved') {
                 // Verify the password
                 if (password_verify($password, $row['password'])) {
@@ -64,35 +49,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($_SESSION['login_attempts'] >= 3) {
                         $_SESSION['login_disabled_until'] = time() + 180; // 3 minutes
                         $_SESSION['login_attempts'] = 0; // Reset attempts
-                        echo "<script>
-                            Swal.fire({
-                                title: 'Error',
-                                text: 'Maximum login attempts exceeded. Please try again in 3 minutes.',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                        </script>";
+                        $_SESSION['error_message'] = 'Maximum login attempts exceeded. Please try again in 3 minutes.';
                     } else {
                         $remaining_attempts = 3 - $_SESSION['login_attempts'];
-                        echo "<script>
-                            Swal.fire({
-                                title: 'Error',
-                                text: 'Invalid password. You have {$remaining_attempts} attempts remaining.',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                        </script>";
+                        $_SESSION['error_message'] = "Invalid password. You have {$remaining_attempts} attempts remaining.";
                     }
                 }
             } else {
-                echo "<script>
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Your account is yet to be approved or created',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                </script>";
+                $_SESSION['error_message'] = 'Your account is yet to be approved or created';
             }
         } else {
             // Increment login attempts for invalid student ID
@@ -102,35 +66,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($_SESSION['login_attempts'] >= 3) {
                 $_SESSION['login_disabled_until'] = time() + 180; // 3 minutes
                 $_SESSION['login_attempts'] = 0; // Reset attempts
-                echo "<script>
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Maximum login attempts exceeded. Please try again in 3 minutes.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                </script>";
+                $_SESSION['error_message'] = 'Maximum login attempts exceeded. Please try again in 3 minutes.';
             } else {
                 $remaining_attempts = 3 - $_SESSION['login_attempts'];
-                echo "<script>
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Invalid Student ID. You have {$remaining_attempts} attempts remaining.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                </script>";
+                $_SESSION['error_message'] = "Invalid Student ID. You have {$remaining_attempts} attempts remaining.";
             }
         }
     } catch(PDOException $e) {
-        echo "<script>
-            Swal.fire({
-                title: 'Error',
-                text: 'Database error: {$e->getMessage()}',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        </script>";
+        $_SESSION['error_message'] = 'Database error: ' . $e->getMessage();
     }
 }
 ?>
@@ -141,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Login - MCC Event Judging System</title>
+    <title>Organizer Login - MCC Event Judging System</title>
 
     <?php include_once('../admin/header2.php'); ?>
 
@@ -150,6 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
+        /* Previous styles remain the same */
         .alert {
             position: fixed;
             top: 20px;
@@ -196,7 +140,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #DC3545;
         }
 
-        /* Add styles for disabled button */
         button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -205,13 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body class="bg-overlay no-select">
-    <?php if (isset($_SESSION['login_error'])): ?>
-        <div class="alert bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
-            <p><?php echo $_SESSION['login_error']; ?></p>
-        </div>
-        <?php unset($_SESSION['login_error']); ?>
-    <?php endif; ?>
-    <br>
+    <!-- Main content remains the same -->
     <div class="min-h-screen flex items-center justify-center p-4 relative">
         <div class="w-full max-w-3xl bg-white rounded-lg shadow-2xl overflow-hidden">
             <div class="grid grid-cols-1 md:grid-cols-2">
@@ -228,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="bg-white p-8">
                     <div class="max-w-sm mx-auto">
                         <h2 class="text-2xl font-bold text-gray-800 mb-8">STUDENT LOGIN</h2>
-                        <form method="POST" action="" class="space-y-6">
+                        <form method="POST" action="" class="space-y-6" id="loginForm">
                             <div>
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     <i class="icon-user"></i> STUDENT ID
@@ -258,8 +195,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </button>
                             <?php if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()): ?>
                                 <div class="text-center text-gray-600 mt-2">
-                                    You can try again in <?php echo ceil(($_SESSION['login_disabled_until'] - time()) / 60); ?> minutes
-                                    <span id="countdown"></span>
+                                    You can try again in <span id="countdown"></span>
                                 </div>
                             <?php endif; ?>
                             <div class="text-center mt-4">
@@ -297,6 +233,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="../assets/js/application.js"></script>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle error messages
+            <?php if (isset($_SESSION['error_message'])): ?>
+                Swal.fire({
+                    title: 'Error',
+                    text: '<?php echo addslashes($_SESSION['error_message']); ?>',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#DC3545'
+                });
+                <?php unset($_SESSION['error_message']); ?>
+            <?php endif; ?>
+
+            // Handle success messages
+            <?php if (isset($_SESSION['login_success']) && $_SESSION['login_success'] === true): ?>
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'You are successfully logged in!',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#DC3545'
+                }).then(() => {
+                    window.location.href = '../index.php';
+                });
+                <?php unset($_SESSION['login_success']); ?>
+            <?php endif; ?>
+
+            // Login button timer
+            <?php if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()): ?>
+            function updateCountdown() {
+                var now = Math.floor(Date.now() / 1000);
+                var timeLeft = <?php echo $_SESSION['login_disabled_until']; ?> - now;
+                
+                if (timeLeft <= 0) {
+                    document.getElementById('login-btn').disabled = false;
+                    document.getElementById('countdown').parentElement.style.display = 'none';
+                    location.reload();
+                } else {
+                    var minutes = Math.floor(timeLeft / 60);
+                    var seconds = timeLeft % 60;
+                    document.getElementById('countdown').textContent = 
+                        `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                }
+            }
+
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+            <?php endif; ?>
+        });
+
         // Security measures
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
@@ -312,51 +298,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         };
 
-        // Alert timeout
-        setTimeout(function () {
-            var alert = document.querySelector('.alert');
-            if (alert) {
-                alert.style.display = 'none';
-            }
-        }, 3000);
-
-        // Login button timer
-        <?php if (isset($_SESSION['login_disabled_until']) && $_SESSION['login_disabled_until'] > time()): ?>
-        function updateCountdown() {
-            var now = Math.floor(Date.now() / 1000);
-            var timeLeft = <?php echo $_SESSION['login_disabled_until']; ?> - now;
-            
-            if (timeLeft <= 0) {
-                document.getElementById('login-btn').disabled = false;
-                document.getElementById('countdown').parentElement.style.display = 'none';
-                location.reload();
-            } else {
-                var minutes = Math.floor(timeLeft / 60);
-                var seconds = timeLeft % 60;
-                document.getElementById('countdown').textContent = 
-                    `(${minutes}:${seconds < 10 ? '0' : ''}${seconds})`;
-            }
-        }
-
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-        <?php endif; ?>
-
-        // Success message handling
-        document.addEventListener('DOMContentLoaded', function () {
-            <?php if (isset($_SESSION['login_success']) && $_SESSION['login_success'] === true): ?>
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            if (document.getElementById('login-btn').disabled) {
+                e.preventDefault();
                 Swal.fire({
-                    title: "Success!",
-                    text: "You are successfully logged in!",
-                    icon: "success",
-                    confirmButtonText: "Ok",
-                }).then(() => {
-                    window.location.href = '../index.php';
+                    title: 'Error',
+                    text: 'Please wait for the lockout period to end before trying again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#DC3545'
                 });
-                <?php unset($_SESSION['login_success']); ?>
-            <?php endif; ?>
+            }
         });
     </script>
 </body>
-
 </html>
