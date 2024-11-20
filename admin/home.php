@@ -472,73 +472,73 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     <!-- Main content -->
     <div class="main" id="main-content">
-        <div class="container">
-            <h1  style="font-size: 35px;" >Ongoing Events</h1>
-        </div>
+    <div class="container">
+        <h1 style="font-size: 35px;">Ongoing Events</h1>
+    </div>
 
-        <section id="download-bootstrap">
-            <div class="page-header">
-                <a data-toggle="modal" class="btn btn-info pull-right" href="#addMEcollapse"
-                    title="Click to add Main Event"><i class="icon icon-plus"></i> <strong>EVENT</strong></a>
+    <section id="download-bootstrap">
+        <div class="page-header">
+            <a data-toggle="modal" class="btn btn-info pull-right" href="#addMEcollapse"
+                title="Click to add Main Event"><i class="icon icon-plus"></i> <strong>EVENT</strong></a>
 
-                <!-- Modal for adding an event -->
-                <div id="addMEcollapse" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addMEcollapseLabel" aria-hidden="true">                    
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title"><strong>ADD EVENT</strong><button type="button" class="close"
-                                        data-dismiss="modal">&times;</button></h4>
-                            </div>
-                            <div class="modal-body">
-                                <form method="POST" enctype="multipart/form-data">
-                                    <div class="form-group">
-                                        <strong>Upload Banner:</strong><br />
-                                        <input type="file" name="banner" accept="image/*">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="main_event"><strong>Event Name:</strong></label>
-                                        <input type="text" name="main_event" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 30px !important;"
-                                            placeholder="Event Name" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="date_start"><strong>Start Date:</strong></label>
-                                        <input type="date" id="date_start" name="date_start" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 30px !important;" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="date_end"><strong>End Date:</strong></label>
-                                        <input type="date" id="date_end" name="date_end" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 30px !important;" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="description"><strong>Description:</strong></label>
-                                        <textarea name="description" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 100px !important;"
-                                            placeholder="Description" required></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="place"><strong>Venue:</strong></label>
-                                        <input type="text" name="place" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 30px !important;"
-                                            placeholder="Venue" required />
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button name="create" class="btn btn-success"><i class="icon-save"></i>
-                                            <strong>SAVE</strong></button>
-                                        <button type="reset" class="btn btn-default"><i class="icon-ban-circle"></i>
-                                            <strong>RESET</strong></button>
-                                        
-                                    </div>
-                                </form>
-                            </div>
+            <!-- Modal for adding an event -->
+            <div id="addMEcollapse" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addMEcollapseLabel" aria-hidden="true">                    
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><strong>ADD EVENT</strong><button type="button" class="close"
+                                    data-dismiss="modal">&times;</button></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <strong>Upload Banner:</strong><br />
+                                    <input type="file" name="banner" accept="image/*">
+                                    <small class="form-text text-muted">Recommended file size: Maximum 2MB. Optimal dimensions: 1200x400 pixels.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="main_event"><strong>Event Name:</strong></label>
+                                    <input type="text" name="main_event" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 30px !important;"
+                                        placeholder="Event Name" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="date_start"><strong>Start Date:</strong></label>
+                                    <input type="date" id="date_start" name="date_start" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 30px !important;" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="date_end"><strong>End Date:</strong></label>
+                                    <input type="date" id="date_end" name="date_end" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 30px !important;" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="description"><strong>Description:</strong></label>
+                                    <textarea name="description" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 100px !important;"
+                                        placeholder="Description" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="place"><strong>Venue:</strong></label>
+                                    <input type="text" name="place" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 30px !important;"
+                                        placeholder="Venue" required />
+                                </div>
+                                <div class="modal-footer">
+                                    <button name="create" class="btn btn-success"><i class="icon-save"></i>
+                                        <strong>SAVE</strong></button>
+                                    <button type="reset" class="btn btn-default"><i class="icon-ban-circle"></i>
+                                        <strong>RESET</strong></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <br> <br><br>
-                <!-- Display events -->
+            </div>
+            <br> <br><br>
+            <!-- Display events -->
             <div class="tile-container">
-                 <?php foreach ($events as $event) { ?>
+                <?php foreach ($events as $event) { ?>
                 <div class="tile" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
                     <div class="dropdown">
                         <button class="dropbtn">⋮</button>
@@ -559,7 +559,6 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php } ?>
             </div>
 
-
 <!-- Update the edit event modal HTML -->
 <div id="editEventModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -577,6 +576,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="form-group">
                         <label for="edit_banner">Banner:</label>
                         <input type="file" class="form-control" id="edit_banner" name="edit_banner">
+                        <small class="form-text text-muted">Recommended file size: Maximum 2MB. Optimal dimensions: 1200x400 pixels.</small>
                     </div>
 
                     <div class="form-group">
@@ -603,8 +603,6 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <label for="edit_place">Venue:</label>
                         <input type="text" class="form-control btn-block" style="height: 30px !important;" id="edit_place" name="edit_place" required>
                     </div>
-                    
-                    
                 </form>
             </div>
             <div class="modal-footer">
