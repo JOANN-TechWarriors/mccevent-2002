@@ -62,22 +62,7 @@
             height: 45px;
             font-size: 1.1rem;
             border-radius: 8px;
-            min-width: 120px; /* Ensure button maintains width during timer display */
-        }
-
-        .social-login {
-            margin-top: 2rem;
-            text-align: center;
-        }
-
-        .btn-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin: 0 5px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            min-width: 120px;
         }
 
         .form-control {
@@ -123,6 +108,11 @@
         h2, h4 {
             margin-bottom: 20px;
         }
+
+        #login-spinner {
+            display: none;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -136,7 +126,7 @@
                 </div>
                 <div class="col-md-6 login-side">
                     <h2 style="font-size: 16px;" class="mb-4">ORGANIZER LOGIN</h2>
-                    <form id="login-form" method="POST" action="login.php" class="login-form">
+                    <form id="login-form" class="login-form">
                         <div class="mb-3">
                             <input type="email" class="form-control" name="username" placeholder="Username" required autofocus>
                         </div>
@@ -144,7 +134,10 @@
                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <button type="button" id="login-button" class="btn btn-primary px-4">Sign in</button>
+                            <button type="button" id="login-button" class="btn btn-primary px-4">
+                                <span>Sign in</span>
+                                <span id="login-spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            </button>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
                         </div>
                         <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
@@ -197,7 +190,8 @@
             const loginButton = document.getElementById("login-button");
             loginButton.disabled = false;
             loginButton.classList.remove('opacity-50');
-            loginButton.textContent = "Sign in";
+            loginButton.querySelector('span:not(#login-spinner)').textContent = "Sign in";
+            document.getElementById('login-spinner').style.display = 'none';
         }
 
         // Function to update timer display
@@ -205,7 +199,8 @@
             const minutes = Math.floor(remainingTime / 60);
             const seconds = remainingTime % 60;
             const loginButton = document.getElementById("login-button");
-            loginButton.textContent = `Wait ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            loginButton.querySelector('span:not(#login-spinner)').textContent = 
+                `Wait ${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
 
         // Function to handle lockout timer
@@ -225,6 +220,22 @@
             }, 1000);
         }
 
+        // Function to show loading state
+        function showLoading() {
+            const loginButton = document.getElementById("login-button");
+            loginButton.disabled = true;
+            loginButton.querySelector('span:not(#login-spinner)').textContent = "Signing in...";
+            document.getElementById('login-spinner').style.display = 'inline-block';
+        }
+
+        // Function to hide loading state
+        function hideLoading() {
+            const loginButton = document.getElementById("login-button");
+            loginButton.disabled = false;
+            loginButton.querySelector('span:not(#login-spinner)').textContent = "Sign in";
+            document.getElementById('login-spinner').style.display = 'none';
+        }
+
         // Function to clear form fields
         function clearForm() {
             document.querySelector('input[name="username"]').value = '';
@@ -237,7 +248,9 @@
         }
 
         // Handle login button click
-        document.getElementById("login-button").addEventListener("click", function() {
+        document.getElementById("login-button").addEventListener("click", function(e) {
+            e.preventDefault();
+            
             const emailInput = document.querySelector('input[name="username"]');
             const passwordInput = document.querySelector('input[name="password"]');
             
@@ -251,10 +264,7 @@
                 return;
             }
 
-            // Increment attempt counter
-            loginAttempts++;
-
-            // Check if we should allow this attempt
+            // Check if we're in lockout period
             if (loginAttempts >= MAX_ATTEMPTS) {
                 disableLoginButton();
                 startLockoutTimer();
@@ -268,35 +278,85 @@
                 return;
             }
 
-            // Your existing login success logic (replace this with actual authentication)
-            Swal.fire({
-                title: "Success!",
-                text: "You are successfully logged in!",
-                icon: "success",
-                confirmButtonText: "Ok",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById("login-form").submit();
+            // Show loading state
+            showLoading();
+
+            // Create form data
+            const formData = new FormData();
+            formData.append('username', emailInput.value);
+            formData.append('password', passwordInput.value);
+
+            // Send form data to login.php
+            fetch('login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(html => {
+                // Hide loading state
+                hideLoading();
+
+                // Check if the response contains success redirect
+                if (html.includes('window.location = \'dashboard.php\'')) {
+                    // Successful login
+                    loginAttempts = 0;
+                    Swal.fire({
+                        title: "Success!",
+                        text: "You are successfully logged in!",
+                        icon: "success",
+                        confirmButtonText: "Ok"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'dashboard.php';
+                        }
+                    });
+                } else {
+                    // Failed login
+                    loginAttempts++;
+                    
+                    // Extract error message from the response
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    const scriptContent = tempDiv.querySelector('script');
+                    
+                    if (scriptContent && scriptContent.textContent.includes('Swal.fire')) {
+                        // Execute the SweetAlert from the response
+                        eval(scriptContent.textContent);
+                    } else {
+                        // Fallback error message
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Invalid username or password",
+                            icon: "error"
+                        });
+                    }
+
+                    // Clear password field
+                    passwordInput.value = '';
+                    
+                    // Check if we should lock the account
+                    if (loginAttempts >= MAX_ATTEMPTS) {
+                        disableLoginButton();
+                        startLockoutTimer();
+                        clearForm();
+                    }
                 }
+            })
+            .catch(error => {
+                hideLoading();
+                Swal.fire({
+                    title: "Error!",
+                    text: "An error occurred. Please try again later.",
+                    icon: "error"
+                });
             });
         });
 
-        // Add event listeners for form inputs to enable real-time validation
-        document.querySelector('input[name="username"]').addEventListener('input', function() {
-            this.value = this.value.trim();
-        });
-
-        document.querySelector('input[name="password"]').addEventListener('input', function() {
-            this.value = this.value.trim();
-        });
-
         // Security measures
-        // Disable right-click
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
         document.onkeydown = function (e) {
             if (
                 e.key === 'F12' ||
@@ -305,22 +365,6 @@
             ) {
                 e.preventDefault();
             }
-        };
-
-        // Load session messages if any
-        window.onload = function() {
-            <?php if(isset($_SESSION['login_success']) && $_SESSION['login_success'] == true): ?>
-                Swal.fire({
-                    title: "Success!",
-                    text: "You are Successfully logged in!",
-                    icon: "success"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "dashboard.php";
-                    }
-                });
-                <?php unset($_SESSION['login_success']); ?>
-            <?php endif; ?>
         };
     </script>
 </body>
