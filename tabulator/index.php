@@ -233,7 +233,7 @@ if ($_SESSION['lockout_time'] < time()) {
                     } else {
                         Swal.fire({
                             title: "Error!",
-                            text: "Invalid Username or Password",
+                            text: "Wrong Username or Password",
                             icon: "error",
                             confirmButtonText: "Ok",
                             confirmButtonColor: '#DC3545'
