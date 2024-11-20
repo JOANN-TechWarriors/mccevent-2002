@@ -494,7 +494,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="form-group">
                                     <strong>Upload Banner:</strong><br />
                                     <input type="file" name="banner" accept="image/*">
-                                    <small class="form-text text-muted">Recommended file size: Maximum 2MB. Optimal dimensions: 1200x400 pixels.</small>
+                                    <small class="form-text text-muted">Recommended file size: 1200x400 pixels.  Maximum 2MB.</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="main_event"><strong>Event Name:</strong></label>
@@ -576,7 +576,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="form-group">
                         <label for="edit_banner">Banner:</label>
                         <input type="file" class="form-control" id="edit_banner" name="edit_banner">
-                        <small class="form-text text-muted">Recommended file size: Maximum 2MB. Optimal dimensions: 1200x400 pixels.</small>
+                        <small class="form-text text-muted">Recommended file size: 1200x400 pixels.  Maximum 2MB.</small>
                     </div>
 
                     <div class="form-group">
