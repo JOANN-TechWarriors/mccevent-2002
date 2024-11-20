@@ -126,7 +126,7 @@
                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
                         <div class="recaptcha-container" id="recaptcha-container">
-                            <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
+                            <div class="g-recaptcha" data-sitekey="6LcsOX0qAAAAAMHHt5C_j6v9iH2hM6RUduOCmxqe"></div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <button type="button" id="login-button" class="btn btn-primary px-4">
