@@ -38,8 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['student_id'] = $student_id;
                     $_SESSION['login_success'] = true;
                     unset($_SESSION['login_disabled_until']);
-                    // Redirect to the login page to trigger JavaScript
-                    header("Location: index.php");
+                    // Updated redirect without .php extension
+                    header("Location: index");
                     exit();
                 } else {
                     // Increment login attempts
@@ -59,13 +59,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['error_message'] = 'Your account is yet to be approved or created';
             }
         } else {
-            // Increment login attempts for invalid student ID
             $_SESSION['login_attempts']++;
             
-            // Check if maximum attempts reached
             if ($_SESSION['login_attempts'] >= 3) {
-                $_SESSION['login_disabled_until'] = time() + 180; // 3 minutes
-                $_SESSION['login_attempts'] = 0; // Reset attempts
+                $_SESSION['login_disabled_until'] = time() + 180;
+                $_SESSION['login_attempts'] = 0;
                 $_SESSION['error_message'] = 'Maximum login attempts exceeded. Please try again in 3 minutes.';
             } else {
                 $remaining_attempts = 3 - $_SESSION['login_attempts'];
@@ -93,7 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        /* Previous styles remain the same */
         .alert {
             position: fixed;
             top: 20px;
@@ -148,7 +145,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body class="bg-overlay no-select">
-    <!-- Main content remains the same -->
     <div class="min-h-screen flex items-center justify-center p-4 relative">
         <div class="w-full max-w-3xl bg-white rounded-lg shadow-2xl overflow-hidden">
             <div class="grid grid-cols-1 md:grid-cols-2">
@@ -201,7 +197,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="text-center mt-4">
                                 <p class="text-gray-600">
                                     Don't have an account?
-                                    <a href="student_register.php" class="text-red-500 hover:text-red-600 font-medium">
+                                    <!-- Updated link without .php extension -->
+                                    <a href="student_register" class="text-red-500 hover:text-red-600 font-medium">
                                         Sign Up
                                     </a>
                                 </p>
@@ -255,7 +252,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#DC3545'
                 }).then(() => {
-                    window.location.href = '../index.php';
+                    // Updated redirect without .php extension
+                    window.location.href = '../index';
                 });
                 <?php unset($_SESSION['login_success']); ?>
             <?php endif; ?>
