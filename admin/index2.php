@@ -239,7 +239,7 @@
         function showLoading() {
             const loginButton = document.getElementById("login-button");
             loginButton.disabled = true;
-            loginButton.querySelector('span:not(#login-spinner)').textContent = "Signing ...";
+            loginButton.querySelector('span:not(#login-spinner)').textContent = "Signing";
             document.getElementById('login-spinner').style.display = 'inline-block';
         }
 
