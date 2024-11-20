@@ -55,6 +55,7 @@ if ($_SESSION['lockout_time'] < time()) {
         .disabled-button {
             opacity: 0.6;
             cursor: not-allowed;
+            background-color: #6B7280 !important;
         }
     </style>
 </head>
@@ -103,8 +104,6 @@ if ($_SESSION['lockout_time'] < time()) {
                                 placeholder="Enter your password"
                             >
                         </div>
-                        <p id="attempts-left" class="text-sm text-gray-600 mt-2">Attempts remaining: <?php echo 3 - $_SESSION['login_attempts']; ?></p>
-                        <p id="lockout-timer" class="text-sm text-red-600 mt-2 <?php echo ($_SESSION['lockout_time'] > time()) ? '' : 'hidden'; ?>"></p>
                         
                         <button 
                             type="button" 
@@ -126,15 +125,9 @@ if ($_SESSION['lockout_time'] < time()) {
         const maxAttempts = 3;
         const lockoutDuration = 180; // 3 minutes in seconds
         let lockoutTime = <?php echo ($_SESSION['lockout_time'] > time()) ? $_SESSION['lockout_time'] : 0; ?>;
-        
-        function updateAttemptsDisplay() {
-            const attemptsLeft = maxAttempts - loginAttempts;
-            document.getElementById('attempts-left').textContent = `Attempts remaining: ${attemptsLeft}`;
-        }
 
         function startLockoutTimer() {
             const loginButton = document.getElementById('login-button');
-            const timerDisplay = document.getElementById('lockout-timer');
             loginButton.disabled = true;
             loginButton.classList.add('disabled-button');
             
@@ -146,15 +139,13 @@ if ($_SESSION['lockout_time'] < time()) {
                     clearInterval(interval);
                     loginButton.disabled = false;
                     loginButton.classList.remove('disabled-button');
-                    timerDisplay.classList.add('hidden');
+                    loginButton.textContent = 'Sign in';
                     loginAttempts = 0;
-                    updateAttemptsDisplay();
                     fetch('reset_attempts.php');
                 } else {
                     const minutes = Math.floor(timeLeft / 60);
                     const seconds = timeLeft % 60;
-                    timerDisplay.textContent = `Account locked. Try again in ${minutes}:${seconds.toString().padStart(2, '0')}`;
-                    timerDisplay.classList.remove('hidden');
+                    loginButton.textContent = `Try again in ${minutes}:${seconds.toString().padStart(2, '0')}`;
                 }
             }, 1000);
         }
@@ -201,7 +192,6 @@ if ($_SESSION['lockout_time'] < time()) {
                 if (data.success) {
                     // Reset attempts on successful login
                     loginAttempts = 0;
-                    updateAttemptsDisplay();
                     
                     Swal.fire({
                         title: "Success!",
@@ -216,7 +206,6 @@ if ($_SESSION['lockout_time'] < time()) {
                     });
                 } else {
                     loginAttempts++;
-                    updateAttemptsDisplay();
                     
                     if (loginAttempts >= maxAttempts) {
                         lockoutTime = Math.floor(Date.now() / 1000) + lockoutDuration;
