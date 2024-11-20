@@ -6,6 +6,7 @@
     <title>MCC Event Judging System - Login</title>
     <link rel="shortcut icon" href="../images/logo copy.png"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         body {
             background: url(../img/Community-College-Madridejos.jpeg);
@@ -95,17 +96,8 @@
             opacity: 0.65;
         }
 
-        a {
-            color: #dc3545;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: #c82333;
-            text-decoration: underline;
-        }
-
-        h2, h4 {
+        .recaptcha-container {
+            display: none;
             margin-bottom: 20px;
         }
 
@@ -132,6 +124,9 @@
                         </div>
                         <div class="mb-3">
                             <input type="password" class="form-control" name="password" placeholder="Password" required>
+                        </div>
+                        <div class="recaptcha-container" id="recaptcha-container">
+                            <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <button type="button" id="login-button" class="btn btn-primary px-4">
@@ -203,6 +198,25 @@
                 `Wait ${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
 
+        // Function to show reCAPTCHA
+        function showRecaptcha() {
+            document.getElementById('recaptcha-container').style.display = 'block';
+        }
+
+        // Function to verify reCAPTCHA
+        function verifyRecaptcha() {
+            const response = grecaptcha.getResponse();
+            if (!response) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please complete the reCAPTCHA verification",
+                    icon: "error"
+                });
+                return false;
+            }
+            return true;
+        }
+
         // Function to handle lockout timer
         function startLockoutTimer() {
             remainingTime = LOCKOUT_TIME;
@@ -216,6 +230,7 @@
                     clearInterval(lockoutTimer);
                     loginAttempts = 0;
                     enableLoginButton();
+                    showRecaptcha(); // Show reCAPTCHA after lockout period
                 }
             }, 1000);
         }
@@ -240,11 +255,9 @@
         function clearForm() {
             document.querySelector('input[name="username"]').value = '';
             document.querySelector('input[name="password"]').value = '';
-        }
-
-        // Function to clear email in forgot password form
-        function clearEmail() {
-            document.getElementById("forgot-password-form").reset();
+            if (grecaptcha) {
+                grecaptcha.reset();
+            }
         }
 
         // Handle login button click
@@ -262,6 +275,13 @@
                     icon: "error"
                 });
                 return;
+            }
+
+            // Check if reCAPTCHA is displayed and verify it
+            if (document.getElementById('recaptcha-container').style.display === 'block') {
+                if (!verifyRecaptcha()) {
+                    return;
+                }
             }
 
             // Check if we're in lockout period
@@ -285,6 +305,11 @@
             const formData = new FormData();
             formData.append('username', emailInput.value);
             formData.append('password', passwordInput.value);
+            
+            // Add reCAPTCHA response if visible
+            if (document.getElementById('recaptcha-container').style.display === 'block') {
+                formData.append('g-recaptcha-response', grecaptcha.getResponse());
+            }
 
             // Send form data to login.php
             fetch('login.php', {
@@ -313,6 +338,16 @@
                 } else {
                     // Failed login
                     loginAttempts++;
+                    
+                    // Reset reCAPTCHA if visible
+                    if (document.getElementById('recaptcha-container').style.display === 'block') {
+                        grecaptcha.reset();
+                    }
+
+                    // Show reCAPTCHA after second attempt
+                    if (loginAttempts >= 2) {
+                        showRecaptcha();
+                    }
                     
                     // Extract error message from the response
                     const tempDiv = document.createElement('div');
