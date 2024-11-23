@@ -1,13 +1,73 @@
+<?php 
+include('header.php');
+include('session.php');
+    
+$sub_event_id = $_GET['sub_event_id'];
+$se_name = $_GET['se_name'];
+
+// Handle form submission
+if(isset($_POST['add_crit'])) {
+    try {
+        // Get form data
+        $criteria_ctr = $_POST['crit_ctr'];
+        $criteria = $_POST['criteria'];
+        $percentage = $_POST['percentage'];
+        $sub_event_id = $_POST['sub_event_id'];
+        
+        // Validate total percentage doesn't exceed 100%
+        $stmt = $conn->prepare("SELECT SUM(percentage) as total FROM criteria WHERE subevent_id = ?");
+        $stmt->execute([$sub_event_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $current_total = $result['total'] ?? 0;
+        
+        if(($current_total + $percentage) > 100) {
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Total percentage cannot exceed 100%',
+                    confirmButtonColor: '#3085d6'
+                });
+            </script>";
+        } else {
+            // Insert new criteria
+            $stmt = $conn->prepare("INSERT INTO criteria (criteria_ctr, criteria, percentage, subevent_id) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$criteria_ctr, $criteria, $percentage, $sub_event_id]);
+            
+            // Redirect back to sub event details page with success message
+            $se_name = $_POST['se_name'];
+            echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Criteria added successfully!',
+                    confirmButtonColor: '#3085d6'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'sub_event_details_edit.php?sub_event_id=" . $sub_event_id . "&se_name=" . urlencode($se_name) . "';
+                    }
+                });
+            </script>";
+        }
+    } catch(PDOException $e) {
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Database error occurred: " . addslashes($e->getMessage()) . "',
+                confirmButtonColor: '#3085d6'
+            });
+        </script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php 
-    include('header.php');
-    include('session.php');
-    
-    $sub_event_id=$_GET['sub_event_id'];
-    $se_name=$_GET['se_name'];
-    ?>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Criteria - <?php echo htmlspecialchars($se_name); ?></title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="shortcut icon" href="../images/logo copy.png"/>
@@ -17,11 +77,10 @@
             background-color: #fff;
             margin: 0;
             padding: 0;
-            min-height: 100vh; /* Ensures the body takes at least the full viewport height */
-            width: 100vw;      /* Ensures full width */
-            overflow-y: auto;  /* Enables vertical scrolling */
-            overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
-        
+            min-height: 100vh;
+            width: 100vw;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .container {
@@ -31,7 +90,6 @@
             padding: 15px;
         }
 
-        /* Table Styles */
         .criteria-table {
             width: 100%;
             max-width: 800px;
@@ -83,10 +141,11 @@
             border-radius: 4px;
             border: none;
             cursor: pointer;
+            margin: 0 5px;
         }
 
         .btn-success {
-            background: #007bff;
+            background: #28a745;
             color: #fff;
         }
 
@@ -95,33 +154,77 @@
             color: #fff;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .criteria-table {
-                margin: 10px auto;
-            }
-
-            .criteria-table td {
-                display: block;
-                width: 100%;
-                padding: 10px;
-            }
-
-            .panel {
-                margin: 10px;
-            }
-
-            .form-control {
-                margin: 5px 0;
-            }
-
-            .btn {
-                width: 100%;
-                margin: 5px 0;
-            }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #27293d;
+            color: #fff;
+            padding-top: 20px;
+            transition: all 0.3s;
+            overflow: hidden;
+            z-index: 1000;
         }
 
-        /* Breadcrumb Styles */
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-heading {
+            text-align: center;
+            padding: 10px 0;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-heading img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px 20px;
+            transition: all 0.3s;
+        }
+
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+
+        .main {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main.collapsed {
+            margin-left: 0;
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
         .breadcrumb {
             list-style: none;
             padding: 10px;
@@ -150,225 +253,76 @@
             text-decoration: none;
         }
 
-   .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 250px;
-    background-color: #27293d;
-    color: #fff;
-    padding-top: 20px;
-    transition: all 0.3s;
-    overflow: hidden;
-    z-index: 1000; /* Ensure the sidebar is above the main content */
-}
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
 
-.sidebar.collapsed {
-    transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
-}
+            .main {
+                margin-left: 0;
+            }
 
-.sidebar .toggle-btn {
-    position: absolute;
-    top: 10px;
-    right: 18px;
-    background-color: transparent;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-}
+            .sidebar.collapsed {
+                transform: translateX(0);
+            }
 
-.sidebar .toggle-btn i {
-    font-size: 20px;
-}
-    .sidebar-heading {
-    text-align: center;
-    padding: 10px 0;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
+            .criteria-table td {
+                display: block;
+                width: 100%;
+            }
 
-.sidebar-heading img {
-    max-width: 100px;
-    max-height: 100px;
-}
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
-    padding: 15px 20px;
-    transition: all 0.3s;
-}
-
-.sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar ul li a i {
-    margin-right: 10px;
-}
-
-
-    .sidebar ul li a:hover {
-    background-color: #1a1a2e;
-}
-
-.main {
-    margin-left: 250px; /* Space for the sidebar */
-    padding: 20px;
-    transition: margin-left 0.3s ease; /* Smooth transition for main content */
-}
-
-.main.collapsed {
-    margin-left: 0; /* No space for sidebar when collapsed */
-}
-
-.header {
-    background-color: #f8f9fa;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-}
-
-.header .profile-dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.header .profile-dropdown img {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-}
-
-.header .profile-dropdown .dropdown-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    z-index: 1000;
-}
-
-.header .profile-dropdown:hover .dropdown-menu {
-    display: block;
-}
-
-.header .profile-dropdown .dropdown-menu a {
-    display: block;
-    padding: 10px;
-    color: #333;
-    text-decoration: none;
-}
-
-.header .profile-dropdown .dropdown-menu a:hover {
-    background-color: #f1f1f1;
-}
-
-    @media (max-width: 768px) {
-    .sidebar {
-        position: absolute;
-        width: 250px;
-       
-        transform: translateX(-100%); /* Hide sidebar off-screen */
-        display: block; /* Show sidebar when collapsed */
-    }
-
-    .main {
-        margin-left: 0; /* No space for sidebar on mobile */
-        transition: margin-left 0.3s ease; /* Smooth transition for main content */
-    }
-
-    .sidebar.collapsed {
-        transform: translateX(0); /* Show sidebar when expanded */
-    }
-
-    .sidebar .toggle-btn {
-        display: block; /* Show toggle button on mobile */
-    }
-}
-
-   @media (max-width: 576px) {
-    .sidebar-heading {
-        font-size: 14px;
-    }
-
-    .sidebar ul li a {
-        font-size: 14px;
-    }
-
-    .header {
-        padding: 5px 10px;
-    }
-
-    .header .profile-dropdown img {
-        width: 30px;
-        height: 30px;
-    }
-  }
-  </style>
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    
- <div class="sidebar" id="sidebar">
-    <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
-    <div class="sidebar-heading">
-        <img src="../img/logo.png" alt="Logo">
-        <div>Event Judging System</div>
-    </div>
-    <ul>
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
+        <div class="sidebar-heading">
+            <img src="../img/logo.png" alt="Logo">
+            <div>Event Judging System</div>
+        </div>
+        <ul>
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
             <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
             <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
             <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
-
         </ul>
-  </div>
+    </div>
 
-<!-- Header -->
-<div class="header">
-            <div>
-                <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+    <div class="header">
+        <div>
+            <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+        </div>
+        <div class="profile-dropdown">
+            <div style="font-size:small;"><?php echo htmlspecialchars($name); ?></div>
+            <div class="dropdown-menu">
+                <a href="edit_organizer.php">Account Settings</a>
+                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
-            <div class="profile-dropdown">
-                <div style="font-size:small;"><?php echo $name; ?></div>
-                <div class="dropdown-menu">
-                    <a href="edit_organizer.php">Account Settings</a>
-                    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
-                </div>
-            </div>
-      </div>
+        </div>
+    </div>
 
-      <div class="main" id="main-content">
+    <div class="main" id="main-content">
         <div class="container">
-            <h1><?php echo $se_name; ?> Settings</h1>
+            <h1><?php echo htmlspecialchars($se_name); ?> Settings</h1>
             
             <div class="col-md-10">
                 <ul class="breadcrumb">
                     <li><a href="selection.php">Dashboard</a></li>
                     <li><a href="home.php">List of Events</a></li>
-                    <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
+                    <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo urlencode($sub_event_id); ?>&se_name=<?php echo urlencode($se_name); ?>"><?php echo htmlspecialchars($se_name); ?> Settings</a></li>
                     <li>Add Criteria</li>
                 </ul>
             </div>
-            <br><br><br>
-            <form method="POST">
-                <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
-                <input value="<?php echo $se_name; ?>" name="se_name" type="hidden" />
+
+            <form method="POST" onsubmit="return validateForm()">
+                <input value="<?php echo htmlspecialchars($sub_event_id); ?>" name="sub_event_id" type="hidden" />
+                <input value="<?php echo htmlspecialchars($se_name); ?>" name="se_name" type="hidden" />
                 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -384,11 +338,12 @@
                                         $n1=0;
                                         while($n1<8) { 
                                             $n1++;
-                                            $cont_query = $conn->query("SELECT * FROM criteria WHERE criteria_ctr='$n1' AND subevent_id='$sub_event_id'") or die(mysql_error());
-                                            if($cont_query->rowCount()>0) {
-                                            } else {
-                                                echo "<option>".$n1."</option>";
+                                            $cont_query = $conn->prepare("SELECT * FROM criteria WHERE criteria_ctr=? AND subevent_id=?");
+                                            $cont_query->execute([$n1, $sub_event_id]);
+                                            if($cont_query->rowCount() > 0) {
+                                                continue;
                                             }
+                                            echo "<option value='" . htmlspecialchars($n1) . "'>" . htmlspecialchars($n1) . "</option>";
                                         } 
                                         ?>
                                     </select>
@@ -404,7 +359,7 @@
                                         $n5=0;
                                         while($n5<100) {
                                             $n5=$n5+5;
-                                            echo "<option>$n5</option>";
+                                            echo "<option value='" . htmlspecialchars($n5) . "'>" . htmlspecialchars($n5) . "</option>";
                                         }
                                         ?>
                                     </select>
@@ -412,7 +367,7 @@
                             </tr>
                             <tr>
                                 <td colspan="3" style="text-align: right;">
-                                    <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
+                                    <a href="sub_event_details_edit.php?sub_event_id=<?php echo urlencode($sub_event_id); ?>&se_name=<?php echo urlencode($se_name); ?>" class="btn btn-default">Back</a>
                                     <button type="submit" name="add_crit" class="btn btn-success">Save</button>
                                 </td>
                             </tr>
@@ -423,9 +378,8 @@
         </div>
     </div>
 
-    <center><?php include("footer.php") ?></center>
-
     <script>
+        // Toggle sidebar functionality
         document.addEventListener("DOMContentLoaded", function() {
             const toggleButtons = document.querySelectorAll(".toggle-btn");
             const sidebar = document.getElementById("sidebar");
@@ -438,6 +392,23 @@
                 });
             });
         });
+
+        // Form validation
+        function validateForm() {
+            const criteriaDesc = document.querySelector('input[name="criteria"]').value.trim();
+            if (!criteriaDesc) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Please enter a criteria description',
+                    confirmButtonColor: '#3085d6'
+                });
+                return false;
+            }
+            return true;
+        }
     </script>
+
+    <center><?php include("footer.php") ?></center>
 </body>
 </html>
