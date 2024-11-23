@@ -1,60 +1,79 @@
 <?php 
 include('header.php');
 include('session.php');
-    
+
 $sub_event_id = $_GET['sub_event_id'];
 $se_name = $_GET['se_name'];
 
 // Handle form submission
 if(isset($_POST['add_crit'])) {
+    // Get form data
+    $criteria_ctr = $_POST['crit_ctr'];
+    $criteria = $_POST['criteria'];
+    $percentage = $_POST['percentage'];
+    $subevent_id = $_POST['sub_event_id'];
+    
     try {
-        // Get form data
-        $criteria_ctr = $_POST['crit_ctr'];
-        $criteria = $_POST['criteria'];
-        $percentage = $_POST['percentage'];
-        $sub_event_id = $_POST['sub_event_id'];
-        
-        // Validate total percentage doesn't exceed 100%
-        $stmt = $conn->prepare("SELECT SUM(percentage) as total FROM criteria WHERE subevent_id = ?");
-        $stmt->execute([$sub_event_id]);
+        // First, check if total percentage won't exceed 100%
+        $sql = "SELECT SUM(percentage) as total FROM criteria WHERE subevent_id = :subevent_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':subevent_id', $subevent_id);
+        $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $current_total = $result['total'] ?? 0;
         
-        if(($current_total + $percentage) > 100) {
+        $current_total = $result['total'] ?? 0;
+        $new_total = $current_total + $percentage;
+        
+        if($new_total > 100) {
             echo "<script>
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Total percentage cannot exceed 100%',
+                    text: 'Total percentage cannot exceed 100%. Current total is {$current_total}%.',
                     confirmButtonColor: '#3085d6'
                 });
             </script>";
         } else {
-            // Insert new criteria
-            $stmt = $conn->prepare("INSERT INTO criteria (criteria_ctr, criteria, percentage, subevent_id) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$criteria_ctr, $criteria, $percentage, $sub_event_id]);
+            // Insert the new criteria
+            $sql = "INSERT INTO criteria (criteria_ctr, criteria, percentage, subevent_id) 
+                   VALUES (:criteria_ctr, :criteria, :percentage, :subevent_id)";
             
-            // Redirect back to sub event details page with success message
-            $se_name = $_POST['se_name'];
-            echo "<script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Criteria added successfully!',
-                    confirmButtonColor: '#3085d6'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'sub_event_details_edit.php?sub_event_id=" . $sub_event_id . "&se_name=" . urlencode($se_name) . "';
-                    }
-                });
-            </script>";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':criteria_ctr', $criteria_ctr);
+            $stmt->bindParam(':criteria', $criteria);
+            $stmt->bindParam(':percentage', $percentage);
+            $stmt->bindParam(':subevent_id', $subevent_id);
+            
+            if($stmt->execute()) {
+                echo "<script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Criteria added successfully!',
+                        confirmButtonColor: '#3085d6'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = 'sub_event_details_edit.php?sub_event_id=" . $subevent_id . "&se_name=" . urlencode($se_name) . "';
+                        }
+                    });
+                </script>";
+            } else {
+                echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to add criteria. Please try again.',
+                        confirmButtonColor: '#3085d6'
+                    });
+                </script>";
+            }
         }
     } catch(PDOException $e) {
         echo "<script>
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Database error occurred: " . addslashes($e->getMessage()) . "',
+                text: 'Database error occurred. Please try again.',
                 confirmButtonColor: '#3085d6'
             });
         </script>";
@@ -154,77 +173,6 @@ if(isset($_POST['add_crit'])) {
             color: #fff;
         }
 
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 250px;
-            background-color: #27293d;
-            color: #fff;
-            padding-top: 20px;
-            transition: all 0.3s;
-            overflow: hidden;
-            z-index: 1000;
-        }
-
-        .sidebar.collapsed {
-            transform: translateX(-100%);
-        }
-
-        .sidebar-heading {
-            text-align: center;
-            padding: 10px 0;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .sidebar-heading img {
-            max-width: 100px;
-            max-height: 100px;
-        }
-
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar ul li {
-            padding: 15px 20px;
-            transition: all 0.3s;
-        }
-
-        .sidebar ul li a {
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar ul li a i {
-            margin-right: 10px;
-        }
-
-        .main {
-            margin-left: 250px;
-            padding: 20px;
-            transition: margin-left 0.3s ease;
-        }
-
-        .main.collapsed {
-            margin-left: 0;
-        }
-
-        .header {
-            background-color: #f8f9fa;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-        }
-
         .breadcrumb {
             list-style: none;
             padding: 10px;
@@ -250,6 +198,112 @@ if(isset($_POST['add_crit'])) {
 
         .breadcrumb a {
             color: #007bff;
+            text-decoration: none;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #27293d;
+            color: #fff;
+            padding-top: 20px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar .toggle-btn {
+            position: absolute;
+            top: 10px;
+            right: 18px;
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sidebar-heading {
+            text-align: center;
+            padding: 10px 0;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-heading img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px 20px;
+        }
+
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+
+        .main {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        .main.collapsed {
+            margin-left: 0;
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-dropdown .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .profile-dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .profile-dropdown .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            color: #333;
             text-decoration: none;
         }
 
@@ -315,12 +369,12 @@ if(isset($_POST['add_crit'])) {
                 <ul class="breadcrumb">
                     <li><a href="selection.php">Dashboard</a></li>
                     <li><a href="home.php">List of Events</a></li>
-                    <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo urlencode($sub_event_id); ?>&se_name=<?php echo urlencode($se_name); ?>"><?php echo htmlspecialchars($se_name); ?> Settings</a></li>
+                    <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo urlencode($se_name); ?>"><?php echo htmlspecialchars($se_name); ?> Settings</a></li>
                     <li>Add Criteria</li>
                 </ul>
             </div>
-
-            <form method="POST" onsubmit="return validateForm()">
+            
+            <form method="POST">
                 <input value="<?php echo htmlspecialchars($sub_event_id); ?>" name="sub_event_id" type="hidden" />
                 <input value="<?php echo htmlspecialchars($se_name); ?>" name="se_name" type="hidden" />
                 
@@ -338,12 +392,11 @@ if(isset($_POST['add_crit'])) {
                                         $n1=0;
                                         while($n1<8) { 
                                             $n1++;
-                                            $cont_query = $conn->prepare("SELECT * FROM criteria WHERE criteria_ctr=? AND subevent_id=?");
-                                            $cont_query->execute([$n1, $sub_event_id]);
-                                            if($cont_query->rowCount() > 0) {
-                                                continue;
+                                            $cont_query = $conn->query("SELECT * FROM criteria WHERE criteria_ctr='$n1' AND subevent_id='$sub_event_id'") or die(mysql_error());
+                                            if($cont_query->rowCount()>0) {
+                                            } else {
+                                                echo "<option>".htmlspecialchars($n1)."</option>";
                                             }
-                                            echo "<option value='" . htmlspecialchars($n1) . "'>" . htmlspecialchars($n1) . "</option>";
                                         } 
                                         ?>
                                     </select>
@@ -359,7 +412,7 @@ if(isset($_POST['add_crit'])) {
                                         $n5=0;
                                         while($n5<100) {
                                             $n5=$n5+5;
-                                            echo "<option value='" . htmlspecialchars($n5) . "'>" . htmlspecialchars($n5) . "</option>";
+                                            echo "<option>".htmlspecialchars($n5)."</option>";
                                         }
                                         ?>
                                     </select>
@@ -367,7 +420,7 @@ if(isset($_POST['add_crit'])) {
                             </tr>
                             <tr>
                                 <td colspan="3" style="text-align: right;">
-                                    <a href="sub_event_details_edit.php?sub_event_id=<?php echo urlencode($sub_event_id); ?>&se_name=<?php echo urlencode($se_name); ?>" class="btn btn-default">Back</a>
+                                    <a href="sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id);?>&se_name=<?php echo urlencode($se_name);?>" class="btn btn-default">Back</a>
                                     <button type="submit" name="add_crit" class="btn btn-success">Save</button>
                                 </td>
                             </tr>
@@ -378,8 +431,9 @@ if(isset($_POST['add_crit'])) {
         </div>
     </div>
 
+    <center><?php include("footer.php") ?></center>
+
     <script>
-        // Toggle sidebar functionality
         document.addEventListener("DOMContentLoaded", function() {
             const toggleButtons = document.querySelectorAll(".toggle-btn");
             const sidebar = document.getElementById("sidebar");
@@ -392,23 +446,6 @@ if(isset($_POST['add_crit'])) {
                 });
             });
         });
-
-        // Form validation
-        function validateForm() {
-            const criteriaDesc = document.querySelector('input[name="criteria"]').value.trim();
-            if (!criteriaDesc) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Please enter a criteria description',
-                    confirmButtonColor: '#3085d6'
-                });
-                return false;
-            }
-            return true;
-        }
     </script>
-
-    <center><?php include("footer.php") ?></center>
 </body>
 </html>
