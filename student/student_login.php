@@ -1,4 +1,12 @@
 <?php
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
+?>
+<?php
 session_start();
 include('../admin/dbcon.php');
 
@@ -17,11 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Retrieve the sub_event_id from the database or set it accordingly
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $_SESSION['sub_event_id'] = $row['sub_event_id'];  // Adjust based on your table structure
-        header('Location: ../index.php');
+        header('Location: ../index');
         exit();
     } else {
         $_SESSION['login_error'] = 'Invalid Student ID';
-        header('Location: index.php');
+        header('Location: index');
         exit();
     }
 }
