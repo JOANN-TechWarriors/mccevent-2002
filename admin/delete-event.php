@@ -32,7 +32,7 @@ try {
         $stmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $stmt = $conn->prepare("DELETE FROM upcoming_event WHERE id = :event_id");
+        $stmt = $conn->prepare("DELETE FROM upcoming_events WHERE id = :event_id");
         $stmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
         $stmt->execute();
 
