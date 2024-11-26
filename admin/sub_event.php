@@ -123,21 +123,65 @@ if (isset($_POST['activation'])) {
 <?php
 
 if (isset($_POST['edit_sub_event'])) {
-    $sub_event_id = $_POST['sub_event_id'];
-    $sub_event_name = $_POST['sub_event_name'];
-    $event_date = $_POST['event_date'];
-    $event_time = $_POST['event_time'];
-    $event_place = $_POST['event_place'];
+    // Validate and sanitize inputs
+    $sub_event_id = filter_input(INPUT_POST, 'sub_event_id', FILTER_VALIDATE_INT);
+    $sub_event_name = filter_input(INPUT_POST, 'sub_event_name', FILTER_SANITIZE_STRING);
+    $event_date = filter_input(INPUT_POST, 'event_date', FILTER_SANITIZE_STRING);
+    $event_time = filter_input(INPUT_POST, 'event_time', FILTER_SANITIZE_STRING);
+    $event_place = filter_input(INPUT_POST, 'event_place', FILTER_SANITIZE_STRING);
+    $update_hash = filter_input(INPUT_POST, 'update_hash', FILTER_SANITIZE_STRING);
 
-    $stmt = $conn->prepare("UPDATE sub_event SET event_name = ?, eventdate = ?, eventtime = ?, place = ? WHERE subevent_id = ?");
-    $result = $stmt->execute([$sub_event_name, $event_date, $event_time, $event_place, $sub_event_id]);
-
-    if ($result) {
-        $_SESSION['swal_success'] = true;
-        $_SESSION['swal_message'] = "Sub-Event " . htmlspecialchars($sub_event_name) . " updated successfully!";
-    } else {
+    // Verify update hash before proceeding
+    if (!$sub_event_id || !$update_hash) {
         $_SESSION['swal_error'] = true;
-        $_SESSION['swal_message'] = "There was a problem updating the sub-event.";
+        $_SESSION['swal_message'] = "Invalid input parameters.";
+        header("Location: sub_event.php?id=" . $main_event_id);
+        exit();
+    }
+
+    // Fetch the stored hash for this sub-event
+    $hash_stmt = $conn->prepare("SELECT update_hash FROM sub_event WHERE subevent_id = ?");
+    $hash_stmt->execute([$sub_event_id]);
+    $stored_hash = $hash_stmt->fetchColumn();
+
+    // Verify the bcrypt hash
+    if (!$stored_hash || !password_verify($update_hash, $stored_hash)) {
+        $_SESSION['swal_error'] = true;
+        $_SESSION['swal_message'] = "Authentication failed. Unable to update sub-event.";
+        header("Location: sub_event.php?id=" . $main_event_id);
+        exit();
+    }
+
+    // Prepare and execute the update
+    $stmt = $conn->prepare("UPDATE sub_event SET 
+        event_name = ?, 
+        eventdate = ?, 
+        eventtime = ?, 
+        place = ? 
+        WHERE subevent_id = ?");
+    
+    try {
+        $result = $stmt->execute([
+            $sub_event_name, 
+            $event_date, 
+            $event_time, 
+            $event_place, 
+            $sub_event_id
+        ]);
+
+        if ($result) {
+            $_SESSION['swal_success'] = true;
+            $_SESSION['swal_message'] = "Sub-Event " . htmlspecialchars($sub_event_name) . " updated successfully!";
+        } else {
+            $_SESSION['swal_error'] = true;
+            $_SESSION['swal_message'] = "There was a problem updating the sub-event.";
+        }
+    } catch (PDOException $e) {
+        // Log the error (in a production environment)
+        error_log("Sub-event update error: " . $e->getMessage());
+        
+        $_SESSION['swal_error'] = true;
+        $_SESSION['swal_message'] = "An unexpected error occurred.";
     }
 
     // Redirect to prevent form resubmission
@@ -145,6 +189,21 @@ if (isset($_POST['edit_sub_event'])) {
     exit();
 }
 
+// When creating/adding a sub-event, generate and store a unique update hash
+function generateUpdateHash($sub_event_id) {
+    // Generate a random, cryptographically secure hash
+    $update_hash = bin2hex(random_bytes(16)); // 32-character hex string
+    
+    // Hash the update hash with bcrypt
+    $bcrypt_hash = password_hash($update_hash, PASSWORD_BCRYPT);
+    
+    // Store the bcrypt hash in the database
+    global $conn;
+    $stmt = $conn->prepare("UPDATE sub_event SET update_hash = ? WHERE subevent_id = ?");
+    $stmt->execute([$bcrypt_hash, $sub_event_id]);
+    
+    return $update_hash; // Return the original hash to be sent to the user
+}
 ?>
 
 <?php
