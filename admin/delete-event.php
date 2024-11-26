@@ -14,11 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Start transaction
         $conn->beginTransaction();
 
-        // Delete related records in sub_event table
-        $stmt = $conn->prepare("DELETE FROM sub_event WHERE mainevent_id = :event_id");
-        $stmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
-        $stmt->execute();
-
         // Delete the event from main_event table
         $stmt = $conn->prepare("DELETE FROM main_event WHERE mainevent_id = :event_id");
         $stmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
