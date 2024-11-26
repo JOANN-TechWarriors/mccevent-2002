@@ -708,7 +708,7 @@ if (isset($_POST['edit_event'])) {
     document.querySelectorAll('.tile').forEach(function(tile) {
         tile.addEventListener('click', function() {
             var eventId = this.getAttribute('data-id');
-            window.location.href = 'sub_event.php?id=' + eventId;
+            window.location.href = 'sub_event?id=' + eventId;
         });
     });
 });
