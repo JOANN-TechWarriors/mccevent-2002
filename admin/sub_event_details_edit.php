@@ -1237,7 +1237,7 @@ if (isset($_POST['delete_crit'])) {
     if ($check_pass == $org_pass) {
         $id = $_POST['selector'];
         $N = count($id);
-        for ($i = 0; $i < $N; $i++) {
+        for ($i = 0; $i < $N; $i++) { 
             $conn->query("DELETE FROM criteria WHERE criteria_id='$id[$i]'");
         }
         ?>
