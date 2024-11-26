@@ -1,20 +1,19 @@
 <?php
 session_start();
-include('dbcon.php'); // Include your PDO database connection file
+include('dbcon.php');
 
-// Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate and sanitize input
-    $event_id = isset($_POST['event_id']) ? intval($_POST['event_id']) : null;
+    // Ensure the event_id is properly filtered and converted to an integer
+    $event_id = filter_input(INPUT_POST, 'event_id', FILTER_VALIDATE_INT);
 
-    if ($event_id === null || $event_id <= 0) {
+    if ($event_id === false || $event_id === null) {
         echo json_encode([
             'success' => false, 
             'message' => 'Invalid event ID',
-            'post_data' => $_POST // Log the received POST data
+            'post_data' => $_POST
         ]);
         exit;
     }
@@ -23,40 +22,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Start transaction
         $conn->beginTransaction();
 
-        // First, check if the event exists
-        $check_stmt = $conn->prepare("SELECT COUNT(*) FROM main_event WHERE mainevent_id = :event_id");
-        $check_stmt->bindParam(':event_id', $event_id);
-        $check_stmt->execute();
-        $event_exists = $check_stmt->fetchColumn();
-
-        if (!$event_exists) {
-            echo json_encode([
-                'success' => false, 
-                'message' => 'Event not found',
-                'event_id' => $event_id
-            ]);
-            exit;
-        }
-
         // Delete related records in sub_event table
         $stmt = $conn->prepare("DELETE FROM sub_event WHERE mainevent_id = :event_id");
-        $stmt->bindParam(':event_id', $event_id);
-        $sub_event_result = $stmt->execute();
+        $stmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
+        $stmt->execute();
 
         // Delete the event from main_event table
         $stmt = $conn->prepare("DELETE FROM main_event WHERE mainevent_id = :event_id");
-        $stmt->bindParam(':event_id', $event_id);
-        $main_event_result = $stmt->execute();
+        $stmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
+        $result = $stmt->execute();
 
         // Commit transaction
         $conn->commit();
 
-        echo json_encode([
-            'success' => true, 
-            'message' => 'Event deleted successfully',
-            'sub_event_deleted' => $sub_event_result,
-            'main_event_deleted' => $main_event_result
-        ]);
+        // Check if any rows were actually deleted
+        if ($result && $stmt->rowCount() > 0) {
+            echo json_encode([
+                'success' => true, 
+                'message' => 'Event deleted successfully',
+                'deleted_rows' => $stmt->rowCount()
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'No event found with the given ID',
+                'event_id' => $event_id
+            ]);
+        }
     } catch (PDOException $e) {
         // Rollback transaction on error
         $conn->rollBack();

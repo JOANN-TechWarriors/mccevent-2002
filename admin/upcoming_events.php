@@ -501,25 +501,31 @@
                     },
                     dataType: 'json',
                     success: function(response) {
-                        console.log('Full Server Response:', response);
+                        console.log('Server Response:', response);
                         
                         if (response.success) {
-                            // Directly remove the event from FullCalendar
+                            // Remove event from FullCalendar
                             var event = calendar.getEventById(id);
                             if (event) {
                                 event.remove();
                             }
                             
+                            // Close and reset modal
                             $('#updateEventModal').modal('hide');
                             $('#updateeventID, #updateeventTitle, #updateeventStart, #updateeventEnd').val('');
                             
+                            // Success message
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Event Deleted Successfully',
                                 showConfirmButton: false,
                                 timer: 1500
                             });
+
+                            // Optional: Refresh calendar view
+                            calendar.refetchEvents();
                         } else {
+                            // Error message if deletion fails
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
