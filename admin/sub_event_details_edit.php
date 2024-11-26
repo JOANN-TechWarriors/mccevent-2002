@@ -803,7 +803,7 @@ if ($tp_status == "active") {
           icon: 'success'
       }).then((result) => {
           if (result.isConfirmed) {
-              window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+              window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
           }
       });
   </script>
@@ -819,7 +819,7 @@ if ($tp_status == "active") {
           icon: 'success'
       }).then((result) => {
           if (result.isConfirmed) {
-              window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+              window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
           }
       });
   </script>
@@ -1200,7 +1200,7 @@ if (isset($_POST['delete_cont'])) {
                         text: 'Contestant(s) successfully deleted.',
                         icon: 'success',
                         didClose: () => {
-                            window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                         }
                     });
                 </script>
@@ -1214,7 +1214,7 @@ if (isset($_POST['delete_cont'])) {
                         text: 'No contestants selected for deletion.',
                         icon: 'error',
                         didClose: () => {
-                            window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                         }
                     });
                 </script>
