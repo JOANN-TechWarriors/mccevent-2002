@@ -1255,37 +1255,93 @@ if (isset($_POST['delete_cont'])) {
 
 <?php
 if (isset($_POST['delete_judge'])) {
-
     $org_pass = $_POST['org_pass'];
     $sub_event_id = $_POST['sub_event_id'];
     $se_name = $_POST['se_name'];
 
-    // Assume $check_pass contains the correct organizer password
-    // Perform your password check here
-    if ($check_pass == $org_pass) {
-        $id = $_POST['selector'];
-        $N = count($id);
-        for ($i = 0; $i < $N; $i++) {
-            $conn->query("DELETE FROM judges WHERE judge_id='$id[$i]'");
-            $conn->query("DELETE FROM sub_results WHERE judge_id='$id[$i]'");
+    try {
+        // Use password_verify for secure password comparison
+        if (password_verify($org_pass, $check_pass)) {
+            // Validate that $id is an array and contains valid integers
+            $id = $_POST['selector'];
+            
+            if (is_array($id) && !empty($id)) {
+                // Prepare DELETE statements
+                $delete_judge_stmt = $conn->prepare("DELETE FROM judges WHERE judge_id = :judge_id");
+                $delete_result_stmt = $conn->prepare("DELETE FROM sub_results WHERE judge_id = :judge_id");
+                
+                // Start a transaction
+                $conn->beginTransaction();
+                
+                foreach ($id as $judge_id) {
+                    // Validate the judge ID
+                    $judge_id = filter_var($judge_id, FILTER_VALIDATE_INT);
+                    
+                    if ($judge_id !== false) {
+                        // Delete from judges
+                        $delete_judge_stmt->bindParam(':judge_id', $judge_id, PDO::PARAM_INT);
+                        $delete_judge_stmt->execute();
+                        
+                        // Delete from sub_results
+                        $delete_result_stmt->bindParam(':judge_id', $judge_id, PDO::PARAM_INT);
+                        $delete_result_stmt->execute();
+                    }
+                }
+                
+                // Commit the transaction
+                $conn->commit();
+                
+                // Success message
+                echo '<script>
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Judge(s) successfully deleted.",
+                        icon: "success"
+                    }).then(function() {
+                        window.location = "sub_event_details_edit.php?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
+                    });
+                </script>';
+            } else {
+                // No judges selected
+                echo '<script>
+                    Swal.fire({
+                        title: "Error!",
+                        text: "No judges selected for deletion.",
+                        icon: "error"
+                    }).then(function() {
+                        window.location = "sub_event_details_edit.php?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
+                    });
+                </script>';
+            }
+        } else {
+            // Invalid password
+            echo '<script>
+                Swal.fire({
+                    title: "Error!",
+                    text: "Confirmation password is invalid!",
+                    icon: "error"
+                }).then(function() {
+                    window.location = "sub_event_details_edit.php?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
+                });
+            </script>';
         }
-        echo '<script>
-            Swal.fire({
-                title: "Deleted!",
-                text: "Judge(s) successfully deleted.",
-                icon: "success"
-            }).then(function() {
-                window.location = "sub_event_details_edit.php?sub_event_id=' . $sub_event_id . '&se_name=' . $se_name . '";
-            });
-        </script>';
-    } else {
+    } catch (PDOException $e) {
+        // Rollback the transaction in case of error
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        
+        // Log the error or handle it appropriately
+        error_log('Database error: ' . $e->getMessage());
+        
+        // Show error message to user
         echo '<script>
             Swal.fire({
                 title: "Error!",
-                text: "Confirmation password is invalid!",
+                text: "An error occurred while deleting judges.",
                 icon: "error"
             }).then(function() {
-                window.location = "sub_event_details_edit.php?sub_event_id=' . $sub_event_id . '&se_name=' . $se_name . '";
+                window.location = "sub_event_details_edit.php?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
             });
         </script>';
     }
