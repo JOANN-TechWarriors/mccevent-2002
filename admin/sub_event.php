@@ -277,23 +277,49 @@ if (isset($_POST['edit_se'])) {
     $se_new_name = $_POST['se_new_name'];
     $entered_pass = $_POST['entered_pass'];
 
-    if ($entered_pass == $check_pass) {
-        // Update sub_event
-        $stmt = $conn->prepare("UPDATE sub_event SET event_name = :new_name WHERE subevent_id = :id");
-        $stmt->execute([':new_name' => $se_new_name, ':id' => $sub_event_id]);
+    try {
+        // Use password_verify for secure password comparison
+        if (password_verify($entered_pass, $check_pass)) {
+            // Validate input
+            if (empty(trim($se_new_name))) {
+                $_SESSION['swal_error'] = true;
+                $_SESSION['swal_message'] = "Sub-Event name cannot be empty.";
+            } else {
+                // Prepare UPDATE statement
+                $stmt = $conn->prepare("UPDATE sub_event SET event_name = :new_name WHERE subevent_id = :id");
+                
+                // Bind parameters
+                $stmt->bindParam(':new_name', $se_new_name, PDO::PARAM_STR);
+                $stmt->bindParam(':id', $sub_event_id, PDO::PARAM_INT);
+                
+                // Execute the update
+                $stmt->execute();
 
-        $_SESSION['swal_success'] = true;
-        $_SESSION['swal_message'] = "Sub-Event title: " . htmlspecialchars($se_name) . " was changed to: " . htmlspecialchars($se_new_name) . " successfully!";
-    } else {
+                // Check if the update was successful
+                if ($stmt->rowCount() > 0) {
+                    $_SESSION['swal_success'] = true;
+                    $_SESSION['swal_message'] = "Sub-Event title: " . htmlspecialchars($se_name) . " was changed to: " . htmlspecialchars($se_new_name) . " successfully!";
+                } else {
+                    $_SESSION['swal_error'] = true;
+                    $_SESSION['swal_message'] = "No changes were made. The sub-event may not exist.";
+                }
+            }
+        } else {
+            $_SESSION['swal_error'] = true;
+            $_SESSION['swal_message'] = "Confirmation did not match. Try again.";
+        }
+    } catch (PDOException $e) {
+        // Log the error
+        error_log('Database error during sub-event edit: ' . $e->getMessage());
+
         $_SESSION['swal_error'] = true;
-        $_SESSION['swal_message'] = "Confirmation did not match. Try again.";
+        $_SESSION['swal_message'] = "An error occurred while updating the sub-event. Please try again.";
     }
 
     // Redirect to prevent form resubmission
-    header("Location: sub_event.php?id=" . $main_event_id);
+    header("Location: sub_event.php?id=" . htmlspecialchars($main_event_id));
     exit();
 }
-
 ?>
 
 <!DOCTYPE html>
