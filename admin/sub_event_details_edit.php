@@ -1347,41 +1347,100 @@ if (isset($_POST['delete_judge'])) {
     }
 }
 ?>
-
 <?php
 if (isset($_POST['delete_crit'])) {
-
     $org_pass = $_POST['org_pass'];
     $sub_event_id = $_POST['sub_event_id'];
     $se_name = $_POST['se_name'];
 
-    if ($check_pass == $org_pass) {
-        $id = $_POST['selector'];
-        $N = count($id);
-        for ($i = 0; $i < $N; $i++) { 
-            $conn->query("DELETE FROM criteria WHERE criteria_id='$id[$i]'");
-        }
-        ?>
-        <script>
-            Swal.fire({
-                title: 'Success!',
-                text: 'Criteria(s) successfully deleted.',
-                icon: 'success',
-                onClose: () => {
-                    window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+    try {
+        // Use password_verify for secure password comparison
+        if (password_verify($org_pass, $check_pass)) {
+            // Validate that $id is an array and contains valid integers
+            $id = $_POST['selector'];
+            
+            if (is_array($id) && !empty($id)) {
+                // Prepare DELETE statement
+                $delete_criteria_stmt = $conn->prepare("DELETE FROM criteria WHERE criteria_id = :criteria_id");
+                
+                // Start a transaction
+                $conn->beginTransaction();
+                
+                foreach ($id as $criteria_id) {
+                    // Validate the criteria ID
+                    $criteria_id = filter_var($criteria_id, FILTER_VALIDATE_INT);
+                    
+                    if ($criteria_id !== false) {
+                        // Delete criteria
+                        $delete_criteria_stmt->bindParam(':criteria_id', $criteria_id, PDO::PARAM_INT);
+                        $delete_criteria_stmt->execute();
+                    }
                 }
-            });
-        </script>
-        <?php
-    } else {
+                
+                // Commit the transaction
+                $conn->commit();
+                
+                // Success message
+                ?>
+                <script>
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Criteria(s) successfully deleted.',
+                        icon: 'success',
+                        didClose: () => {
+                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                        }
+                    });
+                </script>
+                <?php
+            } else {
+                // No criteria selected
+                ?>
+                <script>
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'No criteria selected for deletion.',
+                        icon: 'error',
+                        didClose: () => {
+                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                        }
+                    });
+                </script>
+                <?php
+            }
+        } else {
+            // Invalid password
+            ?>
+            <script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Confirmation password is invalid!',
+                    icon: 'error',
+                    didClose: () => {
+                        window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                    }
+                });
+            </script>
+            <?php
+        }
+    } catch (PDOException $e) {
+        // Rollback the transaction in case of error
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        
+        // Log the error or handle it appropriately
+        error_log('Database error: ' . $e->getMessage());
+        
+        // Show error message to user
         ?>
         <script>
             Swal.fire({
                 title: 'Error!',
-                text: 'Confirmation password is invalid!',
+                text: 'An error occurred while deleting criteria.',
                 icon: 'error',
-                onClose: () => {
-                    window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+                didClose: () => {
+                    window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                 }
             });
         </script>
