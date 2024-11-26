@@ -481,31 +481,39 @@
         }).then((result) => {
           if (result.isConfirmed) {
             $.ajax({
-              url: 'delete-event.php',
-              type: 'POST',
-              data: { id: id },
-              success: function(data) {
-                calendar.refetchEvents();
-                $('#updateEventModal').modal('hide');
-                $('#updateeventID').val('');
-                $('#updateeventTitle').val('');
-                $('#updateeventStart').val('');
-                $('#updateeventEnd').val('');
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Event Deleted Successfully',
-                  showConfirmButton: false,
-                  timer: 1500
-                });
-              },
-              error: function(xhr, status, error) {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error',
-                  text: 'An error occurred while deleting the event: ' + error
-                });
-              }
-            });
+  url: 'delete-event.php',
+  type: 'POST',
+  data: { id: id },
+  success: function(data) {
+    if (data.success) {
+      calendar.refetchEvents();
+      $('#updateEventModal').modal('hide');
+      $('#updateeventID').val('');
+      $('#updateeventTitle').val('');
+      $('#updateeventStart').val('');
+      $('#updateeventEnd').val('');
+      Swal.fire({
+        icon: 'success',
+        title: 'Event Deleted Successfully',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: data.message || 'An error occurred while deleting the event.'
+      });
+    }
+  },
+  error: function(xhr, status, error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'An error occurred while deleting the event: ' + error
+    });
+  }
+});
           }
         });
       } else {
