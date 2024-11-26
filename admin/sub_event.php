@@ -212,25 +212,60 @@ if (isset($_POST['deleteSubEvent'])) {
     $entered_pass = $_POST['entered_pass'];
     $sub_event_name = $_POST['sub_event_name'];
 
-    if ($entered_pass == $check_pass) {
-        // Delete related data
-        $conn->query("DELETE FROM contestants WHERE subevent_id='$sub_event_id'");
-        $conn->query("DELETE FROM criteria WHERE subevent_id='$sub_event_id'");
-        $conn->query("DELETE FROM judges WHERE subevent_id='$sub_event_id'");
-        $conn->query("DELETE FROM sub_results WHERE subevent_id='$sub_event_id'");
-        
-        // Delete the sub-event
-        $conn->query("DELETE FROM sub_event WHERE subevent_id='$sub_event_id'");
+    try {
+        // Use password_verify for secure password comparison
+        if (password_verify($entered_pass, $check_pass)) {
+            // Start a transaction
+            $conn->beginTransaction();
 
-        $_SESSION['swal_success'] = true;
-        $_SESSION['swal_message'] = "Sub-Event: " . htmlspecialchars($sub_event_name) . " and its related data deleted successfully.";
-    } else {
+            // Prepare DELETE statements for related tables
+            $delete_contestants_stmt = $conn->prepare("DELETE FROM contestants WHERE subevent_id = :subevent_id");
+            $delete_criteria_stmt = $conn->prepare("DELETE FROM criteria WHERE subevent_id = :subevent_id");
+            $delete_judges_stmt = $conn->prepare("DELETE FROM judges WHERE subevent_id = :subevent_id");
+            $delete_results_stmt = $conn->prepare("DELETE FROM sub_results WHERE subevent_id = :subevent_id");
+            $delete_subevent_stmt = $conn->prepare("DELETE FROM sub_event WHERE subevent_id = :subevent_id");
+
+            // Bind the sub_event_id parameter
+            $delete_contestants_stmt->bindParam(':subevent_id', $sub_event_id, PDO::PARAM_INT);
+            $delete_criteria_stmt->bindParam(':subevent_id', $sub_event_id, PDO::PARAM_INT);
+            $delete_judges_stmt->bindParam(':subevent_id', $sub_event_id, PDO::PARAM_INT);
+            $delete_results_stmt->bindParam(':subevent_id', $sub_event_id, PDO::PARAM_INT);
+            $delete_subevent_stmt->bindParam(':subevent_id', $sub_event_id, PDO::PARAM_INT);
+
+            // Execute delete statements
+            $delete_contestants_stmt->execute();
+            $delete_criteria_stmt->execute();
+            $delete_judges_stmt->execute();
+            $delete_results_stmt->execute();
+            $delete_subevent_stmt->execute();
+
+            // Commit the transaction
+            $conn->commit();
+
+            // Set success session variables
+            $_SESSION['swal_success'] = true;
+            $_SESSION['swal_message'] = "Sub-Event: " . htmlspecialchars($sub_event_name) . " and its related data deleted successfully.";
+        } else {
+            // Set error session variables for invalid password
+            $_SESSION['swal_error'] = true;
+            $_SESSION['swal_message'] = "Confirmation did not match. Try again.";
+        }
+    } catch (PDOException $e) {
+        // Rollback the transaction in case of error
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+
+        // Log the error
+        error_log('Database error during sub-event deletion: ' . $e->getMessage());
+
+        // Set error session variables
         $_SESSION['swal_error'] = true;
-        $_SESSION['swal_message'] = "Confirmation did not match. Try again.";
+        $_SESSION['swal_message'] = "An error occurred while deleting the sub-event. Please try again.";
     }
 
     // Redirect to prevent form resubmission
-    header("Location: sub_event.php?id=" . $main_event_id);
+    header("Location: sub_event.php?id=" . htmlspecialchars($main_event_id));
     exit();
 }
 ?>
