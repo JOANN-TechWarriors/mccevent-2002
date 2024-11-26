@@ -467,8 +467,9 @@
     calendar.render();
 
     $('#deleteEventButton').off('click').on('click', function() {
-  var id = $('#updateeventID').val();
-  if (id) {
+  var event_id = $('#updateeventID').val();
+  
+  if (event_id) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -482,12 +483,12 @@
         $.ajax({
           url: 'delete-event.php',
           type: 'POST',
-          data: { id: id },
-          dataType: 'json', // Expect JSON response
+          data: { event_id: event_id },
+          dataType: 'json',
           success: function(response) {
-            if (response.status === 'success') {
+            if (response && response.success) {
               // Remove the event from the calendar
-              var eventToRemove = calendar.getEventById(id);
+              var eventToRemove = calendar.getEventById(event_id);
               if (eventToRemove) {
                 eventToRemove.remove();
               }
@@ -505,23 +506,38 @@
               Swal.fire({
                 icon: 'success',
                 title: 'Event Deleted Successfully',
+                text: response.message || 'Event has been removed',
                 showConfirmButton: false,
                 timer: 1500
               });
+
+              // Refresh the calendar events
+              calendar.refetchEvents();
             } else {
               // Handle failure scenario
               Swal.fire({
                 icon: 'error',
                 title: 'Deletion Failed',
-                text: response.message || 'Unable to delete the event'
+                text: response ? response.message : 'Unable to delete the event'
               });
             }
           },
           error: function(xhr, status, error) {
+            // Parse error response if possible
+            let errorMessage = 'An unexpected error occurred';
+            try {
+              const responseText = xhr.responseText;
+              const errorResponse = JSON.parse(responseText);
+              errorMessage = errorResponse.message || errorMessage;
+            } catch (e) {
+              // If parsing fails, use the original error
+              errorMessage = error || 'Unknown error occurred';
+            }
+
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'An error occurred while deleting the event: ' + error
+              text: 'Failed to delete event: ' + errorMessage
             });
           }
         });
