@@ -867,7 +867,7 @@ if (isset($_POST['edit_se'])) {
                         </button>
                         
                         <?php if ($subEvent['status'] != 'deactivated'): ?>
-                        <a href="sub_event_details.php?sub_event_id=<?php echo htmlspecialchars($subEvent['subevent_id']); ?>&se_name=<?php echo urlencode($subEvent['event_name']); ?>" 
+                        <a href="sub_event_details?sub_event_id=<?php echo htmlspecialchars($subEvent['subevent_id']); ?>&se_name=<?php echo urlencode($subEvent['event_name']); ?>" 
                            class="btn btn-primary">
                             <i class="icon icon-cog"></i>
                         </a>
