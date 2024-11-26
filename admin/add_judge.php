@@ -425,41 +425,7 @@
             </div>
         </div>
     </div>
-
-    <?php 
-
-            if(isset($_POST['add_crit']))
-            {
-                
-                $se_name=$_POST['se_name'];
-                $sub_event_id=$_POST['sub_event_id'];
-                
-                $percentage=$_POST['percentage'];
-                $crit_ctr=$_POST['crit_ctr'];
-                $criteria=$_POST['criteria'];
-            
-            /* criteria */
-            
-                $conn->query("insert into criteria(criteria,subevent_id,criteria_ctr,percentage)values('$criteria','$sub_event_id','$crit_ctr','$percentage')");
-            
-            ?>
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-            <script>
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Criteria <?php echo $criteria; ?> added successfully!',
-                    icon: 'success'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
-                    }
-                });
-            </script>
-
-            <?php  
-            
-            
-            } ?>
+    
 
     <center><?php include("footer.php") ?></center>
 
