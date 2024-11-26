@@ -25,7 +25,7 @@ date_default_timezone_set('Asia/Manila');
 
 // Check if token is set and valid
 if (!isset($_GET['token']) || !preg_match('/^[a-zA-Z0-9]{32}$/', $_GET['token'])) {
-    header('Location: lock.php');
+    header('Location: lock');
     exit();
 }
 
