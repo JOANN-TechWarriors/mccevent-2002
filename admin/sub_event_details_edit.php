@@ -1147,45 +1147,88 @@ if(isset($_POST['save_settings']))
 
 <?php
 if (isset($_POST['delete_cont'])) {
-
+    // Ensure proper password hashing and verification
     $org_pass = $_POST['org_pass'];
     $sub_event_id = $_POST['sub_event_id'];
     $se_name = $_POST['se_name'];
 
-    if ($check_pass == $org_pass) {
+    // Verify the password using password_verify()
+    // Assuming $check_pass is the stored bcrypt hashed password
+    if (password_verify($org_pass, $check_pass)) {
+        // Sanitize and validate input to prevent SQL injection
         $id = $_POST['selector'];
-        $N = count($id);
-        for ($i = 0; $i < $N; $i++) {
-            $conn->query("DELETE FROM contestants WHERE contestant_id='$id[$i]'");
-            $conn->query("DELETE FROM sub_results WHERE contestant_id='$id[$i]'");
-        }
-        ?>
-        <script>
-            Swal.fire({
-                title: 'Success!',
-                text: 'Contestant(s) successfully deleted.',
-                icon: 'success',
-                onClose: () => {
-                    window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+        
+        // Validate that $id is an array and contains valid integers
+        if (is_array($id)) {
+            $N = count($id);
+            
+            // Use prepared statements for secure deletion
+            $delete_contestant_stmt = $conn->prepare("DELETE FROM contestants WHERE contestant_id = ?");
+            $delete_result_stmt = $conn->prepare("DELETE FROM sub_results WHERE contestant_id = ?");
+            
+            for ($i = 0; $i < $N; $i++) {
+                // Ensure the ID is a valid integer
+                $contestant_id = filter_var($id[$i], FILTER_VALIDATE_INT);
+                
+                if ($contestant_id !== false) {
+                    // Bind and execute prepared statements
+                    $delete_contestant_stmt->bind_param("i", $contestant_id);
+                    $delete_contestant_stmt->execute();
+                    
+                    $delete_result_stmt->bind_param("i", $contestant_id);
+                    $delete_result_stmt->execute();
                 }
-            });
-        </script>
-        <?php
+            }
+            
+            // Close prepared statements
+            $delete_contestant_stmt->close();
+            $delete_result_stmt->close();
+            
+            // Success message
+            ?>
+            <script>
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Contestant(s) successfully deleted.',
+                    icon: 'success',
+                    didClose: () => {
+                        window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                    }
+                });
+            </script>
+            <?php
+        } else {
+            // Handle case where no contestants were selected
+            ?>
+            <script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'No contestants selected for deletion.',
+                    icon: 'error',
+                    didClose: () => {
+                        window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                    }
+                });
+            </script>
+            <?php
+        }
     } else {
+        // Invalid password
         ?>
         <script>
             Swal.fire({
                 title: 'Error!',
                 text: 'Confirmation password is invalid!',
                 icon: 'error',
-                onClose: () => {
-                    window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+                didClose: () => {
+                    window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                 }
             });
         </script>
         <?php
     }
 }
+
 ?>
 
 <?php

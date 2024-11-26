@@ -2,11 +2,12 @@
 // Start the session (if not already started)
 session_start();
 
-// Connect to the database
+// Connect to database
 $host = '127.0.0.1';
 $username = 'u510162695_judging_root';
-$password = '1Judging_root'; // Replace with the actual password
+$password = '1Judging_root';  // Replace with the actual password
 $dbname = 'u510162695_judging';
+
 
 $conn = new mysqli($host, $username, $password, $dbname);
 
@@ -14,32 +15,45 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get the current date
-$current_date = date('Y-m-d');
+// Check if the user is logged in and has an organizer ID
+if (!isset($_SESSION['id'])) {
+    die("User not logged in");
+}
 
-// Prepare the SQL query to transfer events
-$sql = "INSERT INTO main_event (event_name, status, organizer_id, sy, date_start, date_end, place, banner)
-        SELECT title, 'active', organizer_id, '2023-2024', start_date, end_date, 'default place', 'default_banner.jpg'
-        FROM upcoming_events
-        WHERE DATE(start_date) = ?";
+$organizer_id = $_SESSION['id'];
 
-$stmt = $conn->prepare($sql);
+// Prepare and execute the query to retrieve events for the specific organizer
+$sql = "SELECT * FROM upcoming_events WHERE organizer_id = ?";
+$stmt = mysqli_prepare($conn, $sql);
 
 if (!$stmt) {
-    die("Error preparing statement: " . $conn->error);
+    die("Error preparing statement: " . mysqli_error($conn));
 }
 
-// Bind the current date to the query
-$stmt->bind_param("s", $current_date);
+mysqli_stmt_bind_param($stmt, "i", $organizer_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
-// Execute the query
-if ($stmt->execute()) {
-    echo "Events transferred successfully.";
-} else {
-    echo "Error transferring events: " . $stmt->error;
+if (!$result) {
+    die("Error retrieving events: " . mysqli_error($conn));
 }
+
+// Format events for FullCalendar
+$events = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $event = array(
+        'id' => $row['id'],
+        'title' => $row['title'],
+        'start' => $row['start_date'],
+        'end' => $row['end_date']
+    );
+    $events[] = $event;
+}
+
+// Return events as JSON
+echo json_encode($events);
 
 // Close statement and connection
-$stmt->close();
-$conn->close();
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
 ?>
