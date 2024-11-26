@@ -467,54 +467,74 @@
     calendar.render();
 
     $('#deleteEventButton').off('click').on('click', function() {
-      var id = $('#updateeventID').val();
-      if (id) {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            $.ajax({
-              url: 'delete-event.php',
-              type: 'POST',
-              data: { id: id },
-              success: function(data) {
-                calendar.refetchEvents();
-                $('#updateEventModal').modal('hide');
-                $('#updateeventID').val('');
-                $('#updateeventTitle').val('');
-                $('#updateeventStart').val('');
-                $('#updateeventEnd').val('');
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Event Deleted Successfully',
-                  showConfirmButton: false,
-                  timer: 1500
-                });
-              },
-              error: function(xhr, status, error) {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error',
-                  text: 'An error occurred while deleting the event: ' + error
-                });
+  var id = $('#updateeventID').val();
+  if (id) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: 'delete-event.php',
+          type: 'POST',
+          data: { id: id },
+          dataType: 'json', // Expect JSON response
+          success: function(response) {
+            if (response.status === 'success') {
+              // Remove the event from the calendar
+              var eventToRemove = calendar.getEventById(id);
+              if (eventToRemove) {
+                eventToRemove.remove();
               }
+
+              // Close the modal
+              $('#updateEventModal').modal('hide');
+
+              // Clear form fields
+              $('#updateeventID').val('');
+              $('#updateeventTitle').val('');
+              $('#updateeventStart').val('');
+              $('#updateeventEnd').val('');
+
+              // Show success message
+              Swal.fire({
+                icon: 'success',
+                title: 'Event Deleted Successfully',
+                showConfirmButton: false,
+                timer: 1500
+              });
+            } else {
+              // Handle failure scenario
+              Swal.fire({
+                icon: 'error',
+                title: 'Deletion Failed',
+                text: response.message || 'Unable to delete the event'
+              });
+            }
+          },
+          error: function(xhr, status, error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'An error occurred while deleting the event: ' + error
             });
           }
         });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Event ID is required for deletion.'
-        });
       }
     });
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Event ID is required for deletion.'
+    });
+  }
+});
 
     $('#cancelEventButton').off('click').on('click', function() {
       $('#updateeventID').val('');

@@ -1,34 +1,49 @@
 <?php
-session_start();
-include('dbcon.php'); // Include your PDO database connection file
+include('dbcon.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $event_id = $_POST['event_id'];
+header('Content-Type: application/json');
+
+if (isset($_POST['id'])) {
+    $id = $_POST['id'];
 
     try {
-        // Start transaction
-        $conn->beginTransaction();
+        // Prepare and execute delete statement
+        $stmt = $conn->prepare("DELETE FROM events WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        
+        if ($stmt->execute()) {
+            // Check if any rows were actually deleted
+            if ($stmt->affected_rows > 0) {
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Event deleted successfully'
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'No event found with the given ID'
+                ]);
+            }
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to delete event'
+            ]);
+        }
 
-        // Delete related records in sub_event table
-        $stmt = $conn->prepare("DELETE FROM sub_event WHERE mainevent_id = :event_id");
-        $stmt->bindParam(':event_id', $event_id);
-        $stmt->execute();
-
-        // Delete the event from main_event table
-        $stmt = $conn->prepare("DELETE FROM main_event WHERE mainevent_id = :event_id");
-        $stmt->bindParam(':event_id', $event_id);
-        $stmt->execute();
-
-        // Commit transaction
-        $conn->commit();
-
-        echo json_encode(['success' => true, 'message' => 'Event deleted successfully']);
-    } catch (PDOException $e) {
-        // Rollback transaction on error
-        $conn->rollBack();
-        echo json_encode(['success' => false, 'message' => 'Failed to delete event: ' . $e->getMessage()]);
+        $stmt->close();
+    } catch (Exception $e) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Database error: ' . $e->getMessage()
+        ]);
     }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'No event ID provided'
+    ]);
 }
+
+$conn->close();
 ?>
