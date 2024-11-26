@@ -470,7 +470,7 @@
     $('#deleteEventButton').off('click').on('click', function() {
       var id = $('#updateeventID').val();
       if (id) {
-        Swal.fire({
+        Swal.fire({ 
           title: 'Are you sure?',
           text: "You won't be able to revert this!",
           icon: 'warning',
