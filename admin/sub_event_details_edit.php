@@ -427,10 +427,7 @@ $se_row = $se_query->fetch();
 
 
   <div class="container">
-
     <div class="span15">
-
-
 
       <br />
       <div class="col-md-10">
@@ -448,8 +445,6 @@ $se_row = $se_query->fetch();
       </div>
 
   
-
-
       <form method="POST">
         <input value="<?php echo $sub_event_id; ?>" name="sub_event_id" type="hidden" />
 
@@ -470,13 +465,9 @@ $se_row = $se_query->fetch();
             data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>CRITERIA</strong></a>
           <a class="btn btn-info" style="margin-bottom: 4px !important;" data-toggle="collapse" data-target="#textpoll" data-parent="#myGroup"><i class="icon-chevron-right"></i> <strong>VOTE POLL</strong></a>  
 
-
-
           <div style="border: 0px;" class="accordion-group">
 
           <div class="collapse indent" id="contestant" >
-                
-                
                 <section id="download-bootstrap" style="width:100%;">
                     <div class="page-header">
                     <h1>Contestant's Settings 
@@ -757,9 +748,6 @@ $se_row = $se_query->fetch();
 
   </tbody>
 
-
-    
-       
   <?php }
  else
  { ?>
@@ -783,12 +771,7 @@ $se_row = $se_query->fetch();
 
   </div>
 
-
-
   </div>
-
-
-
   </form>
   </div>
   </div>
@@ -837,14 +820,11 @@ if ($tp_status == "active") {
 ?>
 
 
-
-
   <?php 
 
 if(isset($_POST['save_settings']))
 {
-    
-    
+     
     $sub_event_id=$_POST['sub_event_id'];
     
  /* contestants */
@@ -1072,7 +1052,6 @@ if(isset($_POST['save_settings']))
  /* judges */
  
  
- 
   /* criteria */
    $c1_name=$_POST['crit1']; 
     $cp1=$_POST['cp1'];
@@ -1154,10 +1133,6 @@ if(isset($_POST['save_settings']))
     }
     /* end criteria */
    
-
-   
-  
-  
  ?>
   <script>
 
@@ -1168,8 +1143,6 @@ if(isset($_POST['save_settings']))
  
  
 } ?>
-
-
 
 
 <?php
@@ -1215,8 +1188,6 @@ if (isset($_POST['delete_cont'])) {
 }
 ?>
 
-
-
 <?php
 if (isset($_POST['delete_judge'])) {
 
@@ -1255,7 +1226,6 @@ if (isset($_POST['delete_judge'])) {
     }
 }
 ?>
-
 
 <?php
 if (isset($_POST['delete_crit'])) {
@@ -1298,20 +1268,7 @@ if (isset($_POST['delete_crit'])) {
     }
 }
 ?>
-<!-- <script>
-  
-  document.getElementById("toggle-btn").addEventListener("click", function () {
-        var sidebar = document.getElementById("sidebar");
-        var mainContent = document.getElementById("main-content");
 
-        sidebar.classList.toggle("collapsed");
-        mainContent.classList.toggle("collapsed");
-
-        var isCollapsed = sidebar.classList.contains("collapsed");
-        this.innerHTML = isCollapsed ? "☰" : "☰";
-    });
-
-  </script> -->
   <script>
 document.addEventListener("DOMContentLoaded", function() {
     const toggleButtons = document.querySelectorAll(".toggle-btn");
@@ -1330,11 +1287,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </script>
 
-
-
-  <!-- Le javascript
-    ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
+  <!-- Le javascript -->
 
   <script src="..//assets/js/jquery.js"></script>
   <script src="..//assets/js/bootstrap-transition.js"></script>
@@ -1355,5 +1308,4 @@ document.addEventListener("DOMContentLoaded", function() {
   <script src="..//assets/js/application.js"></script>
 
 </body>
-
 </html>
