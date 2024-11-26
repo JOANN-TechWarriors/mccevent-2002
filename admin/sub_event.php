@@ -849,19 +849,19 @@ if (isset($_POST['edit_se'])) {
                         <button class="btn btn-success" 
                                 onclick="showEditModal(<?php echo htmlspecialchars($subEvent['subevent_id']); ?>, '<?php echo htmlspecialchars($subEvent['event_name']); ?>')" 
                                 <?php echo $subEvent['status'] == 'deactivated' ? 'disabled' : ''; ?>>
-                            <i class="icon-pencil"></i>
+                            <i class="icon-pencil">Edit</i>
                         </button>
                         
                         <button class="btn btn-danger" 
                                 onclick="showDeleteModal(<?php echo htmlspecialchars($subEvent['subevent_id']); ?>, '<?php echo htmlspecialchars($subEvent['event_name']); ?>')" 
                                 <?php echo $subEvent['status'] == 'deactivated' ? 'disabled' : ''; ?>>
-                            <i class="icon-trash"></i>
+                            <i class="icon-trash">Delete</i>
                         </button>
                         
                         <?php if ($subEvent['status'] != 'deactivated'): ?>
                         <a href="sub_event_details.php?sub_event_id=<?php echo htmlspecialchars($subEvent['subevent_id']); ?>&se_name=<?php echo urlencode($subEvent['event_name']); ?>" 
                            class="btn btn-primary">
-                            <i class="icon icon-cog"></i>
+                            <i class="icon icon-cog">Settings</i>
                         </a>
                         <?php endif; ?>
                     
