@@ -867,7 +867,6 @@ if (isset($_POST['edit_se'])) {
                         
                         <button class="btn <?php echo $subEvent['status'] == 'activated' ? 'btn-warning' : 'btn-danger'; ?>"
                                 onclick="showActivationModal(<?php echo htmlspecialchars($subEvent['subevent_id']); ?>, '<?php echo htmlspecialchars($subEvent['event_name']); ?>', '<?php echo htmlspecialchars($subEvent['status']); ?>')">
-                            <i class="fa-solid <?php echo $subEvent['status'] == 'activated' ? 'fa-eye' : 'fa-eye-slash'; ?>"></i>
                         </button>
                     </div>
                 </td>
