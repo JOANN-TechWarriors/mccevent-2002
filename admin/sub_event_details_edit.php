@@ -1144,7 +1144,6 @@ if(isset($_POST['save_settings']))
  
 } ?>
 
-
 <?php
 if (isset($_POST['delete_cont'])) {
     // Ensure proper password hashing and verification
@@ -1152,58 +1151,74 @@ if (isset($_POST['delete_cont'])) {
     $sub_event_id = $_POST['sub_event_id'];
     $se_name = $_POST['se_name'];
 
-    // Verify the password using password_verify()
-    // Assuming $check_pass is the stored bcrypt hashed password
-    if (password_verify($org_pass, $check_pass)) {
-        // Sanitize and validate input to prevent SQL injection
-        $id = $_POST['selector'];
-        
-        // Validate that $id is an array and contains valid integers
-        if (is_array($id)) {
-            $N = count($id);
+    try {
+        // Verify the password using password_verify()
+        // Assuming $check_pass is the stored bcrypt hashed password
+        if (password_verify($org_pass, $check_pass)) {
+            // Validate that $id is an array and contains valid integers
+            $id = $_POST['selector'];
             
-            // Use prepared statements for secure deletion
-            $delete_contestant_stmt = $conn->prepare("DELETE FROM contestants WHERE contestant_id = ?");
-            $delete_result_stmt = $conn->prepare("DELETE FROM sub_results WHERE contestant_id = ?");
-            
-            for ($i = 0; $i < $N; $i++) {
-                // Ensure the ID is a valid integer
-                $contestant_id = filter_var($id[$i], FILTER_VALIDATE_INT);
+            if (is_array($id) && !empty($id)) {
+                // Prepare DELETE statements
+                $delete_contestant_stmt = $conn->prepare("DELETE FROM contestants WHERE contestant_id = :contestant_id");
+                $delete_result_stmt = $conn->prepare("DELETE FROM sub_results WHERE contestant_id = :contestant_id");
                 
-                if ($contestant_id !== false) {
-                    // Bind and execute prepared statements
-                    $delete_contestant_stmt->bind_param("i", $contestant_id);
-                    $delete_contestant_stmt->execute();
+                // Start a transaction
+                $conn->beginTransaction();
+                
+                foreach ($id as $contestant_id) {
+                    // Validate the contestant ID
+                    $contestant_id = filter_var($contestant_id, FILTER_VALIDATE_INT);
                     
-                    $delete_result_stmt->bind_param("i", $contestant_id);
-                    $delete_result_stmt->execute();
-                }
-            }
-            
-            // Close prepared statements
-            $delete_contestant_stmt->close();
-            $delete_result_stmt->close();
-            
-            // Success message
-            ?>
-            <script>
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Contestant(s) successfully deleted.',
-                    icon: 'success',
-                    didClose: () => {
-                        window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                    if ($contestant_id !== false) {
+                        // Delete from contestants
+                        $delete_contestant_stmt->bindParam(':contestant_id', $contestant_id, PDO::PARAM_INT);
+                        $delete_contestant_stmt->execute();
+                        
+                        // Delete from sub_results
+                        $delete_result_stmt->bindParam(':contestant_id', $contestant_id, PDO::PARAM_INT);
+                        $delete_result_stmt->execute();
                     }
-                });
-            </script>
-            <?php
+                }
+                
+                // Commit the transaction
+                $conn->commit();
+                
+                // Success message
+                ?>
+                <script>
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Contestant(s) successfully deleted.',
+                        icon: 'success',
+                        didClose: () => {
+                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                        }
+                    });
+                </script>
+                <?php
+            } else {
+                // No contestants selected
+                ?>
+                <script>
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'No contestants selected for deletion.',
+                        icon: 'error',
+                        didClose: () => {
+                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                        }
+                    });
+                </script>
+                <?php
+            }
         } else {
-            // Handle case where no contestants were selected
+            // Invalid password
             ?>
             <script>
                 Swal.fire({
                     title: 'Error!',
-                    text: 'No contestants selected for deletion.',
+                    text: 'Confirmation password is invalid!',
                     icon: 'error',
                     didClose: () => {
                         window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
@@ -1212,13 +1227,21 @@ if (isset($_POST['delete_cont'])) {
             </script>
             <?php
         }
-    } else {
-        // Invalid password
+    } catch (PDOException $e) {
+        // Rollback the transaction in case of error
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        
+        // Log the error or handle it appropriately
+        error_log('Database error: ' . $e->getMessage());
+        
+        // Show error message to user
         ?>
         <script>
             Swal.fire({
                 title: 'Error!',
-                text: 'Confirmation password is invalid!',
+                text: 'An error occurred while deleting contestants.',
                 icon: 'error',
                 didClose: () => {
                     window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
@@ -1228,7 +1251,6 @@ if (isset($_POST['delete_cont'])) {
         <?php
     }
 }
-
 ?>
 
 <?php
