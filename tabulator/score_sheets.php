@@ -335,7 +335,7 @@ include('..//admin/session.php');
                                             $judge_query = $conn->query("select * from judges where subevent_id='$se_id' order by judge_ctr") or die(mysql_error());
                                             while ($judge_row = $judge_query->fetch()) {
                                             ?>
-                                                <a style="margin-top: 4px !important;" title="click to rank contestant score's for this judge" target="_blank" href="view_score_sheet.php?event_id=<?php echo $se_id; ?>&judge_id=<?php echo $judge_row['judge_id']; ?>" class="btn btn-info">
+                                                <a style="margin-top: 4px !important;" title="click to rank contestant score's for this judge" target="_blank" href="view_score_sheet?event_id=<?php echo $se_id; ?>&judge_id=<?php echo $judge_row['judge_id']; ?>" class="btn btn-info">
                                                     <i class="icon icon-tasks"></i> <?php echo $judge_row['judge_ctr']; ?>. <?php echo $judge_row['fullname']; ?>
                                                 </a>
                                             <?php } ?>
