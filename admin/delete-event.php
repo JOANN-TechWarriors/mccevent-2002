@@ -1,14 +1,15 @@
 <?php
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Disable error reporting to prevent unwanted output
+error_reporting(0);
+ini_set('display_errors', 0);
 
 session_start();
 include('dbcon.php'); // Include your PDO database connection file
 
-// Set proper JSON header
+// Set proper JSON header at the very beginning
 header('Content-Type: application/json');
 
+// Ensure no output before JSON
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Validate event_id
@@ -17,9 +18,6 @@ try {
         }
 
         $event_id = $_POST['event_id'];
-        
-        // Log the received event ID
-        error_log("Received event_id for deletion: " . $event_id);
 
         // Start transaction
         $conn->beginTransaction();
@@ -27,40 +25,22 @@ try {
         // Delete related records in sub_event table
         $stmt = $conn->prepare("DELETE FROM sub_event WHERE mainevent_id = :event_id");
         $stmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
-        $subEventResult = $stmt->execute();
-        
-        // Log sub_event deletion result
-        error_log("Sub-event deletion result: " . ($subEventResult ? "Success" : "Failure"));
+        $stmt->execute();
 
         // Delete the event from main_event table
         $stmt = $conn->prepare("DELETE FROM main_event WHERE mainevent_id = :event_id");
         $stmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
-        $mainEventResult = $stmt->execute();
-        
-        // Log main_event deletion result
-        error_log("Main event deletion result: " . ($mainEventResult ? "Success" : "Failure"));
-
-        // Check if any rows were actually deleted
-        $totalDeletedRows = $stmt->rowCount();
-        
-        // Log total deleted rows
-        error_log("Total rows deleted: " . $totalDeletedRows);
+        $stmt->execute();
 
         // Commit transaction
         $conn->commit();
 
-        // Ensure at least one row was deleted
-        if ($totalDeletedRows > 0) {
-            // Output JSON response
-            echo json_encode([
-                'success' => true, 
-                'message' => 'Event deleted successfully',
-                'deletedRows' => $totalDeletedRows
-            ]);
-            exit;
-        } else {
-            throw new Exception('No event found with the given ID');
-        }
+        // Output JSON response
+        echo json_encode([
+            'success' => true, 
+            'message' => 'Event deleted successfully'
+        ]);
+        exit;
 
     } else {
         // Invalid request method
@@ -71,9 +51,6 @@ try {
     if ($conn->inTransaction()) {
         $conn->rollBack();
     }
-
-    // Log the error
-    error_log("Deletion Error: " . $e->getMessage());
 
     // Output error as JSON
     echo json_encode([

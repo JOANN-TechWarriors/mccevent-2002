@@ -469,8 +469,6 @@
     $('#deleteEventButton').off('click').on('click', function() {
   var event_id = $('#updateeventID').val();
   
-  console.log("Attempting to delete event with ID:", event_id); // Debug log
-  
   if (event_id) {
     Swal.fire({
       title: 'Are you sure?',
@@ -488,11 +486,7 @@
           data: { event_id: event_id },
           dataType: 'json',
           success: function(response) {
-            console.log("Delete Event Response:", response); // Debug log
-            
             if (response && response.success) {
-              console.log("Deletion successful"); // Debug log
-              
               // Remove the event from the calendar
               var eventToRemove = calendar.getEventById(event_id);
               if (eventToRemove) {
@@ -517,11 +511,9 @@
                 timer: 1500
               });
 
-              // Force calendar refresh
+              // Refresh the calendar events
               calendar.refetchEvents();
             } else {
-              console.error("Deletion failed:", response); // Debug log
-              
               // Handle failure scenario
               Swal.fire({
                 icon: 'error',
@@ -531,15 +523,14 @@
             }
           },
           error: function(xhr, status, error) {
-            console.error("AJAX Error:", xhr.responseText, status, error); // Detailed error logging
-            
-            // Attempt to parse error response
+            // Parse error response if possible
             let errorMessage = 'An unexpected error occurred';
             try {
               const responseText = xhr.responseText;
               const errorResponse = JSON.parse(responseText);
               errorMessage = errorResponse.message || errorMessage;
             } catch (e) {
+              // If parsing fails, use the original error
               errorMessage = error || 'Unknown error occurred';
             }
 
