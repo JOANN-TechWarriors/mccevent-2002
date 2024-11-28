@@ -515,7 +515,7 @@ $se_row = $se_query->fetch();
                                     <td><img width="50" src="../img/<?php echo $cont_row['Picture']; ?>" /></td>
                                     <td><?php echo $cont_row['fullname']; ?></td>
                                     <td><?php echo $cont_row['AddOn']; ?></td>
-                                    <td width="10"><a title="Click to edit <?php echo $cont_row['fullname']; ?>  datas" href="edit_contestant.php?contestant_id=<?php echo $cont_row['contestant_id'];?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-success"><i class="icon icon-pencil"></i></a></td>
+                                    <td width="10"><a title="Click to edit <?php echo $cont_row['fullname']; ?>  datas" href="edit_contestant?contestant_id=<?php echo $cont_row['contestant_id'];?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-success"><i class="icon icon-pencil"></i></a></td>
                                     </tr>
                                     <?php } ?>
                                     <tr>
@@ -547,7 +547,7 @@ $se_row = $se_query->fetch();
                       class="btn btn-primary"><i class="icon icon-plus"></i></a>
                     &nbsp;<a title="Click to print Judge's Code for this Event" target="_blank"
                       title="Click to print judges code"
-                      href="print_judges.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
+                      href="print_judges?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
                       class="btn btn-info"><i class="icon icon-print"></i></a></h1>
                 </div>
                 <div class="table-container">
@@ -584,7 +584,7 @@ $se_row = $se_query->fetch();
                           <?php echo $judge_row['jtype']; ?>
                         </td>
                         <td width="10"><a title="Click to edit <?php echo $judge_row['fullname']; ?> datas"
-                            href="edit_judge.php?judge_id=<?php echo $jxx_id;?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>"
+                            href="edit_judge?judge_id=<?php echo $jxx_id;?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>"
                             class="btn btn-success"><i class="icon icon-pencil"></i></a>
 
                         </td>
@@ -650,7 +650,7 @@ $se_row = $se_query->fetch();
                   <?php echo $crit_row['percentage']; ?>
                 </td>
                 <td width="10"><a title="Click to edit Criteria: <?php echo $crit_row['criteria']; ?> datas"
-                    href="edit_criteria.php?crit_id=<?php echo $crit_id;?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>"
+                    href="edit_criteria?crit_id=<?php echo $crit_id;?>&sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>"
                     class="btn btn-success"><i class="icon icon-pencil"></i></a></td>
               </tr>
               <?php } ?>
