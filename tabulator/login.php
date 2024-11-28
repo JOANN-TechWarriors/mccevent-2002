@@ -48,7 +48,7 @@ function sendEmailNotification($adminEmail, $logDetails) {
         $mail->Port = 587;
 
         //Recipients
-        $mail->setFrom('joannrebamonte80@gmail.com', 'Securityt');
+        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Alert');
         $mail->addAddress($adminEmail);
 
         // Content
