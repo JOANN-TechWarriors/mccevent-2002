@@ -62,8 +62,378 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="shortcut icon" href="../images/logo copy.png"/>
     <style>
-        /* Add your CSS styles here */
-        /* ... */
+               /* Modal Background */
+    .modal {
+        display: none; /* Hidden by default */
+       
+    }
+
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+    width: 100vw;      /* Ensures full width */
+    overflow-y: auto;  /* Enables vertical scrolling */
+    overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
+}
+
+    .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #27293d;
+    color: #fff;
+    padding-top: 20px;
+    transition: all 0.3s;
+    overflow: hidden;
+    z-index: 1000; /* Ensure the sidebar is above the main content */
+    }
+
+    .sidebar.collapsed {
+    transform: translateX(-100%); /* Move sidebar off-screen when collapsed */
+    }
+
+
+    .sidebar .toggle-btn {
+    position:absolute;
+    top: 10px;
+    right: 18px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.sidebar .toggle-btn i {
+    font-size: 20px;
+}
+
+.sidebar-heading {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.sidebar-heading img {
+    max-width: 100px;
+    max-height: 100px;
+}
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    padding: 15px 20px;
+    transition: all 0.3s;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+
+/*     .sidebar.collapsed ul li a i {
+        margin-right: 0;
+    }
+ */
+/*     .sidebar ul li a span {
+        display: inline-block;
+        transition: opacity 0.3s;
+    }
+
+    .sidebar.collapsed ul li a span {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+    } */
+
+    .sidebar ul li a:hover {
+    background-color: #1a1a2e;
+}
+
+    .main {
+    margin-left: 250px; /* Space for the sidebar */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Smooth transition for main content */
+}
+
+.main.collapsed {
+    margin-left: 0; /* No space for sidebar when collapsed */
+}
+
+    .header {
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.header .profile-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.header .profile-dropdown img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.header .profile-dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1000;
+}
+.header .profile-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.header .profile-dropdown .dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+}
+
+    .header .profile-dropdown .dropdown-menu a:hover {
+        background-color: #f1f1f1;
+    }
+
+    .tile-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    
+    }
+
+    .tile i {
+        font-size: 50px;
+        margin-bottom: 10px;
+    }
+
+    .tile h3 {
+        margin: 10px 0;
+    }
+
+    .tile p {
+        color: #ddd;
+    }
+
+    .tile:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 1024px) {
+        .tile-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        width: 250px;
+       
+        transform: translateX(-100%); /* Hide sidebar off-screen */
+        display: block; /* Show sidebar when collapsed */
+    }
+
+    .main {
+        margin-left: 0; /* No space for sidebar on mobile */
+        transition: margin-left 0.3s ease; /* Smooth transition for main content */
+    }
+
+    .sidebar.collapsed {
+        transform: translateX(0); /* Show sidebar when expanded */
+    }
+
+    .sidebar .toggle-btn {
+        display: block; /* Show toggle button on mobile */
+    }
+}
+    @media (max-width: 576px) {
+    .sidebar-heading {
+        font-size: 14px;
+    }
+
+    .sidebar ul li a {
+        font-size: 14px;
+    }
+
+    .header {
+        padding: 5px 10px;
+    }
+
+    .header .profile-dropdown img {
+        width: 30px;
+        height: 30px;
+    }
+    }
+
+    .tile {
+    position: relative;
+    /* ... other existing styles ... */
+    }
+
+    .dropdown {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: #f9f9f9;
+        min-width: 120px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {background-color: #f1f1f1}
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #f1f1f1;
+    }
+    .tile-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.tile {
+    background: #FEFFA7;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+}
+
+/* Dropdown Styling */
+.dropdown {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.dropbtn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: #000;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.dropbtn:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: transparent;
+    min-width: 160px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    z-index: 1;
+    padding: 8px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Button Styling */
+.dropdown-content a {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    transition: background-color 0.2s;
+}
+
+.dropdown-content a:last-child {
+    margin-bottom: 0;
+}
+
+.dropdown-content a.btn-success {
+    color: #28a745;
+}
+
+.dropdown-content a.btn-danger {
+    color: #dc3545;
+}
+
+.dropdown-content a:hover {
+    background-color: #f8f9fa;
+}
+
+/* Icon Styling */
+.dropdown-content a i {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* Event Content Styling */
+.tile h3 {
+    margin: 0 0 15px 0;
+    color: #000;
+    font-size: 18px;
+    padding-right: 30px; /* Make room for dropdown */
+}
+
+.tile p {
+    margin: 8px 0;
+    color: #666;
+    font-size: 14px;
+}
     </style>
 </head>
 <body>
