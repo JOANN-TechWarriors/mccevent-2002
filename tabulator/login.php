@@ -25,7 +25,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             
             $response['success'] = true;
             $response['message'] = 'Login successful';
-            $response['redirect'] = 'score_sheets.php';
+            $response['redirect'] = 'score_sheets';
         }
     } else {
         $response['success'] = false;
