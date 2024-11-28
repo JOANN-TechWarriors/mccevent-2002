@@ -10,25 +10,16 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // SQL to modify the judges table
-    $alter_judges_sql = "
-        ALTER TABLE `judges`
-        MODIFY `judge_id` BIGINT NOT NULL,
-        MODIFY `subevent_id` BIGINT NOT NULL;
+    // SQL to modify the id column
+    $alter_sql = "
+        ALTER TABLE `upcoming_events`
+        MODIFY `id` BIGINT NOT NULL;
     ";
 
-    // SQL to modify the criteria table
-    $alter_criteria_sql = "
-        ALTER TABLE `criteria`
-        MODIFY `criteria_id` BIGINT NOT NULL,
-        MODIFY `subevent_id` BIGINT NOT NULL;
-    ";
+    // Execute the SQL statement
+    $conn->exec($alter_sql);
 
-    // Execute the SQL statements
-    $conn->exec($alter_judges_sql);
-    $conn->exec($alter_criteria_sql);
-
-    echo "Tables modified successfully.";
+    echo "Column modified successfully.";
 
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
