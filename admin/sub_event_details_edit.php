@@ -803,7 +803,7 @@ if ($tp_status == "active") {
           icon: 'success'
       }).then((result) => {
           if (result.isConfirmed) {
-              window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+              window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
           }
       });
   </script>
@@ -819,7 +819,7 @@ if ($tp_status == "active") {
           icon: 'success'
       }).then((result) => {
           if (result.isConfirmed) {
-              window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+              window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
           }
       });
   </script>
@@ -1200,7 +1200,7 @@ if (isset($_POST['delete_cont'])) {
                         text: 'Contestant(s) successfully deleted.',
                         icon: 'success',
                         didClose: () => {
-                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                            window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                         }
                     });
                 </script>
@@ -1214,7 +1214,7 @@ if (isset($_POST['delete_cont'])) {
                         text: 'No contestants selected for deletion.',
                         icon: 'error',
                         didClose: () => {
-                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                            window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                         }
                     });
                 </script>
@@ -1229,7 +1229,7 @@ if (isset($_POST['delete_cont'])) {
                     text: 'Confirmation password is invalid!',
                     icon: 'error',
                     didClose: () => {
-                        window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                        window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                     }
                 });
             </script>
@@ -1252,7 +1252,7 @@ if (isset($_POST['delete_cont'])) {
                 text: 'An error occurred while deleting contestants.',
                 icon: 'error',
                 didClose: () => {
-                    window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                    window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                 }
             });
         </script>
@@ -1306,7 +1306,7 @@ if (isset($_POST['delete_judge'])) {
                         text: "Judge(s) successfully deleted.",
                         icon: "success"
                     }).then(function() {
-                        window.location = "sub_event_details_edit.php?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
+                        window.location = "sub_event_details_edit?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
                     });
                 </script>';
             } else {
@@ -1317,7 +1317,7 @@ if (isset($_POST['delete_judge'])) {
                         text: "No judges selected for deletion.",
                         icon: "error"
                     }).then(function() {
-                        window.location = "sub_event_details_edit.php?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
+                        window.location = "sub_event_details_edit?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
                     });
                 </script>';
             }
@@ -1329,7 +1329,7 @@ if (isset($_POST['delete_judge'])) {
                     text: "Confirmation password is invalid!",
                     icon: "error"
                 }).then(function() {
-                    window.location = "sub_event_details_edit.php?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
+                    window.location = "sub_event_details_edit?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
                 });
             </script>';
         }
@@ -1349,7 +1349,7 @@ if (isset($_POST['delete_judge'])) {
                 text: "An error occurred while deleting judges.",
                 icon: "error"
             }).then(function() {
-                window.location = "sub_event_details_edit.php?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
+                window.location = "sub_event_details_edit?sub_event_id=' . htmlspecialchars($sub_event_id) . '&se_name=' . htmlspecialchars($se_name) . '";
             });
         </script>';
     }
@@ -1396,7 +1396,7 @@ if (isset($_POST['delete_crit'])) {
                         text: 'Criteria(s) successfully deleted.',
                         icon: 'success',
                         didClose: () => {
-                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                            window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                         }
                     });
                 </script>
@@ -1410,7 +1410,7 @@ if (isset($_POST['delete_crit'])) {
                         text: 'No criteria selected for deletion.',
                         icon: 'error',
                         didClose: () => {
-                            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                            window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                         }
                     });
                 </script>
@@ -1425,7 +1425,7 @@ if (isset($_POST['delete_crit'])) {
                     text: 'Confirmation password is invalid!',
                     icon: 'error',
                     didClose: () => {
-                        window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                        window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                     }
                 });
             </script>
@@ -1448,7 +1448,7 @@ if (isset($_POST['delete_crit'])) {
                 text: 'An error occurred while deleting criteria.',
                 icon: 'error',
                 didClose: () => {
-                    window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
+                    window.location = 'sub_event_details_edit?sub_event_id=<?php echo htmlspecialchars($sub_event_id); ?>&se_name=<?php echo htmlspecialchars($se_name); ?>';
                 }
             });
         </script>
