@@ -603,7 +603,7 @@ if (substr($request, -4) == '.php') {
             formData.append('eventEnd', end);
 
             var bannerInput = $('#eventBanner')[0];
-            if (bannerInput && bannerInput.files.length > 0) {
+            if (bannerInput.files.length > 0) {
                 formData.append('eventBanner', bannerInput.files[0]);
             }
 
@@ -649,10 +649,10 @@ if (substr($request, -4) == '.php') {
                 }
             });
         });
-    });
 
-    var currentDateTime = roundToNearestHalfHour(new Date()).format('YYYY-MM-DDTHH:mm');
-    $('#eventStart, #eventEnd, #updateeventStart, #updateeventEnd').attr('min', currentDateTime).attr('step', '1800');
+        var currentDateTime = roundToNearestHalfHour(new Date()).format('YYYY-MM-DDTHH:mm');
+        $('#eventStart, #eventEnd, #updateeventStart, #updateeventEnd').attr('min', currentDateTime).attr(
+            'step', '1800');
     });
 
     function roundToNearestHalfHour(date) {
