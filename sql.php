@@ -13,28 +13,20 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// SQL to alter the mainevent_id column in main_event
-$alter_main_event_id_sql = "ALTER TABLE main_event MODIFY COLUMN mainevent_id INT(11) NOT NULL AUTO_INCREMENT";
-if ($conn->query($alter_main_event_id_sql) === TRUE) {
-    echo "Table main_event altered successfully for mainevent_id.<br>";
+// SQL to truncate main_event table
+$truncate_main_event_sql = "TRUNCATE TABLE main_event";
+if ($conn->query($truncate_main_event_sql) === TRUE) {
+    echo "All data deleted from main_event table and auto-increment reset.<br>";
 } else {
-    echo "Error altering main_event table for mainevent_id: " . $conn->error . "<br>";
+    echo "Error truncating main_event table: " . $conn->error . "<br>";
 }
 
-// SQL to alter the subevent_id column in sub_event
-$alter_sub_event_id_sql = "ALTER TABLE sub_event MODIFY COLUMN subevent_id INT(11) NOT NULL AUTO_INCREMENT";
-if ($conn->query($alter_sub_event_id_sql) === TRUE) {
-    echo "Table sub_event altered successfully for subevent_id.<br>";
+// SQL to truncate sub_event table
+$truncate_sub_event_sql = "TRUNCATE TABLE sub_event";
+if ($conn->query($truncate_sub_event_sql) === TRUE) {
+    echo "All data deleted from sub_event table and auto-increment reset.<br>";
 } else {
-    echo "Error altering sub_event table for subevent_id: " . $conn->error . "<br>";
-}
-
-// SQL to alter the mainevent_id column in sub_event
-$alter_sub_event_main_event_id_sql = "ALTER TABLE sub_event MODIFY COLUMN mainevent_id INT(11) NOT NULL";
-if ($conn->query($alter_sub_event_main_event_id_sql) === TRUE) {
-    echo "Table sub_event altered successfully for mainevent_id.<br>";
-} else {
-    echo "Error altering sub_event table for mainevent_id: " . $conn->error . "<br>";
+    echo "Error truncating sub_event table: " . $conn->error . "<br>";
 }
 
 // Close connection
