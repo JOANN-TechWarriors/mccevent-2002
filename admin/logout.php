@@ -13,5 +13,5 @@ session_unset();
 
  ?>
 <script>
-    window.location="../index.php";
+    window.location="../index";
 </script>
