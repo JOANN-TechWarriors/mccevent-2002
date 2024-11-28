@@ -13,16 +13,38 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// SQL to modify the columns
-$sql = "ALTER TABLE logs
-        MODIFY COLUMN latitude VARCHAR(100),
-        MODIFY COLUMN longitude VARCHAR(100)";
+// SQL to select all logs
+$sql = "SELECT * FROM logs";
+$result = $conn->query($sql);
 
-// Execute the query
-if ($conn->query($sql) === TRUE) {
-    echo "Table logs modified successfully.";
+// Check if there are any results
+if ($result->num_rows > 0) {
+    echo "<table border='1'>
+            <tr>
+                <th>ID</th>
+                <th>IP</th>
+                <th>Username</th>
+                <th>Timestamp</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Type</th>
+            </tr>";
+    
+    // Output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>" . htmlspecialchars($row["id"]) . "</td>
+                <td>" . htmlspecialchars($row["ip"]) . "</td>
+                <td>" . htmlspecialchars($row["username"]) . "</td>
+                <td>" . htmlspecialchars($row["timestamp"]) . "</td>
+                <td>" . htmlspecialchars($row["latitude"]) . "</td>
+                <td>" . htmlspecialchars($row["longitude"]) . "</td>
+                <td>" . htmlspecialchars($row["type"]) . "</td>
+              </tr>";
+    }
+    echo "</table>";
 } else {
-    echo "Error modifying table: " . $conn->error;
+    echo "0 results";
 }
 
 // Close connection
