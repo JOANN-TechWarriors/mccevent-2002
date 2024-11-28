@@ -129,42 +129,59 @@ if ($_SESSION['lockout_time'] < time()) {
     </div>
 
     <script>
-    // Function to get user's location
+    // Function to get user's location with high accuracy
     function getUserLocation(callback) {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                callback(latitude, longitude);
-            },
-            (error) => {
-                console.error('Error getting location:', error);
-                let message;
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        message = "Permission to access location was denied. Please enable it in your browser settings.";
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        message = "Location information is unavailable.";
-                        break;
-                    case error.TIMEOUT:
-                        message = "The request to get user location timed out.";
-                        break;
-                    case error.UNKNOWN_ERROR:
-                        message = "An unknown error occurred.";
-                        break;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    callback(latitude, longitude);
+                },
+                (error) => {
+                    console.error('Error getting location:', error);
+                    let message;
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            message = "Permission to access location was denied. Please enable it in your browser settings.";
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            message = "Location information is unavailable.";
+                            break;
+                        case error.TIMEOUT:
+                            message = "The request to get user location timed out.";
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            message = "An unknown error occurred.";
+                            break;
+                    }
+                    Swal.fire({
+                        title: "Location Error",
+                        text: message,
+                        icon: "warning",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: '#DC3545'
+                    });
+                    callback(null, null);
+                },
+                {
+                    enableHighAccuracy: true, // Request high accuracy
+                    timeout: 10000, // Timeout after 10 seconds
+                    maximumAge: 0 // No cached position
                 }
-                alert(message);
-                callback(null, null);
-            }
-        );
-    } else {
-        console.error('Geolocation is not supported by this browser.');
-        alert("Geolocation is not supported by this browser.");
-        callback(null, null);
+            );
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+            Swal.fire({
+                title: "Location Error",
+                text: "Geolocation is not supported by this browser.",
+                icon: "error",
+                confirmButtonText: "Ok",
+                confirmButtonColor: '#DC3545'
+            });
+            callback(null, null);
+        }
     }
-}
 
     let loginAttempts = <?php echo $_SESSION['login_attempts']; ?>;
     const maxAttempts = 3;
