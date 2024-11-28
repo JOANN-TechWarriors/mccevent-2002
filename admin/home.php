@@ -61,14 +61,21 @@ $stmt->bindParam(':organizer_id', $session_id);
 $stmt->execute();
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
 // Fetch the token from the admin table
 $admin_query = "SELECT token FROM admin WHERE id = :admin_id";
 $admin_stmt = $conn->prepare($admin_query);
 $admin_stmt->bindParam(':admin_id', $session_id);
 $admin_stmt->execute();
 $admin = $admin_stmt->fetch(PDO::FETCH_ASSOC);
-$admin_token = $admin['token'];
+
+if ($admin !== false) {
+    $admin_token = $admin['token'];
+} else {
+    // Handle the case where no token is found
+    $admin_token = null; // or set a default value
+    // Optionally, log an error or display a message
+    error_log("No token found for admin ID: $session_id");
+}
 ?>
 
 
