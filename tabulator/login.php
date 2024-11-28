@@ -40,15 +40,15 @@ function sendEmailNotification($adminEmail, $logs) {
     try {
         // Server settings
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
+        $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
         $mail->SMTPAuth = true;
-        $mail->Username = 'your-email@gmail.com'; // Replace with your email
-        $mail->Password = 'your-email-password'; // Replace with your password
+        $mail->Username = 'joannrebamonte80@gmail.com'; // SMTP username
+        $mail->Password = 'dkyd tsnv hzyh amjy'; // SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        // Recipients
-        $mail->setFrom('your-email@gmail.com', 'Your Name');
+        //Recipients
+        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Alert');
         $mail->addAddress($adminEmail);
 
         // Generate detailed HTML log details
