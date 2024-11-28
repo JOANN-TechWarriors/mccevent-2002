@@ -285,7 +285,7 @@ if (substr($request, -4) == '.php') {
       <nav class="nav">
           <div class="logo">
               <a href="#" style="font-family: impact; color: #1153D0;">
-                  <img src="img/logo.png" style="height: 60px; vertical-align: middle;"> MCC Events
+                  <img src="img/logo.png" style="height: 30px; vertical-align: middle;"> MCC Events
               </a>
           </div>
           <div class="main_list" id="mainListDiv">
