@@ -13,32 +13,31 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// SQL to select all logs
-$sql = "SELECT * FROM logs";
+// SQL to describe table structure
+$sql = "DESCRIBE logs";
 $result = $conn->query($sql);
 
 // Check if there are any results
 if ($result->num_rows > 0) {
-    // Output table header
     echo "<table border='1'>
             <tr>
-                <th>ID</th>
-                <th>IP</th>
-                <th>Username</th>
-                <th>Timestamp</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Null</th>
+                <th>Key</th>
+                <th>Default</th>
+                <th>Extra</th>
             </tr>";
     
     // Output data of each row
     while($row = $result->fetch_assoc()) {
         echo "<tr>
-                <td>" . htmlspecialchars($row["id"]) . "</td>
-                <td>" . htmlspecialchars($row["ip"]) . "</td>
-                <td>" . htmlspecialchars($row["username"]) . "</td>
-                <td>" . htmlspecialchars($row["timestamp"]) . "</td>
-                <td>" . htmlspecialchars($row["latitude"]) . "</td>
-                <td>" . htmlspecialchars($row["longitude"]) . "</td>
+                <td>" . htmlspecialchars($row["Field"]) . "</td>
+                <td>" . htmlspecialchars($row["Type"]) . "</td>
+                <td>" . htmlspecialchars($row["Null"]) . "</td>
+                <td>" . htmlspecialchars($row["Key"]) . "</td>
+                <td>" . htmlspecialchars($row["Default"]) . "</td>
+                <td>" . htmlspecialchars($row["Extra"]) . "</td>
               </tr>";
     }
     echo "</table>";
