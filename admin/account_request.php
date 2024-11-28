@@ -37,25 +37,25 @@ if (isset($_POST['accept'])) {
 
     $up = "UPDATE organizer SET request_status = 'Approved' WHERE organizer_id = $org_id";
     mysqli_query($conn, $up);
-    header('location: account_request.php');
+    header('location: account_request');
 }
 if (isset($_POST['accept_student'])) {
     $student_id = $_POST['schoolid'];
     $up = "UPDATE student SET request_status = 'Approved' WHERE schoolid = $student_id";
     mysqli_query($conn, $up);
-    header('location: account_request.php?filter_user_type=Student');
+    header('location: account_request?filter_user_type=Student');
 }
 if (isset($_POST['delete'])) {
     $org_id = $_POST['org_id'];
     $del = "DELETE FROM organizer WHERE organizer_id='$org_id'";
     mysqli_query($conn, $del);
-    header('location: account_request.php');
+    header('location: account_request');
 }
 if (isset($_POST['deleteStudent'])) {
     $student_id = $_POST['schoolid'];
     $del = "DELETE FROM student WHERE schoolid='$student_id'";
     mysqli_query($conn, $del);
-    header('location: account_request.php?filter_user_type=Student');
+    header('location: account_request?filter_user_type=Student');
 }
 ?>
 
@@ -290,8 +290,8 @@ if (isset($_POST['deleteStudent'])) {
             <div>Event Judging System</div>
         </div>
         <ul>
-            <li><a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-            <li><a href="account_request.php"><i class="fas fa-clipboard-list"></i> <span>ACCOUNT REQUEST</span></a>
+            <li><a href="admin_dashboard"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="account_request"><i class="fas fa-clipboard-list"></i> <span>ACCOUNT REQUEST</span></a>
             </li>
         </ul>
     </div>
@@ -304,7 +304,7 @@ if (isset($_POST['deleteStudent'])) {
         <div class="profile-dropdown">
             <div style="font-size:small;"> Ayres Santillan Ilustrisimo </div>
             <div class="dropdown-menu">
-                <a href="admin_logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                <a href="admin_logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
         </div>
     </div>
@@ -759,7 +759,7 @@ if (isset($_POST['deleteStudent'])) {
                             confirmButtonText: 'OK'
                         }).then(() => {
                             if (res.status === 'success' || res.status === 'warning') {
-                                window.location.href = 'account_request.php?filter_user_type=Student';
+                                window.location.href = 'account_request?filter_user_type=Student';
                             }
                         });
                     }

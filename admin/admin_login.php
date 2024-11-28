@@ -60,7 +60,7 @@ if (isset($_POST['admin_login'])) {
         } else {         
             $_SESSION['admin_login'] = true;
             $_SESSION['admin_id'] = $row['id'];
-            header('location: admin_dashboard.php');
+            header('location: admin_dashboard');
         }
     } else {
         $msg = "<div class='alert alert-danger'>Admin doesn't exist!</div>";
@@ -285,7 +285,7 @@ if (isset($_POST['admin_login'])) {
             icon: "success"
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "dashboard.php";
+                window.location.href = "dashboard";
             }
         });
         <?php unset($_SESSION['login_success']); ?>

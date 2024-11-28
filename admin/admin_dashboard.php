@@ -241,8 +241,8 @@ if (!isset($_SESSION['admin_id'])) {
             <div>Event Judging System</div>
         </div>
     <ul>
-        <li><a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-        <li><a href="account_request.php"><i class="fas fa-clipboard-list"></i> <span>ACCOUNT REQUEST</span></a></li>
+        <li><a href="admin_dashboard"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+        <li><a href="account_request"><i class="fas fa-clipboard-list"></i> <span>ACCOUNT REQUEST</span></a></li>
     </ul>
   </div>
 
@@ -254,7 +254,7 @@ if (!isset($_SESSION['admin_id'])) {
         <div class="profile-dropdown">
            <div style="font-size:small;"> Ayres Santillan Ilustrisimo</div>
             <div class="dropdown-menu">
-                <a href="admin_logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                <a href="admin_logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
         </div>
     </div>
