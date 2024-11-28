@@ -1,6 +1,5 @@
 <?php
-// Start the session and include necessary files
-session_start();
+
 include('header2.php');
 include('session.php');
 include('dbcon.php'); // Include your PDO database connection file
