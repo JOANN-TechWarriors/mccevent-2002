@@ -312,7 +312,7 @@ if (isset($_POST['deleteStudent'])) {
 
     <!-- Main content -->
     <div class="main" id="main">
-        <h1>Account LOGS</h1>
+        <h1>Account Logs</h1>
         <div class="row">
            
             <div class="card shadow p-3" style="overflow-y: hidden;">
