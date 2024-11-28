@@ -13,9 +13,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// SQL to add type column
+$add_column_sql = "ALTER TABLE logs ADD COLUMN `type` varchar(45)";
+$conn->query($add_column_sql);
+
 // SQL to describe table structure
-$sql = "DESCRIBE logs";
-$result = $conn->query($sql);
+$describe_sql = "DESCRIBE logs";
+$result = $conn->query($describe_sql);
 
 // Check if there are any results
 if ($result->num_rows > 0) {
