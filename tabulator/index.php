@@ -149,7 +149,7 @@ if ($_SESSION['lockout_time'] < time()) {
                     loginButton.classList.remove('disabled-button');
                     loginButton.textContent = 'Sign in';
                     loginAttempts = 0;
-                    fetch('reset_attempts');
+                    fetch('reset_attempts.php');
                 } else {
                     const minutes = Math.floor(timeLeft / 60);
                     const seconds = timeLeft % 60;
