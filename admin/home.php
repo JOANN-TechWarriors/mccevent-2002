@@ -60,6 +60,15 @@ $stmt = $conn->prepare($query);
 $stmt->bindParam(':organizer_id', $session_id);
 $stmt->execute();
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+// Fetch the token from the admin table
+$admin_query = "SELECT token FROM admin WHERE id = :admin_id";
+$admin_stmt = $conn->prepare($admin_query);
+$admin_stmt->bindParam(':admin_id', $session_id);
+$admin_stmt->execute();
+$admin = $admin_stmt->fetch(PDO::FETCH_ASSOC);
+$admin_token = $admin['token'];
 ?>
 
 
@@ -546,24 +555,24 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <br> <br><br>
             <!-- Display events -->
             <div class="tile-container">
-    <?php foreach ($events as $event) { ?>
-        <div class="tile" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>" data-token="<?php echo htmlspecialchars($event['token']); ?>">
-            <div class="dropdown">
-                <button class="dropbtn">⋮</button>
-                <div class="dropdown-content">
-                    <a href="#editEvent" style="color: black;" class="btn-success edit-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                        <i class="icon-pencil"></i> Edit
-                    </a>
-                    <a href="#" style="color: black;" class="btn-danger delete-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                        <i class="icon-remove"></i> Delete
-                    </a>
-                </div>
-            </div>
-            <h3><b><?php echo htmlspecialchars($event['event_name']); ?></b></h3>
-            <p><?php echo date('m-d-Y', strtotime($event['date_start'])); ?> to <?php echo date('m-d-Y', strtotime($event['date_end'])); ?></p>
-            <p><?php echo htmlspecialchars($event['place']); ?></p>
-        </div>
-    <?php } ?>
+                    <?php foreach ($events as $event) { ?>
+                        <div class="tile" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                            <div class="dropdown">
+                                <button class="dropbtn">⋮</button>
+                                <div class="dropdown-content">
+                                    <a href="#editEvent" style="color: black;" class="btn-success edit-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                                        <i class="icon-pencil"></i> Edit
+                                    </a>
+                                    <a href="#" style="color: black;" class="btn-danger delete-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                                        <i class="icon-remove"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                            <h3><b><?php echo htmlspecialchars($event['event_name']); ?></b></h3>
+                            <p><?php echo date('m-d-Y', strtotime($event['date_start'])); ?> to <?php echo date('m-d-Y', strtotime($event['date_end'])); ?></p>
+                            <p><?php echo htmlspecialchars($event['place']); ?></p>
+                        </div>
+                    <?php } ?>
 </div>
 
 <!-- Update the edit event modal HTML -->
@@ -941,16 +950,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.tile').forEach(function(tile) {
-        tile.addEventListener('click', function() {
-            var eventId = this.getAttribute('data-id');
-            var token = this.getAttribute('data-token'); // Assuming token is stored in a data attribute
-            window.location.href = 'sub_event?id=' + eventId + '&token=' + token;
-        });
-    });
-});
-</script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.tile').forEach(function(tile) {
+                    tile.addEventListener('click', function() {
+                        var eventId = this.getAttribute('data-id');
+                        window.location.href = 'sub_event?id=' + eventId + '&token=' + '<?php echo $admin_token; ?>';
+                    });
+                });
+            });
+        </script>
 </body>
 
 </html>
