@@ -12,8 +12,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Select all data from organizer table
-$sql = "SELECT * FROM organizer";
+// Select all data from main_event table
+$sql = "SELECT * FROM main_event";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -38,36 +38,8 @@ if ($result->num_rows > 0) {
     }
     echo "</table>";
 } else {
-    echo "0 results found in organizer table";
+    echo "0 results found in main_event table";
 }
 
 $conn->close();
 ?>
-
-<style>
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 20px 0;
-    font-family: Arial, sans-serif;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #f5f5f5;
-}
-</style>
