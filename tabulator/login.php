@@ -35,7 +35,7 @@ function sendEmailNotification($adminEmail, $logs) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'joannrebamonte80@gmail.com';
-        $mail->Password = 'your_smtp_password'; // Use an app-specific password
+        $mail->Password = 'dkyd tsnv hzyh amjy'; // Use an app-specific password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
