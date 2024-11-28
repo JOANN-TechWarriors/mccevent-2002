@@ -1,11 +1,3 @@
-<?php
-$request = $_SERVER['REQUEST_URI'];
-if (substr($request, -4) == '.php') {
-    $new_url = substr($request, 0, -4);
-    header("Location: $new_url", true, 301);
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +15,7 @@ include('session.php');
 <div class="container">
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
-        <a href="edit_organizer" class="btn btn-primary"><strong>ORGANIZER SETTINGS &raquo;</strong></a>
+        <a href="edit_organizer.php" class="btn btn-primary"><strong>ORGANIZER SETTINGS &raquo;</strong></a>
         <hr />
         <div class="panel panel-danger">
             <div class="panel-heading">
@@ -98,7 +90,7 @@ include('session.php');
                         <hr />
                         <div class="btn-group pull-right">
                             <button name="update" type="submit" class="btn btn-success">Update</button>
-                            <a href="dashboard" type="button" class="btn btn-default">Cancel</a>
+                            <a href="dashboard.php" type="button" class="btn btn-default">Cancel</a>
                         </div>
                     </div> 
                     </form>
@@ -159,7 +151,7 @@ include('session.php');
                         <br />
                         <div class="btn-group pull-right">
                             <button name="add_tabulator" type="submit" class="btn btn-primary">ADD</button>
-                            <a href="edit_organizer" type="button" class="btn btn-default">CANCEL</a>
+                            <a href="edit_organizer.php" type="button" class="btn btn-default">CANCEL</a>
                         </div>
                     </form>
                     <?php } ?>
@@ -214,7 +206,7 @@ if(isset($_POST['add_tabulator'])) {
                     type: 'success',
                     confirmButtonText: 'OK'
                 }, function() {
-                    window.location = 'edit_tabulator';
+                    window.location = 'edit_tabulator.php';
                 });
                 </script>";
             } else {
@@ -250,7 +242,7 @@ if(isset($_POST['update'])) {
         type: 'success',
         confirmButtonText: 'OK'
     }, function() {
-        window.location = 'edit_tabulator';
+        window.location = 'edit_tabulator.php';
     });
     </script>";
 }
