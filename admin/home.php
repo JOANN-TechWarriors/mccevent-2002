@@ -15,7 +15,15 @@ include('dbcon.php'); // Include your PDO database connection file
 
 
 // Handle form submission to create a new event
+<?php
+// Include necessary files and start the session
+include('header2.php');
+include('session.php');
+include('dbcon.php'); // Include your PDO database connection file
+
+// Handle form submission to create a new event
 if (isset($_POST['create'])) {
+    $mainevent_id = uniqid('', true); // Generate a unique ID
     $event_name = $_POST['main_event'];
     $description = $_POST['description'];
     $event_start_date = $_POST['date_start'];
@@ -25,10 +33,11 @@ if (isset($_POST['create'])) {
     $target = "../img/" . basename($banner);
 
     // Insert event details into the database using PDO
-    $sql = "INSERT INTO main_event (event_name, description, status, organizer_id, date_start, date_end, place, banner) 
-            VALUES (:event_name, :description, 'activated', :organizer_id, :date_start, :date_end, :place, :banner)";
+    $sql = "INSERT INTO main_event (mainevent_id, event_name, description, status, organizer_id, date_start, date_end, place, banner) 
+            VALUES (:mainevent_id, :event_name, :description, 'activated', :organizer_id, :date_start, :date_end, :place, :banner)";
     $stmt = $conn->prepare($sql);
 
+    $stmt->bindParam(':mainevent_id', $mainevent_id);
     $stmt->bindParam(':event_name', $event_name);
     $stmt->bindParam(':description', $description);
     $stmt->bindParam(':organizer_id', $session_id);
@@ -53,6 +62,7 @@ if (isset($_POST['create'])) {
     header("Location: home.php"); // Redirect to the same page or another page
     exit();
 }
+
 
 // Fetch events from the database using PDO
 $query = "SELECT * FROM main_event WHERE organizer_id = :organizer_id";
