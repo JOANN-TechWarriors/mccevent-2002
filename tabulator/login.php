@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 header('Content-Type: application/json');
-
+ 
 $response = ['success' => false, 'message' => '', 'redirect' => ''];
 
 // Function to log failed login attempts

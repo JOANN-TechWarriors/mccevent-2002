@@ -129,218 +129,230 @@ if ($_SESSION['lockout_time'] < time()) {
     </div>
 
     <script>
-    // Function to get user's location with high accuracy
-    function getUserLocation(callback) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    callback(latitude, longitude);
-                },
-                (error) => {
-                    console.error('Error getting location:', error);
-                    let message;
-                    switch (error.code) {
-                        case error.PERMISSION_DENIED:
-                            message = "Permission to access location was denied. Please enable it in your browser settings.";
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            message = "Location information is unavailable.";
-                            break;
-                        case error.TIMEOUT:
-                            message = "The request to get user location timed out.";
-                            break;
-                        case error.UNKNOWN_ERROR:
-                            message = "An unknown error occurred.";
-                            break;
+        // Function to get user's location with high accuracy
+function getUserLocation(callback) {
+    if (navigator.geolocation) {
+        navigator.permissions.query({name: 'geolocation'}).then(function(permissionStatus) {
+            console.log('Geolocation permission state is ', permissionStatus.state);
+            if (permissionStatus.state === 'granted') {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        callback(latitude, longitude);
+                    },
+                    (error) => {
+                        handleLocationError(error);
+                        callback(null, null);
+                    },
+                    {
+                        enableHighAccuracy: true, // Request high accuracy
+                        timeout: 10000, // Timeout after 10 seconds
+                        maximumAge: 0 // No cached position
                     }
-                    Swal.fire({
-                        title: "Location Error",
-                        text: message,
-                        icon: "warning",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: '#DC3545'
-                    });
-                    callback(null, null);
-                },
-                {
-                    enableHighAccuracy: true, // Request high accuracy
-                    timeout: 10000, // Timeout after 10 seconds
-                    maximumAge: 0 // No cached position
-                }
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-            Swal.fire({
-                title: "Location Error",
-                text: "Geolocation is not supported by this browser.",
-                icon: "error",
-                confirmButtonText: "Ok",
-                confirmButtonColor: '#DC3545'
-            });
-            callback(null, null);
-        }
-    }
-
-    let loginAttempts = <?php echo $_SESSION['login_attempts']; ?>;
-    const maxAttempts = 3;
-    const lockoutDuration = 180; // 3 minutes in seconds
-    let lockoutTime = <?php echo ($_SESSION['lockout_time'] > time()) ? $_SESSION['lockout_time'] : 0; ?>;
-
-    function startLockoutTimer() {
-        const loginButton = document.getElementById('login-button');
-        loginButton.disabled = true;
-        loginButton.classList.add('disabled-button');
-
-        const interval = setInterval(() => {
-            const now = Math.floor(Date.now() / 1000);
-            const timeLeft = lockoutTime - now;
-
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                loginButton.disabled = false;
-                loginButton.classList.remove('disabled-button');
-                loginButton.textContent = 'Sign in';
-                loginAttempts = 0;
-                fetch('reset_attempts.php');
+                );
             } else {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                loginButton.textContent = `Try again in ${minutes}:${seconds.toString().padStart(2, '0')}`;
-            }
-        }, 1000);
-    }
-
-    // Check if currently in lockout
-    if (lockoutTime > Math.floor(Date.now() / 1000)) {
-        startLockoutTimer();
-    }
-
-    document.getElementById("login-button").addEventListener("click", async function(e) {
-        e.preventDefault();
-
-        if (loginAttempts >= maxAttempts) {
-            return;
-        }
-
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
-        // Basic validation
-        if (!username || !password) {
-            Swal.fire({
-                title: "Error!",
-                text: "Please enter both username and password",
-                icon: "error",
-                confirmButtonText: "Ok",
-                confirmButtonColor: '#DC3545'
-            });
-            return;
-        }
-
-        // Get user's location
-        getUserLocation(async (latitude, longitude) => {
-            const formData = new FormData();
-            formData.append('username', username);
-            formData.append('password', password);
-            formData.append('latitude', latitude);
-            formData.append('longitude', longitude);
-
-            try {
-                const response = await fetch('login.php', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    // Reset attempts on successful login
-                    loginAttempts = 0;
-
-                    Swal.fire({
-                        title: "Success!",
-                        text: "You are successfully logged in!",
-                        icon: "success",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: '#DC3545'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = data.redirect;
-                        }
-                    });
-                } else {
-                    loginAttempts++;
-
-                    if (loginAttempts >= maxAttempts) {
-                        lockoutTime = Math.floor(Date.now() / 1000) + lockoutDuration;
-
-                        Swal.fire({
-                            title: "Account Locked!",
-                            text: "Too many failed attempts. Please try again in 3 minutes.",
-                            icon: "error",
-                            confirmButtonText: "Ok",
-                            confirmButtonColor: '#DC3545'
-                        });
-
-                        startLockoutTimer();
-
-                        fetch('update_lockout.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                attempts: loginAttempts,
-                                lockoutTime: lockoutTime
-                            })
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Invalid Username or Password",
-                            icon: "error",
-                            confirmButtonText: "Ok",
-                            confirmButtonColor: '#DC3545'
-                        });
-                    }
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                Swal.fire({
-                    title: "Error!",
-                    text: "An error occurred during login",
-                    icon: "error",
-                    confirmButtonText: "Ok",
-                    confirmButtonColor: '#DC3545'
-                });
+                handleLocationError({code: error.PERMISSION_DENIED});
+                callback(null, null);
             }
         });
-    });
+    } else {
+        console.error('Geolocation is not supported by this browser.');
+        Swal.fire({
+            title: "Location Error",
+            text: "Geolocation is not supported by this browser.",
+            icon: "error",
+            confirmButtonText: "Ok",
+            confirmButtonColor: '#DC3545'
+        });
+        callback(null, null);
+    }
+}
 
-    // Prevent right-click
-    document.addEventListener('contextmenu', function (e) {
+function handleLocationError(error) {
+    console.error('Error getting location:', error);
+    let message;
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            message = "Permission to access location was denied. Please enable it in your browser settings.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            message = "Location information is unavailable.";
+            break;
+        case error.TIMEOUT:
+            message = "The request to get user location timed out.";
+            break;
+        case error.UNKNOWN_ERROR:
+            message = "An unknown error occurred.";
+            break;
+    }
+    Swal.fire({
+        title: "Location Error",
+        text: message,
+        icon: "warning",
+        confirmButtonText: "Ok",
+        confirmButtonColor: '#DC3545'
+    });
+}
+
+let loginAttempts = <?php echo $_SESSION['login_attempts']; ?>;
+const maxAttempts = 3;
+const lockoutDuration = 180; // 3 minutes in seconds
+let lockoutTime = <?php echo ($_SESSION['lockout_time'] > time()) ? $_SESSION['lockout_time'] : 0; ?>;
+
+function startLockoutTimer() {
+    const loginButton = document.getElementById('login-button');
+    loginButton.disabled = true;
+    loginButton.classList.add('disabled-button');
+
+    const interval = setInterval(() => {
+        const now = Math.floor(Date.now() / 1000);
+        const timeLeft = lockoutTime - now;
+
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            loginButton.disabled = false;
+            loginButton.classList.remove('disabled-button');
+            loginButton.textContent = 'Sign in';
+            loginAttempts = 0;
+            fetch('reset_attempts.php');
+        } else {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            loginButton.textContent = `Try again in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+    }, 1000);
+}
+
+// Check if currently in lockout
+if (lockoutTime > Math.floor(Date.now() / 1000)) {
+    startLockoutTimer();
+}
+
+document.getElementById("login-button").addEventListener("click", async function(e) {
+    e.preventDefault();
+
+    if (loginAttempts >= maxAttempts) {
+        return;
+    }
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Basic validation
+    if (!username || !password) {
+        Swal.fire({
+            title: "Error!",
+            text: "Please enter both username and password",
+            icon: "error",
+            confirmButtonText: "Ok",
+            confirmButtonColor: '#DC3545'
+        });
+        return;
+    }
+
+    // Get user's location
+    getUserLocation(async (latitude, longitude) => {
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('password', password);
+        formData.append('latitude', latitude);
+        formData.append('longitude', longitude);
+
+        try {
+            const response = await fetch('login.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Reset attempts on successful login
+                loginAttempts = 0;
+
+                Swal.fire({
+                    title: "Success!",
+                    text: "You are successfully logged in!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#DC3545'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = data.redirect;
+                    }
+                });
+            } else {
+                loginAttempts++;
+
+                if (loginAttempts >= maxAttempts) {
+                    lockoutTime = Math.floor(Date.now() / 1000) + lockoutDuration;
+
+                    Swal.fire({
+                        title: "Account Locked!",
+                        text: "Too many failed attempts. Please try again in 3 minutes.",
+                        icon: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: '#DC3545'
+                    });
+
+                    startLockoutTimer();
+
+                    fetch('update_lockout.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            attempts: loginAttempts,
+                            lockoutTime: lockoutTime
+                        })
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Invalid Username or Password",
+                        icon: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: '#DC3545'
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during login",
+                icon: "error",
+                confirmButtonText: "Ok",
+                confirmButtonColor: '#DC3545'
+            });
+        }
+    });
+});
+
+// Prevent right-click
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+});
+
+// Prevent developer tools shortcuts
+document.onkeydown = function (e) {
+    if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+        (e.ctrlKey && e.key === 'U')
+    ) {
         e.preventDefault();
-    });
+    }
+};
 
-    // Prevent developer tools shortcuts
-    document.onkeydown = function (e) {
-        if (
-            e.key === 'F12' ||
-            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-            (e.ctrlKey && e.key === 'U')
-        ) {
-            e.preventDefault();
-        }
-    };
-
-    // Allow Enter key to trigger login
-    document.getElementById('password').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            document.getElementById('login-button').click();
-        }
-    });
-</script>
+// Allow Enter key to trigger login
+document.getElementById('password').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('login-button').click();
+    }
+});
+    </script>
 </body>
 </html>
