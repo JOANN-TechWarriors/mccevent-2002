@@ -36,26 +36,18 @@ if (isset($_GET['id'])) {
     die('Event ID not provided.');
 }
 
-// Define the generateUniqueId function
-function generateUniqueId() {
-    return uniqid(rand(), true);
-}
-
 // Handle form submission
 if (isset($_POST['add_event'])) {
     $banner = $_FILES['banner']['name'];
-    $target = "../img/" . basename($banner);
-    $sub_event_name = $_POST['event_name'];
-    $event_date = $_POST['event_date'];
-    $event_time = $_POST['event_time'];
-    $event_place = $_POST['event_place'];
+    $target = "../img/".basename($banner);
+    $sub_event_name = $_POST['event_name'];  
+    $event_date = $_POST['event_date']; 
+    $event_time = $_POST['event_time']; 
+    $event_place = $_POST['event_place']; 
 
-    // Generate a unique sub-event ID
-    $sub_event_id = generateUniqueId();
-
-    $stmt = $conn->prepare("INSERT INTO sub_event (subevent_id, mainevent_id, event_name, status, eventdate, eventtime, place, organizer_id, banner) 
-                            VALUES (?, ?, ?, 'activated', ?, ?, ?, ?, ?)");
-    $result = $stmt->execute([$sub_event_id, $main_event_id, $sub_event_name, $event_date, $event_time, $event_place, $session_id, $banner]);
+    $stmt = $conn->prepare("INSERT INTO sub_event (mainevent_id, event_name, status, eventdate, eventtime, place, organizer_id, banner) 
+                            VALUES (?, ?, 'activated', ?, ?, ?, ?, ?)");
+    $result = $stmt->execute([$main_event_id, $sub_event_name, $event_date, $event_time, $event_place, $session_id, $banner]);
 
     if ($result && move_uploaded_file($_FILES['banner']['tmp_name'], $target)) {
         $_SESSION['swal_success'] = true;
@@ -66,7 +58,7 @@ if (isset($_POST['add_event'])) {
     }
 
     // Redirect to prevent form resubmission and include mainevent_id in the URL
-    header("Location: sub_event?id=" . $main_event_id);
+    header("Location: sub_event.php?id=" . $main_event_id);
     exit();
 }
 ?>
@@ -132,7 +124,7 @@ if (isset($_POST['activation'])) {
     }
 
     // Redirect to prevent form resubmission
-    header("Location: sub_event?id=" . $main_event_id);
+    header("Location: sub_event.php?id=" . $main_event_id);
     exit();
 }
 ?>
@@ -197,7 +189,7 @@ if (isset($_POST['deleteSubEvent'])) {
     }
 
     // Redirect to prevent form resubmission
-    header("Location: sub_event?id=" . htmlspecialchars($main_event_id));
+    header("Location: sub_event.php?id=" . htmlspecialchars($main_event_id));
     exit();
 }
 ?>
@@ -249,7 +241,7 @@ if (isset($_POST['edit_se'])) {
     }
 
     // Redirect to prevent form resubmission
-    header("Location: sub_event?id=" . htmlspecialchars($main_event_id));
+    header("Location: sub_event.php?id=" . htmlspecialchars($main_event_id));
     exit();
 }
 ?>
@@ -719,10 +711,10 @@ if (isset($_POST['edit_se'])) {
         <div>Event Judging System</div>
     </div>
     <ul>
-            <li><a href="dashboard"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-            <li><a href="home"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-            <li><a href="upcoming_events"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-            <li><a href="live_stream"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+            <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+            <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
 
         </ul>
 </div>
@@ -734,7 +726,7 @@ if (isset($_POST['edit_se'])) {
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $name; ?></div>
             <div class="dropdown-menu">
-                <a href="edit_organizer"> Account Settings</a>
+                <a href="edit_organizer.php"> Account Settings</a>
                 <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
         </div>
@@ -1141,7 +1133,7 @@ function showActivationModal(subEventId, subEventName, status) {
                 cancelButtonText: 'No'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '../index';
+                    window.location.href = '../index.php';
                 }
             });
         });
