@@ -589,66 +589,63 @@ if (substr($request, -4) == '.php') {
         });
 
         $('#updateEventButton').off('click').on('click', function(event) {
-            event.preventDefault(); // Prevent default form submission
+    event.preventDefault(); // Prevent default form submission
 
-            var id = $('#updateeventID').val();
-            var title = $('#updateeventTitle').val();
-            var start = $('#updateeventStart').val();
-            var end = $('#updateeventEnd').val();
-            var formData = new FormData();
+    var id = $('#updateeventID').val();
+    var title = $('#updateeventTitle').val();
+    var start = $('#updateeventStart').val();
+    var end = $('#updateeventEnd').val();
+    var formData = new FormData();
 
-            formData.append('eventID', id);
-            formData.append('eventTitle', title);
-            formData.append('eventStart', start);
-            formData.append('eventEnd', end);
+    formData.append('eventID', id);
+    formData.append('eventTitle', title);
+    formData.append('eventStart', start);
+    formData.append('eventEnd', end);
 
-            var bannerInput = $('#eventBanner')[0];
-            if (bannerInput.files.length > 0) {
-                formData.append('eventBanner', bannerInput.files[0]);
-            }
+    var bannerInput = $('#eventBanner')[0];
+    if (bannerInput.files.length > 0) {
+        formData.append('eventBanner', bannerInput.files[0]);
+    }
 
-            $.ajax({
-                url: 'update-event.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                dataType: 'json', // Expect JSON response
-                success: function(response) {
-                    console.log(response); // Debugging: Log the response
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.message,
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $('#updateEventModal').modal('hide');
-                                calendar
-                            .refetchEvents(); // Refresh the events in FullCalendar
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message ||
-                                'An error occurred while updating the event.',
-                            confirmButtonText: 'OK'
-                        });
+    $.ajax({
+        url: 'update-event.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: 'json', // Expect JSON response
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: response.message,
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#updateEventModal').modal('hide');
+                        calendar.refetchEvents(); // Refresh the events in FullCalendar
                     }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error updating event: ' + errorThrown,
-                        confirmButtonText: 'OK'
-                    });
-                }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'An error occurred while updating the event.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error updating event: ' + errorThrown,
+                confirmButtonText: 'OK'
             });
-        });
+        }
+    });
+});
 
         var currentDateTime = roundToNearestHalfHour(new Date()).format('YYYY-MM-DDTHH:mm');
         $('#eventStart, #eventEnd, #updateeventStart, #updateeventEnd').attr('min', currentDateTime).attr(

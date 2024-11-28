@@ -15,10 +15,7 @@ $response = ['success' => false, 'message' => ''];
 
 // Check if the request is a POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Debugging: Check received POST data
-    // var_dump($_POST);
-
-    // Debugging: Check session data
+    // Check session data
     if (!isset($_SESSION['id'])) {
         $response['message'] = 'Session ID is not set.';
         echo json_encode($response);
@@ -52,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql .= ", banner=?";
         }
         $sql .= " WHERE id=? AND organizer_id=?";
-
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(1, $event_name);
         $stmt->bindParam(2, $date_start);
@@ -71,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $response['message'] = 'Error updating event: ' . $stmt->errorInfo()[2];
         }
-
         $stmt->closeCursor();
     } else {
         $response['message'] = 'All fields are required.';
