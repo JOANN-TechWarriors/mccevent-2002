@@ -6,6 +6,9 @@ session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+header('Content-Type: application/json');
+$response = ['success' => false, 'message' => '', 'redirect' => ''];
+
 // Function to log failed login attempts
 function logFailedAttempt($conn, $username, $ip, $latitude, $longitude) {
     $type = 'tabulator_login_attempt';
@@ -45,7 +48,7 @@ function sendEmailNotification($adminEmail, $logDetails) {
         $mail->Port = 587;
 
         //Recipients
-        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Alert');
+        $mail->setFrom('joannrebamonte80@gmail.com', 'Securityt');
         $mail->addAddress($adminEmail);
 
         // Content
@@ -54,9 +57,8 @@ function sendEmailNotification($adminEmail, $logDetails) {
         $mail->Body    = '<h1>Failed Login Attempts</h1><p>' . $logDetails . '</p>';
 
         $mail->send();
-        echo 'Message has been sent';
     } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
     }
 }
 
@@ -64,23 +66,6 @@ function sendEmailNotification($adminEmail, $logDetails) {
 $query = $conn->prepare("SELECT email FROM admin WHERE id = 1"); // Assuming admin ID is 1
 $query->execute();
 $admin = $query->fetch();
-
-if ($admin) {
-    $adminEmail = $admin['email'];
-
-    // Fetch log details
-    $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = 'tabulator_login_attempt' ORDER BY timestamp DESC LIMIT 5");
-    $logQuery->execute();
-    $logs = $logQuery->fetchAll();
-
-    $logDetails = '';
-    foreach ($logs as $log) {
-        $logDetails .= "IP: {$log['ip']}, Username: {$log['username']}, Time: {$log['timestamp']}, Latitude: {$log['latitude']}, Longitude: {$log['longitude']}<br>";
-    }
-
-    // Send email notification
-    sendEmailNotification($adminEmail, $logDetails);
-}
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
@@ -114,6 +99,23 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             $longitude = $location['longitude'];
 
             logFailedAttempt($conn, $username, $ip, $latitude, $longitude);
+
+            if ($admin) {
+                $adminEmail = $admin['email'];
+
+                // Fetch log details
+                $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = 'tabulator_login_attempt' ORDER BY timestamp DESC LIMIT 5");
+                $logQuery->execute();
+                $logs = $logQuery->fetchAll();
+
+                $logDetails = '';
+                foreach ($logs as $log) {
+                    $logDetails .= "IP: {$log['ip']}, Username: {$log['username']}, Time: {$log['timestamp']}, Latitude: {$log['latitude']}, Longitude: {$log['longitude']}<br>";
+                }
+
+                // Send email notification
+                sendEmailNotification($adminEmail, $logDetails);
+            }
 
             $_SESSION['lockout_time'] = time() + 180; // Lockout for 3 minutes
         }
