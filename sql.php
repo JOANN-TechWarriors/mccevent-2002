@@ -10,38 +10,16 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Fetch data from the main_event table
-    $select_sql = "SELECT mainevent_id, event_name, status, organizer_id, sy, date_start, date_end, place, banner FROM main_event";
-    $stmt = $conn->query($select_sql);
+    // SQL to modify the columns
+    $alter_sql_subevent = "ALTER TABLE `sub_event` MODIFY COLUMN `subevent_id` BIGINT NOT NULL";
+    $alter_sql_mainevent = "ALTER TABLE `sub_event` MODIFY COLUMN `mainevent_id` BIGINT NOT NULL";
 
-    // Display data in an HTML table
-    echo "<table border='1'>";
-    echo "<tr>
-            <th>Main Event ID</th>
-            <th>Event Name</th>
-            <th>Status</th>
-            <th>Organizer ID</th>
-            <th>SY</th>
-            <th>Date Start</th>
-            <th>Date End</th>
-            <th>Place</th>
-            <th>Banner</th>
-          </tr>";
+    // Execute the SQL statements
+    $conn->exec($alter_sql_subevent);
+    $conn->exec($alter_sql_mainevent);
 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars($row['mainevent_id']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['event_name']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['status']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['organizer_id']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['sy']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['date_start']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['date_end']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['place']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['banner']) . "</td>";
-        echo "</tr>";
-    }
-    echo "</table>";
+    echo "Columns `subevent_id` and `mainevent_id` modified successfully to BIGINT.";
+
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
