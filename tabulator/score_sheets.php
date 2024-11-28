@@ -253,7 +253,7 @@ include('..//admin/session.php');
         <ul>
             <li><a href="score_sheets"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
             <li><a href="../admin/rev_main_event"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
-            <li><a href="#"><i class="fas fa-chart-line"></i> <span>ACTIVITY LOGS</span></a></li>
+            <li><a href="index1"><i class="fas fa-chart-line"></i> <span>ACTIVITY LOGS</span></a></li>
         </ul>
     </div>
 
