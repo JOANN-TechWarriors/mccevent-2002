@@ -641,5 +641,62 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 </script>
+<script>
+$(document).ready(function() {
+    $('#updateEventButton').on('click', function(event) {
+        event.preventDefault();
+
+        var formData = new FormData();
+        formData.append('eventID', $('#updateeventID').val());
+        formData.append('eventTitle', $('#updateeventTitle').val());
+        formData.append('eventStart', $('#updateeventStart').val());
+        formData.append('eventEnd', $('#updateeventEnd').val());
+
+        var bannerInput = $('#eventBanner')[0];
+        if (bannerInput.files.length > 0) {
+            formData.append('eventBanner', bannerInput.files[0]);
+        }
+
+        $.ajax({
+            url: 'update-event.php',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                var result = JSON.parse(response);
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: result.message,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#updateEventModal').modal('hide');
+                            calendar.refetchEvents();  // Refresh the events in FullCalendar
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.message,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error updating event: ' + errorThrown,
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
