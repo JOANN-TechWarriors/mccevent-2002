@@ -176,7 +176,7 @@ while ($cont_row = $cont_query->fetch()) {
     
     <?php if($getContestant_id=="allTally"){?>
     <li class="active" ><a href="judge_panel.php?judge_ctr=<?php echo $judge_ctr; ?>&subevent_id=<?php echo $subevent_id; ?>&contestant_id=allTally"><strong>View Tally</strong></a></li>
-      <li><a href="..//index.php"><strong><font color="red">Exit</font></strong></a></li>
+      <li><a href="..//index"><strong><font color="red">Exit</font></strong></a></li>
     <?php }else{ ?>
         
         <li class="" ><a href="judge_panel.php?judge_ctr=<?php echo $judge_ctr; ?>&subevent_id=<?php echo $subevent_id; ?>&contestant_id=allTally">View Tally</a></li>
