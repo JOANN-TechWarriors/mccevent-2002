@@ -567,60 +567,7 @@ if (substr($request, -4) == '.php') {
       $('#updateeventEnd').val('');
     });
 
-    $('#updateEventButton').off('click').on('click', function() {
-      var id = $('#updateeventID').val();
-      var title = $('#updateeventTitle').val();
-      var start = $('#updateeventStart').val();
-      var end = $('#updateeventEnd').val();
-      var formData = new FormData();
-
-      formData.append('eventID', id);
-      formData.append('eventTitle', title);
-      formData.append('eventStart', start);
-      formData.append('eventEnd', end);
-
-      var bannerInput = $('#eventBanner')[0];
-      if (bannerInput.files.length > 0) {
-        formData.append('eventBanner', bannerInput.files[0]);
-      }
-
-      $.ajax({
-    url: 'update-event.php',
-    type: 'POST',
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function(response) {
-        var result = JSON.parse(response);
-        if (result.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: result.message,
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#updateEventModal').modal('hide');
-                    calendar.refetchEvents();  // Refresh the events in FullCalendar
-                }
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: result.message,
-                confirmButtonText: 'OK'
-            });
-        }
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error updating event: ' + errorThrown,
-            confirmButtonText: 'OK'
-        });
-    }
+   
 
     var currentDateTime = roundToNearestHalfHour(new Date()).format('YYYY-MM-DDTHH:mm');
     $('#eventStart, #eventEnd, #updateeventStart, #updateeventEnd').attr('min', currentDateTime).attr('step', '1800');
