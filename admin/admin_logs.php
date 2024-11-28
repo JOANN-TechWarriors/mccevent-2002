@@ -11,12 +11,8 @@ if (substr($request, -4) == '.php') {
 session_start();
 if (!isset($_SESSION['admin_id'])) {
     header('location: admin_login.php');
+    exit();
 }
-?>
-<!DOCTYPE html>
-<html lang="en">
-<?php
-
 
 // Connect to database
 $host = '127.0.0.1';
@@ -24,14 +20,25 @@ $username = 'u510162695_judging_root';
 $password = '1Judging_root';  // Replace with the actual password
 $dbname = 'u510162695_judging';
 
-
 $conn = new mysqli($host, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Fetch logs data from the database
+$sql = "SELECT * FROM logs WHERE type = 'tabulator_login_attempt' ORDER BY timestamp DESC";
+$result = $conn->query($sql);
+
+$logs = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $date = date('Y-m-d', strtotime($row['timestamp']));
+        $logs[$date][] = $row;
+    }
+}
 ?>
+
 
 <head>
     <meta charset="UTF-8">
@@ -331,25 +338,26 @@ if ($conn->connect_error) {
 
     <!-- Main content -->
     <div class="main" id="main">
-        <h1>Account Logs</h1>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-date">2023-10-01</div>
-                <div class="timeline-content">
-                    <div class="timeline-icon"><i class="fas fa-check-circle"></i></div>
-                    <div class="timeline-details">User logged in successfully.</div>
+    <h1>Account Logs</h1>
+    <div class="timeline">
+        <?php foreach ($logs as $date => $entries): ?>
+            <div class="timeline-date"><?php echo $date; ?></div>
+            <?php foreach ($entries as $entry): ?>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-user"></i></div>
+                        <div class="timeline-details">
+                            <strong>Username:</strong> <?php echo htmlspecialchars($entry['username']); ?><br>
+                            <strong>IP:</strong> <?php echo htmlspecialchars($entry['ip']); ?><br>
+                            <strong>Time:</strong> <?php echo date('H:i:s', strtotime($entry['timestamp'])); ?><br>
+                            <strong>Location:</strong> <?php echo htmlspecialchars($entry['latitude'] . ', ' . $entry['longitude']); ?>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">2023-10-02</div>
-                <div class="timeline-content">
-                    <div class="timeline-icon"><i class="fas fa-exclamation-circle"></i></div>
-                    <div class="timeline-details">Failed login attempt.</div>
-                </div>
-            </div>
-            <!-- Add more timeline items as needed -->
-        </div>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
     </div>
+</div>
     </div>
 
     </div>
