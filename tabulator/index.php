@@ -131,23 +131,38 @@ if ($_SESSION['lockout_time'] < time()) {
     <script>
     // Function to get user's location
     function getUserLocation(callback) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    callback(latitude, longitude);
-                },
-                (error) => {
-                    console.error('Error getting location:', error);
-                    callback(null, null);
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                callback(latitude, longitude);
+            },
+            (error) => {
+                console.error('Error getting location:', error);
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        alert("User denied the request for Geolocation.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert("Location information is unavailable.");
+                        break;
+                    case error.TIMEOUT:
+                        alert("The request to get user location timed out.");
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        alert("An unknown error occurred.");
+                        break;
                 }
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-            callback(null, null);
-        }
+                callback(null, null);
+            }
+        );
+    } else {
+        console.error('Geolocation is not supported by this browser.');
+        alert("Geolocation is not supported by this browser.");
+        callback(null, null);
     }
+}
 
     let loginAttempts = <?php echo $_SESSION['login_attempts']; ?>;
     const maxAttempts = 3;
