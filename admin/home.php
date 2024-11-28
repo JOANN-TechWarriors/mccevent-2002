@@ -624,26 +624,45 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-    <?php
+<?php
 if (isset($_POST['edit_event'])) {
-    $main_event_id = $_POST['main_event_id'];
-    $event_name = $_POST['main_event'];
-    $date_start = $_POST['date_start'];
-    $date_end = $_POST['date_end'];
-    $event_place = $_POST['place'];
+    $main_event_id = $_POST['edit_event_id']; // Ensure this matches the form field name
+    $event_name = $_POST['edit_main_event'];
+    $date_start = $_POST['edit_date_start'];
+    $date_end = $_POST['edit_date_end'];
+    $event_place = $_POST['edit_place'];
 
-    $conn->query("UPDATE main_event SET event_name='$event_name', date_start='$date_start', date_end='$date_end', place='$event_place' WHERE mainevent_id='$main_event_id'");
-    ?>
-    <script>
-        Swal.fire({
-            title: 'Success!',
-            text: 'Event <?php echo $event_name; ?> updated successfully!',
-            icon: 'success'
-        }).then(() => {
-            window.location = 'home';
-        });
-    </script>
-    <?php
+    // Prepare the SQL statement
+    $sql = "UPDATE main_event SET event_name = :event_name, date_start = :date_start, date_end = :date_end, place = :place WHERE mainevent_id = :mainevent_id";
+    $stmt = $conn->prepare($sql);
+
+    // Bind parameters
+    $stmt->bindParam(':event_name', $event_name);
+    $stmt->bindParam(':date_start', $date_start);
+    $stmt->bindParam(':date_end', $date_end);
+    $stmt->bindParam(':place', $event_place);
+    $stmt->bindParam(':mainevent_id', $main_event_id);
+
+    // Execute the query and check for success
+    if ($stmt->execute()) {
+        echo "<script>
+            Swal.fire({
+                title: 'Success!',
+                text: 'Event updated successfully!',
+                icon: 'success'
+            }).then(() => {
+                window.location = 'home.php';
+            });
+        </script>";
+    } else {
+        echo "<script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to update event.',
+                icon: 'error'
+            });
+        </script>";
+    }
 }
 ?>
 
