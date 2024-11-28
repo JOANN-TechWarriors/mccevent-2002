@@ -341,7 +341,7 @@ include('..//admin/session.php');
                                             <?php } ?>
                                         </td>
                                         <td width="128">
-                                            <a title="click to set points deductions" target="_blank" href="deductScores.php?event_id=<?php echo $se_id; ?>" class="btn btn-danger">
+                                            <a title="click to set points deductions" target="_blank" href="deductScores?event_id=<?php echo $se_id; ?>" class="btn btn-danger">
                                                 <i class="icon icon-minus-sign"></i>
                                             </a>
 
