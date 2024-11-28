@@ -54,7 +54,7 @@ function sendEmailNotification($adminEmail, $logs) {
         $mail->Body = "
             <html>
             <body style='font-family: Arial, sans-serif;'>
-                <h2 style='color: #ff0000;'>⚠️ Security Warning</h2>
+                <h2 style='color: #ff0000;'> Security Warning</h2>
                 <p>Multiple failed login attempts have been detected for your system.</p>
                 {$logDetails}
                 <p style='margin-top: 20px; color: #666;'> Please review these attempts and take necessary security actions. </p>
