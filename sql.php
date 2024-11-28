@@ -10,15 +10,13 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // SQL to modify the columns
-    $alter_sql_subevent = "ALTER TABLE `sub_event` MODIFY COLUMN `subevent_id` BIGINT NOT NULL";
-    $alter_sql_mainevent = "ALTER TABLE `sub_event` MODIFY COLUMN `mainevent_id` BIGINT NOT NULL";
+    // SQL to modify the subevent_id column to remove AUTO_INCREMENT
+    $alter_sql = "ALTER TABLE `sub_event` MODIFY COLUMN `subevent_id` BIGINT NOT NULL";
 
-    // Execute the SQL statements
-    $conn->exec($alter_sql_subevent);
-    $conn->exec($alter_sql_mainevent);
+    // Execute the SQL statement
+    $conn->exec($alter_sql);
 
-    echo "Columns `subevent_id` and `mainevent_id` modified successfully to BIGINT.";
+    echo "AUTO_INCREMENT removed from `subevent_id` column successfully.";
 
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
