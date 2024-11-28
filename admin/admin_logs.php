@@ -31,32 +31,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
-if (isset($_POST['accept'])) {
-    $org_id = $_POST['org_id'];
-
-    $up = "UPDATE organizer SET request_status = 'Approved' WHERE organizer_id = $org_id";
-    mysqli_query($conn, $up);
-    header('location: account_request');
-}
-if (isset($_POST['accept_student'])) {
-    $student_id = $_POST['schoolid'];
-    $up = "UPDATE student SET request_status = 'Approved' WHERE schoolid = $student_id";
-    mysqli_query($conn, $up);
-    header('location: account_request?filter_user_type=Student');
-}
-if (isset($_POST['delete'])) {
-    $org_id = $_POST['org_id'];
-    $del = "DELETE FROM organizer WHERE organizer_id='$org_id'";
-    mysqli_query($conn, $del);
-    header('location: account_request');
-}
-if (isset($_POST['deleteStudent'])) {
-    $student_id = $_POST['schoolid'];
-    $del = "DELETE FROM student WHERE schoolid='$student_id'";
-    mysqli_query($conn, $del);
-    header('location: account_request?filter_user_type=Student');
-}
 ?>
 
 <head>
@@ -279,6 +253,51 @@ if (isset($_POST['deleteStudent'])) {
         height: 400px;
         width: 100%;
     }
+
+    .timeline {
+        position: relative;
+        margin: 20px 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 20px;
+        padding-left: 40px;
+    }
+
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 2px;
+        height: 100%;
+        background-color: #ddd;
+    }
+
+    .timeline-date {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .timeline-content {
+        display: flex;
+        align-items: center;
+    }
+
+    .timeline-icon {
+        margin-right: 10px;
+        color: #007bff;
+    }
+
+    .timeline-details {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
     </style>
 </head>
 
@@ -313,11 +332,22 @@ if (isset($_POST['deleteStudent'])) {
     <!-- Main content -->
     <div class="main" id="main">
         <h1>Account Logs</h1>
-        <div class="row">
-
-            <div class="card shadow p-3" style="overflow-y: hidden;">
-
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">2023-10-01</div>
+                <div class="timeline-content">
+                    <div class="timeline-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="timeline-details">User logged in successfully.</div>
+                </div>
             </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2023-10-02</div>
+                <div class="timeline-content">
+                    <div class="timeline-icon"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="timeline-details">Failed login attempt.</div>
+                </div>
+            </div>
+            <!-- Add more timeline items as needed -->
         </div>
     </div>
     </div>
