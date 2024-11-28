@@ -1,4 +1,12 @@
 <?php
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
+?>
+<?php
 include('dbcon.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -24,7 +32,7 @@ if(isset($_POST["send"])){
 
     if (!$user) {
         echo '<div class="alert alert-danger" role="alert">Email address not found.</div>';
-        include('index2.php');
+        include('index2');
         exit();
     } else {
         // Generate unique token for password reset link
@@ -61,16 +69,16 @@ if(isset($_POST["send"])){
             $mail->isHTML(true);
             $mail->Subject = 'Password Reset Link';
             // http://localhost/judging-standard/create_account.php
-            $mail->Body = 'Click on this link to reset your password: https://mcceventsjudging.com/admin/reset_password.php?email=' . $email . '&token=' . $token;
+            $mail->Body = 'Click on this link to reset your password: https://mcceventsjudging.com/admin/reset_password?email=' . $email . '&token=' . $token;
     
             $mail->send();
     
             echo '<div class="alert alert-success" role="alert">Password reset email sent to ' . $email . '.</div>';
-            include('index2.php');
+            include('index2');
             exit();
         } catch (Exception $e) {
             echo '<div class="alert alert-danger" role="alert">Error sending email: ' . $mail->ErrorInfo . '</div>';
-            include('index2.php');
+            include('index2');
             exit();
         }
     }

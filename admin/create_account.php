@@ -155,7 +155,7 @@
                             </div>
 
                             <div class="form-group text-right">
-                                <a href="index2.php" class="btn btn-default">Cancel</a>
+                                <a href="index2" class="btn btn-default">Cancel</a>
                                 <button name="register" type="submit" class="btn btn-primary">Register</button>
                             </div>
                         </form>
@@ -367,7 +367,7 @@ if (isset($_POST['register'])) {
                         confirmButtonColor: '#3085d6'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location = 'index2.php';
+                            window.location = 'index2';
                         }
                     });
                 </script>";

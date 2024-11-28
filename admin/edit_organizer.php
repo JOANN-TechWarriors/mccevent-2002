@@ -28,7 +28,7 @@ if (substr($request, -4) == '.php') {
 
 
 
- <a href="edit_tabulator.php" class="btn btn-danger"><strong>TABULATOR SETTINGS &raquo;</strong></a>  
+ <a href="edit_tabulator" class="btn btn-danger"><strong>TABULATOR SETTINGS &raquo;</strong></a>  
  
  <hr />
  
@@ -120,7 +120,7 @@ if (substr($request, -4) == '.php') {
         <hr />
         <div class="btn-group pull-right">
             <button name="update" type="submit" class="btn btn-success">Update</button>
-            <a href="dashboard.php" type="button" class="btn btn-default">Cancel</a>
+            <a href="dashboard" type="button" class="btn btn-default">Cancel</a>
         </div>
     </div>
 </form>
@@ -227,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
                text: 'Record updated successfully.',
            }).then((result) => {
                if (result.isConfirmed) {
-                   window.location.href = 'edit_organizer.php';
+                   window.location.href = 'edit_organizer';
                }
            });
        </script>";

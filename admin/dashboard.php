@@ -246,8 +246,8 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-i
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $name; ?></div>
             <div class="dropdown-menu">
-                <a href="edit_organizer.php"> Account Settings</a>
-                <a href="logout.php" ><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                <a href="edit_organizer"> Account Settings</a>
+                <a href="logout" ><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
         </div>
     </div>
@@ -276,7 +276,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-i
                             mysqli_stmt_close($stmt);
                         ?>
                         <h2 class="mb-4"><?php echo $ongoing_events; ?></h2>
-                        <a class="btn btn-primary btn-sm" href="home.php">View Details</a>
+                        <a class="btn btn-primary btn-sm" href="home">View Details</a>
                     </div>
                 </div>
             </div>

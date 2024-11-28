@@ -1,4 +1,12 @@
 <?php
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
+?>
+<?php
 // Load database connection
 include('dbcon.php');
 include('header2.php');
@@ -42,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($query->rowCount() > 0) {
             // Password updated successfully
             $successMessage = "Password reset successfully.";
-            header('Location: index2.php');
+            header('Location: index2');
             exit();
         } else {
             // Password update failed
@@ -137,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input id="confirm_password" type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon1" required="true" autofocus="true" />
                         </div>
                         <div class="btn-group">
-                            <a href="index2.php" type="button" class="btn btn-default">Cancel</a>
+                            <a href="index2" type="button" class="btn btn-default">Cancel</a>
                             <button name="register" type="submit" class="btn btn-primary">Reset</button>
                         </div>
                     </form>

@@ -314,10 +314,10 @@ if (substr($request, -4) == '.php') {
             <div>Event Judging System</div>
         </div>
         <ul>
-            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-            <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-            <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-            <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
+            <li><a href="dashboard"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="home"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+            <li><a href="upcoming_events"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+            <li><a href="live_stream"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
         </ul>
     </div>
 
@@ -328,8 +328,8 @@ if (substr($request, -4) == '.php') {
         <div class="profile-dropdown">
             <div style="font-size:small;"><?php echo $name; ?></div>
             <div class="dropdown-menu">
-                <a href="edit_organizer.php">Account Settings</a>
-                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                <a href="edit_organizer">Account Settings</a>
+                <a href="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
         </div>
     </div>
@@ -388,7 +388,7 @@ if (substr($request, -4) == '.php') {
                             </div>
                             
                             <div class="button-group">
-                                <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
+                                <a href="sub_event_details_edit?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
                                 <button name="edit_judge" class="btn btn-success">Update</button>
                             </div>
                         </div>
@@ -410,7 +410,7 @@ if (substr($request, -4) == '.php') {
         $conn->query("update judges set fullname='$fullname',judge_ctr='$judge_ctr', jtype='$jtype' where judge_id='$judge_id'");
     ?>
         <script>                                      
-            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>';
+            window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>';
             alert('Judge <?php echo $fullname; ?> updated successfully!');						
         </script>
     <?php  
@@ -445,7 +445,7 @@ if (substr($request, -4) == '.php') {
                         cancelButtonText: 'No'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = 'logout.php';
+                            window.location.href = 'logout';
                         }
                     });
                 });
