@@ -16,7 +16,7 @@ $response = ['success' => false, 'message' => ''];
 // Check if the request is a POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Debugging: Check received POST data
-    var_dump($_POST);
+    // var_dump($_POST);
 
     // Debugging: Check session data
     if (!isset($_SESSION['id'])) {
@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($response);
         exit;
     }
-    var_dump($_SESSION['id']);
 
     // Get form data
     $event_id = isset($_POST['eventID']) ? intval($_POST['eventID']) : null;
@@ -37,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($event_id && $event_name && $date_start && $date_end && $organizer_id) {
         // Handle file upload if a new banner is provided
         $banner = null;
-        if (isset($_FILES['edit_banner']) && $_FILES['edit_banner']['size'] > 0) {
-            $banner = time() . '_' . $_FILES['edit_banner']['name'];
+        if (isset($_FILES['eventBanner']) && $_FILES['eventBanner']['size'] > 0) {
+            $banner = time() . '_' . $_FILES['eventBanner']['name'];
             $target = "../img/" . $banner;
-            if (!move_uploaded_file($_FILES['edit_banner']['tmp_name'], $target)) {
+            if (!move_uploaded_file($_FILES['eventBanner']['tmp_name'], $target)) {
                 $response['message'] = 'Failed to upload banner.';
                 echo json_encode($response);
                 exit;
