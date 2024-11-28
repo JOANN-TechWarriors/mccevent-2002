@@ -455,164 +455,57 @@ jQuery(document).ready(function($){
 </form>
           </div>
           
-          
-<?php 
+          <?php
+if (isset($_POST['save_settings'])) {
+    $sub_event_id = $_POST['sub_event_id'];
+    $se_name = $_POST['se_name'];
 
-if(isset($_POST['save_settings']))
-{
-  $sub_event_id = $_POST['sub_event_id'];
-  $se_name = $_POST['se_name'];
+    // Contestants
+    for ($i = 1; $i <= 15; $i++) {
+        if (isset($_POST["con$i"])) {
+            $con_name = $_POST["con$i"];
+            $rand_code = $_POST["rand$i"];
+            $cour_name = $_POST["cour$i"];
+            $pic_name = $_FILES["pic$i"]['name'];
+            $pic_tmp_name = $_FILES["pic$i"]['tmp_name'];
 
-  for ($i = 1; $i <= 15; $i++) {
-      if(isset($_POST["con$i"])) {
-          $con_name = $_POST["con$i"];
-          $rand_code = $_POST["rand$i"];
-          $cour_name = $_POST["cour$i"];
-          $pic_name = $_FILES["pic$i"]['name'];
-          $pic_tmp_name = $_FILES["pic$i"]['tmp_name'];
-          
-          if($con_name != "") {
-              $target_dir = "../img/";
-              $target_file = $target_dir . basename($pic_name);
-              
-              if (move_uploaded_file($pic_tmp_name, $target_file)) {
-                  $conn->query("INSERT INTO contestants (fullname, subevent_id, contestant_ctr, rand_code, AddOn, Picture) VALUES ('$con_name', '$sub_event_id', '$i', '$rand_code', '$cour_name', '$target_file')");
-              } else {
-                  echo "Sorry, there was an error uploading the file.";
-              }
-          }
-      }
-  }
- 
- /* end contestants */
-   
+            if ($con_name != "") {
+                $target_dir = "../img/";
+                $target_file = $target_dir . basename($pic_name);
 
-   
-   /* judges */
-   
-    $code1=$_POST['code1'];
-    $code2=$_POST['code2'];
-    $code3=$_POST['code3'];
-    $code4=$_POST['code4'];
-  
+                if (move_uploaded_file($pic_tmp_name, $target_file)) {
+                    $contestant_id = random_int(10000, 99999); // Generate random 5-digit number
+                    $conn->query("INSERT INTO contestants (contestant_id, fullname, subevent_id, contestant_ctr, rand_code, AddOn, Picture) VALUES ('$contestant_id', '$con_name', '$sub_event_id', '$i', '$rand_code', '$cour_name', '$target_file')");
+                } else {
+                    echo "Sorry, there was an error uploading the file.";
+                }
+            }
+        }
+    }
 
-   $j1_name=$_POST['jud1'];
-   if($j1_name=="")
-   {
-    
-   }
-   else
-   {
-    $conn->query("insert into judges(fullname,subevent_id,judge_ctr,code)values('$j1_name','$sub_event_id','1','$code1')");
-   }
-   
-   
-   $j2_name=$_POST['jud2'];
-   if($j2_name=="")
-   {
-    
-   }
-   else
-   {
-    $conn->query("insert into judges(fullname,subevent_id,judge_ctr,code)values('$j2_name','$sub_event_id','2','$code2')");
-   }
-   
-   
-   $j3_name=$_POST['jud3'];
-   if($j3_name=="")
-   {
-    
-   }
-   else
-   {
-    $conn->query("insert into judges(fullname,subevent_id,judge_ctr,code)values('$j3_name','$sub_event_id','3','$code3')");
-   }
-   
-   
-   $j4_name=$_POST['jud4'];
-   if($j4_name=="")
-   {
-    
-   }
-   else
-   {
-    $conn->query("insert into judges(fullname,subevent_id,judge_ctr,code)values('$j4_name','$sub_event_id','4','$code4')");
-   }
-   
- 
- /* end judges */
- 
- 
+    // Judges
+    for ($j = 1; $j <= 4; $j++) {
+        $j_name = $_POST["jud$j"];
+        $code = $_POST["code$j"];
 
-  /* criteria */
-   $c1_name=$_POST['crit1']; 
-    $cp1=$_POST['cp1'];
-  if($c1_name!="" or $cp1>0)
-    {
-      $conn->query("insert into criteria(criteria,subevent_id,percentage,criteria_ctr)values('$c1_name','$sub_event_id','$cp1','1')"); 
+        if ($j_name != "") {
+            $judge_id = random_int(10000, 99999); // Generate random 5-digit number
+            $conn->query("INSERT INTO judges (judge_id, fullname, subevent_id, judge_ctr, code) VALUES ('$judge_id', '$j_name', '$sub_event_id', '$j', '$code')");
+        }
     }
-    
-    
-       $c2_name=$_POST['crit2']; 
-    $cp2=$_POST['cp2'];
-   if($c2_name!="" or $cp1>0)
-    {
-      $conn->query("insert into criteria(criteria,subevent_id,percentage,criteria_ctr)values('$c2_name','$sub_event_id','$cp2','2')"); 
+
+    // Criteria
+    for ($k = 1; $k <= 8; $k++) {
+        $c_name = $_POST["crit$k"];
+        $cp = $_POST["cp$k"];
+
+        if ($c_name != "" || $cp > 0) {
+            $criteria_id = random_int(10000, 99999); // Generate random 5-digit number
+            $conn->query("INSERT INTO criteria (criteria_id, criteria, subevent_id, percentage, criteria_ctr) VALUES ('$criteria_id', '$c_name', '$sub_event_id', '$cp', '$k')");
+        }
     }
-    
-    
-       $c3_name=$_POST['crit3']; 
-    $cp3=$_POST['cp3'];
-    if($c3_name!="" or $cp3>0)
-    {
-      $conn->query("insert into criteria(criteria,subevent_id,percentage,criteria_ctr)values('$c3_name','$sub_event_id','$cp3','3')"); 
-    }
-    
-    
-       $c4_name=$_POST['crit4']; 
-    $cp4=$_POST['cp4'];
-   if($c4_name!="" or $cp4>0)
-    {
-      $conn->query("insert into criteria(criteria,subevent_id,percentage,criteria_ctr)values('$c4_name','$sub_event_id','$cp4','4')"); 
-    }
-    
-    
-       $c5_name=$_POST['crit5']; 
-    $cp5=$_POST['cp5'];
-    if($c5_name!="" or $cp5>0)
-    {
-      $conn->query("insert into criteria(criteria,subevent_id,percentage,criteria_ctr)values('$c5_name','$sub_event_id','$cp5','5')"); 
-    }
-    
-    
-       $c6_name=$_POST['crit6']; 
-    $cp6=$_POST['cp6'];
-    if($c6_name!="" or $cp6>0)
-    {
-      $conn->query("insert into criteria(criteria,subevent_id,percentage,criteria_ctr)values('$c6_name','$sub_event_id','$cp6','6')"); 
-    }
-    
-    
-       $c7_name=$_POST['crit7']; 
-    $cp7=$_POST['cp7'];
-   if($c7_name!="" or $cp7>0)
-    {
-      $conn->query("insert into criteria(criteria,subevent_id,percentage,criteria_ctr)values('$c7_name','$sub_event_id','$cp7','7')"); 
-    }
-    
-    
-       $c8_name=$_POST['crit8']; 
-    $cp8=$_POST['cp8'];
-    if($c8_name!="" or $cp8>0)
-    {
-      $conn->query("insert into criteria(criteria,subevent_id,percentage,criteria_ctr)values('$c8_name','$sub_event_id','$cp8','8')"); 
-    }
- 
- 
-    /* end criteria */
- 
- 
- ?>
+}
+?>
 <script>
 window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
 alert('Event details successfully set.');						
