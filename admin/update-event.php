@@ -17,46 +17,53 @@ $response = ['success' => false, 'message' => ''];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Debugging: Check received POST data
     var_dump($_POST);
+
+    // Debugging: Check session data
+    if (!isset($_SESSION['id'])) {
+        $response['message'] = 'Session ID is not set.';
+        echo json_encode($response);
+        exit;
+    }
     var_dump($_SESSION['id']);
 
     // Get form data
-    $event_id = isset($_POST['edit_event_id']) ? intval($_POST['edit_event_id']) : null;
-    $event_name = isset($_POST['edit_main_event']) ? trim($_POST['edit_main_event']) : '';
-    $date_start = isset($_POST['edit_date_start']) ? trim($_POST['edit_date_start']) : '';
-    $date_end = isset($_POST['edit_date_end']) ? trim($_POST['edit_date_end']) : '';
+    $event_id = isset($_POST['eventID']) ? intval($_POST['eventID']) : null;
+    $event_name = isset($_POST['eventTitle']) ? trim($_POST['eventTitle']) : '';
+    $date_start = isset($_POST['eventStart']) ? trim($_POST['eventStart']) : '';
+    $date_end = isset($_POST['eventEnd']) ? trim($_POST['eventEnd']) : '';
     $organizer_id = isset($_SESSION['id']) ? intval($_SESSION['id']) : null;
 
     // Validate required fields
     if ($event_id && $event_name && $date_start && $date_end && $organizer_id) {
         // Handle file upload if a new banner is provided
+        $banner = null;
         if (isset($_FILES['edit_banner']) && $_FILES['edit_banner']['size'] > 0) {
             $banner = time() . '_' . $_FILES['edit_banner']['name'];
             $target = "../img/" . $banner;
-            if (move_uploaded_file($_FILES['edit_banner']['tmp_name'], $target)) {
-                // Update query with new banner
-                $sql = "UPDATE upcoming_events SET title=?, start_date=?, end_date=?, banner=? WHERE id=? AND organizer_id=?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindParam(1, $event_name);
-                $stmt->bindParam(2, $date_start);
-                $stmt->bindParam(3, $date_end);
-                $stmt->bindParam(4, $banner);
-                $stmt->bindParam(5, $event_id);
-                $stmt->bindParam(6, $organizer_id);
-            } else {
-                $response['message'] = 'Failed to upload banner';
+            if (!move_uploaded_file($_FILES['edit_banner']['tmp_name'], $target)) {
+                $response['message'] = 'Failed to upload banner.';
                 echo json_encode($response);
                 exit;
             }
-        } else {
-            // Update query without banner
-            $sql = "UPDATE upcoming_events SET title=?, start_date=?, end_date=? WHERE id=? AND organizer_id=?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(1, $event_name);
-            $stmt->bindParam(2, $date_start);
-            $stmt->bindParam(3, $date_end);
-            $stmt->bindParam(4, $event_id);
-            $stmt->bindParam(5, $organizer_id);
         }
+
+        // Prepare SQL query
+        $sql = "UPDATE upcoming_events SET title=?, start_date=?, end_date=?";
+        if ($banner) {
+            $sql .= ", banner=?";
+        }
+        $sql .= " WHERE id=? AND organizer_id=?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $event_name);
+        $stmt->bindParam(2, $date_start);
+        $stmt->bindParam(3, $date_end);
+        $paramIndex = 4;
+        if ($banner) {
+            $stmt->bindParam($paramIndex++, $banner);
+        }
+        $stmt->bindParam($paramIndex++, $event_id);
+        $stmt->bindParam($paramIndex, $organizer_id);
 
         // Execute update query
         if ($stmt->execute()) {
