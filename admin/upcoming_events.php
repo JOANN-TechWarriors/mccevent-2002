@@ -625,7 +625,6 @@ if (substr($request, -4) == '.php') {
             });
         }
     });
-});
 
     var currentDateTime = roundToNearestHalfHour(new Date()).format('YYYY-MM-DDTHH:mm');
     $('#eventStart, #eventEnd, #updateeventStart, #updateeventEnd').attr('min', currentDateTime).attr('step', '1800');
