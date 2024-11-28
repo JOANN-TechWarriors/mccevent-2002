@@ -401,7 +401,7 @@ if (substr($request, -4) == '.php') {
   </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" id="deleteEventButton">Delete</button>
-            <button type="button" class="btn btn-success" id="updateEventButton">Update</button>
+            <button type="submit" class="btn btn-success" id="updateEventButton">Update</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelEventButton">Cancel</button>
           </div>
           </form>
@@ -567,7 +567,52 @@ if (substr($request, -4) == '.php') {
       $('#updateeventEnd').val('');
     });
 
-   
+    $('#updateEventButton').off('click').on('click', function() {
+      var id = $('#updateeventID').val();
+      var title = $('#updateeventTitle').val();
+      var start = $('#updateeventStart').val();
+      var end = $('#updateeventEnd').val();
+      var formData = new FormData();
+
+      formData.append('eventID', id);
+      formData.append('eventTitle', title);
+      formData.append('eventStart', start);
+      formData.append('eventEnd', end);
+
+      var bannerInput = $('#eventBanner')[0];
+      if (bannerInput.files.length > 0) {
+        formData.append('eventBanner', bannerInput.files[0]);
+      }
+
+      $.ajax({
+        url: 'update-event.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: response.message,
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $('#updateEventModal').modal('hide');
+              calendar.refetchEvents();  // Refresh the events in FullCalendar
+            }
+          });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error updating event: ' + errorThrown,
+            confirmButtonText: 'OK'
+          });
+        }
+      });
+    });
 
     var currentDateTime = roundToNearestHalfHour(new Date()).format('YYYY-MM-DDTHH:mm');
     $('#eventStart, #eventEnd, #updateeventStart, #updateeventEnd').attr('min', currentDateTime).attr('step', '1800');
@@ -640,63 +685,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-</script>
-<script>
-$(document).ready(function() {
-    $('#updateEventButton').on('click', function(event) {
-        event.preventDefault();
-
-        var formData = new FormData();
-        formData.append('eventID', $('#updateeventID').val());
-        formData.append('eventTitle', $('#updateeventTitle').val());
-        formData.append('eventStart', $('#updateeventStart').val());
-        formData.append('eventEnd', $('#updateeventEnd').val());
-
-        var bannerInput = $('#eventBanner')[0];
-        if (bannerInput.files.length > 0) {
-            formData.append('eventBanner', bannerInput.files[0]);
-        }
-
-        $.ajax({
-            url: 'update-event.php',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                var result = JSON.parse(response);
-                if (result.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: result.message,
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#updateEventModal').modal('hide');
-                            calendar.refetchEvents();  // Refresh the events in FullCalendar
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: result.message,
-                        confirmButtonText: 'OK'
-                    });
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Error updating event: ' + errorThrown,
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
-    });
-});
 </script>
 </body>
 </html>
