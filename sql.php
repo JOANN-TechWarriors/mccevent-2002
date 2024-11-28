@@ -13,22 +13,37 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// SQL to create logs table
-$sql = "CREATE TABLE IF NOT EXISTS `logs` (
-    `id` varchar(45) NOT NULL,
-    `ip` varchar(45) NOT NULL,
-    `username` varchar(100) NOT NULL,
-    `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-    `latitude` int(11) NOT NULL,
-    `longitude` int(11) NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+// SQL to select all logs
+$sql = "SELECT * FROM logs";
+$result = $conn->query($sql);
 
-// Execute query
-if ($conn->query($sql) === TRUE) {
-    echo "Table 'logs' created successfully or already exists.";
+// Check if there are any results
+if ($result->num_rows > 0) {
+    // Output table header
+    echo "<table border='1'>
+            <tr>
+                <th>ID</th>
+                <th>IP</th>
+                <th>Username</th>
+                <th>Timestamp</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>";
+    
+    // Output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>" . htmlspecialchars($row["id"]) . "</td>
+                <td>" . htmlspecialchars($row["ip"]) . "</td>
+                <td>" . htmlspecialchars($row["username"]) . "</td>
+                <td>" . htmlspecialchars($row["timestamp"]) . "</td>
+                <td>" . htmlspecialchars($row["latitude"]) . "</td>
+                <td>" . htmlspecialchars($row["longitude"]) . "</td>
+              </tr>";
+    }
+    echo "</table>";
 } else {
-    echo "Error creating table: " . $conn->error;
+    echo "0 results";
 }
 
 // Close connection
