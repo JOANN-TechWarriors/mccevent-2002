@@ -308,10 +308,10 @@ if (substr($request, -4) == '.php') {
       <div>Event Judging System</div>
     </div>
     <ul>
-        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-        <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-        <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-        <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
+        <li><a href="dashboard"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+        <li><a href="home"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+        <li><a href="upcoming_events"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+        <li><a href="live_stream"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
     </ul>
   </div>
   <!-- Header -->
@@ -322,7 +322,7 @@ if (substr($request, -4) == '.php') {
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $name; ?></div>
             <div class="dropdown-menu">
-                <a href="edit_organizer.php"> Account Settings</a>
+                <a href="edit_organizer"> Account Settings</a>
                 <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
         </div>

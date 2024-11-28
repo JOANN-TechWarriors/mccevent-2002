@@ -223,8 +223,8 @@ if (substr($request, -4) == '.php') {
         <div>Event Judging System</div>
     </div>
     <ul>
-        <li><a href="../tabulator/score_sheets.php"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
-        <li><a href="../tabulator/rev_main_event.php"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
+        <li><a href="../tabulator/score_sheets"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
+        <li><a href="../tabulator/rev_main_event"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
     </ul>
   </div>
     
@@ -249,7 +249,7 @@ if (substr($request, -4) == '.php') {
     <div class="span15">
       <div class="col-md-12">
         <ul class="breadcrumb">
-          <li><a href="../tabulator/score_sheets.php">Score Sheets</a> /</li>
+          <li><a href="../tabulator/score_sheets">Score Sheets</a> /</li>
           <li>Data Reviews</li>
         </ul>
       </div>
@@ -299,7 +299,7 @@ if (substr($request, -4) == '.php') {
                       <button class="btn btn-info pull-right" style="width: 200px !important;"><strong>NEXT</strong> <i class="icon-chevron-right"></i></button>
                     <?php } else { ?>
                       <div class="alert alert-warning">
-                        <h3>NO EVENTS TO DISPLAY... PLEASE ADD AN EVENT <a href="home.php">HERE &raquo;</a></h3>
+                        <h3>NO EVENTS TO DISPLAY... PLEASE ADD AN EVENT <a href="home">HERE &raquo;</a></h3>
                       </div>
                     <?php } ?>
                   </td>

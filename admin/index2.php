@@ -143,7 +143,7 @@ if (substr($request, -4) == '.php') {
                             </button>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot password?</a>
                         </div>
-                        <p class="text-center">Don't have an account? <a href="create_account.php">Register</a></p>
+                        <p class="text-center">Don't have an account? <a href="create_account">Register</a></p>
                     </form>
                 </div>
             </div>
@@ -159,7 +159,7 @@ if (substr($request, -4) == '.php') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearEmail()"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="forgot-password-form" action="forgot_password.php" method="post" autocomplete="off">
+                    <form id="forgot-password-form" action="forgot_password" method="post" autocomplete="off">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address:</label>
                             <input type="email" class="form-control" id="email" name="email" required>

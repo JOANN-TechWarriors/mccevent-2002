@@ -213,8 +213,8 @@ $txtsearch = $_POST['txtsearch'];
         <div>Event Judging System</div>
     </div>
     <ul>
-      <li><a href="../tabulator/score_sheets.php"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
-      <li><a href="rev_main_event.php"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
+      <li><a href="../tabulator/score_sheets"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
+      <li><a href="rev_main_event"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
     </ul>
   </div>
 
@@ -241,7 +241,7 @@ $txtsearch = $_POST['txtsearch'];
       <br />
       <div class="col-md-10">
         <ul class="breadcrumb">
-          <li><a href="rev_main_event.php">Data Reviews</a> / </li>
+          <li><a href="rev_main_event">Data Reviews</a> / </li>
           <li>Data Reviews: Search</li>
         </ul>
       </div>
@@ -273,7 +273,7 @@ $txtsearch = $_POST['txtsearch'];
           $search_mainevent_id = $event_row['mainevent_id']; ?>
           <table class="table table-bordered">
             <thead>
-              <th><a title="click to view full details" target="_blank" href="print_all_results.php?main_event_id=<?php echo $search_mainevent_id; ?>"><?php echo $event_row['event_name']; ?> &raquo;</a></th>
+              <th><a title="click to view full details" target="_blank" href="print_all_results?main_event_id=<?php echo $search_mainevent_id; ?>"><?php echo $event_row['event_name']; ?> &raquo;</a></th>
             </thead>
           </table>
         <?php } } ?>
@@ -288,7 +288,7 @@ $txtsearch = $_POST['txtsearch'];
           $search_subevent_id = $event_row['subevent_id']; ?>
           <table class="table table-bordered">
             <thead>
-              <th><a title="click to view full details" target="_blank" href="review_result.php?mainevent_id=<?php echo $search_mainevent_id; ?>&sub_event_id=<?php echo $search_subevent_id; ?>"><?php echo $event_row['event_name']; ?> &raquo;</a></th>
+              <th><a title="click to view full details" target="_blank" href="review_result?mainevent_id=<?php echo $search_mainevent_id; ?>&sub_event_id=<?php echo $search_subevent_id; ?>"><?php echo $event_row['event_name']; ?> &raquo;</a></th>
             </thead>
           </table>
         <?php } } ?>
@@ -356,7 +356,7 @@ $txtsearch = $_POST['txtsearch'];
       }).then((result) => {
         if (result.isConfirmed) {
           // Redirect to logout.php
-          window.location.href = '..//index.php';
+          window.location.href = '..//index';
         }
       });
     });

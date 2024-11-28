@@ -1,3 +1,11 @@
+<?php
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +44,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location = 'index2.php';
+                            window.location = 'index2';
                         }
                     });
                 </script>
@@ -46,7 +54,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 $_SESSION['id'] = $row['organizer_id'];
                 ?>
                 <script>
-                    window.location = 'dashboard.php';
+                    window.location = 'dashboard';
                 </script>
                 <?php
             }
@@ -61,7 +69,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                     confirmButtonText: 'OK'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location = 'index2.php';
+                        window.location = 'index2';
                     }
                 });
             </script>
@@ -78,7 +86,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location = 'index2.php';
+                    window.location = 'index2';
                 }
             });
         </script>
@@ -94,7 +102,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             confirmButtonText: 'OK'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location = 'index2.php';
+                window.location = 'index2';
             }
         });
     </script>

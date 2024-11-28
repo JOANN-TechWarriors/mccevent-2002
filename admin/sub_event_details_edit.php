@@ -746,9 +746,9 @@ $se_row = $se_query->fetch();
   <button name="activate_textpoll" type="submit" class="btn btn-default" title="Click to deactivate event textpoll">Deactivate</button>
   <a type="button" class="btn btn-success" title="Event textpoll is activated">&nbsp;</a>
 </div>
-  &nbsp;<a class="btn btn-primary" href="updateTxtview.php?sid=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">Live View Result</a>
-  &nbsp;<a class="btn btn-primary" href="updateBlankTxtview.php?sid=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">Live View</a>
-  &nbsp;<a class="btn btn-primary" href="..//poll/index.php?event=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">View Vote Poll</a>
+  &nbsp;<a class="btn btn-primary" href="updateTxtview?sid=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">Live View Result</a>
+  &nbsp;<a class="btn btn-primary" href="updateBlankTxtview?sid=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">Live View</a>
+  &nbsp;<a class="btn btn-primary" href="..//poll/index?event=<?php echo $sub_event_id; ?>" target="_blank" title="Click to view textpoll votes">View Vote Poll</a>
  </form>
  
  </td>
@@ -1144,7 +1144,7 @@ if(isset($_POST['save_settings']))
  ?>
   <script>
 
-    window.location = 'home.php';
+    window.location = 'home';
     alert('Organizer <?php echo $fname." ".$mname." ".$lname; ?> registered successfully!');						
   </script>
   <?php  

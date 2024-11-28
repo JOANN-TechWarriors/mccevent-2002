@@ -226,11 +226,11 @@ include('session.php');
             <div>Event Judging System</div>
         </div>
         <ul>
-            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-            <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-            <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-            <li><a href="score_sheets.php"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
-            <li><a href="rev_main_event.php"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
+            <li><a href="dashboard"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="home"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+            <li><a href="upcoming_events"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+            <li><a href="score_sheets"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
+            <li><a href="rev_main_event"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
         </ul>
     </div>
     <!-- Header -->
@@ -241,7 +241,7 @@ include('session.php');
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $name; ?></div>
             <div class="dropdown-menu">
-                <a href="edit_organizer.php"> Account Settings</a>
+                <a href="edit_organizer"> Account Settings</a>
                 <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
             </div>
         </div>
@@ -258,13 +258,13 @@ include('session.php');
             <div class="col-md-15">
                 <ul class="breadcrumb">
                     <li>
-                        <a href="dashboard.php">Dashboard</a> /
+                        <a href="dashboard">Dashboard</a> /
                     </li>
                     <li>
-                        <a href="home.php">Ongoing Events</a> /
+                        <a href="home">Ongoing Events</a> /
                     </li>
                     <li>
-                        <a href="upcoming_events.php">Upcoming Events</a> /
+                        <a href="upcoming_events">Upcoming Events</a> /
                     </li>
                     <li>Score Sheets</li>
                 </ul>
@@ -350,11 +350,11 @@ include('session.php');
          </td>
          
          <td width="128">
-            <a title="click to set points deductions" target="_blank" href="deductScores.php?event_id=<?php echo $se_id ; ?>" class="btn btn-danger"><i class="icon icon-minus-sign"></i></a>
+            <a title="click to set points deductions" target="_blank" href="deductScores?event_id=<?php echo $se_id ; ?>" class="btn btn-danger"><i class="icon icon-minus-sign"></i></a>
     
-            <a title="click to set final result for this sub-event" target="_blank" href="result_title.php?event_id=<?php echo $se_id ; ?>" class="btn btn-primary"><i class="icon icon-star"></i></a>
+            <a title="click to set final result for this sub-event" target="_blank" href="result_title?event_id=<?php echo $se_id ; ?>" class="btn btn-primary"><i class="icon icon-star"></i></a>
             
-            <a title="click to print results" target="_blank" href="result_sheet.php?event_id=<?php echo $se_id ; ?>" class="btn btn-primary"><i class="icon icon-print"></i></a>
+            <a title="click to print results" target="_blank" href="result_sheet?event_id=<?php echo $se_id ; ?>" class="btn btn-primary"><i class="icon icon-print"></i></a>
      
          </td>
          
@@ -449,7 +449,7 @@ include('session.php');
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redirect to logout.php
-                    window.location.href = '..//index.php';
+                    window.location.href = '..//index';
                 }
             });
         });

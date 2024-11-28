@@ -91,7 +91,7 @@ return $code4;
                 { 
                     ?>	<script>
                
-								window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+								window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
 							</script><?php
                 }
                 
@@ -103,7 +103,7 @@ return $code4;
                 { 
                     ?>	<script>
                
-								window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+								window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
 							</script><?php
                 }
                 
@@ -115,7 +115,7 @@ return $code4;
                 { 
                     ?><script>
                
-								window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+								window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
 							</script><?php
                 }
         
@@ -163,7 +163,7 @@ padding:10px;
                
               <li>
               <br />
-                  <a href="home.php">Home | Organizer: <b><?php echo $name; ?></b></a>
+                  <a href="home">Home | Organizer: <b><?php echo $name; ?></b></a>
               </li>
               
               
@@ -447,7 +447,7 @@ jQuery(document).ready(function($){
   <table><tr>
   <td><button name="save_settings" id="submit" type="submit"  class="btn btn-primary">Save Settings</button></td>
   <td>&nbsp;</td>
-  <td><a href="home.php"  class="btn btn-default">Cancel</a></td>
+  <td><a href="home"  class="btn btn-default">Cancel</a></td>
   </tr></table>
    
  
@@ -614,7 +614,7 @@ if(isset($_POST['save_settings']))
  
  ?>
 <script>
-window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
 alert('Event details successfully set.');						
 </script>
 <?php  

@@ -471,8 +471,8 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="profile-dropdown">
         <div style="font-size:small;"> <?php echo $name; ?></div>
         <div class="dropdown-menu">
-            <a href="edit_organizer.php"> Account Settings</a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
+            <a href="edit_organizer"> Account Settings</a>
+            <a href="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
         </div>
     </div>
 </div> 
@@ -637,7 +637,7 @@ if (isset($_POST['edit_event'])) {
             text: 'Event <?php echo $event_name; ?> updated successfully!',
             icon: 'success'
         }).then(() => {
-            window.location = 'home.php';
+            window.location = 'home';
         });
     </script>
     <?php
@@ -691,7 +691,7 @@ if (isset($_POST['edit_event'])) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redirect to logout.php
-                    window.location.href = '..//index.php';
+                    window.location.href = '..//index';
                 }
             });
         });

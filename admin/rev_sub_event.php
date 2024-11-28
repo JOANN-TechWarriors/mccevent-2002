@@ -240,8 +240,8 @@ if (substr($request, -4) == '.php') {
         <div>Event Judging System</div>
     </div>
     <ul>
-      <li><a href="../tabulator/score_sheets.php"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
-      <li><a href="rev_main_event.php"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
+      <li><a href="../tabulator/score_sheets"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
+      <li><a href="rev_main_event"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
     </ul>
   </div>
 
@@ -267,7 +267,7 @@ if (substr($request, -4) == '.php') {
     <br />
     <div class="col-md-12">
       <ul class="breadcrumb">
-        <li><a href="rev_main_event.php">DR: Main Event List</a> / </li>
+        <li><a href="rev_main_event">DR: Main Event List</a> / </li>
         <li>DR: Main Event <i><strong><?php echo $m_event_name; ?></strong></i> - Event List</li>
       </ul>
     </div>
@@ -371,7 +371,7 @@ if (substr($request, -4) == '.php') {
         cancelButtonText: 'No'
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location.href = '../index.php';
+          window.location.href = '../index';
         }
       });
     });
