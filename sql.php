@@ -11,7 +11,7 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Fetch data from the main_event table
-    $select_sql = "SELECT event_id, event_name, status, organizer_id, sy, date_start, date_end, place, banner FROM main_event";
+    $select_sql = "SELECT mainevent_id , event_name, status, organizer_id, sy, date_start, date_end, place, banner FROM main_event";
     $stmt = $conn->query($select_sql);
 
     // Display data in an HTML table
@@ -19,7 +19,7 @@ try {
     echo "<tr><th>Event ID</th><th>Event Name</th><th>Status</th><th>Organizer ID</th><th>SY</th><th>Date Start</th><th>Date End</th><th>Place</th><th>Banner</th></tr>";
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         echo "<tr>";
-        echo "<td>" . htmlspecialchars($row['event_id']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['mainevent_id ']) . "</td>";
         echo "<td>" . htmlspecialchars($row['event_name']) . "</td>";
         echo "<td>" . htmlspecialchars($row['status']) . "</td>";
         echo "<td>" . htmlspecialchars($row['organizer_id']) . "</td>";
