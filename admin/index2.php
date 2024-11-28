@@ -340,7 +340,7 @@ if (substr($request, -4) == '.php') {
                         confirmButtonText: "Ok"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = 'dashboard.php';
+                            window.location.href = 'dashboard';
                         }
                     });
                 } else {
