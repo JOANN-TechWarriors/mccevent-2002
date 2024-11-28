@@ -479,7 +479,7 @@ $se_row = $se_query->fetch();
                 <section id="download-bootstrap" style="width:100%;">
                     <div class="page-header">
                     <h1>Contestant's Settings 
-                    &nbsp;<a title="Click to add new Contestant for this Event" href="add_contestant.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-primary"><i class="icon icon-plus"></i></a> 
+                    &nbsp;<a title="Click to add new Contestant for this Event" href="add_contestant?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>" class="btn btn-primary"><i class="icon icon-plus"></i></a> 
                     </h1>
                     </div>
                     
@@ -543,7 +543,7 @@ $se_row = $se_query->fetch();
                 <div class="page-header">
                   <h1>Judge's Settings
                     &nbsp;<a title="Click to add new Judge for this Event"
-                      href="add_judge.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
+                      href="add_judge?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
                       class="btn btn-primary"><i class="icon icon-plus"></i></a>
                     &nbsp;<a title="Click to print Judge's Code for this Event" target="_blank"
                       title="Click to print judges code"
@@ -616,7 +616,7 @@ $se_row = $se_query->fetch();
       <section id="download-bootstrap">
         <div class="page-header">
           <h1>Criteria's Settings &nbsp;<a title="Click to add new Criteria for this Event"
-              href="add_criteria.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
+              href="add_criteria?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name;?>"
               class="btn btn-primary"><i class="icon icon-plus"></i></a></h1>
         </div>
         <div class="table-container">
