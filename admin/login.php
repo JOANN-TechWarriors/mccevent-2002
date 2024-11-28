@@ -36,7 +36,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location = 'index2';
+                            window.location = 'index2.php';
                         }
                     });
                 </script>
@@ -46,7 +46,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 $_SESSION['id'] = $row['organizer_id'];
                 ?>
                 <script>
-                    window.location = 'dashboard';
+                    window.location = 'dashboard.php';
                 </script>
                 <?php
             }
@@ -61,7 +61,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                     confirmButtonText: 'OK'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location = 'index2';
+                        window.location = 'index2.php';
                     }
                 });
             </script>
@@ -78,7 +78,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location = 'index2';
+                    window.location = 'index2.php';
                 }
             });
         </script>
@@ -94,7 +94,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             confirmButtonText: 'OK'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location = 'index2';
+                window.location = 'index2.php';
             }
         });
     </script>
