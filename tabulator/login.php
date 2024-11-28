@@ -10,7 +10,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 header('Content-Type: application/json');
- 
 $response = ['success' => false, 'message' => '', 'redirect' => ''];
 
 // Function to log failed login attempts
@@ -33,15 +32,15 @@ function sendEmailNotification($adminEmail, $logs) {
     try {
         // Server settings
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'joannrebamonte80@gmail.com'; // SMTP username
-        $mail->Password = 'dkyd tsnv hzyh amjy'; // SMTP password
+        $mail->Username = 'joannrebamonte80@gmail.com';
+        $mail->Password = 'your_smtp_password'; // Use an app-specific password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        //Recipients
-        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Tabulator Attempt Alert ');
+        // Recipients
+        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Tabulator Attempt Alert');
         $mail->addAddress($adminEmail);
 
         // Generate detailed HTML log details
@@ -56,16 +55,7 @@ function sendEmailNotification($adminEmail, $logs) {
         // Content
         $mail->isHTML(true);
         $mail->Subject = 'Security Alert: Multiple Failed Login Attempts';
-        $mail->Body = "
-            <html>
-            <body style='font-family: Arial, sans-serif;'>
-                <h2 style='color: #ff0000;'> Security Warning</h2>
-                <p>Multiple failed login attempts have been detected for your system.</p>
-                {$logDetails}
-                <p style='margin-top: 20px; color: #666;'> Please review these attempts and take necessary security actions. </p>
-            </body>
-            </html>
-        ";
+        $mail->Body = "<html><body style='font-family: Arial, sans-serif;'><h2 style='color: #ff0000;'>Security Warning</h2><p>Multiple failed login attempts have been detected for your system.</p>{$logDetails}<p style='margin-top: 20px; color: #666;'>Please review these attempts and take necessary security actions.</p></body></html>";
         $mail->send();
     } catch (Exception $e) {
         error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
@@ -105,7 +95,6 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         if ($_SESSION['login_attempts'] >= 3) {
             $ip = $_SERVER['REMOTE_ADDR'];
             logFailedAttempt($conn, $username, $ip, $latitude, $longitude);
-
             if ($admin) {
                 $adminEmail = $admin['email'];
                 // Fetch log details

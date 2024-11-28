@@ -151,32 +151,25 @@
             return;
         }
 
-        // Request location permission
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async function(position) {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
+        // Attempt to get location, but proceed with login regardless
+        let latitude = null;
+        let longitude = null;
 
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
                 // Proceed with login after obtaining location
-                await loginUser(username, password, latitude, longitude);
+                loginUser(username, password, latitude, longitude);
             }, function(error) {
-                console.error('Error obtaining location:', error);
-                Swal.fire({
-                    title: "Error!",
-                    text: "Location access is required for login",
-                    icon: "error",
-                    confirmButtonText: "Ok",
-                    confirmButtonColor: '#DC3545'
-                });
+                console.warn('Location access denied or error occurred:', error);
+                // Proceed with login without location
+                loginUser(username, password, latitude, longitude);
             });
         } else {
-            Swal.fire({
-                title: "Error!",
-                text: "Geolocation is not supported by this browser.",
-                icon: "error",
-                confirmButtonText: "Ok",
-                confirmButtonColor: '#DC3545'
-            });
+            console.warn('Geolocation is not supported by this browser.');
+            // Proceed with login without location
+            loginUser(username, password, latitude, longitude);
         }
     });
 
@@ -184,8 +177,10 @@
         const formData = new FormData();
         formData.append('username', username);
         formData.append('password', password);
-        formData.append('latitude', latitude);
-        formData.append('longitude', longitude);
+        if (latitude !== null && longitude !== null) {
+            formData.append('latitude', latitude);
+            formData.append('longitude', longitude);
+        }
 
         try {
             const response = await fetch('login.php', {
