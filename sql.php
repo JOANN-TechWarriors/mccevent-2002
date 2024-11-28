@@ -10,16 +10,32 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // SQL to modify the id column
-    $alter_sql = "
-        ALTER TABLE `upcoming_events`
-        MODIFY `id` BIGINT NOT NULL;
-    ";
+    // SQL to select all data from the upcoming_events table
+    $select_sql = "SELECT * FROM `upcoming_events`";
+    $stmt = $conn->query($select_sql);
 
-    // Execute the SQL statement
-    $conn->exec($alter_sql);
+    // Display data in an HTML table
+    echo "<table border='1'>";
+    echo "<tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Banner</th>
+            <th>Organizer ID</th>
+          </tr>";
 
-    echo "Column modified successfully.";
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['title']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['start_date']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['end_date']) . "</td>";
+        echo "<td><img src='" . htmlspecialchars($row['banner']) . "' alt='Banner' width='100'></td>";
+        echo "<td>" . htmlspecialchars($row['organizer_id']) . "</td>";
+        echo "</tr>";
+    }
+    echo "</table>";
 
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
