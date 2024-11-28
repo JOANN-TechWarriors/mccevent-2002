@@ -401,7 +401,7 @@ if (substr($request, -4) == '.php') {
   </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" id="deleteEventButton">Delete</button>
-            <button type="submit" class="btn btn-success" id="updateEventButton">Update</button>
+            <button type="button" class="btn btn-success" id="updateEventButton">Update</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelEventButton">Cancel</button>
           </div>
           </form>
