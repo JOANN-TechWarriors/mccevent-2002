@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php'; // Include PHPMailer's autoloader
+require '../vendor/autoload.php'; // Include PHPMailer's autoloader
 include('../admin/dbcon.php');
 session_start();
 
