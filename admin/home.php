@@ -1,12 +1,21 @@
 <?php
-
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
+?>
+<?php
+// Include necessary files and start the session
 include('header2.php');
 include('session.php');
 include('dbcon.php'); // Include your PDO database connection file
 
+
+
 // Handle form submission to create a new event
 if (isset($_POST['create'])) {
-    $mainevent_id = uniqid('', true); // Generate a unique ID
     $event_name = $_POST['main_event'];
     $description = $_POST['description'];
     $event_start_date = $_POST['date_start'];
@@ -16,11 +25,10 @@ if (isset($_POST['create'])) {
     $target = "../img/" . basename($banner);
 
     // Insert event details into the database using PDO
-    $sql = "INSERT INTO main_event (mainevent_id, event_name, description, status, organizer_id, date_start, date_end, place, banner) 
-            VALUES (:mainevent_id, :event_name, :description, 'activated', :organizer_id, :date_start, :date_end, :place, :banner)";
+    $sql = "INSERT INTO main_event (event_name, description, status, organizer_id, date_start, date_end, place, banner) 
+            VALUES (:event_name, :description, 'activated', :organizer_id, :date_start, :date_end, :place, :banner)";
     $stmt = $conn->prepare($sql);
 
-    $stmt->bindParam(':mainevent_id', $mainevent_id);
     $stmt->bindParam(':event_name', $event_name);
     $stmt->bindParam(':description', $description);
     $stmt->bindParam(':organizer_id', $session_id);
@@ -42,7 +50,7 @@ if (isset($_POST['create'])) {
         $_SESSION['message_type'] = 'error';
     }
 
-    header("Location: home.php");
+    header("Location: home.php"); // Redirect to the same page or another page
     exit();
 }
 
@@ -54,12 +62,16 @@ $stmt->execute();
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="shortcut icon" href="../images/logo copy.png"/>
+
     <style>
                /* Modal Background */
     .modal {
@@ -435,174 +447,207 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
     </style>
 </head>
+
 <body>
     <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
-        <div class="sidebar-heading">
-            <img src="../img/logo.png" alt="Logo">
-            <div>Event Judging System</div>
-        </div>
+    <button class="toggle-btn" id="toggle-btn"><i class="fas fa-bars"></i></button>
+    <div class="sidebar-heading">
+        <img src="../img/logo.png" alt="Logo">
+        <div>Event Judging System</div>
+    </div>
         <ul>
-            <li><a href="dashboard"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-            <li><a href="home"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-            <li><a href="upcoming_events"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-            <li><a href="live_stream"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+            <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+            <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
+
         </ul>
     </div>
     <!-- Header -->
     <div class="header">
-        <div>
-            <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+    <div>
+        <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
+    </div>
+    <div class="profile-dropdown">
+        <div style="font-size:small;"> <?php echo $name; ?></div>
+        <div class="dropdown-menu">
+            <a href="edit_organizer.php"> Account Settings</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
         </div>
-        <div class="profile-dropdown">
-            <div style="font-size:small;"> <?php echo $name; ?></div>
-            <div class="dropdown-menu">
-                <a href="edit_organizer"> Account Settings</a>
-                <a href="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
-            </div>
-        </div>
-    </div> 
-
+    </div>
+</div> 
+    
+    
     <!-- Main content -->
     <div class="main" id="main-content">
-        <div class="container">
-            <h1 style="font-size: 35px;">Ongoing Events</h1>
-        </div>
+    <div class="container">
+        <h1 style="font-size: 35px;">Ongoing Events</h1>
+    </div>
 
-        <section id="download-bootstrap">
-            <div class="page-header">
-                <a data-toggle="modal" class="btn btn-info pull-right" href="#addMEcollapse"
-                    title="Click to add Main Event"><i class="icon icon-plus"></i> <strong>EVENT</strong></a>
+    <section id="download-bootstrap">
+        <div class="page-header">
+            <a data-toggle="modal" class="btn btn-info pull-right" href="#addMEcollapse"
+                title="Click to add Main Event"><i class="icon icon-plus"></i> <strong>EVENT</strong></a>
 
-                <!-- Modal for adding an event -->
-                <div id="addMEcollapse" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addMEcollapseLabel" aria-hidden="true">                    
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title"><strong>ADD EVENT</strong><button type="button" class="close"
-                                        data-dismiss="modal">&times;</button></h4>
-                            </div>
-                            <div class="modal-body">
-                                <form method="POST" enctype="multipart/form-data">
-                                    <div class="form-group">
-                                        <strong>Upload Banner:</strong><br />
-                                        <input type="file" name="banner" accept="image/*">
-                                        <small class="form-text text-muted">File size:1200x400 pixels.Maximum 2MB.</small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="main_event"><strong>Event Name:</strong></label>
-                                        <input type="text" name="main_event" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 30px !important;"
-                                            placeholder="Event Name" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="date_start"><strong>Start Date:</strong></label>
-                                        <input type="date" id="date_start" name="date_start" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 30px !important;" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="date_end"><strong>End Date:</strong></label>
-                                        <input type="date" id="date_end" name="date_end" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 30px !important;" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="description"><strong>Description:</strong></label>
-                                        <textarea name="description" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 100px !important;"
-                                            placeholder="Description" required></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="place"><strong>Venue:</strong></label>
-                                        <input type="text" name="place" class="form-control btn-block"
-                                            style="text-indent: 5px !important; height: 30px !important;"
-                                            placeholder="Venue" required />
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button name="create" class="btn btn-success"><i class="icon-save"></i>
-                                            <strong>SAVE</strong></button>
-                                        <button type="reset" class="btn btn-default"><i class="icon-ban-circle"></i>
-                                            <strong>RESET</strong></button>
-                                    </div>
-                                </form>
-                            </div>
+            <!-- Modal for adding an event -->
+            <div id="addMEcollapse" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addMEcollapseLabel" aria-hidden="true">                    
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><strong>ADD EVENT</strong><button type="button" class="close"
+                                    data-dismiss="modal">&times;</button></h4>
                         </div>
-                    </div>
-                </div>
-                <br> <br><br>
-                <!-- Display events -->
-                <div class="tile-container">
-                    <?php foreach ($events as $event) { ?>
-                    <div class="tile" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                        <div class="dropdown">
-                            <button class="dropbtn">⋮</button>
-                            <div class="dropdown-content">
-                                <a href="#editEvent" style="color: black;" class="btn-success edit-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                                    <i class="icon-pencil"></i> Edit
-                                </a>
-                                <a href="#" style="color: black;" class="btn-danger delete-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
-                                    <i class="icon-remove"></i> Delete
-                                </a>
-                            </div>
-                        </div>
-                        <h3><b><?php echo htmlspecialchars($event['event_name']); ?></b></h3>
-                        <p><?php echo date('m-d-Y', strtotime($event['date_start'])); ?> to
-                        <?php echo date('m-d-Y', strtotime($event['date_end'])); ?></p>
-                        <p><?php echo htmlspecialchars($event['place']); ?></p>
-                    </div>
-                    <?php } ?>
-                </div>
-
-                <!-- Edit Event Modal -->
-                <div id="editEventModal" class="modal fade" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Edit Event</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editEventForm" method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="edit_event_id" id="edit_event_id">
-                                    
-                                    <div class="form-group">
-                                        <label for="edit_main_event">Event Name:</label>
-                                        <input type="text" class="form-control btn-block" id="edit_main_event" name="edit_main_event" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="edit_date_start">Start Date:</label>
-                                        <input type="date" class="form-control btn-block" id="edit_date_start" name="edit_date_start" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="edit_date_end">End Date:</label>
-                                        <input type="date" class="form-control btn-block" id="edit_date_end" name="edit_date_end" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="edit_event_description">Description:</label>
-                                        <textarea class="form-control btn-block" id="edit_event_description" name="edit_event_description" required></textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="edit_place">Venue:</label>
-                                        <input type="text" class="form-control btn-block" id="edit_place" name="edit_place" required>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
+                        <div class="modal-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <strong>Upload Banner:</strong><br />
+                                    <input type="file" name="banner" accept="image/*">
+                                    <small class="form-text text-muted">File size:1200x400 pixels.Maximum 2MB.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="main_event"><strong>Event Name:</strong></label>
+                                    <input type="text" name="main_event" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 30px !important;"
+                                        placeholder="Event Name" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="date_start"><strong>Start Date:</strong></label>
+                                    <input type="date" id="date_start" name="date_start" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 30px !important;" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="date_end"><strong>End Date:</strong></label>
+                                    <input type="date" id="date_end" name="date_end" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 30px !important;" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="description"><strong>Description:</strong></label>
+                                    <textarea name="description" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 100px !important;"
+                                        placeholder="Description" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="place"><strong>Venue:</strong></label>
+                                    <input type="text" name="place" class="form-control btn-block"
+                                        style="text-indent: 5px !important; height: 30px !important;"
+                                        placeholder="Venue" required />
+                                </div>
+                                <div class="modal-footer">
+                                    <button name="create" class="btn btn-success"><i class="icon-save"></i>
+                                        <strong>SAVE</strong></button>
+                                    <button type="reset" class="btn btn-default"><i class="icon-ban-circle"></i>
+                                        <strong>RESET</strong></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+            <br> <br><br>
+            <!-- Display events -->
+            <div class="tile-container">
+                <?php foreach ($events as $event) { ?>
+                <div class="tile" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                    <div class="dropdown">
+                        <button class="dropbtn">⋮</button>
+                        <div class="dropdown-content">
+                            <a href="#editEvent" style="color: black;" class="btn-success edit-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                                <i class="icon-pencil"></i> Edit
+                            </a>
+                            <a href="#" style="color: black;" class="btn-danger delete-event" data-id="<?php echo htmlspecialchars($event['mainevent_id']); ?>">
+                                <i class="icon-remove"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                    <h3><b><?php echo htmlspecialchars($event['event_name']); ?></b></h3>
+                    <p><?php echo date('m-d-Y', strtotime($event['date_start'])); ?> to
+                    <?php echo date('m-d-Y', strtotime($event['date_end'])); ?></p>
+                    <p><?php echo htmlspecialchars($event['place']); ?></p>
+                </div>
+                <?php } ?>
+            </div>
 
+<!-- Update the edit event modal HTML -->
+<div id="editEventModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Event</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editEventForm" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="edit_event_id" id="edit_event_id">
+                    
+                    <div class="form-group">
+                        <label for="edit_banner">Banner:</label>
+                        <input type="file" class="form-control" id="edit_banner" name="edit_banner">
+                        <small class="form-text text-muted">File size:1200x400 pixels.Maximum 2MB.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_main_event">Event Name:</label>
+                        <input type="text" class="form-control btn-block" style="text-indent: 7px !important; height: 30px !important;" id="edit_main_event" name="edit_main_event" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit_date_start">Start Date:</label>
+                        <input type="date" class="form-control btn-block" style="height: 30px !important;" id="edit_date_start" name="edit_date_start" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit_date_end">End Date:</label>
+                        <input type="date" class="form-control btn-block" style="height: 30px !important;" id="edit_date_end" name="edit_date_end" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit_event_description">Description:</label>
+                        <textarea class="form-control btn-block" style="text-indent: 7px !important; height: 100px !important;" id="edit_event_description" name="edit_event_description" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_place">Venue:</label>
+                        <input type="text" class="form-control btn-block" style="height: 30px !important;" id="edit_place" name="edit_place" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <?php
+if (isset($_POST['edit_event'])) {
+    $main_event_id = $_POST['main_event_id'];
+    $event_name = $_POST['main_event'];
+    $date_start = $_POST['date_start'];
+    $date_end = $_POST['date_end'];
+    $event_place = $_POST['place'];
+
+    $conn->query("UPDATE main_event SET event_name='$event_name', date_start='$date_start', date_end='$date_end', place='$event_place' WHERE mainevent_id='$main_event_id'");
+    ?>
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text: 'Event <?php echo $event_name; ?> updated successfully!',
+            icon: 'success'
+        }).then(() => {
+            window.location = 'home.php';
+        });
+    </script>
+    <?php
+}
+?>
+
+
+            </div>
+
+        </section>
     <script src="..//assets/js/jquery.js"></script>
     <script src="..//assets/js/bootstrap-transition.js"></script>
     <script src="..//assets/js/bootstrap-alert.js"></script>
@@ -635,6 +680,22 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
         <?php endif; ?>
 
+        document.getElementById('logout').addEventListener('click', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Are you sure you want to log out?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to logout.php
+                    window.location.href = '..//index.php';
+                }
+            });
+        });
+
         $('#toggle-btn').on('click', function() {
             $('#sidebar').toggleClass('collapsed');
             $('#main-content').toggleClass('collapsed');
@@ -643,181 +704,243 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
     </script>
     <script>
-        $(document).ready(function() {
-            // Handle edit button click
-            $('.edit-event').on('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+        document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.tile').forEach(function(tile) {
+        tile.addEventListener('click', function() {
+            var eventId = this.getAttribute('data-id');
+            window.location.href = 'sub_event?id=' + eventId;
+        });
+    });
+});
+
+    </script>
+    <script>
+    // Function to get today's date in YYYY-MM-DD format
+    function getTodayDate() {
+        return new Date().toISOString().split('T')[0];
+    }
+
+    // Set min attribute for both date inputs
+    document.getElementById('date_start').min = getTodayDate();
+    document.getElementById('date_end').min = getTodayDate();
+
+    // Ensure end date is not before start date
+    document.getElementById('date_start').addEventListener('change', function() {
+        document.getElementById('date_end').min = this.value;
+    });
+    document.getElementById('event_time').addEventListener('change', function() {
+        var time = this.value;
+        var [hours, minutes] = time.split(':');
+        
+        // Round minutes to nearest 30
+        minutes = (Math.round(minutes / 30) * 30) % 60;
+        
+        // Adjust hours if minutes rounded up to 60
+        if (minutes === 0 && parseInt(this.value.split(':')[1]) > 30) {
+            hours = (parseInt(hours) + 1) % 24;
+        }
+        
+        // Format hours and minutes to ensure two digits
+        hours = hours.toString().padStart(2, '0');
+        minutes = minutes.toString().padStart(2, '0');
+        
+        this.value = `${hours}:${minutes}`;
+    });
+</script>
+<script>
+$(document).ready(function() {
+    // Handle edit button click
+    $('.edit-event').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var eventId = $(this).data('id');
+        
+        // Show loading state
+        Swal.fire({
+            title: 'Loading...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        
+        // Fetch event details
+        $.ajax({
+            url: 'get_event_details.php',
+            type: 'POST',
+            data: { event_id: eventId },
+            success: function(response) {
+                Swal.close();
                 
-                var eventId = $(this).data('id');
+                // Parse the response if it's a string
+                if (typeof response === 'string') {
+                    response = JSON.parse(response);
+                }
                 
-                // Show loading state
+                // Populate form fields
+                $('#edit_event_id').val(response.mainevent_id);
+                $('#edit_main_event').val(response.event_name);
+                $('#edit_date_start').val(response.date_start);
+                $('#edit_date_end').val(response.date_end);
+                $('#edit_place').val(response.place);
+                
+                // Show the modal
+                $('#editEventModal').modal('show');
+            },
+            error: function() {
                 Swal.fire({
-                    title: 'Loading...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to fetch event details'
                 });
-                
-                // Fetch event details
-                $.ajax({
-                    url: 'get_event_details.php',
-                    type: 'POST',
-                    data: { event_id: eventId },
-                    success: function(response) {
-                        Swal.close();
-                        
-                        if (typeof response === 'string') {
-                            response = JSON.parse(response);
-                        }
-                        
-                        if (!response.error) {
-                            // Populate form fields
-                            $('#edit_event_id').val(response.mainevent_id);
-                            $('#edit_main_event').val(response.event_name);
-                            $('#edit_date_start').val(response.date_start);
-                            $('#edit_date_end').val(response.date_end);
-                            $('#edit_event_description').val(response.description);
-                            $('#edit_place').val(response.place);
+            }
+        });
+    });
+    
+    // Handle save changes button click
+    $('#saveChanges').on('click', function() {
+    var formData = new FormData($('#editEventForm')[0]);
+    
+    // Disable the save button to prevent multiple clicks
+    $('#saveChanges').prop('disabled', true);
 
-                            // Show the modal
-                            $('#editEventModal').modal('show');
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.error
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to fetch event details'
-                        });
-                    }
+    $.ajax({
+        url: 'update_event.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (typeof response === 'string') {
+                response = JSON.parse(response);
+            }
+            
+            // Wait for 2 seconds before showing the SweetAlert
+            setTimeout(() => {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.message
+                    }).then(function() {
+                        $('#editEventModal').modal('hide');
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'Failed to update event'
+                    });
+                }
+                // Re-enable the save button
+                $('#saveChanges').prop('disabled', false);
+            }, 1000);
+        },
+        error: function() {
+            // Wait for 2 seconds before showing the error SweetAlert
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to update event'
                 });
-            });
-
-            // Handle save changes button click
-            $('#saveChanges').on('click', function() {
-                var formData = new FormData($('#editEventForm')[0]);
-
-                // Disable the save button to prevent multiple clicks
-                $('#saveChanges').prop('disabled', true);
-
-                $.ajax({
-                    url: 'update_event.php',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (typeof response === 'string') {
-                            response = JSON.parse(response);
+                // Re-enable the save button
+                $('#saveChanges').prop('disabled', false);
+            }, 1000);
+        }
+    });
+});
+});
+</script>
+<script>
+    $(document).ready(function() {
+        // Handle delete button click
+        $('.delete-event').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            var eventId = $(this).data('id');
+            
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading state
+                    Swal.fire({
+                        title: 'Deleting...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
                         }
-
-                        setTimeout(() => {
+                    });
+                    
+                    // Send delete request
+                    $.ajax({
+                        url: 'delete-event.php',
+                        type: 'POST',
+                        data: { event_id: eventId },
+                        success: function(response) {
+                            Swal.close();
+                            
+                            // Parse the response if it's a string
+                            if (typeof response === 'string') {
+                                response = JSON.parse(response);
+                            }
+                            
                             if (response.success) {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Success',
+                                    title: 'Deleted!',
                                     text: response.message
                                 }).then(function() {
-                                    $('#editEventModal').modal('hide');
                                     location.reload();
                                 });
                             } else {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
-                                    text: response.message || 'Failed to update event'
+                                    text: response.message || 'Failed to delete event'
                                 });
                             }
-                            $('#saveChanges').prop('disabled', false);
-                        }, 1000);
-                    },
-                    error: function() {
-                        setTimeout(() => {
+                        },
+                        error: function() {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'Failed to update event'
+                                text: 'Failed to connect to the server'
                             });
-                            $('#saveChanges').prop('disabled', false);
-                        }, 1000);
-                    }
-                });
-            });
-
-            // Handle delete button click
-            $('.delete-event').on('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                var eventId = $(this).data('id');
-                
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Show loading state
-                        Swal.fire({
-                            title: 'Deleting...',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-                        
-                        // Send delete request
-                        $.ajax({
-                            url: 'delete-event.php',
-                            type: 'POST',
-                            data: { event_id: eventId },
-                            success: function(response) {
-                                Swal.close();
-                                
-                                if (typeof response === 'string') {
-                                    response = JSON.parse(response);
-                                }
-                                
-                                if (response.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Deleted!',
-                                        text: response.message
-                                    }).then(function() {
-                                        location.reload();
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: response.message || 'Failed to delete event'
-                                    });
-                                }
-                            },
-                            error: function() {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'Failed to connect to the server'
-                                });
-                            }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
             });
         });
+    });
     </script>
+        <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleButtons = document.querySelectorAll(".toggle-btn");
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.querySelector(".main");
+
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Toggle the collapsed class on sidebar
+            sidebar.classList.toggle("collapsed");
+            // Toggle the collapsed class on main content
+            mainContent.classList.toggle("collapsed");
+        });
+    });
+});
+
+</script>
 </body>
+
 </html>
