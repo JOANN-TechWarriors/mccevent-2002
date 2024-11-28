@@ -243,7 +243,7 @@ if (!isset($_SESSION['admin_id'])) {
     <ul>
         <li><a href="admin_dashboard"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
         <li><a href="account_request"><i class="fas fa-clipboard-list"></i> <span>ACCOUNT REQUEST</span></a></li>
-        <li><a href="account_logs"><i class="fas fa-clipboard-list"></i> <span>ACCOUNT LOGS</span></a></li>
+        <li><a href="admin_logs"><i class="fas fa-clipboard-list"></i> <span>ACCOUNT LOGS</span></a></li>
     </ul>
   </div>
 
