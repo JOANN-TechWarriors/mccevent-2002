@@ -48,7 +48,7 @@ function sendEmailNotification($adminEmail, $logs) {
         $mail->Port = 587;
 
         //Recipients
-        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Alert');
+        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Tabulator Attempt Alert ');
         $mail->addAddress($adminEmail);
 
         // Generate detailed HTML log details
