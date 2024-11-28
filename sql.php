@@ -10,21 +10,25 @@
         $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-        // SQL to add the token column to the admin table
-        $alter_table_sql = "ALTER TABLE admin ADD COLUMN token VARCHAR(100)";
-        $conn->exec($alter_table_sql);
-        echo "Column 'token' added successfully to admin table.<br>";
+        // Fetch data from the admin table
+        $select_sql = "SELECT id, username, password, email, token FROM admin";
+        $stmt = $conn->query($select_sql);
         
-        // Generate a temporary token
-        $temporary_token = bin2hex(random_bytes(50)); // Generates a 100-character hexadecimal string
+        // Display data in an HTML table
+        echo "<table border='1'>";
+        echo "<tr><th>ID</th><th>Username</th><th>Password</th><th>Email</th><th>Token</th></tr>";
         
-        // SQL to update the token column with the temporary token
-        $update_token_sql = "UPDATE admin SET token = :token";
-        $stmt = $conn->prepare($update_token_sql);
-        $stmt->bindParam(':token', $temporary_token);
-        $stmt->execute();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['password']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['token']) . "</td>";
+            echo "</tr>";
+        }
         
-        echo "Temporary token inserted successfully into the token column for all rows.<br>";
+        echo "</table>";
     
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
