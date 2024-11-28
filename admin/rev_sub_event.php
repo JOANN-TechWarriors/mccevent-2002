@@ -1,3 +1,11 @@
+<?php
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   
@@ -294,7 +302,7 @@
                 <tr>
                   <td><?php echo $subevent_row['event_name']; ?></td>
                   <td width="90">
-                    <a title="click to view event details" target="_blank" href="review_result.php?mainevent_id=<?php echo $mainevent_id; ?>&sub_event_id=<?php echo $subevent_row['subevent_id']; ?>" class="btn btn-primary"><i class="icon-folder-open"></i></a>
+                    <a title="click to view event details" target="_blank" href="review_result?mainevent_id=<?php echo $mainevent_id; ?>&sub_event_id=<?php echo $subevent_row['subevent_id']; ?>" class="btn btn-primary"><i class="icon-folder-open"></i></a>
                     <button type="button" onclick="handlePrint(<?php echo $mainevent_id; ?>, <?php echo $subevent_row['subevent_id']; ?>)" title="click to print event result" class="btn btn-info"><i class="icon-print"></i></button>
                   </td>
                 </tr>
@@ -335,7 +343,7 @@
     function handlePrint(mainEventId, subEventId) {
       // Create a new window for the print content
       const printWindow = window.open(
-        `review_se_result.php?mainevent_id=${mainEventId}&sub_event_id=${subEventId}`,
+        `review_se_result?mainevent_id=${mainEventId}&sub_event_id=${subEventId}`,
         'PrintWindow',
         'width=1000,height=800'
       );

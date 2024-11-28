@@ -271,7 +271,7 @@ if (substr($request, -4) == '.php') {
           <h4 class="panel-title">Select Main Event</h4>
         </div>
         <div class="panel-body">
-          <form method="POST" action="rev_sub_event.php">
+          <form method="POST" action="rev_sub_event">
             <table class="table table-bordered">
               <thead>
                 <th></th>
@@ -286,7 +286,7 @@ if (substr($request, -4) == '.php') {
                   <td width="10" align="center"><input type="radio" name="main_event_id" value="<?php echo $mainevent_row['mainevent_id']; ?>" required="true" /></td>
                   <td> <?php echo $mainevent_row['event_name']; ?></td>
                   <td width="10">
-                  <a target="_blank" title="click to print summary result" href="summary_results.php?main_event_id=<?php echo $mainevent_row['mainevent_id']; ?>" class="btn btn-warning"><i class="icon-list"></i></a>
+                  <a target="_blank" title="click to print summary result" href="summary_results?main_event_id=<?php echo $mainevent_row['mainevent_id']; ?>" class="btn btn-warning"><i class="icon-list"></i></a>
                   </td>
                   <td width="10"> 
                     <a title="click to print event result" class="btn btn-info print-result" data-event-id="<?php echo $mainevent_row['mainevent_id']; ?>"><i class="icon-print"></i></a>
@@ -355,7 +355,7 @@ if (substr($request, -4) == '.php') {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             const eventId = this.getAttribute('data-event-id');
-            const printWindow = window.open(`print_all_results.php?main_event_id=${eventId}`, '_blank');
+            const printWindow = window.open(`print_all_results?main_event_id=${eventId}`, '_blank');
             printWindow.onload = function() {
                 printWindow.print();
             };
