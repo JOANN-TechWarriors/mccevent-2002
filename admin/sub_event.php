@@ -39,15 +39,18 @@ if (isset($_GET['id'])) {
 // Handle form submission
 if (isset($_POST['add_event'])) {
     $banner = $_FILES['banner']['name'];
-    $target = "../img/".basename($banner);
+    $target = "../img/" . basename($banner);
     $sub_event_name = $_POST['event_name'];  
     $event_date = $_POST['event_date']; 
     $event_time = $_POST['event_time']; 
     $event_place = $_POST['event_place']; 
 
-    $stmt = $conn->prepare("INSERT INTO sub_event (mainevent_id, event_name, status, eventdate, eventtime, place, organizer_id, banner) 
-                            VALUES (?, ?, 'activated', ?, ?, ?, ?, ?)");
-    $result = $stmt->execute([$main_event_id, $sub_event_name, $event_date, $event_time, $event_place, $session_id, $banner]);
+    // Generate a random 5-digit number for subevent_id
+    $subevent_id = random_int(10000, 99999);
+
+    $stmt = $conn->prepare("INSERT INTO sub_event (subevent_id, mainevent_id, event_name, status, eventdate, eventtime, place, organizer_id, banner) 
+                            VALUES (?, ?, ?, 'activated', ?, ?, ?, ?, ?)");
+    $result = $stmt->execute([$subevent_id, $main_event_id, $sub_event_name, $event_date, $event_time, $event_place, $session_id, $banner]);
 
     if ($result && move_uploaded_file($_FILES['banner']['tmp_name'], $target)) {
         $_SESSION['swal_success'] = true;
@@ -61,6 +64,7 @@ if (isset($_POST['add_event'])) {
     header("Location: sub_event.php?id=" . $main_event_id);
     exit();
 }
+
 ?>
     <?php
     // At the top of your file, add these pagination variables
