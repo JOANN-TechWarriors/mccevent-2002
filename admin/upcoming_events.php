@@ -585,34 +585,43 @@ if (substr($request, -4) == '.php') {
       }
 
       $.ajax({
-        url: 'update-event.php',
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: response.message,
-            confirmButtonText: 'OK'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              $('#updateEventModal').modal('hide');
-              calendar.refetchEvents();  // Refresh the events in FullCalendar
-            }
-          });
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          Swal.fire({
+    url: 'update-event.php',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function(response) {
+        var result = JSON.parse(response);
+        if (result.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: result.message,
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#updateEventModal').modal('hide');
+                    calendar.refetchEvents();  // Refresh the events in FullCalendar
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: result.message,
+                confirmButtonText: 'OK'
+            });
+        }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        Swal.fire({
             icon: 'error',
             title: 'Error',
             text: 'Error updating event: ' + errorThrown,
             confirmButtonText: 'OK'
-          });
-        }
-      });
-    });
+        });
+    }
+});
 
     var currentDateTime = roundToNearestHalfHour(new Date()).format('YYYY-MM-DDTHH:mm');
     $('#eventStart, #eventEnd, #updateeventStart, #updateeventEnd').attr('min', currentDateTime).attr('step', '1800');
