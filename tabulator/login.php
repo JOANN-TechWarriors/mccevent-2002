@@ -1,9 +1,10 @@
 <?php
+require 'vendor/autoload.php'; // Include PHPMailer's autoloader
 include('../admin/dbcon.php');
 session_start();
 
-header('Content-Type: application/json');
-$response = ['success' => false, 'message' => '', 'redirect' => ''];
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 // Function to log failed login attempts
 function logFailedAttempt($conn, $username, $ip, $latitude, $longitude) {
@@ -27,6 +28,58 @@ function getLocationFromIP($ip) {
         'latitude' => $data['lat'] ?? 0,
         'longitude' => $data['lon'] ?? 0
     ];
+}
+
+// Function to send email notification
+function sendEmailNotification($adminEmail, $logDetails) {
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
+        $mail->SMTPAuth = true;
+        $mail->Username = 'joannrebamonte80@gmail.com'; // SMTP username
+        $mail->Password = 'dkyd tsnv hzyh amjy'; // SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        //Recipients
+        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Alert');
+        $mail->addAddress($adminEmail);
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Failed Login Attempts Notification';
+        $mail->Body    = '<h1>Failed Login Attempts</h1><p>' . $logDetails . '</p>';
+
+        $mail->send();
+        echo 'Message has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+}
+
+// Fetch admin email
+$query = $conn->prepare("SELECT email FROM admin WHERE id = 1"); // Assuming admin ID is 1
+$query->execute();
+$admin = $query->fetch();
+
+if ($admin) {
+    $adminEmail = $admin['email'];
+
+    // Fetch log details
+    $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = 'tabulator_login_attempt' ORDER BY timestamp DESC LIMIT 5");
+    $logQuery->execute();
+    $logs = $logQuery->fetchAll();
+
+    $logDetails = '';
+    foreach ($logs as $log) {
+        $logDetails .= "IP: {$log['ip']}, Username: {$log['username']}, Time: {$log['timestamp']}, Latitude: {$log['latitude']}, Longitude: {$log['longitude']}<br>";
+    }
+
+    // Send email notification
+    sendEmailNotification($adminEmail, $logDetails);
 }
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
