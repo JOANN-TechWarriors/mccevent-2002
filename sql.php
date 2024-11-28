@@ -10,44 +10,17 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // SQL to select all data from the sub_event table
-    $select_sql = "SELECT * FROM `sub_event`";
-    $stmt = $conn->query($select_sql);
+    // SQL to modify the columns
+    $alter_sql = "
+        ALTER TABLE `contestants`
+        MODIFY `contestant_id` BIGINT NOT NULL,
+        MODIFY `subevent_id` BIGINT NOT NULL;
+    ";
 
-    // Display data in an HTML table
-    echo "<table border='1'>";
-    echo "<tr> 
-            <th>Subevent ID</th> 
-            <th>Main Event ID</th> 
-            <th>Organizer ID</th> 
-            <th>Event Name</th> 
-            <th>Status</th> 
-            <th>Event Date</th> 
-            <th>Event Time</th> 
-            <th>Place</th> 
-            <th>Txtpoll Status</th> 
-            <th>View</th> 
-            <th>Txtpoll View</th> 
-            <th>Banner</th> 
-          </tr>";
+    // Execute the SQL statement
+    $conn->exec($alter_sql);
 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars($row['subevent_id']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['mainevent_id']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['organizer_id']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['event_name']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['status']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['eventdate']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['eventtime']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['place']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['txtpoll_status']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['view']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['txtpollview']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['banner']) . "</td>";
-        echo "</tr>";
-    }
-    echo "</table>";
+    echo "Columns modified successfully.";
 
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
