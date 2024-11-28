@@ -186,7 +186,7 @@ $conn->close();
 
             const handleWatchLive = () => {
                 const currentStream = streams[currentIndex];
-                window.location.href = `audience.php?stream_id=${currentStream.stream_id}`;
+                window.location.href = `audience?stream_id=${currentStream.stream_id}`;
             };
 
             const currentStream = streams[currentIndex];
