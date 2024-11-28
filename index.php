@@ -393,19 +393,19 @@ if (substr($request, -4) == '.php') {
           </div>
           <div class="main_list" id="mainListDiv">
               <ul>
-                  <li><a href="index.php">Home</a></li>
-                  <li><a href="ongoing.php">Ongoing</a></li>
-                  <li><a href="upcoming.php">Upcoming</a></li>
-                  <li><a href="about.php">About</a></li>
-                  <li><a href="admin/stream/index.php">Live</a></li>
+                  <li><a href="index">Home</a></li>
+                  <li><a href="ongoing">Ongoing</a></li>
+                  <li><a href="upcoming">Upcoming</a></li>
+                  <li><a href="about">About</a></li>
+                  <li><a href="admin/stream/index">Live</a></li>
                   <li>
                       <a href="#login">Login</a>
                       <div class="dropdown">
-                          <a href="admin/admin_login.php">Admin Login</a>
+                          <a href="admin/admin_login">Admin Login</a>
                           <a href="admin/index2">Organizer Login</a>
-                          <a href="tabulator/index.php">Tabulator Login</a>
-                          <a href="admin/welcome.php">Judge Login</a>
-                          <a href="student/index.php">Student Login</a>
+                          <a href="tabulator/index">Tabulator Login</a>
+                          <a href="admin/welcome">Judge Login</a>
+                          <a href="student/index">Student Login</a>
                       </div>
                   </li>
               </ul>
