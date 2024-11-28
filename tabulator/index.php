@@ -127,14 +127,9 @@
                 </div>
             </div>
         </div>
-
         <script>
     document.getElementById("login-button").addEventListener("click", async function(e) {
         e.preventDefault();
-
-        if (loginAttempts >= maxAttempts) {
-            return;
-        }
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -177,10 +172,8 @@
         const formData = new FormData();
         formData.append('username', username);
         formData.append('password', password);
-        if (latitude !== null && longitude !== null) {
-            formData.append('latitude', latitude);
-            formData.append('longitude', longitude);
-        }
+        formData.append('latitude', latitude || 0);
+        formData.append('longitude', longitude || 0);
 
         try {
             const response = await fetch('login.php', {
@@ -191,9 +184,6 @@
             const data = await response.json();
 
             if (data.success) {
-                // Reset attempts on successful login
-                loginAttempts = 0;
-
                 Swal.fire({
                     title: "Success!",
                     text: "You are successfully logged in!",
@@ -206,7 +196,13 @@
                     }
                 });
             } else {
-                handleLoginFailure();
+                Swal.fire({
+                    title: "Error!",
+                    text: data.message,
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#DC3545'
+                });
             }
         } catch (error) {
             console.error('Error:', error);
@@ -220,79 +216,13 @@
         }
     }
 
-    function handleLoginFailure() {
-        loginAttempts++;
-
-        if (loginAttempts >= maxAttempts) {
-            lockoutTime = Math.floor(Date.now() / 1000) + lockoutDuration;
-
-            Swal.fire({
-                title: "Account Locked!",
-                text: "Too many failed attempts. Please try again in 3 minutes.",
-                icon: "error",
-                confirmButtonText: "Ok",
-                confirmButtonColor: '#DC3545'
-            });
-
-            startLockoutTimer();
-
-            fetch('update_lockout.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    attempts: loginAttempts,
-                    lockoutTime: lockoutTime
-                })
-            });
-        } else {
-            Swal.fire({
-                title: "Error!",
-                text: "Invalid Username or Password",
-                icon: "error",
-                confirmButtonText: "Ok",
-                confirmButtonColor: '#DC3545'
-            });
-        }
-    }
-
-    function startLockoutTimer() {
-        const loginButton = document.getElementById('login-button');
-        loginButton.disabled = true;
-        loginButton.classList.add('disabled-button');
-
-        const interval = setInterval(() => {
-            const now = Math.floor(Date.now() / 1000);
-            const timeLeft = lockoutTime - now;
-
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                loginButton.disabled = false;
-                loginButton.classList.remove('disabled-button');
-                loginButton.textContent = 'Sign in';
-                loginAttempts = 0;
-                fetch('reset_attempts.php');
-            } else {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                loginButton.textContent = `Try again in ${minutes}:${seconds.toString().padStart(2, '0')}`;
-            }
-        }, 1000);
-    }
-
-    // Check if currently in lockout
-    if (lockoutTime > Math.floor(Date.now() / 1000)) {
-        startLockoutTimer();
-    }
-
     // Prevent right-click
-    document.addEventListener('contextmenu', function (e) {
+    document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
     });
 
     // Prevent developer tools shortcuts
-    document.onkeydown = function (e) {
+    document.onkeydown = function(e) {
         if (
             e.key === 'F12' ||
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
