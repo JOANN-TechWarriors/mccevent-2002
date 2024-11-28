@@ -345,7 +345,7 @@ include('..//admin/session.php');
                                                 <i class="icon icon-minus-sign"></i>
                                             </a>
 
-                                            <a title="click to set final result for this sub-event" target="_blank" href="result_title.php?event_id=<?php echo $se_id; ?>" class="btn btn-primary">
+                                            <a title="click to set final result for this sub-event" target="_blank" href="result_title?event_id=<?php echo $se_id; ?>" class="btn btn-primary">
                                                 <i class="icon icon-star"></i>
                                             </a>
 
