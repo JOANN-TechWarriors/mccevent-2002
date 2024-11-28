@@ -1,5 +1,5 @@
 <?php
-require '../vendor/autoload.php'; // Include PHPMailer's autoloader
+require 'vendor/autoload.php'; // Include PHPMailer's autoloader
 include('../admin/dbcon.php');
 session_start();
 
@@ -34,27 +34,62 @@ function getLocationFromIP($ip) {
 }
 
 // Function to send email notification
-function sendEmailNotification($adminEmail, $logDetails) {
+function sendEmailNotification($adminEmail, $logs) {
     $mail = new PHPMailer(true);
 
     try {
-        //Server settings
+        // Server settings
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'joannrebamonte80@gmail.com'; // SMTP username
-        $mail->Password = 'dkyd tsnv hzyh amjy'; // SMTP password
+        $mail->Username = 'your-email@gmail.com'; // Replace with your email
+        $mail->Password = 'your-email-password'; // Replace with your password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        //Recipients
-        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Alert');
+        // Recipients
+        $mail->setFrom('your-email@gmail.com', 'Your Name');
         $mail->addAddress($adminEmail);
+
+        // Generate detailed HTML log details
+        $logDetails = '<table border="1" cellpadding="10" style="width:100%; border-collapse: collapse;">';
+        $logDetails .= '<thead><tr style="background-color: #f2f2f2;">
+                            <th>IP Address</th>
+                            <th>Username</th>
+                            <th>Timestamp</th>
+                            <th>Location</th>
+                        </tr></thead><tbody>';
+        
+        foreach ($logs as $log) {
+            $googleMapsLink = "https://www.google.com/maps?q={$log['latitude']},{$log['longitude']}";
+            $logDetails .= "<tr>
+                                <td>{$log['ip']}</td>
+                                <td>{$log['username']}</td>
+                                <td>{$log['timestamp']}</td>
+                                <td>
+                                    <a href='{$googleMapsLink}' target='_blank' style='color: blue; text-decoration: none;'>
+                                        Lat: {$log['latitude']}, Lon: {$log['longitude']}
+                                    </a>
+                                </td>
+                            </tr>";
+        }
+        $logDetails .= '</tbody></table>';
 
         // Content
         $mail->isHTML(true);
-        $mail->Subject = 'Failed Login Attempts Notification';
-        $mail->Body    = '<h1>Failed Login Attempts</h1><p>' . $logDetails . '</p>';
+        $mail->Subject = 'Security Alert: Multiple Failed Login Attempts';
+        $mail->Body = "
+            <html>
+            <body style='font-family: Arial, sans-serif;'>
+                <h2 style='color: #ff0000;'>⚠️ Security Warning</h2>
+                <p>Multiple failed login attempts have been detected for your system.</p>
+                {$logDetails}
+                <p style='margin-top: 20px; color: #666;'>
+                    Please review these attempts and take necessary security actions.
+                </p>
+            </body>
+            </html>
+        ";
 
         $mail->send();
     } catch (Exception $e) {
@@ -108,13 +143,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 $logQuery->execute();
                 $logs = $logQuery->fetchAll();
 
-                $logDetails = '';
-                foreach ($logs as $log) {
-                    $logDetails .= "IP: {$log['ip']}, Username: {$log['username']}, Time: {$log['timestamp']}, Latitude: {$log['latitude']}, Longitude: {$log['longitude']}<br>";
-                }
-
                 // Send email notification
-                sendEmailNotification($adminEmail, $logDetails);
+                sendEmailNotification($adminEmail, $logs);
             }
 
             $_SESSION['lockout_time'] = time() + 180; // Lockout for 3 minutes
