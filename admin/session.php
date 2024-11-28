@@ -57,7 +57,7 @@ if ($user_row) {
     ?>
     <script>
         alert('User not found.');
-        window.location = 'index.php';
+        window.location = 'index2';
     </script>
     <?php
     exit();
