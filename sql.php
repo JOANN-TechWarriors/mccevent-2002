@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // SQL to alter the mainevent_id column
-$alter_sql = "ALTER TABLE main_event MODIFY COLUMN mainevent_id VARCHAR(100) NOT NULL";
+$alter_sql = "";
 
 // Execute the alter query
 if ($conn->query($alter_sql) === TRUE) {
