@@ -14,14 +14,7 @@ if ($conn->connect_error) {
 }
 
 // SQL to alter the mainevent_id column
-$alter_sql = "";
 
-// Execute the alter query
-if ($conn->query($alter_sql) === TRUE) {
-    echo "Table main_event altered successfully.<br>";
-} else {
-    echo "Error altering table: " . $conn->error . "<br>";
-}
 
 // SQL to select all data from main_event
 $select_sql = "SELECT * FROM main_event";
