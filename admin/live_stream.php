@@ -894,7 +894,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
                     </td>
                     <td>
-                        <a href="stream/host.php?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>" class="btn btn-primary">View</a>
+                        <a href="stream/host?id=<?php echo $stream['stream_id']; ?>&token=<?php echo $stream['token']; ?>" class="btn btn-primary">View</a>
                         <button class="btn btn-danger delete-stream" data-id="<?php echo $stream['stream_id']; ?>">Delete</button>
                     </td>
                 </tr>
