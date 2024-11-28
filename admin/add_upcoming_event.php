@@ -1,7 +1,6 @@
 <?php
 include 'dbcon.php';
-
-  include('session.php');
+include('session.php');
 
 $organizer_id = $_SESSION['id']; // Get the organizer's ID from the session
 
@@ -59,10 +58,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (move_uploaded_file($_FILES["banner"]["tmp_name"], $targetFile)) {
                 $bannerPath = $targetFile;
 
+                // Generate a random 10-digit number for the id
+                $id = random_int(1000000000, 9999999999);
+
                 // Insert data into the database
-                $sql = "INSERT INTO upcoming_events (title, banner, start_date, end_date, organizer_id) VALUES (:title, :banner, :start_date, :end_date, :organizer_id)";
+                $sql = "INSERT INTO upcoming_events (id, title, banner, start_date, end_date, organizer_id) VALUES (:id, :title, :banner, :start_date, :end_date, :organizer_id)";
                 $stmt = $conn->prepare($sql);
 
+                $stmt->bindParam(':id', $id);
                 $stmt->bindParam(':title', $eventTitle);
                 $stmt->bindParam(':banner', $bannerPath);
                 $stmt->bindParam(':start_date', $eventStart);
