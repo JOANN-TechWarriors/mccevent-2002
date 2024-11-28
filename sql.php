@@ -13,38 +13,14 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// SQL to select all logs
-$sql = "SELECT * FROM logs";
-$result = $conn->query($sql);
+// SQL to alter the mainevent_id column
+$sql = "ALTER TABLE main_event MODIFY COLUMN mainevent_id VARCHAR(100) NOT NULL";
 
-// Check if there are any results
-if ($result->num_rows > 0) {
-    echo "<table border='1'>
-            <tr>
-                <th>ID</th>
-                <th>IP</th>
-                <th>Username</th>
-                <th>Timestamp</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>Type</th>
-            </tr>";
-    
-    // Output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>" . htmlspecialchars($row["id"]) . "</td>
-                <td>" . htmlspecialchars($row["ip"]) . "</td>
-                <td>" . htmlspecialchars($row["username"]) . "</td>
-                <td>" . htmlspecialchars($row["timestamp"]) . "</td>
-                <td>" . htmlspecialchars($row["latitude"]) . "</td>
-                <td>" . htmlspecialchars($row["longitude"]) . "</td>
-                <td>" . htmlspecialchars($row["type"]) . "</td>
-              </tr>";
-    }
-    echo "</table>";
+// Execute the query
+if ($conn->query($sql) === TRUE) {
+    echo "Table main_event altered successfully.";
 } else {
-    echo "0 results";
+    echo "Error altering table: " . $conn->error;
 }
 
 // Close connection
