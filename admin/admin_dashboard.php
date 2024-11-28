@@ -247,7 +247,7 @@ if (!isset($_SESSION['admin_id'])) {
     </ul>
   </div>
 
-    <!-- Header -->
+    <!-- Heade -->
     <div class="header">
         <div>
         <button class="toggle-btn" id="toggle-btn-mobile"><i class="fas fa-bars"></i></button>
