@@ -15,7 +15,11 @@ include('dbcon.php'); // Include your PDO database connection file
 
 
 // Handle form submission to create a new event
+
 if (isset($_POST['create'])) {
+    // Generate a random 5-digit number for mainevent_id
+    $mainevent_id = rand(10000, 99999);
+
     $event_name = $_POST['main_event'];
     $description = $_POST['description'];
     $event_start_date = $_POST['date_start'];
@@ -24,35 +28,41 @@ if (isset($_POST['create'])) {
     $banner = $_FILES['banner']['name'];
     $target = "../img/" . basename($banner);
 
-    // Insert event details into the database using PDO
-    $sql = "INSERT INTO main_event (event_name, description, status, organizer_id, date_start, date_end, place, banner) 
-            VALUES (:event_name, :description, 'activated', :organizer_id, :date_start, :date_end, :place, :banner)";
-    $stmt = $conn->prepare($sql);
+    try {
+        // Insert event details into the database using PDO
+        $sql = "INSERT INTO main_event (mainevent_id, event_name, description, status, organizer_id, date_start, date_end, place, banner) 
+                VALUES (:mainevent_id, :event_name, :description, 'activated', :organizer_id, :date_start, :date_end, :place, :banner)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':mainevent_id', $mainevent_id);
+        $stmt->bindParam(':event_name', $event_name);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':organizer_id', $session_id); // Assuming $session_id is defined elsewhere
+        $stmt->bindParam(':date_start', $event_start_date);
+        $stmt->bindParam(':date_end', $event_end_date);
+        $stmt->bindParam(':place', $event_venue);
+        $stmt->bindParam(':banner', $banner);
 
-    $stmt->bindParam(':event_name', $event_name);
-    $stmt->bindParam(':description', $description);
-    $stmt->bindParam(':organizer_id', $session_id);
-    $stmt->bindParam(':date_start', $event_start_date);
-    $stmt->bindParam(':date_end', $event_end_date);
-    $stmt->bindParam(':place', $event_venue);
-    $stmt->bindParam(':banner', $banner);
-
-    if ($stmt->execute()) {
-        if (move_uploaded_file($_FILES['banner']['tmp_name'], $target)) {
-            $_SESSION['message'] = 'Event created successfully!';
-            $_SESSION['message_type'] = 'success';
+        if ($stmt->execute()) {
+            if (move_uploaded_file($_FILES['banner']['tmp_name'], $target)) {
+                $_SESSION['message'] = 'Event created successfully!';
+                $_SESSION['message_type'] = 'success';
+            } else {
+                $_SESSION['message'] = 'Event created, but failed to upload banner.';
+                $_SESSION['message_type'] = 'error';
+            }
         } else {
-            $_SESSION['message'] = 'Event created, but failed to upload banner.';
+            $_SESSION['message'] = 'Failed to create event.';
             $_SESSION['message_type'] = 'error';
         }
-    } else {
-        $_SESSION['message'] = 'Failed to create event.';
+    } catch (PDOException $e) {
+        $_SESSION['message'] = 'Database error: ' . $e->getMessage();
         $_SESSION['message_type'] = 'error';
     }
 
     header("Location: home.php"); // Redirect to the same page or another page
     exit();
 }
+
 
 // Fetch events from the database using PDO
 $query = "SELECT * FROM main_event WHERE organizer_id = :organizer_id";
