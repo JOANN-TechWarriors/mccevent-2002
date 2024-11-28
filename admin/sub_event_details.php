@@ -504,7 +504,7 @@ if (isset($_POST['save_settings'])) {
             $conn->query("INSERT INTO criteria (criteria_id, criteria, subevent_id, percentage, criteria_ctr) VALUES ('$criteria_id', '$c_name', '$sub_event_id', '$cp', '$k')");
         }
     }
-}
+
 ?>
 <script>
 window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
