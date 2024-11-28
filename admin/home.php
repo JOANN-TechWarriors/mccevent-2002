@@ -7,15 +7,7 @@ if (substr($request, -4) == '.php') {
 }
 ?>
 <?php
-// Include necessary files and start the session
-include('header2.php');
-include('session.php');
-include('dbcon.php'); // Include your PDO database connection file
 
-
-
-// Handle form submission to create a new event
-<?php
 // Include necessary files and start the session
 include('header2.php');
 include('session.php');
