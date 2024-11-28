@@ -312,21 +312,9 @@ if (isset($_POST['deleteStudent'])) {
 
     <!-- Main content -->
     <div class="main" id="main">
-        <h1>Account Record</h1>
+        <h1>Account LOGS</h1>
         <div class="row">
-            <div class="d-flex justify-content-end mb-2">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Select user type
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="?filter_user_type=Organizer">Organizer</a></li>
-                        <li><a class="dropdown-item" href="?filter_user_type=Student">Student</a></li>
-                    </ul>
-                </div>
-                <button class="btn btn-primary ml-2" data-bs-toggle="modal" data-bs-target="#addModal">Add</button>
-            </div>
+           
             <div class="card shadow p-3" style="overflow-y: hidden;">
                 <?php
                 if (@$_GET['filter_user_type'] == 'Organizer') { ?>
