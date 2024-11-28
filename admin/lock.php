@@ -352,7 +352,7 @@
                 if (data.status === 'success') {
                     showCustomAlert('success', 'Success', data.message);
                     setTimeout(() => {
-                        window.location.href = `admin_login.php?token=${data.token}`;
+                        window.location.href = `admin_login?token=${data.token}`;
                     }, 3000); // Redirect after 3 seconds
                 } else {
                     showCustomAlert('error', 'Error', data.message);
