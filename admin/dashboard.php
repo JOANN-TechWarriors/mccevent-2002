@@ -366,7 +366,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-i
                 cancelButtonText: 'No'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'logout.php';
+                    window.location.href = 'logout';
                 }
             });
         });
