@@ -36,6 +36,18 @@ if (isset($_GET['id'])) {
     die('Event ID not provided.');
 }
 
+// Define the generateUniqueId function
+function generateUniqueId() {
+    return uniqid(rand(), true);
+}
+
+// Your existing code
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
 // Handle form submission
 if (isset($_POST['add_event'])) {
     $banner = $_FILES['banner']['name'];
