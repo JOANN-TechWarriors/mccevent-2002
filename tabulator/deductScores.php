@@ -235,7 +235,7 @@ if (isset($_POST['submit_place'])) {
             confirmButtonText: 'OK'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location = 'deductScores.php?event_id=<?php echo $active_sub_event; ?>';
+                window.location = 'deductScores?event_id=<?php echo $active_sub_event; ?>';
             }
         });
     </script>

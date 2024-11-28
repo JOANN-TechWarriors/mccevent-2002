@@ -220,8 +220,8 @@
       <div>Event Judging System</div>
     </div>
     <ul>
-        <li><a href="score_sheets.php"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
-        <li><a href="rev_main_event.php"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
+        <li><a href="score_sheets"><i class="fas fa-clipboard-list"></i> <span>SCORE SHEETS</span></a></li>
+        <li><a href="rev_main_event"><i class="fas fa-chart-line"></i> <span>DATA REVIEWS</span></a></li>
     </ul>
   </div>
     
@@ -233,7 +233,7 @@
         <div class="profile-dropdown">
            <div style="font-size:small;"> <?php echo $tabname ;?></div>
             <div class="dropdown-menu">
-                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+                <a href="logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
             </div>
         </div>
     </div>
@@ -247,7 +247,7 @@
     <div class="span15">
       <div class="col-md-12">
         <ul class="breadcrumb">
-          <li><a href="score_sheets.php">Score Sheets</a> /</li>
+          <li><a href="score_sheets">Score Sheets</a> /</li>
           <li>Data Reviews</li>
         </ul>
       </div>
@@ -284,10 +284,10 @@
                   <td width="10" align="center"><input type="radio" name="main_event_id" value="<?php echo $mainevent_row['mainevent_id']; ?>" required="true" /></td>
                   <td> <?php echo $mainevent_row['event_name']; ?></td>
                   <td width="10">
-                    <a target="_blank" title="click to print summary result" href="summary_results.php?main_event_id=<?php echo $mainevent_row['mainevent_id']; ?>" class="btn btn-warning"><i class="icon-list"></i></a>
+                    <a target="_blank" title="click to print summary result" href="summary_results?main_event_id=<?php echo $mainevent_row['mainevent_id']; ?>" class="btn btn-warning"><i class="icon-list"></i></a>
                   </td>
                   <td width="10"> 
-                    <a target="_blank" title="click to print event result" href="print_all_results.php?main_event_id=<?php echo $mainevent_row['mainevent_id']; ?>" class="btn btn-info"><i class="icon-print"></i></a>
+                    <a target="_blank" title="click to print event result" href="print_all_results?main_event_id=<?php echo $mainevent_row['mainevent_id']; ?>" class="btn btn-info"><i class="icon-print"></i></a>
                   </td>
                 </tr>
                 <?php } ?>
@@ -297,7 +297,7 @@
                       <button class="btn btn-info pull-right" style="width: 200px !important;"><strong>NEXT</strong> <i class="icon-chevron-right"></i></button>
                     <?php } else { ?>
                       <div class="alert alert-warning">
-                        <h3>NO EVENTS TO DISPLAY... PLEASE ADD AN EVENT <a href="home.php">HERE &raquo;</a></h3>
+                        <h3>NO EVENTS TO DISPLAY... PLEASE ADD AN EVENT <a href="home">HERE &raquo;</a></h3>
                       </div>
                     <?php } ?>
                   </td>
@@ -344,7 +344,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redirect to logout.php
-                    window.location.href = '..//index.php';
+                    window.location.href = '..//index';
                 }
             });
         });

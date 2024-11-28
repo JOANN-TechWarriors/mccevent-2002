@@ -19,7 +19,7 @@ $error_message = "";
 
 // Check if both stream_id and token are provided in the URL
 if(!isset($_GET['id']) || !isset($_GET['token'])) {
-    header("Location: ../live_stream.php");
+    header("Location: ../live_stream");
     exit();
 }
 
@@ -40,12 +40,12 @@ if($result->num_rows > 0) {
     // Verify that the provided token matches the stored token
     if($provided_token !== $stored_token) {
         // Invalid token, redirect to live_stream.php
-        header("Location: ../live_stream.php");
+        header("Location: ../live_stream");
         exit();
     }
 } else {
     // Stream not found, redirect to live_stream.php
-    header("Location: ../live_stream.php");
+    header("Location: ../live_stream");
     exit();
 }
 

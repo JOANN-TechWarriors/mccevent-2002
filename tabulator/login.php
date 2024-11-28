@@ -1,4 +1,12 @@
 <?php
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
+?>
+<?php
 include('../admin/dbcon.php');
 session_start();
 
@@ -25,7 +33,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             
             $response['success'] = true;
             $response['message'] = 'Login successful';
-            $response['redirect'] = 'score_sheets.php';
+            $response['redirect'] = 'score_sheets';
         }
     } else {
         $response['success'] = false;
