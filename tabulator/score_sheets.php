@@ -408,7 +408,7 @@ include('..//admin/session.php');
         // Print handling function
         function handlePrint(eventId) {
             // Create a new window for the print content
-            const printWindow = window.open(`result_sheet.php?event_id=${eventId}`, '_blank');
+            const printWindow = window.open(`result_sheet?event_id=${eventId}`, '_blank');
             
             // Wait for the content to load before triggering print
             printWindow.onload = function() {
