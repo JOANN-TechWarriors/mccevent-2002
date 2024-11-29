@@ -319,97 +319,100 @@ if (substr($request, -4) == '.php') {
 </html>
 
 <?php
-if (isset($_POST['register'])) {
-    $fname = htmlspecialchars($_POST['fname']);
-    $mname = htmlspecialchars($_POST['mname']);
-    $lname = htmlspecialchars($_POST['lname']);
-    $username = htmlspecialchars($_POST['username']);
-    $password = htmlspecialchars($_POST['password']);
-    $password2 = htmlspecialchars($_POST['password2']);
-
-    // Server-side password validation
-    $password_regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,10}$/";
-
-    if (!preg_match($password_regex, $password)) {
-        echo "<script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Invalid Password',
-                text: 'Password does not meet requirements. Please ensure it contains 8-10 characters, including uppercase, lowercase, numbers, and special characters.',
-                confirmButtonColor: '#3085d6'
-            });
-        </script>";
-        exit;
-    }
-
-    try {
-        // Check if username already exists
-        $check_username = $conn->prepare("SELECT username FROM organizer WHERE username = ?");
-        $check_username->execute([$username]);
-        
-        if ($check_username->rowCount() > 0) {
+    if (isset($_POST['register'])) {
+        $fname = htmlspecialchars($_POST['fname']);
+        $mname = htmlspecialchars($_POST['mname']);
+        $lname = htmlspecialchars($_POST['lname']);
+        $username = htmlspecialchars($_POST['username']);
+        $password = htmlspecialchars($_POST['password']);
+        $password2 = htmlspecialchars($_POST['password2']);
+    
+        // Server-side password validation
+        $password_regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,10}$/";
+    
+        if (!preg_match($password_regex, $password)) {
             echo "<script>
                 Swal.fire({
                     icon: 'error',
-                    title: 'Username Taken',
-                    text: 'Username already exists. Please choose a different username.',
+                    title: 'Invalid Password',
+                    text: 'Password does not meet requirements. Please ensure it contains 8-10 characters, including uppercase, lowercase, numbers, and special characters.',
                     confirmButtonColor: '#3085d6'
                 });
             </script>";
             exit;
         }
-
-        if ($password === $password2) {
-            // Hash password before storing
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    
+        try {
+            // Check if username already exists
+            $check_username = $conn->prepare("SELECT username FROM organizer WHERE username = ?");
+            $check_username->execute([$username]);
             
-            // Insert new user using PDO
-            $stmt = $conn->prepare("INSERT INTO organizer (fname, mname, lname, username, password, access, status) VALUES (?, ?, ?, ?, ?, 'Organizer', 'offline')");
-            
-            if ($stmt->execute([$fname, $mname, $lname, $username, $hashed_password])) {
+            if ($check_username->rowCount() > 0) {
                 echo "<script>
                     Swal.fire({
-                        icon: 'success',
-                        title: 'Registration Successful',
-                        text: 'Organizer " . $fname . " " . $mname . " " . $lname . " registered successfully!',
+                        icon: 'error',
+                        title: 'Username Taken',
+                        text: 'Username already exists. Please choose a different username.',
                         confirmButtonColor: '#3085d6'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = 'index2';
-                        }
                     });
                 </script>";
+                exit;
+            }
+    
+            if ($password === $password2) {
+                // Hash password before storing
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                
+                // Generate a 10-digit random number for organizer_id
+                $organizer_id = mt_rand(1000000000, 9999999999);
+                
+                // Insert new user using PDO
+                $stmt = $conn->prepare("INSERT INTO organizer (organizer_id, fname, mname, lname, username, password, access, status) VALUES (?, ?, ?, ?, ?, ?, 'Organizer', 'offline')");
+                
+                if ($stmt->execute([$organizer_id, $fname, $mname, $lname, $username, $hashed_password])) {
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Registration Successful',
+                            text: 'Organizer " . $fname . " " . $mname . " " . $lname . " registered successfully!',
+                            confirmButtonColor: '#3085d6'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location = 'index2';
+                            }
+                        });
+                    </script>";
+                } else {
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Registration Failed',
+                            text: 'Registration failed. Please try again.',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    </script>";
+                }
             } else {
                 echo "<script>
                     Swal.fire({
                         icon: 'error',
-                        title: 'Registration Failed',
-                        text: 'Registration failed. Please try again.',
+                        title: 'Password Mismatch',
+                        text: 'Passwords do not match. Please try again.',
                         confirmButtonColor: '#3085d6'
                     });
                 </script>";
             }
-        } else {
+        } catch (PDOException $e) {
             echo "<script>
                 Swal.fire({
                     icon: 'error',
-                    title: 'Password Mismatch',
-                    text: 'Passwords do not match. Please try again.',
+                    title: 'Database Error',
+                    text: 'An error occurred. Please try again later.',
                     confirmButtonColor: '#3085d6'
                 });
             </script>";
+            // For debugging (remove in production):
+            // error_log($e->getMessage());
         }
-    } catch (PDOException $e) {
-        echo "<script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Database Error',
-                text: 'An error occurred. Please try again later.',
-                confirmButtonColor: '#3085d6'
-            });
-        </script>";
-        // For debugging (remove in production):
-        // error_log($e->getMessage());
     }
-}
 ?>
