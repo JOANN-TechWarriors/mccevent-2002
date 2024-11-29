@@ -10,8 +10,8 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // SQL to alter the table and change the organizer_id column to BIGINT(100)
-    $alter_sql = "ALTER TABLE `main_event` MODIFY `organizer_id` BIGINT(100) NOT NULL";
+    // SQL to alter the sub_event table and change the organizer_id column to BIGINT(100)
+    $alter_sql = "ALTER TABLE `sub_event` MODIFY `organizer_id` BIGINT(100) NOT NULL";
     
     // Execute the SQL statement
     $conn->exec($alter_sql);
