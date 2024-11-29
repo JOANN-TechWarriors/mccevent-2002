@@ -198,11 +198,7 @@ if (substr($request, -4) == '.php') {
                             licensors. Our trademarks and trade dress may not be used in connection with any product or service
                             without our prior written consent.<br>
                 12. Privacy: Your use of the App is also governed by our Privacy Policy, which is incorporated into these
-                        Terms by reference.<br>
-
-                13. Termination: We may terminate or suspend your account and bar access to the App immediately, without prior
-                        notice or liability, under our sole discretion, for any reason whatsoever, including but not
-                        limited to a breach of the Terms.<br>
+                        Terms by reference.<br><br>
 
                 By creating an account, you acknowledge that you have read, understood, and agree to be bound by these terms and conditions.
             </p>
