@@ -192,17 +192,17 @@ if (substr($request, -4) == '.php') {
                 7. Termination: MCC can terminate accounts for violations or at their discretion.<br>
                 8. Liability: System provided "as is" with no warranties; MCC not liable for certain damages.<br>
                 9. Changes to Terms: Terms may be modified; continued use implies acceptance.<br>
-                10. Governing Law: Terms governed by laws of the specified jurisdiction.<br><br>
+                10. Governing Law: Terms governed by laws of the specified jurisdiction.<br>
                 11. Intellectual Property: The App and its original content, features, and functionality are
                             and will remain the exclusive property of Madridejos Community COllege and its
                             licensors. Our trademarks and trade dress may not be used in connection with any product or service
-                            without our prior written consent.<br><br>
+                            without our prior written consent.<br>
                 12. Privacy: Your use of the App is also governed by our Privacy Policy, which is incorporated into these
-                        Terms by reference.<br><br>
+                        Terms by reference.<br>
 
                 13. Termination: We may terminate or suspend your account and bar access to the App immediately, without prior
                         notice or liability, under our sole discretion, for any reason whatsoever, including but not
-                        limited to a breach of the Terms.<br><br>
+                        limited to a breach of the Terms.<br>
 
                 By creating an account, you acknowledge that you have read, understood, and agree to be bound by these terms and conditions.
             </p>
