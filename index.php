@@ -360,7 +360,25 @@ if (substr($request, -4) == '.php') {
         padding: 10px;
     }
 }
+.readmore_btn a {
+        font-size: 0.8rem; /* Smaller font size for the button text */
+        color: #007bff; /* Default link color */
+        text-decoration: none; /* Removed underline for cleaner look */
+        padding: 4px 8px; /* Smaller padding for a compact button */
+        border-radius: 3px; /* Slightly rounded corners */
+        transition: all 0.3s ease; /* Smooth transition on hover */
+    }
 
+    .readmore_btn a:hover {
+        color: #0056b3; /* Darker blue on hover */
+        text-decoration: underline; /* Underline on hover */
+    }
+
+    .readmore_btn a:active {
+        background-color: red; /* Red background on click */
+        color: black; /* Black text on click */
+        text-decoration: none; /* No underline when active */
+    }
 /* Ensure carousel controls stay visible */
 .banner_section .carousel-control-prev,
 .banner_section .carousel-control-next {
@@ -636,7 +654,7 @@ $conn->close();
     				fostering transparency, engagement, and community connection.
 			</p>
 			     <div class="readmore_btn mt-3">
-    				<a href="about.php" class="btn-link">Read More</a>
+   				 <a href="about.php" class="btn-link">Read More</a>
 			</div>
                      </div>
                   </div>
