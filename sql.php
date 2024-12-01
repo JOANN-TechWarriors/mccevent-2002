@@ -11,46 +11,17 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Get all tables in the database
-    $tables_query = "SHOW TABLES";
-    $tables_stmt = $conn->query($tables_query);
-    $tables = $tables_stmt->fetchAll(PDO::FETCH_COLUMN);
+    // Delete all data from main_event table
+    $delete_sql = "DELETE FROM `sub_event`";
+    $deleted_count = $conn->exec($delete_sql);
 
-    // Loop through each table and display its columns and data
-    foreach ($tables as $table) {
-        // Get column information
-        $columns_query = "SHOW COLUMNS FROM `$table`";
-        $columns_stmt = $conn->query($columns_query);
-        $columns = $columns_stmt->fetchAll(PDO::FETCH_COLUMN);
+    // Reset auto-increment to start from 1
+    $reset_sql = "ALTER TABLE `sub_event` AUTO_INCREMENT = 1";
+    $conn->exec($reset_sql);
 
-        // SQL to select all data from the current table
-        $select_sql = "SELECT * FROM `$table`";
-        $stmt = $conn->query($select_sql);
-
-        // Display table name and header
-        echo "<h2>$table Table Columns:</h2>";
-        echo implode(', ', $columns) . "<br><br>";
-
-        // Display data from the table in an HTML table
-        echo "<table border='1'>";
-        
-        // Create table header
-        echo "<tr>";
-        foreach ($columns as $column) {
-            echo "<th>" . htmlspecialchars($column) . "</th>";
-        }
-        echo "</tr>";
-
-        // Display table rows
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo "<tr>";
-            foreach ($columns as $column) {
-                echo "<td>" . htmlspecialchars($row[$column]) . "</td>";
-            }
-            echo "</tr>";
-        }
-        echo "</table><br><br>";
-    }
+    // Output confirmation message
+    echo "Successfully deleted $deleted_count rows from main_event table.<br>";
+    echo "Table auto-increment has been reset to 1.";
 
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
