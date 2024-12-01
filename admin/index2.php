@@ -174,7 +174,7 @@ if (substr($request, -4) == '.php') {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Initialize login attempts counter and timer variables
+        // Initialize login attempt counter and timer variables
         let loginAttempts = 0;
         const MAX_ATTEMPTS = 3;
         const LOCKOUT_TIME = 180; // 3 minutes in seconds
