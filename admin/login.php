@@ -10,11 +10,15 @@
 <body>
 <?php
 include('dbcon.php');
+require '../vendor/autoload.php'; // Include PHPMailer's autoloader
 session_start();
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 // Function to log failed login attempts
 function logFailedAttempt($conn, $username, $ip, $latitude, $longitude) {
-    $type = 'organzizer_login_attempt';
+    $type = 'organizer_login_attempt';
     $currentTimestamp = date('Y-m-d H:i:s');
     $stmt = $conn->prepare("INSERT INTO logs (id, ip, username, timestamp, latitude, longitude, type) VALUES (UUID(), :ip, :username, :timestamp, :latitude, :longitude, :type)");
     $stmt->bindParam(':ip', $ip);
@@ -41,7 +45,6 @@ function getUserIP() {
 function sendEmailNotification($adminEmail, $logs) {
     $mail = new PHPMailer(true);
     try {
-        // Server settings
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -51,9 +54,8 @@ function sendEmailNotification($adminEmail, $logs) {
         $mail->Port = 587;
 
         // Recipients
-        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Organizer Attempt Alert');
+        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Tabulator Attempt Alert');
         $mail->addAddress($adminEmail);
-
         // Generate detailed HTML log details
         $logDetails = '<table border="1" cellpadding="10" style="width:100%; border-collapse: collapse;">';
         $logDetails .= '<thead><tr style="background-color: #f2f2f2;"> <th>IP Address</th> <th>Username</th> <th>Timestamp</th> <th>Location</th> </tr></thead><tbody>';
@@ -128,7 +130,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 if ($admin) {
                     $adminEmail = $admin['email'];
                     // Fetch log details
-                    $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = '_login_attempt' ORDER BY timestamp DESC LIMIT 5");
+                    $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = 'organizer_login_attempt' ORDER BY timestamp DESC LIMIT 5");
                     $logQuery->execute();
                     $logs = $logQuery->fetchAll();
                     // Send email notification
@@ -164,7 +166,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             if ($admin) {
                 $adminEmail = $admin['email'];
                 // Fetch log details
-                $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = '_login_attempt' ORDER BY timestamp DESC LIMIT 5");
+                $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = 'organizer_login_attempt' ORDER BY timestamp DESC LIMIT 5");
                 $logQuery->execute();
                 $logs = $logQuery->fetchAll();
                 // Send email notification
