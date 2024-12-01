@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../images/logo copy.png"/>
+    <title>Event Judging System</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 <?php
 include('dbcon.php');
 session_start();
@@ -122,3 +132,5 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     <?php
 }
 ?>
+</body>
+</html>
