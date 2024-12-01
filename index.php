@@ -361,7 +361,7 @@ if (substr($request, -4) == '.php') {
     }
 }
 .readmore_btn a {
-        font-size: 0.8rem; /* Smaller font size for the button text */
+        font-size: 1rem; /* Smaller font size for the button text */
         color: #007bff; /* Default link color */
         text-decoration: none; /* Removed underline for cleaner look */
         padding: 4px 8px; /* Smaller padding for a compact button */
@@ -370,7 +370,7 @@ if (substr($request, -4) == '.php') {
     }
 
     .readmore_btn a:hover {
-        color: #0056b3; /* Darker blue on hover */
+        color: red; /* Darker blue on hover */
         text-decoration: underline; /* Underline on hover */
     }
 
