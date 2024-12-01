@@ -54,8 +54,9 @@ function sendEmailNotification($adminEmail, $logs) {
         $mail->Port = 587;
 
         // Recipients
-        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Orgnizer Attempt Alert');
+        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Organizer Attempt Alert');
         $mail->addAddress($adminEmail);
+
         // Generate detailed HTML log details
         $logDetails = '<table border="1" cellpadding="10" style="width:100%; border-collapse: collapse;">';
         $logDetails .= '<thead><tr style="background-color: #f2f2f2;"> <th>IP Address</th> <th>Username</th> <th>Timestamp</th> <th>Location</th> </tr></thead><tbody>';
@@ -111,6 +112,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             } elseif ($row['access'] == "Organizer") {
                 $_SESSION['useraccess'] = "Organizer";
                 $_SESSION['id'] = $row['organizer_id'];
+                $_SESSION['login_attempts'] = 0; // Reset attempts on successful login
                 ?>
                 <script>
                 window.location = 'dashboard.php';
@@ -122,7 +124,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             logFailedAttempt($conn, $username, getUserIP(), $latitude, $longitude);
             $_SESSION['login_attempts'] = ($_SESSION['login_attempts'] ?? 0) + 1;
 
-            if ($_SESSION['login_attempts'] >= 3) {
+            if ($_SESSION['login_attempts'] == 3) {
                 // Fetch admin email
                 $query = $conn->prepare("SELECT email FROM admin WHERE id = 1"); // Assuming admin ID is 1
                 $query->execute();
@@ -158,7 +160,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         logFailedAttempt($conn, $username, getUserIP(), $latitude, $longitude);
         $_SESSION['login_attempts'] = ($_SESSION['login_attempts'] ?? 0) + 1;
 
-        if ($_SESSION['login_attempts'] >= 3) {
+        if ($_SESSION['login_attempts'] == 3) {
             // Fetch admin email
             $query = $conn->prepare("SELECT email FROM admin WHERE id = 1"); // Assuming admin ID is 1
             $query->execute();
