@@ -36,6 +36,10 @@ if (substr($request, -4) == '.php') {
       <link rel="stylesheet" href="css1/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <!-- Other meta tags and links -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
 
       <style>
         * {
@@ -173,6 +177,52 @@ if (substr($request, -4) == '.php') {
             opacity: 0.5;
         }
 
+           /* Banner Section Base Styles */
+.banner_section {
+    padding-top: 65px; /* Account for fixed navbar */
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.banner_taital_main {
+    padding: 20px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.banner_taital {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    line-height: 1.2;
+}
+/* Responsive Breakpoints */
+@media screen and (max-width: 1200px) {
+    .banner_taital {
+        font-size: 3.5rem;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .banner_section {
+        min-height: 500px;
+    }
+    
+    .banner_taital {
+        font-size: 3rem;
+    }
+}
+
         @media screen and (max-width: 768px) {
             .media_button {
                 display: block;
@@ -259,35 +309,281 @@ if (substr($request, -4) == '.php') {
               <span></span>
           </button>
       </nav>
-
-      <!-- about section start -->
-      <div class="about_section layout_padding">
-         <div class="container">
-            <div class="about_section_2">
-               <div class="row">
-                  <div class="col-md-6"> 
-                     <div class="about_taital_box">
-                        <h1 class="about_taital">ABOUT</h1>
-                        <p class="about_text">Madridejos Community College (MCC) is an educational institution that serves the local community in Madridejos, a municipality in the province of Cebu, Philippines. It is dedicated to providing quality education and fostering a supportive learning environment for its students.</p>
-                        <div class="readmore_btn"><a href="#">Read More</a></div>
+!-- banner section start --> 
+<div class="banner_section">
+   <div class="container">
+      <div id="banner_slider" class="carousel slide" data-ride="carousel">
+         <div class="carousel-inner">
+            <div class="carousel-item active">
+               <div class="banner_taital_main">
+                  <div class="container h-75">
+                     <div 
+                        class="row h-100 align-items-center justify-content-center text-center" 
+                        style="height: 100vh; position: relative;">
+                        <!-- Adjusted text container -->
+                        <div 
+                           class="col-lg-10 align-self-center"  
+                           style="background: #0000002e; padding: 20px; border-radius: 10px; margin-top: 0; margin-bottom: 0;">
+                           <h1 
+                              class="text-uppercase text-white font-weight-bold" 
+                              style="font-size: 4rem; line-height: 1.2;">
+                              About Us
+                           </h1>
+                           <hr 
+                            class="divider my-4" 
+                            style="width: 50%; height: 3px; background: lightblue; border: none; margin: 0 auto;" />
+                        
+                        </div>
                      </div>
-                  </div>
-                  <div class="col-md-6"> 
-                     <div class="image_iman"><img src="img/Community-College-Madridejos.jpeg" class="about_img"></div>
-                     <br><br><br>
                   </div>
                </div>
             </div>
          </div>
       </div>
+   </div>
+</div>
+
+<!-- banner section end -->
+
+      <!-- header section end -->
+      <!-- about section start -->
+      <div class="about_section layout_padding" style="background: #f8f9fa;">
+    <section class="page-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto text-center">
+                    <h2 class="about_title mb-3">Welcome to MCC Events</h2>
+                    <p class="about_text mb-5">
+                        The Madridejos Community College (MCC) Events is your partner in transforming school events. 
+                        Our platform streamlines event management with automated judging, live streaming, and audience interaction, 
+                        fostering transparency, engagement, and community connection.
+                    </p>
+                    
+                   <h3 class="about_subtitle mb-3">What We Offer:</h3>
+<ul class="offer_list mb-5">
+    <li>
+        <i class="fa fa-check-circle offer_icon"></i> 
+        Efficient event organization with real-time updates
+    </li>
+    <li>
+        <i class="fa fa-check-circle offer_icon"></i> 
+        Transparent and accurate judging processes
+    </li>
+    <li>
+        <i class="fa fa-check-circle offer_icon"></i> 
+        Interactive features like live streaming and audience engagement
+    </li>
+</ul>
+                    <p class="about_text mb-4">
+                        Join us in creating memorable and engaging MCC events!
+                    </p>
+                    
+                    <!-- Optional Read More Button -->
+                    <!-- <div class="readmore_btn mt-4"><a href="#">Read More</a></div> -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .about_section {
+        padding: 3rem 0;
+        background: #f8f9fa;
+    }
+
+    .about_title {
+        font-size: 2rem;
+        font-weight: 600;
+        color:#495057;
+    }
+
+    .about_text {
+        font-size: 1.5rem;
+        color: #495057;
+        line-height: 2;
+    }
+
+    .about_subtitle {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #495057;
+    }
+    .offer_list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .offer_list li {
+        font-size: 1.1rem;
+        color: #343a40;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        line-height: 1.6;
+    }
+
+    .offer_icon {
+        font-size: 1.3rem;
+        color: #ffc107;
+        margin-right: 10px;
+    }
+
+    .offer_list li:hover .offer_icon {
+        color: #e0a800;
+    }
+
+    .offer_list li:hover {
+        color: #495057;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .about_subtitle {
+            font-size: 1.5rem;
+        }
+
+        .offer_list li {
+            font-size: 1rem;
+        }
+
+        .offer_icon {
+            font-size: 1.1rem;
+        }
+    }
+
+    
+</style>
+
+
+
       <!-- about section end -->
+<!-- Your footer content -->
+<footer class="footer py-4">
+    <div class="container">
+        <div class="row text-center text-md-left">
+            <!-- Quick Links Section -->
+            <div class="col-md-6 mb-4 mt-3">
+                <h4 class="text-white">Quick Links</h4>
+                <ul class="quick-links list-unstyled">
+                    <li><a href="#about"><span class="arrow"> &gt; </span>About Us</a></li>
+                    <li><a href="#faqs"><span class="arrow"> &gt; </span>FAQs</a></li>
+                    <li><a href="#contact"><span class="arrow"> &gt; </span>Contact Us</a></li>
+                    <li><a href="#privacy"><span class="arrow"> &gt; </span>Privacy Policy</a></li>
+                    <li><a href="#terms"><span class="arrow"> &gt; </span>Terms and Condition</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="col-md-6 mb-4 text-md-right mt-3">
+                <h4 class="text-white">Contact Us</h4>
+                <p class="text-muted mb-2">
+                    <i class="fa fa-phone mr-2"></i>+639453278882
+                </p>
+                <p class="text-muted mb-2">
+                    <i class="fa fa-envelope mr-2"></i>
+                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannrebamonte@gmail.com</a>
+                </p>
+                <div class="social-icons mt-2">
+                    <a href="#" class="mr-3"><i class="fa fa-facebook-square fa-lg"></i></a>
+                    <a href="#" class="mr-3"><i class="fa fa-twitter-square fa-lg"></i></a>
+                    <a href="#" class="mr-3"><i class="fa fa-instagram fa-lg"></i></a>
+                    <a href="#" class="mr-3"><i class="fa fa-linkedin-square fa-lg"></i></a> <!-- LinkedIn added -->
+                    <a href="#" class="mr-3"><i class="fa fa-youtube-square fa-lg"></i></a> <!-- YouTube added -->
+                </div>
+            </div>
+        </div>
+        
+</footer>
+
+<style>
+    .footer {
+        background: #212529 !important;
+        color: #f8f9fa;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    .footer h4 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .footer p, .footer a {
+        font-size: 1rem;
+        color: #adb5bd;
+    }
+
+    .contact-link {
+        color: #ffc107 !important;
+        text-decoration: none;
+    }
+
+    .contact-link:hover {
+        text-decoration: underline;
+    }
+
+    .quick-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .quick-links li {
+        margin-bottom: 0.5rem;
+    }
+
+    .quick-links a {
+        color: #ffc107;
+        text-decoration: none;
+    }
+
+    .quick-links a:hover {
+        text-decoration: underline;
+    }
+
+    .quick-links .arrow {
+        color: white;
+    }
+
+    .social-icons a {
+        color: #ffc107;
+        text-decoration: none;
+        transition: color 0.3s;
+        font-size: 1.5rem;
+    }
+
+    .social-icons a:hover {
+        color: #e0a800;
+    }
+
+    @media (max-width: 768px) {
+        .footer {
+            text-align: center;
+        }
+
+        .text-md-left, .text-md-right {
+            text-align: center !important;
+        }
+
+        .social-icons {
+            justify-content: center;
+        }
+    }
+</style>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" crossorigin="anonymous"></script>
 
       <!-- copyright section start -->
       <div class="copyright_section">
          <div class="container">
             <div class="row">
-               <div class="col-sm-12">
-                  <p class="copyright_text"><strong> Event Judging System &COPY; <?= date("Y") ?> </strong></p>
+               <div class="col-sm-12 ">
+                  <p class="copyright_text"><strong>&COPY; <?= date("Y") ?> MCC Events. All Rights Reserved. </strong></p>
                </div>
             </div>
          </div>
