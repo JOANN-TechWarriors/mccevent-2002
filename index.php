@@ -1,4 +1,4 @@
-<?php
+z<?php
 $request = $_SERVER['REQUEST_URI'];
 if (substr($request, -4) == '.php') {
     $new_url = substr($request, 0, -4);
@@ -682,6 +682,7 @@ $conn->close();
          </div>
       </div>
       <!-- contact section end -->
+   <!-- Your footer content -->
 <footer class="footer py-4">
     <div class="container">
         <div class="row text-center text-md-left">
@@ -701,17 +702,16 @@ $conn->close();
             <div class="col-md-6 mb-4 text-md-right mt-3">
                 <h4 class="text-white">Contact Us</h4>
                 <p class="text-muted mb-2">
-                    <i class="fa fa-phone mr-2"></i>+639453278882
+                    <i class="fa fa-phone mr-2 "></i>+639453278882
                 </p>
                 <p class="text-muted mb-2">
                     <i class="fa fa-envelope mr-2"></i>
                     <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannrebamonte@gmail.com</a>
                 </p>
+                
             </div>
-        </div>
         
 </footer>
-
 <style>
     .footer {
         background: #212529 !important;
@@ -763,7 +763,6 @@ $conn->close();
     }
 
     
-
     @media (max-width: 768px) {
         .footer {
             text-align: center;
@@ -772,14 +771,12 @@ $conn->close();
         .text-md-left, .text-md-right {
             text-align: center !important;
         }
+
+        .social-icons {
+            justify-content: center;
+        }
     }
 </style>
-
-
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" crossorigin="anonymous"></script>
 
       <!-- copyright section start -->
       <div class="copyright_section">
