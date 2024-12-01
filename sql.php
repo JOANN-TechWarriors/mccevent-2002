@@ -41,7 +41,7 @@ try {
         }
         echo "</tr>";
 
-        // Display table rows
+        // Display table row
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             echo "<tr>";
             foreach ($columns as $column) {
