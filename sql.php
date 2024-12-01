@@ -11,8 +11,10 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // List of tables to display
-    $tables = ['main_event', 'sub_event', 'organizer'];
+    // Get all tables in the database
+    $tables_query = "SHOW TABLES";
+    $tables_stmt = $conn->query($tables_query);
+    $tables = $tables_stmt->fetchAll(PDO::FETCH_COLUMN);
 
     // Loop through each table and display its columns and data
     foreach ($tables as $table) {
