@@ -45,13 +45,13 @@ function sendEmailNotification($adminEmail, $logs) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'your-email@gmail.com'; // Replace with your email
-        $mail->Password = 'your-app-password'; // Replace with your app-specific password
+        $mail->Username = 'joannrebamonte80@gmail.com';
+        $mail->Password = 'dkyd tsnv hzyh amjy'; // Use an app-specific password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         // Recipients
-        $mail->setFrom('your-email@gmail.com', 'Security Alert');
+        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Organizer Attempt Alert');
         $mail->addAddress($adminEmail);
 
         // Generate detailed HTML log details
