@@ -17,9 +17,14 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Function to log failed login attempts
+// Function to log failed login attempts
 function logFailedAttempt($conn, $username, $ip, $latitude, $longitude) {
     $type = 'organizer_login_attempt';
-    $currentTimestamp = date('Y-m-d H:i:s');
+    
+    // Create a DateTime object with the desired timezone
+    $dateTime = new DateTime('now', new DateTimeZone('Asia/Kolkata')); // Replace 'Asia/Kolkata' with your specific timezone
+    $currentTimestamp = $dateTime->format('Y-m-d H:i:s');
+    
     $stmt = $conn->prepare("INSERT INTO logs (id, ip, username, timestamp, latitude, longitude, type) VALUES (UUID(), :ip, :username, :timestamp, :latitude, :longitude, :type)");
     $stmt->bindParam(':ip', $ip);
     $stmt->bindParam(':username', $username);
