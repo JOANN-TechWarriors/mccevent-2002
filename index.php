@@ -627,10 +627,16 @@ $conn->close();
          <div class="container">
             <div class="about_section_2">
                <div class="row">
-                  <div class="col-md-6" style="z-index:-1000;"> 
+                  <div class="col-md-6" > 
                      <div class="about_taital_box">
                         <h1 class="about_taital">ABOUT</h1>
-                        <p class=" about_text" style="text-align:justify;">Madridejos Community College (MCC) is an educational institution that serves the local community in Madridejos, a municipality in the province of Cebu, Philippines. It is dedicated to providing quality education and fostering a supportive learning environment for its students.</p>
+                        <p class=" about_text" style="text-align:justify;"> The Madridejos Community College (MCC) Events is your partner in transforming school events. 
+                        Our platform streamlines event management with automated judging, live streaming, and audience interaction, 
+                        fostering transparency, engagement, and community connection.</p>
+			     <!-- Read More Button -->
+                  	<div class="readmore_btn mt-3">
+                    		<a href="about.php" class="btn-link">Read More</a>
+                    	</div>
                      </div>
                   </div>
                   <div class="col-md-6" style="z-index:-1000;"> 
