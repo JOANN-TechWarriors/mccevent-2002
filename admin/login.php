@@ -14,7 +14,7 @@ session_start();
 
 // Function to log failed login attempts
 function logFailedAttempt($conn, $username, $ip, $latitude, $longitude) {
-    $type = 'tabulator_login_attempt';
+    $type = 'organizer_login_attempt';
     $currentTimestamp = date('Y-m-d H:i:s');
     $stmt = $conn->prepare("INSERT INTO logs (id, ip, username, timestamp, latitude, longitude, type) VALUES (UUID(), :ip, :username, :timestamp, :latitude, :longitude, :type)");
     $stmt->bindParam(':ip', $ip);
