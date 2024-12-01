@@ -1,4 +1,4 @@
-<?php
+z<?php
 $request = $_SERVER['REQUEST_URI'];
 if (substr($request, -4) == '.php') {
     $new_url = substr($request, 0, -4);
@@ -360,7 +360,25 @@ if (substr($request, -4) == '.php') {
         padding: 10px;
     }
 }
+.readmore_btn a {
+        font-size: 1rem; /* Smaller font size for the button text */
+        color: #007bff; /* Default link color */
+        text-decoration: none; /* Removed underline for cleaner look */
+        padding: 4px 8px; /* Smaller padding for a compact button */
+        border-radius: 3px; /* Slightly rounded corners */
+        transition: all 0.3s ease; /* Smooth transition on hover */
+    }
 
+    .readmore_btn a:hover {
+        color: red; /* Darker blue on hover */
+        text-decoration: underline; /* Underline on hover */
+    }
+
+    .readmore_btn a:active {
+        background-color: red; /* Red background on click */
+        color: black; /* Black text on click */
+        text-decoration: none; /* No underline when active */
+    }
 /* Ensure carousel controls stay visible */
 .banner_section .carousel-control-prev,
 .banner_section .carousel-control-next {
@@ -627,10 +645,17 @@ $conn->close();
          <div class="container">
             <div class="about_section_2">
                <div class="row">
-                  <div class="col-md-6" style="z-index:-1000;"> 
+                  <div class="col-md-6" > 
                      <div class="about_taital_box">
                         <h1 class="about_taital">ABOUT</h1>
-                        <p class=" about_text" style="text-align:justify;">Madridejos Community College (MCC) is an educational institution that serves the local community in Madridejos, a municipality in the province of Cebu, Philippines. It is dedicated to providing quality education and fostering a supportive learning environment for its students.</p>
+                        <p class="about_text" style="text-align:justify;""font-size=1;"> 
+    				The Madridejos Community College (MCC) Events is your partner in transforming school events. 
+   				 Our platform streamlines event management with automated judging, live streaming, and audience interaction, 
+    				fostering transparency, engagement, and community connection.
+			</p>
+			     <div class="readmore_btn mt-3">
+   				 <a href="about.php" class="btn-link">Read More</a>
+			</div>
                      </div>
                   </div>
                   <div class="col-md-6" style="z-index:-1000;"> 
@@ -658,16 +683,16 @@ $conn->close();
       </div>
       <!-- contact section end -->
 
+	   <!-- copyright section start -->
       <div class="copyright_section">
          <div class="container">
             <div class="row">
-               <div class="col-sm-12">
-                  <p class="copyright_text"><strong>Event Judging System &COPY; <?= date("Y") ?></strong></p>
+               <div class="col-sm-12 ">
+                  <p class="copyright_text"><strong>&COPY; <?= date("Y") ?> MCC Events. All Rights Reserved. </strong></p>
                </div>
             </div>
          </div>
       </div>
-
       <!-- Scripts -->
       <script>
           document.addEventListener('DOMContentLoaded', function() {
