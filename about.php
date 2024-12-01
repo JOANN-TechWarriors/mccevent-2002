@@ -484,13 +484,6 @@ if (substr($request, -4) == '.php') {
                     <i class="fa fa-envelope mr-2"></i>
                     <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannrebamonte@gmail.com</a>
                 </p>
-                <div class="social-icons mt-2">
-                    <a href="#" class="mr-3"><i class="fa fa-facebook-square fa-lg"></i></a>
-                    <a href="#" class="mr-3"><i class="fa fa-twitter-square fa-lg"></i></a>
-                    <a href="#" class="mr-3"><i class="fa fa-instagram fa-lg"></i></a>
-                    <a href="#" class="mr-3"><i class="fa fa-linkedin-square fa-lg"></i></a> <!-- LinkedIn added -->
-                    <a href="#" class="mr-3"><i class="fa fa-youtube-square fa-lg"></i></a> <!-- YouTube added -->
-                </div>
             </div>
         </div>
         
@@ -546,16 +539,7 @@ if (substr($request, -4) == '.php') {
         color: white;
     }
 
-    .social-icons a {
-        color: #ffc107;
-        text-decoration: none;
-        transition: color 0.3s;
-        font-size: 1.5rem;
-    }
-
-    .social-icons a:hover {
-        color: #e0a800;
-    }
+    
 
     @media (max-width: 768px) {
         .footer {
@@ -564,10 +548,6 @@ if (substr($request, -4) == '.php') {
 
         .text-md-left, .text-md-right {
             text-align: center !important;
-        }
-
-        .social-icons {
-            justify-content: center;
         }
     }
 </style>
