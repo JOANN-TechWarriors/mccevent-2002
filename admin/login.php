@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../images/logo copy.png"/>
@@ -9,22 +9,12 @@
 </head>
 <body>
 <?php
-require '../vendor/autoload.php'; // Include PHPMailer's autoloader
-include('../admin/dbcon.php');
+include('dbcon.php');
 session_start();
-
-// Set the default timezone to Asia/Manila
-date_default_timezone_set('Asia/Manila');
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-header('Content-Type: application/json');
-$response = ['success' => false, 'message' => '', 'redirect' => ''];
 
 // Function to log failed login attempts
 function logFailedAttempt($conn, $username, $ip, $latitude, $longitude) {
-    $type = 'tabulator_login_attempt';
+    $type = 'organzizer_login_attempt';
     $currentTimestamp = date('Y-m-d H:i:s');
     $stmt = $conn->prepare("INSERT INTO logs (id, ip, username, timestamp, latitude, longitude, type) VALUES (UUID(), :ip, :username, :timestamp, :latitude, :longitude, :type)");
     $stmt->bindParam(':ip', $ip);
@@ -36,6 +26,17 @@ function logFailedAttempt($conn, $username, $ip, $latitude, $longitude) {
     $stmt->execute();
 }
 
+// Helper function to get the user's IP address
+function getUserIP() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        return $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        return $_SERVER['REMOTE_ADDR'];
+    }
+}
+
 // Function to send email notification
 function sendEmailNotification($adminEmail, $logs) {
     $mail = new PHPMailer(true);
@@ -44,13 +45,13 @@ function sendEmailNotification($adminEmail, $logs) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'joannrebamonte80@gmail.com';
-        $mail->Password = 'dkyd tsnv hzyh amjy'; // Use an app-specific password
+        $mail->Username = 'your-email@gmail.com'; // Replace with your email
+        $mail->Password = 'your-app-password'; // Replace with your app-specific password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         // Recipients
-        $mail->setFrom('joannrebamonte80@gmail.com', 'Security Tabulator Attempt Alert');
+        $mail->setFrom('your-email@gmail.com', 'Security Alert');
         $mail->addAddress($adminEmail);
 
         // Generate detailed HTML log details
@@ -72,44 +73,98 @@ function sendEmailNotification($adminEmail, $logs) {
     }
 }
 
-// Fetch admin email
-$query = $conn->prepare("SELECT email FROM admin WHERE id = 1"); // Assuming admin ID is 1
-$query->execute();
-$admin = $query->fetch();
+// Example latitude and longitude (you may need a service to get real data)
+$latitude = '0.0';
+$longitude = '0.0';
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $latitude = $_POST['latitude'] ?? 0;
-    $longitude = $_POST['longitude'] ?? 0;
 
+    // Prepare query to fetch user data
     $query = $conn->prepare("SELECT * FROM organizer WHERE username = :username");
     $query->bindParam(':username', $username);
     $query->execute();
     $row = $query->fetch();
     $num_row = $query->rowCount();
 
-    if ($num_row > 0 && password_verify($password, $row['password'])) {
-        if ($row['access'] == "Tabulator") {
-            $_SESSION['useraccess'] = "Tabulator";
-            $_SESSION['id'] = $row['org_id'];
-            $_SESSION['userid'] = $row['organizer_id'];
-            $_SESSION['login_success'] = true;
-            $response['success'] = true;
-            $response['message'] = 'Login successful';
-            $response['redirect'] = 'score_sheets';
-            $_SESSION['login_attempts'] = 0; // Reset attempts on successful login
+    if ($num_row > 0) {
+        // Verify the password hash
+        if (password_verify($password, $row['password'])) {
+            if ($row['request_status'] == '') {
+                ?>
+                <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Sorry, Your account is not yet approved by the admin',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = 'index2.php';
+                    }
+                });
+                </script>
+                <?php
+            } elseif ($row['access'] == "Organizer") {
+                $_SESSION['useraccess'] = "Organizer";
+                $_SESSION['id'] = $row['organizer_id'];
+                ?>
+                <script>
+                window.location = 'dashboard.php';
+                </script>
+                <?php
+            }
+        } else {
+            // Invalid password
+            logFailedAttempt($conn, $username, getUserIP(), $latitude, $longitude);
+            $_SESSION['login_attempts'] = ($_SESSION['login_attempts'] ?? 0) + 1;
+
+            if ($_SESSION['login_attempts'] >= 3) {
+                // Fetch admin email
+                $query = $conn->prepare("SELECT email FROM admin WHERE id = 1"); // Assuming admin ID is 1
+                $query->execute();
+                $admin = $query->fetch();
+                if ($admin) {
+                    $adminEmail = $admin['email'];
+                    // Fetch log details
+                    $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = '_login_attempt' ORDER BY timestamp DESC LIMIT 5");
+                    $logQuery->execute();
+                    $logs = $logQuery->fetchAll();
+                    // Send email notification
+                    sendEmailNotification($adminEmail, $logs);
+                }
+                $_SESSION['lockout_time'] = time() + 180; // Lockout for 3 minutes
+            }
+            ?>
+            <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Invalid Username or Password',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location = 'index2.php';
+                }
+            });
+            </script>
+            <?php
         }
     } else {
+        // User not found
+        logFailedAttempt($conn, $username, getUserIP(), $latitude, $longitude);
         $_SESSION['login_attempts'] = ($_SESSION['login_attempts'] ?? 0) + 1;
-        $ip = $_SERVER['REMOTE_ADDR'];
-        logFailedAttempt($conn, $username, $ip, $latitude, $longitude);
 
         if ($_SESSION['login_attempts'] >= 3) {
+            // Fetch admin email
+            $query = $conn->prepare("SELECT email FROM admin WHERE id = 1"); // Assuming admin ID is 1
+            $query->execute();
+            $admin = $query->fetch();
             if ($admin) {
                 $adminEmail = $admin['email'];
                 // Fetch log details
-                $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = 'tabulator_login_attempt' ORDER BY timestamp DESC LIMIT 5");
+                $logQuery = $conn->prepare("SELECT * FROM logs WHERE type = '_login_attempt' ORDER BY timestamp DESC LIMIT 5");
                 $logQuery->execute();
                 $logs = $logQuery->fetchAll();
                 // Send email notification
@@ -117,15 +172,37 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             }
             $_SESSION['lockout_time'] = time() + 180; // Lockout for 3 minutes
         }
-        $response['success'] = false;
-        $response['message'] = 'Invalid Username or Password';
+        ?>
+        <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Invalid Username or Password',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = 'index2.php';
+            }
+        });
+        </script>
+        <?php
     }
 } else {
-    $response['success'] = false;
-    $response['message'] = 'Missing credentials';
+    ?>
+    <script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please provide both username and password',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = 'index2.php';
+        }
+    });
+    </script>
+    <?php
 }
-
-echo json_encode($response);
 ?>
 </body>
 </html>
