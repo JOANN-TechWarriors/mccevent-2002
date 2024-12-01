@@ -682,7 +682,17 @@ $conn->close();
          </div>
       </div>
       <!-- contact section end -->
-   
+
+	   <!-- copyright section start -->
+      <div class="copyright_section">
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-12 ">
+                  <p class="copyright_text"><strong>&COPY; <?= date("Y") ?> MCC Events. All Rights Reserved. </strong></p>
+               </div>
+            </div>
+         </div>
+      </div>
       <!-- Scripts -->
       <script>
           document.addEventListener('DOMContentLoaded', function() {
