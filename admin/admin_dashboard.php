@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 
 
 if (!isset($_SESSION['admin_id'])) {
-   header('location: admin_login.php');
+   header('location: admin_login');
 }
 ?>
 

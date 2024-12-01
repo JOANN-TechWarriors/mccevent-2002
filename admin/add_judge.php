@@ -370,8 +370,8 @@ if (substr($request, -4) == '.php') {
             <div class="profile-dropdown">
                 <div style="font-size:small;"><?php echo $name; ?></div>
                 <div class="dropdown-menu">
-                    <a href="edit_organizer.php">Account Settings</a>
-                    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                    <a href="edit_organizer">Account Settings</a>
+                    <a href="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
                 </div>
             </div>
       </div>
@@ -381,9 +381,9 @@ if (substr($request, -4) == '.php') {
             <h1 style="font-size: 20px;"><?php echo $se_name; ?> Settings</h1>
             
         <div class="breadcrumb">
-                <li><a href="selection.php">Dashboard</a></li>
-                <li><a href="home.php">List of Events</a></li>
-                <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
+                <li><a href="dashboard">Dashboard</a></li>
+                <li><a href="home">List of Events</a></li>
+                <li><a href="sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
                 <li>Add Judge</li>
         </div>
 
@@ -422,7 +422,7 @@ if (substr($request, -4) == '.php') {
                                 </tr>
                                 <tr>
                                     <td colspan="2" style="text-align: right;">
-                                        <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
+                                        <a href="sub_event_details_edit?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
                                         <button name="add_judge" class="btn btn-primary">Save</button>
                                     </td>
                                 </tr>
@@ -483,7 +483,7 @@ if (substr($request, -4) == '.php') {
                 icon: 'success'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+                    window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
                 }
             });
         </script>

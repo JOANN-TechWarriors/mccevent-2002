@@ -1,3 +1,11 @@
+<?php
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   
@@ -138,10 +146,10 @@
       <div>Event Judging System</div>
     </div>
     <ul>
-            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
-            <li><a href="home.php"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
-            <li><a href="upcoming_events.php"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
-            <li><a href="live_stream.php"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
+            <li><a href="dashboard"><i class="fas fa-tachometer-alt"></i> <span>DASHBOARD</span></a></li>
+            <li><a href="home"><i class="fas fa-calendar-check"></i> <span>ONGOING EVENTS</span></a></li>
+            <li><a href="upcoming_events"><i class="fas fa-calendar-alt"></i> <span>UPCOMING EVENTS</span></a></li>
+            <li><a href="live_stream"><i class="fas fa-camera"></i> <span>LIVE STREAM</span></a></li>
 
         </ul>
   </div>
@@ -156,8 +164,8 @@
       <div class="col-md-15">
         <ul class="breadcrumb">
           <li><a href="selection.php">User Selection</a></li>
-          <li><a href="home.php">List of Events</a></li>
-          <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
+          <li><a href="home">List of Events</a></li>
+          <li><a href="sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
           <li>Edit Contestant TxtCode</li>
         </ul>
       </div>
@@ -193,7 +201,7 @@
                   </tr>
                   <tr>
                     <td align="right">
-                      <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>&nbsp;
+                      <a href="sub_event_details_edit?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>&nbsp;
                       <button name="edit_contestant" class="btn btn-success">Update</button>
                     </td>
                   </tr>
@@ -219,7 +227,7 @@ if (isset($_POST['edit_contestant'])) {
     if ($ssnum_row > 0) {
 ?>
 <script>
-  window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+  window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
   alert('Textcode: <?php echo $txt_code ?> already exists, try another. . . Thanks.');
 </script>
 <?php 
@@ -227,7 +235,7 @@ if (isset($_POST['edit_contestant'])) {
         $conn->query("UPDATE contestants SET txt_code='$txt_code' WHERE contestant_id='$contestant_id'");  
 ?>
 <script>
-  window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
+  window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>';
   alert('Textcode updated successfully!');
 </script>
 <?php  

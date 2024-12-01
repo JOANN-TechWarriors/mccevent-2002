@@ -469,7 +469,7 @@ if ($result->num_rows > 0) {
                     }).then(() => {
                         if (res.status === 'success') {
                             window.location.href =
-                                'account_request.php?filter_user_type=Student';
+                                'account_request?filter_user_type=Student';
                         }
                     });
                 }

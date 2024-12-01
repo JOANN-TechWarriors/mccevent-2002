@@ -346,8 +346,8 @@ $se_name=$_GET['se_name'];
             <div class="profile-dropdown">
                 <div style="font-size:small;"><?php echo $name; ?></div>
                 <div class="dropdown-menu">
-                    <a href="edit_organizer.php">Account Settings</a>
-                    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
+                    <a href="edit_organizer">Account Settings</a>
+                    <a href="logout"><i class="fas fa-sign-out-alt"></i> <span>Sign out</span></a>
                 </div>
             </div>
       </div>
@@ -357,9 +357,9 @@ $se_name=$_GET['se_name'];
             <h1 style="font-size: 20px;"><?php echo $se_name; ?> Settings</h1>
             
             <div class="breadcrumb">
-                <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="home.php">List of Events</a></li>
-                <li><a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
+                <li><a href="dashboard">Dashboard</a></li>
+                <li><a href="home">List of Events</a></li>
+                <li><a href="sub_event_details_edit?sub_event_id=<?php echo $sub_event_id; ?>&se_name=<?php echo $se_name; ?>"><?php echo $se_name; ?> Settings</a></li>
                 <li>Add Contestant</li>
             </div>
 
@@ -409,7 +409,7 @@ $se_name=$_GET['se_name'];
                             </div>
 
                             <div class="form-buttons">
-                                <a href="sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
+                                <a href="sub_event_details_edit?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>" class="btn btn-default">Back</a>
                                 <button name="add_contestant" class="btn btn-primary">Save</button>
                             </div>
                         </form>
@@ -434,7 +434,7 @@ $se_name=$_GET['se_name'];
         move_uploaded_file($_FILES['picture']['tmp_name'],$target);
     ?>
         <script>
-            window.location = 'sub_event_details_edit.php?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>';
+            window.location = 'sub_event_details_edit?sub_event_id=<?php echo $sub_event_id;?>&se_name=<?php echo $se_name;?>';
             alert('Contestant <?php echo $fullname; ?> added successfully!');
         </script>
     <?php  

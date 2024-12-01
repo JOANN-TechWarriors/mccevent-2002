@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text: '$success',
             confirmButtonText: 'OK'
         }).then((result) => {
-            window.location.href = 'upcoming_events.php';
+            window.location.href = 'upcoming_events';
         });";
     } elseif (isset($error)) {
         echo "Swal.fire({
@@ -109,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text: '$error',
             confirmButtonText: 'OK'
         }).then((result) => {
-            window.location.href = 'upcoming_events.php';
+            window.location.href = 'upcoming_events';
         });";
     }
     ?>
