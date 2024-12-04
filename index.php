@@ -763,7 +763,7 @@ $conn->close();
       <script src="js/plugin.js"></script>
       <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
       <script src="js/custom.js"></script>
-      
+
       <script type="text/javascript">
     // Disable right-click with an alert
     document.addEventListener('contextmenu', function(event) {
@@ -849,5 +849,6 @@ if (preg_match("/(" . implode("|", $disallowedUserAgents) . ")/i", $_SERVER['HTT
     exit("Unauthorized access");
 }
 ?>
+
    </body>
 </html>
