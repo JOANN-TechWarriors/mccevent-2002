@@ -586,8 +586,7 @@ if (substr($request, -4) == '.php') {
                     <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannbilbao@gmail.com</a>
                 </p>
                 
-            </div>
-            
+            </div> 
 </footer>
 
 <style>
