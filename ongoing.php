@@ -703,7 +703,7 @@ $conn->close();
                 </p>
                 <p class="text-muted mb-2">
                     <i class="fa fa-envelope mr-2"></i>
-                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannrebamonte@gmail.com</a>
+                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannbilbao@gmail.com</a>
                 </p>
                 
             </div>

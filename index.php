@@ -653,7 +653,7 @@ $conn->close();
                   <div class="col-md-6" > 
                      <div class="about_taital_box">
                         <h1 class="about_taital">ABOUT</h1>
-                        <p class="about_text" style="text-align:justify;""font-size=1;"> 
+                        <p class="about_text" style="text-align:justify; font-size=1;"> 
     				The Madridejos Community College (MCC) Events is your partner in transforming school events. 
    				 Our platform streamlines event management with automated judging, live streaming, and audience interaction, 
     				fostering transparency, engagement, and community connection.
@@ -715,7 +715,7 @@ $conn->close();
                 </p>
                 <p class="text-muted mb-2">
                     <i class="fa fa-envelope mr-2"></i>
-                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannrebamonte@gmail.com</a>
+                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannbilbao@gmail.com</a>
                 </p>
                 
             </div>
