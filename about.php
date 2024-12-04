@@ -554,7 +554,7 @@ if (substr($request, -4) == '.php') {
                     <li><a href="#faqs"><span class="arrow"> &gt; </span>FAQs</a></li>
                     <li><a href="#contact"><span class="arrow"> &gt; </span>Contact Us</a></li>
                     <li><a href="#privacy"><span class="arrow"> &gt; </span>Privacy Policy</a></li>
-                    <li><a href="#terms"><span class="arrow"> &gt; </span>Terms and Condition</a></li>
+                    <li><a href="terms"><span class="arrow"> &gt; </span>Terms and Condition</a></li>
                 </ul>
             </div>
 
