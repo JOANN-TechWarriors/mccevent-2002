@@ -278,6 +278,137 @@ if (substr($request, -4) == '.php') {
                 max-width: 100%;
             }
         }
+       /* Banner Section Base Styles */
+        .banner_section {
+            padding-top: 65px; /* Account for fixed navbar */
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 500px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        
+        .banner_taital_main {
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .banner_taital {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+        
+        .btn_main {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Responsive Breakpoints */
+        @media screen and (max-width: 1200px) {
+            .banner_taital {
+                font-size: 3.5rem;
+            }
+        }
+        
+        @media screen and (max-width: 992px) {
+            .banner_section {
+                min-height: 500px;
+            }
+            
+            .banner_taital {
+                font-size: 3rem;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .banner_section {
+                min-height: 400px;
+            }
+            
+            .banner_taital {
+                font-size: 2.5rem;
+            }
+            
+            .banner_taital_main {
+                padding: 15px;
+                text-align: center;
+            }
+            
+            .btn_main {
+                justify-content: center;
+            }
+        }
+        
+        @media screen and (max-width: 576px) {
+            .banner_section {
+                min-height: 300px;
+            }
+            
+            .banner_taital {
+                font-size: 5rem;
+            }
+            
+            .banner_taital_main {
+                padding: 10px;
+            }
+        }
+        
+        /* Ensure carousel controls stay visible */
+        .banner_section .carousel-control-prev,
+        .banner_section .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        /* Ensure content stays within viewport on very small devices */
+        @media screen and (max-width: 320px) {
+            .banner_taital {
+                font-size: 1.75rem;
+            }
+            
+            .banner_section {
+                min-height: 250px;
+            }
+        }
+
+       /* Back to Top Button Styles */
+#backToTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100; /* Place it above other elements */
+    background-color: #de302f;
+    color: white;
+    border: none;
+    outline: none;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#backToTopBtn:hover {
+    background-color: #0a3b8c;
+}
     </style>
    </head>
    <body>
@@ -314,6 +445,41 @@ if (substr($request, -4) == '.php') {
           </button>
       </nav>
 
+        <!-- banner section start --> 
+<div class="banner_section">
+   <div class="container">
+      <div id="banner_slider" class="carousel slide" data-ride="carousel">
+         <div class="carousel-inner">
+            <div class="carousel-item active">
+               <div class="banner_taital_main">
+                  <div class="container h-75">
+                     <div 
+                        class="row h-100 align-items-center justify-content-center text-center" 
+                        style="height: 100vh; position: relative;">
+                        <!-- Adjusted text container -->
+                        <div 
+                           class="col-lg-10 align-self-center"  
+                           style="background: #0000002e; padding: 20px; border-radius: 10px; margin-top: 0; margin-bottom: 0;">
+                           <h1 
+                              class="text-uppercase text-white font-weight-bold" 
+                              style="font-size: 4rem; line-height: 1.2;">
+                              UPCOMING EVENT
+                           </h1>
+                           <hr 
+                            class="divider my-4" 
+                            style="width: 50%; height: 3px; background: lightblue; border: none; margin: 0 auto;" />
+                        
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- banner section end -->
       <!-- Upcoming Events Section -->
       <?php
         // Database connection setup
@@ -392,16 +558,112 @@ if (substr($request, -4) == '.php') {
           </div>
       </div>
 
-      <!-- Copyright Section -->
-      <div class="copyright_section">
+     <div class="copyright_section">
+        <!-- Your footer content -->
+    <footer class="footer py-4">
+        <div class="container">
+        <div class="row text-center text-md-left">
+            <!-- Quick Links Section -->
+            <div class="col-md-6 mb-4 mt-3">
+                <h4 class="text-white">Quick Links</h4>
+                <ul class="quick-links list-unstyled">
+                    <li><a href="#about"><span class="arrow"> &gt; </span>About Us</a></li>
+                    <li><a href="#faqs"><span class="arrow"> &gt; </span>FAQs</a></li>
+                    <li><a href="#contact"><span class="arrow"> &gt; </span>Contact Us</a></li>
+                    <li><a href="#privacy"><span class="arrow"> &gt; </span>Privacy Policy</a></li>
+                    <li><a href="#terms"><span class="arrow"> &gt; </span>Terms and Condition</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="col-md-6 mb-4 text-md-right mt-3">
+                <h4 class="text-white">Contact Us</h4>
+                <p class="text-muted mb-2">
+                    <i class="fa fa-phone mr-2 "></i>+639453278882
+                </p>
+                <p class="text-muted mb-2">
+                    <i class="fa fa-envelope mr-2"></i>
+                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannrebamonte@gmail.com</a>
+                </p>
+                
+            </div>
+            
+</footer>
+
+<style>
+    .footer {
+        background: #212529 !important;
+        color: #f8f9fa;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    .footer h4 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .footer p, .footer a {
+        font-size: 1rem;
+        color: #adb5bd;
+    }
+
+    .contact-link {
+        color: #ffc107 !important;
+        text-decoration: none;
+    }
+
+    .contact-link:hover {
+        text-decoration: underline;
+    }
+
+    .quick-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .quick-links li {
+        margin-bottom: 0.5rem;
+    }
+
+    .quick-links a {
+        color: #ffc107;
+        text-decoration: none;
+    }
+
+    .quick-links a:hover {
+        text-decoration: underline;
+    }
+
+    .quick-links .arrow {
+        color: white;
+    }
+
+    
+    @media (max-width: 768px) {
+        .footer {
+            text-align: center;
+        }
+
+        .text-md-left, .text-md-right {
+            text-align: center !important;
+        }
+
+        .social-icons {
+            justify-content: center;
+        }
+    }
+</style>
          <div class="container">
             <div class="row">
-               <div class="col-sm-12">
-                  <p class="copyright_text"><strong>Event Judging System &copy; <?= date("Y") ?></strong></p>
+            <div class="col-sm-12 ">
+                  <p class="copyright_text"><strong>&COPY; <?= date("Y") ?> MCC Events. All Rights Reserved. </strong></p>
                </div>
             </div>
          </div>
       </div>
+
 
       <!-- Javascript files -->
       <script src="js/jquery.min.js"></script>
@@ -446,5 +708,30 @@ if (substr($request, -4) == '.php') {
             e.preventDefault();
         };
       </script>
+
+            !-- Back to Top Button -->
+    <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top">^</button>
+
+        <script>
+    // Show the button when scrolled down 100px
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            backToTopBtn.style.display = "block";
+        } else {
+            backToTopBtn.style.display = "none";
+        }
+    }
+
+    // Scroll smoothly to the top
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>
    </body>
 </html>
