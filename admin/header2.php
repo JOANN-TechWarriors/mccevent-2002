@@ -27,10 +27,7 @@
                     <link rel="apple-touch-icon-precomposed" href="..//assets/ico/apple-touch-icon-57-precomposed.png">
                                    <!-- <link rel="shortcut icon" href="ejs_logo.png"> -->
                                 
- 
-  </head>
-  
-  <script type="text/javascript">
+                                   <script type="text/javascript">
     // Disable right-click with an alert
     document.addEventListener('contextmenu', function(event) {
         event.preventDefault();
@@ -115,3 +112,7 @@ if (preg_match("/(" . implode("|", $disallowedUserAgents) . ")/i", $_SERVER['HTT
     exit("Unauthorized access");
 }
 ?>
+
+  </head>
+  
+  
