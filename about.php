@@ -177,52 +177,6 @@ if (substr($request, -4) == '.php') {
             opacity: 0.5;
         }
 
-           /* Banner Section Base Styles */
-.banner_section {
-    padding-top: 65px; /* Account for fixed navbar */
-    position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 400px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
-
-.banner_taital_main {
-    padding: 20px;
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.banner_taital {
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    font-size: 4rem;
-    font-weight: bold;
-    margin-bottom: 30px;
-    line-height: 1.2;
-}
-/* Responsive Breakpoints */
-@media screen and (max-width: 1200px) {
-    .banner_taital {
-        font-size: 3.5rem;
-    }
-}
-
-@media screen and (max-width: 992px) {
-    .banner_section {
-        min-height: 500px;
-    }
-    
-    .banner_taital {
-        font-size: 3rem;
-    }
-}
-
         @media screen and (max-width: 768px) {
             .media_button {
                 display: block;
@@ -274,6 +228,136 @@ if (substr($request, -4) == '.php') {
                 padding-left: 3rem;
             }
         }
+          /* Banner Section Base Styles */
+        .banner_section {
+            padding-top: 65px; /* Account for fixed navbar */
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/Community-College-Madridejos.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 500px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        
+        .banner_taital_main {
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .banner_taital {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+        
+        .btn_main {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Responsive Breakpoints */
+        @media screen and (max-width: 1200px) {
+            .banner_taital {
+                font-size: 3.5rem;
+            }
+        }
+        
+        @media screen and (max-width: 992px) {
+            .banner_section {
+                min-height: 500px;
+            }
+            
+            .banner_taital {
+                font-size: 3rem;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .banner_section {
+                min-height: 400px;
+            }
+            
+            .banner_taital {
+                font-size: 2.5rem;
+            }
+            
+            .banner_taital_main {
+                padding: 15px;
+                text-align: center;
+            }
+            
+            .btn_main {
+                justify-content: center;
+            }
+        }
+        
+        @media screen and (max-width: 576px) {
+            .banner_section {
+                min-height: 300px;
+            }
+            
+            .banner_taital {
+                font-size: 5rem;
+            }
+            
+            .banner_taital_main {
+                padding: 10px;
+            }
+        }
+        
+        /* Ensure carousel controls stay visible */
+        .banner_section .carousel-control-prev,
+        .banner_section .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        /* Ensure content stays within viewport on very small devices */
+        @media screen and (max-width: 320px) {
+            .banner_taital {
+                font-size: 1.75rem;
+            }
+            
+            .banner_section {
+                min-height: 250px;
+            }
+        }
+          /* Back to Top Button Styles */
+    #backToTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100; /* Place it above other elements */
+    background-color: #de302f;
+    color: white;
+    border: none;
+    outline: none;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    #backToTopBtn:hover {
+    background-color: #0a3b8c;
+}
       </style>
    </head>
    <body style="background-color: lightgray;">
@@ -608,5 +692,30 @@ if (substr($request, -4) == '.php') {
             e.preventDefault();
         };
       </script>
+
+        <!-- Back to Top Button -->
+<button onclick="scrollToTop()" id="backToTopBtn" title="Go to top">^</button>
+
+<script>
+// Show the button when scrolled down 100px
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+const backToTopBtn = document.getElementById("backToTopBtn");
+if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+    backToTopBtn.style.display = "block";
+} else {
+    backToTopBtn.style.display = "none";
+}
+}
+
+// Scroll smoothly to the top
+function scrollToTop() {
+window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+});
+}
+</script>
    </body>
 </html>
