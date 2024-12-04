@@ -351,7 +351,7 @@ if (substr($request, -4) == '.php') {
     <section class="page-section">
         <div class="container">
             <div class="row">
-                <div class="col-md-8 mx-auto text-center">
+                <div style="text align: justify" class="col-md-8 mx-auto text-center">
                     <h2 class="about_title mb-3">Welcome to MCC Events</h2>
                     <p class="about_text mb-5">
                         The Madridejos Community College (MCC) Events is your partner in transforming school events. 
@@ -482,7 +482,7 @@ if (substr($request, -4) == '.php') {
                 </p>
                 <p class="text-muted mb-2">
                     <i class="fa fa-envelope mr-2"></i>
-                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannrebamonte@gmail.com</a>
+                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannbilbao@gmail.com</a>
                 </p>
             </div>
         </div>
