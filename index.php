@@ -382,6 +382,29 @@ if (substr($request, -4) == '.php') {
         min-height: 250px;
     }
 }
+	    /* Back to Top Button Styles */
+    #backToTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100; /* Place it above other elements */
+    background-color: #de302f;
+    color: white;
+    border: none;
+    outline: none;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    #backToTopBtn:hover {
+    background-color: #0a3b8c;
+}
     </style>
    </head>
    <body style="background-color: lightgray;">
@@ -637,8 +660,9 @@ $conn->close();
 			</p>
 			     <!-- Read More Button -->
                   	<div class="readmore_btn mt-3">
-                    		<a href="about.php" class="btn-link">Read More</a>
+                   		 <a href="about.php" class="btn-link">Read More</a>
                     	</div>
+
                      </div>
                   </div>
                   <div class="col-md-6" style="z-index:-1000;"> 
@@ -761,31 +785,7 @@ $conn->close();
         .social-icons {
             justify-content: center;
         }
-    }
-
-	 /* Back to Top Button Styles */
-    #backToTopBtn {
-    display: none; /* Hidden by default */
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 100; /* Place it above other elements */
-    background-color: #de302f;
-    color: white;
-    border: none;
-    outline: none;
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    font-size: 18px;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-    #backToTopBtn:hover {
-    background-color: #0a3b8c;
-}
+    } 
 </style>
          <div class="container">
             <div class="row">
