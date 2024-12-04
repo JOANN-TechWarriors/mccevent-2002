@@ -360,25 +360,7 @@ if (substr($request, -4) == '.php') {
         padding: 10px;
     }
 }
-.readmore_btn a {
-        font-size: 1rem; /* Smaller font size for the button text */
-        color: #007bff; /* Default link color */
-        text-decoration: none; /* Removed underline for cleaner look */
-        padding: 4px 8px; /* Smaller padding for a compact button */
-        border-radius: 3px; /* Slightly rounded corners */
-        transition: all 0.3s ease; /* Smooth transition on hover */
-    }
 
-    .readmore_btn a:hover {
-        color: red; /* Darker blue on hover */
-        text-decoration: underline; /* Underline on hover */
-    }
-
-    .readmore_btn a:active {
-        background-color: red; /* Red background on click */
-        color: black; /* Black text on click */
-        text-decoration: none; /* No underline when active */
-    }
 /* Ensure carousel controls stay visible */
 .banner_section .carousel-control-prev,
 .banner_section .carousel-control-next {
@@ -399,6 +381,29 @@ if (substr($request, -4) == '.php') {
     .banner_section {
         min-height: 250px;
     }
+}
+	    /* Back to Top Button Styles */
+    #backToTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100; /* Place it above other elements */
+    background-color: #de302f;
+    color: white;
+    border: none;
+    outline: none;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    #backToTopBtn:hover {
+    background-color: #0a3b8c;
 }
     </style>
    </head>
@@ -653,9 +658,11 @@ $conn->close();
    				 Our platform streamlines event management with automated judging, live streaming, and audience interaction, 
     				fostering transparency, engagement, and community connection.
 			</p>
-			     <div class="readmore_btn mt-3">
-   				 <a href="about.php" class="btn-link">Read More</a>
-			</div>
+			     <!-- Read More Button -->
+                  	<div class="readmore_btn mt-3">
+                   		 <a href="about.php" class="btn-link">Read More</a>
+                    	</div>
+
                      </div>
                   </div>
                   <div class="col-md-6" style="z-index:-1000;"> 
@@ -683,11 +690,106 @@ $conn->close();
       </div>
       <!-- contact section end -->
 
-	   <!-- copyright section start -->
-      <div class="copyright_section">
+	   <div class="copyright_section">
+        <!-- Your footer content -->
+    <footer class="footer py-4">
+        <div class="container">
+        <div class="row text-center text-md-left">
+            <!-- Quick Links Section -->
+            <div class="col-md-6 mb-4 mt-3">
+                <h4 class="text-white">Quick Links</h4>
+                <ul class="quick-links list-unstyled">
+                    <li><a href="#about"><span class="arrow"> &gt; </span>About Us</a></li>
+                    <li><a href="#faqs"><span class="arrow"> &gt; </span>FAQs</a></li>
+                    <li><a href="#contact"><span class="arrow"> &gt; </span>Contact Us</a></li>
+                    <li><a href="#privacy"><span class="arrow"> &gt; </span>Privacy Policy</a></li>
+                    <li><a href="#terms"><span class="arrow"> &gt; </span>Terms and Condition</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="col-md-6 mb-4 text-md-right mt-3">
+                <h4 class="text-white">Contact Us</h4>
+                <p class="text-muted mb-2">
+                    <i class="fa fa-phone mr-2 "></i>+639453278882
+                </p>
+                <p class="text-muted mb-2">
+                    <i class="fa fa-envelope mr-2"></i>
+                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannrebamonte@gmail.com</a>
+                </p>
+                
+            </div>
+            
+</footer>
+
+<style>
+    .footer {
+        background: #212529 !important;
+        color: #f8f9fa;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    .footer h4 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .footer p, .footer a {
+        font-size: 1rem;
+        color: #adb5bd;
+    }
+
+    .contact-link {
+        color: #ffc107 !important;
+        text-decoration: none;
+    }
+
+    .contact-link:hover {
+        text-decoration: underline;
+    }
+
+    .quick-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .quick-links li {
+        margin-bottom: 0.5rem;
+    }
+
+    .quick-links a {
+        color: #ffc107;
+        text-decoration: none;
+    }
+
+    .quick-links a:hover {
+        text-decoration: underline;
+    }
+
+    .quick-links .arrow {
+        color: white;
+    }
+
+    
+    @media (max-width: 768px) {
+        .footer {
+            text-align: center;
+        }
+
+        .text-md-left, .text-md-right {
+            text-align: center !important;
+        }
+
+        .social-icons {
+            justify-content: center;
+        }
+    } 
+</style>
          <div class="container">
             <div class="row">
-               <div class="col-sm-12 ">
+            <div class="col-sm-12 ">
                   <p class="copyright_text"><strong>&COPY; <?= date("Y") ?> MCC Events. All Rights Reserved. </strong></p>
                </div>
             </div>
@@ -755,6 +857,31 @@ $conn->close();
                 e.preventDefault();
             };
     </script>
+
+<!-- Back to Top Button -->
+<button onclick="scrollToTop()" id="backToTopBtn" title="Go to top">^</button>
+
+<script>
+// Show the button when scrolled down 100px
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+const backToTopBtn = document.getElementById("backToTopBtn");
+if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+    backToTopBtn.style.display = "block";
+} else {
+    backToTopBtn.style.display = "none";
+}
+}
+
+// Scroll smoothly to the top
+function scrollToTop() {
+window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+});
+}
+</script>
       <!-- Your existing scripts -->
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
