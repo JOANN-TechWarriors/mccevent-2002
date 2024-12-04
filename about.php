@@ -435,9 +435,9 @@ if (substr($request, -4) == '.php') {
     <section class="page-section">
         <div class="container">
             <div class="row">
-                <div style="text-align:justify;"  class="col-md-8 mx-auto text-center">
+                <div   class="col-md-8 mx-auto text-center">
                     <h2 class="about_title mb-3">Welcome to MCC Events</h2>
-                    <p class="about_text mb-5">
+                    <p class="about_text mb-5" style="text-align:justify;">
                         The Madridejos Community College (MCC) Events is your partner in transforming school events. 
                         Our platform streamlines event management with automated judging, live streaming, and audience interaction, 
                         fostering transparency, engagement, and community connection.
