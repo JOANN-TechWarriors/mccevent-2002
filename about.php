@@ -393,7 +393,7 @@ if (substr($request, -4) == '.php') {
               <span></span>
           </button>
       </nav>
-!-- banner section start --> 
+<!-- banner section start --> 
 <div class="banner_section">
    <div class="container">
       <div id="banner_slider" class="carousel slide" data-ride="carousel">
