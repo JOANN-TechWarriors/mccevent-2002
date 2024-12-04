@@ -558,6 +558,7 @@ if (substr($request, -4) == '.php') {
           </div>
       </div>
 
+     <div class="copyright_section">
         <!-- Your footer content -->
     <footer class="footer py-4">
         <div class="container">
@@ -653,17 +654,14 @@ if (substr($request, -4) == '.php') {
         }
     }
 </style>
-      <!-- copyright section start -->
-      <div class="copyright_section">
          <div class="container">
             <div class="row">
-               <div class="col-sm-12 ">
+            <div class="col-sm-12 ">
                   <p class="copyright_text"><strong>&COPY; <?= date("Y") ?> MCC Events. All Rights Reserved. </strong></p>
                </div>
             </div>
          </div>
       </div>
-      <!-- copyright section end -->
 
 
       <!-- Javascript files -->
@@ -710,7 +708,7 @@ if (substr($request, -4) == '.php') {
         };
       </script>
 
-            !-- Back to Top Button -->
+            <!-- Back to Top Button -->
     <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top">^</button>
 
         <script>
