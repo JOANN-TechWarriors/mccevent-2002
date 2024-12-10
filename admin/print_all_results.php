@@ -219,20 +219,20 @@ $active_main_event = $_GET['main_event_id'];
                                     $rank_score = 0;
                                     $tot_score_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
                                     while ($tot_score_row = $tot_score_query->fetch()) {
-                                        $divz = $divz + 1;
-                                        $c_ctr = $c_ctr + 1;
+                                        $divz++;
+                                        $c_ctr++;
                                         $place_title = $tot_score_row['place_title'];
                                     }
 
-                                    $tot_score_query = $conn->query("select judge_id,total_score, deduction, rank from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
+                                    $tot_score_query = $conn->query("select judge_id, total_score, deduction, rank from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
                                     while ($tot_score_row = $tot_score_query->fetch()) {
-                                        $totx_score = $totx_score + $tot_score_row['total_score'];
-                                        $rank_score = $rank_score + $tot_score_row['rank'];
-                                        $totx_deduct = $tot_score_row['deduction'];
+                                        $totx_score += floatval($tot_score_row['total_score']);
+                                        $rank_score += intval($tot_score_row['rank']);
+                                        $totx_deduct = floatval($tot_score_row['deduction']);
                                     }
                                     ?>
                                     <tr>
-                                        <td><b>Ave: <?php echo round(($totx_score-$totx_deduct)/$divz,1) ?></b></td>
+                                        <td><b>Ave: <?php echo $divz > 0 ? round(($totx_score - $totx_deduct) / $divz, 1) : 0; ?></b></td>
                                         <td><b>Sum: <?php echo $rank_score; ?></b></td>
                                     </tr>
                                 </table>
