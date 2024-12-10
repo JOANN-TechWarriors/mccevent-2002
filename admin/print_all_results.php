@@ -195,38 +195,50 @@ $active_main_event = $_GET['main_event_id'];
                     $o_result_query = $conn->query("select distinct contestant_id from sub_results where mainevent_id='$active_main_event' and subevent_id='$active_sub_event' order by place_title ASC") or die(mysql_error());
                     while ($o_result_row = $o_result_query->fetch()) {
                         $contestant_id = $o_result_row['contestant_id'];
-                        $place_title = ''; // Initialize place_title for each contestant
-
-                        // Fetch contestant details
-                        $cname_query = $conn->query("select * from contestants where contestant_id='$contestant_id'") or die(mysql_error());
-                        while ($cname_row = $cname_query->fetch()) {
-                            echo $cname_row['contestant_ctr'].".".$cname_row['fullname'];
-                        }
-
-                        // Fetch scores and calculate average and rank
-                        $tot_score_query = $conn->query("select judge_id, total_score, deduction, rank, place_title from sub_results where contestant_id='$contestant_id' and mainevent_id='$active_main_event' and subevent_id='$active_sub_event'") or die(mysql_error());
-                        $totx_score = 0;
-                        $rank_score = 0;
-                        $totx_deduct = 0;
-                        $divz = 0;
-                        while ($tot_score_row = $tot_score_query->fetch()) {
-                            $totx_score += floatval($tot_score_row['total_score']);
-                            $rank_score += intval($tot_score_row['rank']);
-                            $totx_deduct = floatval($tot_score_row['deduction']);
-                            $place_title = $tot_score_row['place_title']; // Set place_title for the contestant
-                            $divz++;
-                        }
                     ?>
                     <tr>
                         <td>
-                            <b>Ave: <?php echo $divz > 0 ? round(($totx_score - $totx_deduct) / $divz, 1) : 0; ?></b>
+                            <?php
+                            $cname_query = $conn->query("select * from contestants where contestant_id='$contestant_id'") or die(mysql_error());
+                            while ($cname_row = $cname_query->fetch()) {
+                                echo $cname_row['contestant_ctr'].".".$cname_row['fullname'];
+                            }
+                            ?>
                         </td>
                         <td>
-                            <b>Sum: <?php echo $rank_score; ?></b>
+                            <div class="table-responsive">
+                                <table class="inner-table">
+                                    <tr>
+                                        <th>Average Score</th>
+                                        <th>Sum of Rank in all Judges</th>
+                                    </tr>
+                                    <?php
+                                    $divz = 0;
+                                    $c_ctr = 0;
+                                    $totx_score = 0;
+                                    $rank_score = 0;
+                                    $tot_score_query = $conn->query("select * from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
+                                    while ($tot_score_row = $tot_score_query->fetch()) {
+                                        $divz++;
+                                        $c_ctr++;
+                                        $place_title = $tot_score_row['place_title'];
+                                    }
+
+                                    $tot_score_query = $conn->query("select judge_id, total_score, deduction, rank from sub_results where contestant_id='$contestant_id'") or die(mysql_error());
+                                    while ($tot_score_row = $tot_score_query->fetch()) {
+                                        $totx_score += floatval($tot_score_row['total_score']);
+                                        $rank_score += intval($tot_score_row['rank']);
+                                        $totx_deduct = floatval($tot_score_row['deduction']);
+                                    }
+                                    ?>
+                                    <tr>
+                                        <td><b>Ave: <?php echo $divz > 0 ? round(($totx_score - $totx_deduct) / $divz, 1) : 0; ?></b></td>
+                                        <td><b>Sum: <?php echo $rank_score; ?></b></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </td>
-                        <td>
-                            <center><h3 style="font-size:small;"><?php echo $place_title; ?></h3></center>
-                        </td>
+                        <td><center><h3 style="font-size:small;"><?php echo $place_title; ?></h3></center></td>
                     </tr>
                     <?php } ?>
                 </tbody>
