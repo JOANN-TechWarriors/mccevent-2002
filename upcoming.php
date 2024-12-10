@@ -200,24 +200,7 @@ if (substr($request, -4) == '.php') {
             transform: translateY(-50%);
         }
 
-        /* Copyright Section */
-        .copyright_section {
-            width: 100%;
-            float: left;
-            background-color: #f01c1c;
-            height: auto;
-            padding: 20px 0;
-        }
-
-        .copyright_text {
-            width: 100%;
-            float: left;
-            color: #fff;
-            text-align: center;
-            font-size: 16px;
-            margin: 0;
-        }
-
+        
         /* Responsive Styles */
         @media screen and (max-width: 768px) {
             .media_button {
@@ -558,10 +541,9 @@ if (substr($request, -4) == '.php') {
           </div>
       </div>
 
-     <div class="copyright_section">
-        <!-- Your footer content -->
-    <footer class="footer py-4">
-        <div class="container">
+    <!-- Footer Section -->
+<footer class="footer py-4">
+    <div class="container">
         <div class="row text-center text-md-left">
             <!-- Quick Links Section -->
             <div class="col-md-6 mb-4 mt-3">
@@ -571,7 +553,7 @@ if (substr($request, -4) == '.php') {
                     <li><a href="#faqs"><span class="arrow"> &gt; </span>FAQs</a></li>
                     <li><a href="#contact"><span class="arrow"> &gt; </span>Contact Us</a></li>
                     <li><a href="#privacy"><span class="arrow"> &gt; </span>Privacy Policy</a></li>
-                    <li><a href="terms"><span class="arrow"> &gt; </span>Terms and Condition</a></li>
+                    <li><a href="#terms"><span class="arrow"> &gt; </span>Terms and Condition</a></li>
                 </ul>
             </div>
 
@@ -579,21 +561,44 @@ if (substr($request, -4) == '.php') {
             <div class="col-md-6 mb-4 text-md-right mt-3">
                 <h4 class="text-white">Contact Us</h4>
                 <p class="text-muted mb-2">
-                    <i class="fa fa-phone mr-2 "></i>+639453278882
+                    <i class="fa fa-phone mr-2"></i>+639453278882
                 </p>
                 <p class="text-muted mb-2">
                     <i class="fa fa-envelope mr-2"></i>
-                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannbilbao@gmail.com</a>
+                    <a href="mailto:joannrebamonte@gmail.com" class="contact-link">joannrebamonte@gmail.com</a>
                 </p>
-                
-            </div> 
+            </div>
+        </div>
+    </div>
 </footer>
 
+<!-- Copyright Section -->
+<div class="copyright_section">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <p class="copyright_text">
+                    <strong>&COPY; <?= date("Y") ?> MCC Events. All Rights Reserved.</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
+    /* Ensure no space below copyright */
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Main content should grow and allow footer to stick at bottom */
     .footer {
-        background: #212529 !important;
+        background: #212529;
         color: #f8f9fa;
-        padding-top: 2rem;
+        padding-top: 4rem;
         padding-bottom: 2rem;
     }
 
@@ -639,7 +644,21 @@ if (substr($request, -4) == '.php') {
         color: white;
     }
 
-    
+    /* Copyright fixed at the very bottom */
+    .copyright_section {
+        background-color: red;
+        padding: 1rem 0;
+        text-align: center;
+        width: 100%;
+        margin-top: auto; /* Forces it to always stick to the bottom of the page */
+    }
+
+    .copyright_text {
+        color: #f8f9fa;
+        margin: 0;
+        font-size: 1rem;
+    }
+
     @media (max-width: 768px) {
         .footer {
             text-align: center;
@@ -654,16 +673,6 @@ if (substr($request, -4) == '.php') {
         }
     }
 </style>
-         <div class="container">
-            <div class="row">
-            <div class="col-sm-12 ">
-                  <p class="copyright_text"><strong>&COPY; <?= date("Y") ?> MCC Events. All Rights Reserved. </strong></p>
-               </div>
-            </div>
-         </div>
-      </div>
-
-
       <!-- Javascript files -->
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
